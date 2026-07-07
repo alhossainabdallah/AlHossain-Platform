@@ -377,260 +377,75 @@
   .price-row{ display:flex; justify-content:space-between; padding:6px 0; font-size:14.5px; }
   .price-note{ font-size:12px; color:rgba(237,230,216,.7); margin-bottom:8px; }
 
-  /* ====== صفحة عن المؤسس - خلفية كاملة مع تأثير زجاجي ====== */
-  
-  #about {
-    position: relative;
-    min-height: 100vh;
-    overflow: hidden;
+  .about-hero{ text-align:center; padding:20px 10px; }
+  .about-photo{
+    width:120px; height:120px; border-radius:50%; margin:0 auto 14px;
+    background:linear-gradient(135deg, var(--ink) 0%, var(--rust) 100%);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    font-family:'Aref Ruqaa'; font-size:42px; color:var(--paper);
+    border:3px solid var(--gold);
+  }
+  .about-photo img{ width:100%; height:100%; object-fit:cover; }
+  .about-role{ color:var(--rust); font-weight:700; font-size:14px; margin-top:4px; }
+  .about-stats{ display:flex; gap:12px; justify-content:center; margin:24px 0; flex-wrap:wrap; }
+  .about-stat{
+    background:var(--white); border:1px solid var(--line); border-radius:14px;
+    padding:16px 22px; text-align:center; min-width:100px;
+  }
+  .about-stat .num{ font-family:'Aref Ruqaa'; font-size:26px; color:var(--rust); }
+  .about-stat .lbl{ font-size:12px; color:#555; margin-top:4px; }
+  .about-bio{
+    background:var(--white); border:1px solid var(--line); border-radius:16px;
+    padding:22px; font-size:15px; line-height:1.9; white-space:pre-line;
+    max-width:600px; margin:0 auto;
   }
 
-  .about-hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    background: var(--paper-soft);
-    margin: 0 -16px;
-    border-radius: 0;
+  #craneLoader{
+    position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-14px);
+    background:var(--ink); border-radius:14px; padding:8px 16px 6px;
+    display:flex; align-items:center; gap:8px; z-index:100;
+    opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
+    box-shadow:0 6px 18px rgba(10,27,43,.35);
+  }
+  #craneLoader.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  #craneLoader svg{ display:block; }
+  #craneLoader .txt{ color:var(--paper); font-size:12px; font-weight:700; }
+  .crane-hook{ animation:hookMove 0.9s ease-in-out infinite; transform-origin:170px 40px; }
+  .crane-box{ animation:boxMove 0.9s ease-in-out infinite; }
+  @keyframes hookMove{
+    0%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(10px) rotate(-3deg); }
+    100%{ transform:translateY(0) rotate(0deg); }
+  }
+  @keyframes boxMove{
+    0%{ transform:translate(0,0); }
+    50%{ transform:translate(-14px,10px); }
+    100%{ transform:translate(0,0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .crane-hook, .crane-box{ animation:none; }
   }
 
-  .about-hero.expanded {
-    background: var(--ink-dark);
-    padding: 0;
-    min-height: 100vh;
+  #waFloat{
+    position:fixed; bottom:22px; right:22px; z-index:45;
+    width:58px; height:58px; border-radius:50%;
+    background:#25D366; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(0,0,0,.25); text-decoration:none;
+    animation:waPulse 2.4s ease-in-out infinite;
+  }
+  #waFloat svg{ width:30px; height:30px; }
+  #currencyFloat{
+    position:fixed; bottom:22px; left:22px; z-index:45;
+    width:52px; height:52px; border-radius:50%;
+    background:var(--gold); color:var(--ink-dark); border:none;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(0,0,0,.25); cursor:pointer; font-size:24px;
+  }
+  @keyframes waPulse{
+    0%,100%{ box-shadow:0 6px 16px rgba(37,211,102,.4); }
+    50%{ box-shadow:0 6px 22px rgba(37,211,102,.75); }
   }
 
-  .about-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0;
-    transform: scale(1.1);
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    filter: brightness(0.5) saturate(1.1);
-  }
-
-  .about-hero.expanded .about-background {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .glass-container {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 700px;
-    padding: 30px 25px 40px;
-    border-radius: 24px;
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    pointer-events: none;
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  }
-
-  .about-hero.expanded .glass-container {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
-  }
-
-  /* إزالة الصورة الدائرية - مخفية */
-  .about-photo {
-    display: none !important;
-  }
-
-  .about-content h2 {
-    color: #fff;
-    font-size: 26px;
-    margin-bottom: 2px;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-  }
-
-  .about-role {
-    color: var(--gold);
-    font-weight: 700;
-    font-size: 14px;
-    margin-top: 2px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-
-  .about-stats {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin: 24px 0 20px;
-    flex-wrap: wrap;
-  }
-
-  .glass-card {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    border-radius: 16px;
-    padding: 14px 20px;
-    text-align: center;
-    min-width: 80px;
-    flex: 1;
-    max-width: 130px;
-    transition: all 0.3s ease;
-  }
-
-  .glass-card:hover {
-    transform: translateY(-3px);
-    background: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  }
-
-  .glass-card .num {
-    font-family: 'Aref Ruqaa';
-    font-size: 26px;
-    color: var(--gold);
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-
-  .glass-card .lbl {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.8);
-    margin-top: 4px;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  }
-
-  .about-bio {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    border-radius: 16px;
-    padding: 18px 22px;
-    font-size: 14.5px;
-    line-height: 1.9;
-    white-space: pre-line;
-    max-width: 600px;
-    margin: 0 auto;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .ios-clock {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    padding: 10px 20px;
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
-  }
-
-  .ios-clock .time {
-    font-family: 'Aref Ruqaa', monospace;
-    font-size: 38px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 3px;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-  }
-
-  .ios-clock .label {
-    display: none;
-  }
-
-  .ios-clock .icon {
-    display: none;
-  }
-
-  .back-btn {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-family: 'Tajawal';
-    font-size: 14px;
-    display: none;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  }
-
-  .back-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.02);
-  }
-
-  .back-btn.show {
-    display: flex;
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  .glass-container .animate-in {
-    animation: fadeInUp 0.6s ease forwards;
-    opacity: 0;
-  }
-
-  .glass-container .animate-in:nth-child(1) { animation-delay: 0.1s; }
-  .glass-container .animate-in:nth-child(2) { animation-delay: 0.2s; }
-  .glass-container .animate-in:nth-child(3) { animation-delay: 0.3s; }
-  .glass-container .animate-in:nth-child(4) { animation-delay: 0.4s; }
-  .glass-container .animate-in:nth-child(5) { animation-delay: 0.5s; }
-
-  .about-hero .about-content h2,
-  .about-hero .about-role,
-  .about-hero .about-stats,
-  .about-hero .about-bio {
-    opacity: 0;
-    transition: opacity 0.6s ease;
-  }
-
-  .about-hero.expanded .about-content h2,
-  .about-hero.expanded .about-role,
-  .about-hero.expanded .about-stats,
-  .about-hero.expanded .about-bio {
-    opacity: 1;
-  }
-
-  /* ====== باقي الأقسام ====== */
-  
   .auth-area{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
   .auth-btn{
     background:rgba(255,255,255,0.08);
@@ -814,67 +629,6 @@
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
 
-  .about-hero .about-content h2,
-  .about-hero .about-role,
-  .about-hero .about-stats,
-  .about-hero .about-bio {
-    opacity: 0;
-    transition: opacity 0.6s ease;
-  }
-
-  .about-hero.expanded .about-content h2,
-  .about-hero.expanded .about-role,
-  .about-hero.expanded .about-stats,
-  .about-hero.expanded .about-bio {
-    opacity: 1;
-  }
-
-  #craneLoader{
-    position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-14px);
-    background:var(--ink); border-radius:14px; padding:8px 16px 6px;
-    display:flex; align-items:center; gap:8px; z-index:100;
-    opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
-    box-shadow:0 6px 18px rgba(10,27,43,.35);
-  }
-  #craneLoader.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-  #craneLoader svg{ display:block; }
-  #craneLoader .txt{ color:var(--paper); font-size:12px; font-weight:700; }
-  .crane-hook{ animation:hookMove 0.9s ease-in-out infinite; transform-origin:170px 40px; }
-  .crane-box{ animation:boxMove 0.9s ease-in-out infinite; }
-  @keyframes hookMove{
-    0%{ transform:translateY(0) rotate(0deg); }
-    50%{ transform:translateY(10px) rotate(-3deg); }
-    100%{ transform:translateY(0) rotate(0deg); }
-  }
-  @keyframes boxMove{
-    0%{ transform:translate(0,0); }
-    50%{ transform:translate(-14px,10px); }
-    100%{ transform:translate(0,0); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .crane-hook, .crane-box{ animation:none; }
-  }
-
-  #waFloat{
-    position:fixed; bottom:22px; right:22px; z-index:45;
-    width:58px; height:58px; border-radius:50%;
-    background:#25D366; display:flex; align-items:center; justify-content:center;
-    box-shadow:0 6px 16px rgba(0,0,0,.25); text-decoration:none;
-    animation:waPulse 2.4s ease-in-out infinite;
-  }
-  #waFloat svg{ width:30px; height:30px; }
-  #currencyFloat{
-    position:fixed; bottom:22px; left:22px; z-index:45;
-    width:52px; height:52px; border-radius:50%;
-    background:var(--gold); color:var(--ink-dark); border:none;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 6px 16px rgba(0,0,0,.25); cursor:pointer; font-size:24px;
-  }
-  @keyframes waPulse{
-    0%,100%{ box-shadow:0 6px 16px rgba(37,211,102,.4); }
-    50%{ box-shadow:0 6px 22px rgba(37,211,102,.75); }
-  }
-
   @media (max-width: 768px) {
     header.site {
       padding: 12px 12px 16px;
@@ -982,10 +736,6 @@
     .auth-modal {
       padding: 20px;
     }
-    
-    .ios-clock .time {
-      font-size: 30px !important;
-    }
   }
 
   @media (max-width: 480px) {
@@ -1052,14 +802,12 @@
       padding: 10px 16px;
       font-size: 13px;
     }
-    
-    .ios-clock .time {
-      font-size: 24px !important;
-    }
   }
 </style>
 </head>
 <body>
+<body>
+
 <header class="site">
   <div class="top">
     <div>
@@ -1095,10 +843,10 @@
     <button data-tab="ratings" data-i18n="nav_ratings" onclick="showTab('ratings')">التقييمات</button>
     <button data-tab="activityfeed" data-i18n="nav_activity" onclick="showTab('activityfeed')">🔔 الإشعارات</button>
     <button data-tab="about" data-i18n="nav_about" onclick="showTab('about')">عن المؤسس</button>
-    <button data-tab="weeklyoffers" data-i18n="nav_offers" onclick="showTab('weeklyoffers')">🔥 العروض</button>
   </nav>
 </header>
 <div class="pattern-divider"></div>
+
 <main>
 
   <section id="home" class="active">
@@ -1313,166 +1061,150 @@
     </div>
     <div id="qaList"></div>
   </section>
+
   <section id="importorder">
-  <h2 style="margin-bottom:6px;" data-i18n="import_title">اطلب من الصين</h2>
-  <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="import_desc">هل وجدت منتجات في تاوباو أو 1688 أو علي بابا وترغب في شرائها؟ أضف كل منتج على حدة، وسنوافيك بعرض سعر شامل الشراء والشحن لكل الطلب دفعة واحدة.</p>
-  <div class="ask-box">
-    <div id="importItemsList"></div>
-    <button class="btn btn-outline" style="width:100%;margin-bottom:12px;" data-i18n="add_item_btn" onclick="addImportRow()">+ إضافة منتج آخر</button>
-    <div style="margin-bottom:10px;">
-      <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">الوجهة</label>
-      <select id="importDestination" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
-        <option value="SD" data-i18n="opt_sd">السودان</option>
-        <option value="SS" data-i18n="opt_ss">جنوب السودان</option>
-        <option value="UAE" data-i18n="opt_uae">الإمارات العربية المتحدة</option>
-        <option value="KSA" data-i18n="opt_ksa">المملكة العربية السعودية</option>
-      </select>
-    </div>
-    <textarea id="importNotes" placeholder="ملاحظات عامة على الطلب: اللون، المقاس، أي تفاصيل إضافية..." data-i18n-ph="import_notes_ph"></textarea>
-    <button class="btn btn-primary" style="margin-top:10px;" data-i18n="send_quote_request_btn" onclick="submitImportRequest()">إرسال طلب عرض سعر</button>
-  </div>
-  <p style="font-size:12px;color:#777;">ملاحظة: هذه الخدمة مخصصة لطلب عرض سعر يشمل شراء المنتجات ونقلها إلى المستودع، وليست شراءً تلقائياً فورياً.</p>
-</section>
-
-<section id="factoryvisit">
-  <h2 style="margin-bottom:6px;" data-i18n="factory_title">طلب زيارة مصنع</h2>
-  <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="factory_desc">هل وجدت مصنعاً على علي بابا أو غيره وترغب بمعاينته ميدانياً قبل الشراء؟ يمكننا القيام بذلك نيابة عنك.</p>
-
-  <div class="price-box" style="margin-bottom:20px;">
-    <div class="price-title" data-i18n="factory_terms_title">شروط وتكلفة زيارة المصانع</div>
-    <p style="font-size:14px;line-height:1.8;" id="factoryTermsP">
-      إذا كان المصنع داخل نفس المدينة التي يتواجد فيها المسؤول حالياً <strong id="factoryCurrentCityLabel">(يُحدَّد لاحقاً)</strong>، فتكلفة الزيارة <strong>15$</strong> تشمل: زيارة ميدانية، تفاوض مع المصنع، إتمام عملية الشراء، وفحص البضاعة والمصنع.<br><br>
-      أما إذا كان المصنع في مدينة أخرى، فتكلفة التنقل والسفر تكون على العميل، وتُحدَّد بعد التنسيق المباشر.
-    </p>
-  </div>
-
-  <div class="ask-box">
-    <div class="admin-row">
-      <input id="factoryLink" placeholder="رابط صفحة المصنع (علي بابا أو غيره) — اختياري" data-i18n-ph="factory_link_ph">
-    </div>
-    <div class="admin-row">
-      <input id="factoryName" placeholder="اسم المصنع *" data-i18n-ph="factory_name_ph">
-      <input id="factorySpecialty" placeholder="تخصص المصنع *" data-i18n-ph="factory_specialty_ph">
-    </div>
-    <div class="admin-row">
-      <input id="factoryContact" placeholder="رقم أو إيميل المصنع (اختياري)" data-i18n-ph="factory_contact_ph">
-      <input id="factoryCity" placeholder="مدينة المصنع *" oninput="checkFactoryCity()" data-i18n-ph="factory_city_ph">
-    </div>
-    <textarea id="factoryNotes" placeholder="ملاحظات إضافية (اختياري)" data-i18n-ph="factory_notes_ph"></textarea>
-    <div id="factoryCostNote" style="font-size:13px;color:var(--rust);margin:8px 0;display:none;"></div>
-    <button class="btn btn-primary" style="margin-top:6px;" data-i18n="send_visit_request_btn" onclick="submitFactoryVisit()">إرسال طلب الزيارة</button>
-  </div>
-</section>
-
-<section id="community">
-  <h2 style="margin-bottom:6px;" data-i18n="community_title">مجتمع العملاء</h2>
-  <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="community_desc">شارك تجربتك، اسأل، أو تفاعل مع باقي العملاء.</p>
-
-  <div class="ask-box">
-    <textarea id="postInput" placeholder="اكتب منشورك هنا..." data-i18n-ph="post_ph"></textarea>
-    <button class="btn btn-primary" style="margin-top:8px;" data-i18n="publish_btn" onclick="submitPost()">نشر</button>
-  </div>
-
-  <div id="communityFeed"></div>
-  <button class="btn btn-outline" id="loadMorePostsBtn" style="width:100%;display:none;" data-i18n="load_more" onclick="loadCommunityFeed(true)">تحميل المزيد</button>
-</section>
-
-<section id="ratings">
-  <h2 style="margin-bottom:6px;" data-i18n="ratings_title">تقييمات العملاء</h2>
-  <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="ratings_desc">آراء عملائنا الحقيقية عن تجربتهم في التعامل معنا.</p>
-
-  <div class="ratings-summary">
-    <div class="ratings-avg" id="ratingsAvg">-</div>
-    <div class="ratings-stars-display" id="ratingsAvgStars">☆☆☆☆☆</div>
-    <div class="ratings-count" id="ratingsCount"></div>
-  </div>
-
-  <div class="ask-box">
-    <div style="text-align:center;margin-bottom:10px;" data-i18n="your_rating">قيّم تجربتك معنا</div>
-    <div class="star-picker" id="starPicker">
-      <span class="star-pick" data-value="1">☆</span>
-      <span class="star-pick" data-value="2">☆</span>
-      <span class="star-pick" data-value="3">☆</span>
-      <span class="star-pick" data-value="4">☆</span>
-      <span class="star-pick" data-value="5">☆</span>
-    </div>
-    <textarea id="ratingComment" placeholder="اكتب تعليقاً (اختياري)..." data-i18n-ph="rating_comment_ph"></textarea>
-    <button class="btn btn-primary" style="margin-top:8px;" data-i18n="submit_rating_btn" onclick="submitRating()">إرسال التقييم</button>
-  </div>
-
-  <div id="reviewsList"></div>
-</section>
-
-<section id="activityfeed">
-  <h2 style="margin-bottom:6px;" data-i18n="activity_title">آخر التحركات في الموقع</h2>
-  <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="activity_desc">تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.</p>
-  <div id="activityList"></div>
-</section>
-
-<section id="profile">
-  <h2 style="margin-bottom:6px;" data-i18n="profile_title">حسابي</h2>
-  <div class="profile-card">
-    <div class="profile-name" id="profileName">-</div>
-    <div class="profile-mark-row">
-      <span class="profile-mark" id="profileMark">-</span>
-      <button class="copy-btn" onclick="copyProfileMark()" title="نسخ">📋</button>
-    </div>
-    <div class="profile-info-line"><span data-i18n="profile_email_label">البريد الإلكتروني:</span> <span id="profileEmail">-</span></div>
-    <div class="profile-info-line"><span data-i18n="destination_label">الوجهة:</span> <span id="profileDestination">-</span></div>
-    <div class="profile-info-line"><span data-i18n="profile_verified_label">حالة التحقق:</span> <span id="profileVerified">-</span></div>
-  </div>
-
-  <div class="ask-box">
-    <h3 style="font-size:15px;margin-bottom:8px;" data-i18n="profile_change_email">تغيير البريد الإلكتروني</h3>
-    <input id="newEmailInput" type="email" placeholder="البريد الإلكتروني الجديد" data-i18n-ph="new_email_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
-    <input id="emailCurrentPassword" type="password" placeholder="كلمة المرور الحالية (للتأكيد)" data-i18n-ph="current_password_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
-    <button class="btn btn-primary" data-i18n="save_email_btn" onclick="changeMyEmail()">حفظ البريد الجديد</button>
-  </div>
-
-  <div class="ask-box">
-    <h3 style="font-size:15px;margin-bottom:8px;" data-i18n="profile_change_password">تغيير كلمة المرور</h3>
-    <input id="newPasswordInput" type="password" placeholder="كلمة المرور الجديدة (6 أحرف على الأقل)" data-i18n-ph="new_password_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
-    <input id="passwordCurrentPassword" type="password" placeholder="كلمة المرور الحالية (للتأكيد)" data-i18n-ph="current_password_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
-    <button class="btn btn-primary" data-i18n="save_password_btn" onclick="changeMyPassword()">حفظ كلمة المرور الجديدة</button>
-  </div>
-
-  <button class="btn btn-outline" style="width:100%;" data-i18n="logout_btn" onclick="auth.signOut(); showTab('home');">تسجيل الخروج</button>
-</section>
-
-<!-- ====== صفحة عن المؤسس - النسخة الجديدة ====== -->
-<section id="about">
-  <div class="about-hero" id="aboutHero">
-    <div class="about-background" id="aboutBackground"></div>
-    <div class="glass-container" id="glassContainer">
-      <div class="ios-clock animate-in">
-        <span class="time" id="chinaClock">00:00:00</span>
+    <h2 style="margin-bottom:6px;" data-i18n="import_title">اطلب من الصين</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="import_desc">هل وجدت منتجات في تاوباو أو 1688 أو علي بابا وترغب في شرائها؟ أضف كل منتج على حدة، وسنوافيك بعرض سعر شامل الشراء والشحن لكل الطلب دفعة واحدة.</p>
+    <div class="ask-box">
+      <div id="importItemsList"></div>
+      <button class="btn btn-outline" style="width:100%;margin-bottom:12px;" data-i18n="add_item_btn" onclick="addImportRow()">+ إضافة منتج آخر</button>
+      <div style="margin-bottom:10px;">
+        <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">الوجهة</label>
+        <select id="importDestination" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
+          <option value="SD" data-i18n="opt_sd">السودان</option>
+          <option value="SS" data-i18n="opt_ss">جنوب السودان</option>
+          <option value="UAE" data-i18n="opt_uae">الإمارات العربية المتحدة</option>
+          <option value="KSA" data-i18n="opt_ksa">المملكة العربية السعودية</option>
+        </select>
       </div>
-      <h2 class="animate-in" id="aboutName" style="color:#ffffff;font-size:32px;font-weight:900;margin-bottom:4px;text-shadow:0 2px 16px rgba(0,0,0,0.5);letter-spacing:0.5px;">اسم المؤسس</h2>
-      <div class="about-role animate-in" style="color:#D9A441;font-weight:700;font-size:15px;margin-bottom:24px;text-shadow:0 2px 8px rgba(0,0,0,0.3);">مؤسس AlHossain · وكيلك المعتمد في الصين</div>
-      
-      <div class="about-stats animate-in">
-        <div class="glass-card"><div class="num" id="aboutYears">-</div><div class="lbl" data-i18n="years_exp">سنوات الخبرة</div></div>
-        <div class="glass-card"><div class="num" id="statOrders2">0</div><div class="lbl" data-i18n="orders_done">طلب منفذ</div></div>
-        <div class="glass-card"><div class="num" id="customerCount2">0</div><div class="lbl" data-i18n="registered_customers">عميل مسجل</div></div>
-      </div>
-      
-      <div class="about-bio animate-in" id="aboutBio" style="background:rgba(255,255,255,0.06);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 24px;font-size:14.5px;line-height:2;text-align:right;max-width:600px;margin:0 auto;color:rgba(255,255,255,0.92);text-shadow:0 1px 6px rgba(0,0,0,0.2);box-shadow:0 4px 20px rgba(0,0,0,0.15);">
-        لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.
-      </div>
+      <textarea id="importNotes" placeholder="ملاحظات عامة على الطلب: اللون، المقاس، أي تفاصيل إضافية..." data-i18n-ph="import_notes_ph"></textarea>
+      <button class="btn btn-primary" style="margin-top:10px;" data-i18n="send_quote_request_btn" onclick="submitImportRequest()">إرسال طلب عرض سعر</button>
     </div>
-  </div>
-  
-  <button class="back-btn" id="backBtn" onclick="collapseAbout()" style="position:fixed;top:20px;left:20px;z-index:100;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:10px 18px;border-radius:12px;cursor:pointer;font-family:'Tajawal';font-size:14px;display:none;align-items:center;gap:8px;transition:all 0.3s ease;box-shadow:0 4px 16px rgba(0,0,0,0.2);">
-    ✕ العودة
-  </button>
-</section>
+    <p style="font-size:12px;color:#777;">ملاحظة: هذه الخدمة مخصصة لطلب عرض سعر يشمل شراء المنتجات ونقلها إلى المستودع، وليست شراءً تلقائياً فورياً.</p>
+  </section>
 
-<!-- ====== صفحة العروض النارية ====== -->
-<section id="weeklyoffers">
-  <div id="flashSaleContainer">
-    <!-- يتم تعبئتها بواسطة JavaScript -->
-  </div>
-</section>
+  <section id="factoryvisit">
+    <h2 style="margin-bottom:6px;" data-i18n="factory_title">طلب زيارة مصنع</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="factory_desc">هل وجدت مصنعاً على علي بابا أو غيره وترغب بمعاينته ميدانياً قبل الشراء؟ يمكننا القيام بذلك نيابة عنك.</p>
+
+    <div class="price-box" style="margin-bottom:20px;">
+      <div class="price-title" data-i18n="factory_terms_title">شروط وتكلفة زيارة المصانع</div>
+      <p style="font-size:14px;line-height:1.8;" id="factoryTermsP">
+        إذا كان المصنع داخل نفس المدينة التي يتواجد فيها المسؤول حالياً <strong id="factoryCurrentCityLabel">(يُحدَّد لاحقاً)</strong>، فتكلفة الزيارة <strong>15$</strong> تشمل: زيارة ميدانية، تفاوض مع المصنع، إتمام عملية الشراء، وفحص البضاعة والمصنع.<br><br>
+        أما إذا كان المصنع في مدينة أخرى، فتكلفة التنقل والسفر تكون على العميل، وتُحدَّد بعد التنسيق المباشر.
+      </p>
+    </div>
+
+    <div class="ask-box">
+      <div class="admin-row">
+        <input id="factoryLink" placeholder="رابط صفحة المصنع (علي بابا أو غيره) — اختياري" data-i18n-ph="factory_link_ph">
+      </div>
+      <div class="admin-row">
+        <input id="factoryName" placeholder="اسم المصنع *" data-i18n-ph="factory_name_ph">
+        <input id="factorySpecialty" placeholder="تخصص المصنع *" data-i18n-ph="factory_specialty_ph">
+      </div>
+      <div class="admin-row">
+        <input id="factoryContact" placeholder="رقم أو إيميل المصنع (اختياري)" data-i18n-ph="factory_contact_ph">
+        <input id="factoryCity" placeholder="مدينة المصنع *" oninput="checkFactoryCity()" data-i18n-ph="factory_city_ph">
+      </div>
+      <textarea id="factoryNotes" placeholder="ملاحظات إضافية (اختياري)" data-i18n-ph="factory_notes_ph"></textarea>
+      <div id="factoryCostNote" style="font-size:13px;color:var(--rust);margin:8px 0;display:none;"></div>
+      <button class="btn btn-primary" style="margin-top:6px;" data-i18n="send_visit_request_btn" onclick="submitFactoryVisit()">إرسال طلب الزيارة</button>
+    </div>
+  </section>
+
+  <section id="community">
+    <h2 style="margin-bottom:6px;" data-i18n="community_title">مجتمع العملاء</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="community_desc">شارك تجربتك، اسأل، أو تفاعل مع باقي العملاء.</p>
+
+    <div class="ask-box">
+      <textarea id="postInput" placeholder="اكتب منشورك هنا..." data-i18n-ph="post_ph"></textarea>
+      <button class="btn btn-primary" style="margin-top:8px;" data-i18n="publish_btn" onclick="submitPost()">نشر</button>
+    </div>
+
+    <div id="communityFeed"></div>
+    <button class="btn btn-outline" id="loadMorePostsBtn" style="width:100%;display:none;" data-i18n="load_more" onclick="loadCommunityFeed(true)">تحميل المزيد</button>
+  </section>
+
+  <section id="ratings">
+    <h2 style="margin-bottom:6px;" data-i18n="ratings_title">تقييمات العملاء</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="ratings_desc">آراء عملائنا الحقيقية عن تجربتهم في التعامل معنا.</p>
+
+    <div class="ratings-summary">
+      <div class="ratings-avg" id="ratingsAvg">-</div>
+      <div class="ratings-stars-display" id="ratingsAvgStars">☆☆☆☆☆</div>
+      <div class="ratings-count" id="ratingsCount"></div>
+    </div>
+
+    <div class="ask-box">
+      <div style="text-align:center;margin-bottom:10px;" data-i18n="your_rating">قيّم تجربتك معنا</div>
+      <div class="star-picker" id="starPicker">
+        <span class="star-pick" data-value="1">☆</span>
+        <span class="star-pick" data-value="2">☆</span>
+        <span class="star-pick" data-value="3">☆</span>
+        <span class="star-pick" data-value="4">☆</span>
+        <span class="star-pick" data-value="5">☆</span>
+      </div>
+      <textarea id="ratingComment" placeholder="اكتب تعليقاً (اختياري)..." data-i18n-ph="rating_comment_ph"></textarea>
+      <button class="btn btn-primary" style="margin-top:8px;" data-i18n="submit_rating_btn" onclick="submitRating()">إرسال التقييم</button>
+    </div>
+
+    <div id="reviewsList"></div>
+  </section>
+
+  <section id="activityfeed">
+    <h2 style="margin-bottom:6px;" data-i18n="activity_title">آخر التحركات في الموقع</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="activity_desc">تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.</p>
+    <div id="activityList"></div>
+  </section>
+
+  <section id="profile">
+    <h2 style="margin-bottom:6px;" data-i18n="profile_title">حسابي</h2>
+    <div class="profile-card">
+      <div class="profile-name" id="profileName">-</div>
+      <div class="profile-mark-row">
+        <span class="profile-mark" id="profileMark">-</span>
+        <button class="copy-btn" onclick="copyProfileMark()" title="نسخ">📋</button>
+      </div>
+      <div class="profile-info-line"><span data-i18n="profile_email_label">البريد الإلكتروني:</span> <span id="profileEmail">-</span></div>
+      <div class="profile-info-line"><span data-i18n="destination_label">الوجهة:</span> <span id="profileDestination">-</span></div>
+      <div class="profile-info-line"><span data-i18n="profile_verified_label">حالة التحقق:</span> <span id="profileVerified">-</span></div>
+    </div>
+
+    <div class="ask-box">
+      <h3 style="font-size:15px;margin-bottom:8px;" data-i18n="profile_change_email">تغيير البريد الإلكتروني</h3>
+      <input id="newEmailInput" type="email" placeholder="البريد الإلكتروني الجديد" data-i18n-ph="new_email_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
+      <input id="emailCurrentPassword" type="password" placeholder="كلمة المرور الحالية (للتأكيد)" data-i18n-ph="current_password_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
+      <button class="btn btn-primary" data-i18n="save_email_btn" onclick="changeMyEmail()">حفظ البريد الجديد</button>
+    </div>
+
+    <div class="ask-box">
+      <h3 style="font-size:15px;margin-bottom:8px;" data-i18n="profile_change_password">تغيير كلمة المرور</h3>
+      <input id="newPasswordInput" type="password" placeholder="كلمة المرور الجديدة (6 أحرف على الأقل)" data-i18n-ph="new_password_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
+      <input id="passwordCurrentPassword" type="password" placeholder="كلمة المرور الحالية (للتأكيد)" data-i18n-ph="current_password_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
+      <button class="btn btn-primary" data-i18n="save_password_btn" onclick="changeMyPassword()">حفظ كلمة المرور الجديدة</button>
+    </div>
+
+    <button class="btn btn-outline" style="width:100%;" data-i18n="logout_btn" onclick="auth.signOut(); showTab('home');">تسجيل الخروج</button>
+  </section>
+
+  <section id="about">
+    <div class="about-hero">
+      <div class="about-photo" id="aboutPhotoWrap">
+        <span id="aboutInitial">؟</span>
+      </div>
+      <h2 id="aboutName">اسم المؤسس</h2>
+      <div class="about-role" data-i18n="about_role">مؤسس AlHossain · وكيلك المعتمد في الصين</div>
+    </div>
+    <div class="about-stats">
+      <div class="about-stat"><div class="num" id="aboutYears">-</div><div class="lbl" data-i18n="years_exp">سنوات الخبرة</div></div>
+      <div class="about-stat"><div class="num" id="statOrders2">0</div><div class="lbl" data-i18n="orders_done">طلب منفَّذ</div></div>
+      <div class="about-stat"><div class="num" id="customerCount2">0</div><div class="lbl" data-i18n="registered_customers">عميل مسجَّل</div></div>
+    </div>
+    <div class="about-bio" id="aboutBio">
+      لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.
+    </div>
+  </section>
 
   <section id="terms">
     <h2 style="margin-bottom:16px;" data-i18n="terms_title">الشروط والأحكام</h2>
@@ -1554,64 +1286,6 @@
         <input class="admin-search" placeholder="بحث بالاسم أو الإيميل أو المارك..." oninput="renderAdminCustomers(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
         <div id="adminCustomerList"></div>
       </div>
-      
-      <!-- قسم التحكم في التبويبات -->
-      <div class="admin-section">
-        <h3>📌 التحكم في التبويبات</h3>
-        <p style="font-size:13px;color:#666;margin-bottom:12px;">تحكم في ظهور وإخفاء التبويبات في الموقع</p>
-        <div id="tabsControlList"></div>
-        <button class="btn btn-gold" onclick="saveTabsSettings()" style="margin-top:12px;">💾 حفظ إعدادات التبويبات</button>
-      </div>
-
-      <!-- قسم إدارة العروض النارية -->
-      <div class="admin-section">
-        <h3>🔥 إدارة العروض النارية</h3>
-        
-        <div style="background:var(--paper-soft);border-radius:12px;padding:16px;margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
-            <label style="font-weight:700;">حالة العرض:</label>
-            <select id="flashSaleStatus" style="padding:8px 16px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
-              <option value="inactive">⏸ غير مفعل</option>
-              <option value="active">▶ مفعل</option>
-            </select>
-          </div>
-          
-          <div class="admin-row">
-            <input id="flashProductName" placeholder="اسم المنتج *">
-            <input id="flashSalePrice" type="number" placeholder="سعر العرض ($) *" step="0.01">
-          </div>
-          <div class="admin-row">
-            <input id="flashOriginalPrice" type="number" placeholder="السعر الأصلي ($)" step="0.01">
-            <input id="flashMaxQuantity" type="number" placeholder="العدد المتاح (1-10)" value="1" min="1" max="10">
-          </div>
-          <div class="admin-row">
-            <select id="flashDuration" style="padding:8px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';flex:1;">
-              <option value="day">📅 يوم واحد</option>
-              <option value="week" selected>📅 أسبوع</option>
-              <option value="month">📅 شهر</option>
-              <option value="custom">📅 مدة مخصصة</option>
-            </select>
-            <input id="flashCustomDays" type="number" placeholder="عدد الأيام" style="display:none;flex:1;">
-          </div>
-          <div class="admin-row">
-            <input id="flashStartDate" type="datetime-local" placeholder="تاريخ البدء *">
-            <input id="flashEndDate" type="datetime-local" placeholder="تاريخ الانتهاء *">
-          </div>
-          <div style="margin-bottom:8px;">
-            <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">🖼️ صورة المنتج (اختياري)</label>
-            <input id="flashProductImage" type="file" accept="image/*">
-          </div>
-          <textarea id="flashDescription" placeholder="وصف العرض (اختياري)" style="width:100%;min-height:60px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;"></textarea>
-          
-          <button class="btn btn-gold" onclick="saveFlashSale()" style="width:100%;" id="saveFlashBtn">💾 حفظ العرض الناري</button>
-        </div>
-        
-        <div id="flashSaleHistory" style="margin-top:12px;">
-          <h4 style="font-size:15px;margin-bottom:8px;">📜 تاريخ العروض</h4>
-          <div id="flashSaleHistoryList"></div>
-        </div>
-      </div>
-
       <div class="admin-section">
         <h3>صفحة عن المؤسس</h3>
         <div class="admin-row">
@@ -1619,14 +1293,12 @@
           <input id="aboutYearsInput" type="number" placeholder="سنوات الخبرة">
         </div>
         <div style="margin-bottom:8px;">
-          <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">🖼️ صورة الخلفية (تظهر عند التوسع)</label>
-          <input id="aboutBgPhotoInput" type="file" accept="image/*">
-          <p style="font-size:11px;color:#888;margin-top:4px;">يفضل صورة عالية الجودة 1200×800 على الأقل</p>
+          <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">الصورة الشخصية</label>
+          <input id="aboutPhotoInput" type="file" accept="image/*">
         </div>
         <textarea id="aboutBioInput" placeholder="اكتب نبذة عنك: قصتك، خبرتك، وطريقة عملك مع العملاء..." style="width:100%;min-height:100px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;"></textarea>
         <button class="btn btn-gold" onclick="saveAbout()" id="saveAboutBtn">حفظ صفحة المؤسس</button>
       </div>
-      
       <div class="admin-section">
         <h3>سعر الصرف والموقع الحالي</h3>
         <div class="admin-row">
@@ -1672,7 +1344,6 @@
   </section>
 
 </main>
-
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
 <div class="drawer" id="drawer">
   <button class="close-drawer" onclick="closeCart()">✕</button>
@@ -1880,11 +1551,8 @@ let authMode = 'login';
 let importRowCount = 0;
 let selectedStars = 0;
 let allRatings = [];
-let isAboutExpanded = false;
-let clockInterval = null;
-let flashTimerInterval = null;
 
-// ====== TRANSLATIONS ======
+// ====== TRANSLATIONS OBJECT (كامل) ======
 const translations = {
   nav_home: {ar:'الرئيسية', en:'Home'},
   nav_catalog: {ar:'المنتجات', en:'Products'},
@@ -1894,7 +1562,6 @@ const translations = {
   nav_import: {ar:'اطلب من الصين', en:'Order from China'},
   nav_factory: {ar:'زيارة مصنع', en:'Factory Visit'},
   nav_about: {ar:'عن المؤسس', en:'About Us'},
-  nav_offers: {ar:'🔥 العروض', en:'🔥 Offers'},
   hero_eyebrow: {ar:'وكيلك المعتمد في الصين · تجارة موثوقة', en:'Your Trusted Agent in China'},
   hero_title: {ar:'كل احتياجاتك التجارية في مكان واحد', en:'All Your Trading Needs in One Place'},
   hero_desc: {ar:'نستورد ونوفر لك أفضل المنتجات بأسعار تنافسية، مع متابعة مباشرة لطلبك من التأكيد حتى التسليم.', en:'We import and source the best products at competitive prices, with direct follow-up from confirmation to delivery.'},
@@ -1914,26 +1581,26 @@ const translations = {
   login_btn: {ar:'تسجيل الدخول', en:'Login'},
   glossary_desc: {ar:'مصطلحات ستواجهها كثيراً عند الشراء والشحن من الصين — فهمها جيداً يوفر الوقت والمال.', en:'Terms you will encounter often when buying and shipping from China — understanding them saves time and money.'},
   cur_title: {ar:'محوّل العملة (دولار ↔ جنيه سوداني)', en:'Currency Converter (USD ↔ SDG)'},
-  cur_desc: {ar:'سعر صرف الجنيه السوداني يتغيّر بشكل شبه يومي.', en:'The Sudanese Pound exchange rate changes almost daily.'},
+  cur_desc: {ar:'سعر صرف الجنيه السوداني يتغيّر بشكل شبه يومي، لذا لا يعتمد هذا المحوّل على مصدر آلي، بل على سعر يُحدَّث يدوياً من صاحب الموقع بحسب السوق الفعلي.', en:'The Sudanese Pound exchange rate changes almost daily, so this converter does not rely on an automated source, but on a rate updated manually by the site owner based on the actual market.'},
   cur_amount_label: {ar:'المبلغ بالدولار ($)', en:'Amount in USD ($)'},
   cur_btn: {ar:'تحويل', en:'Convert'},
-  cur_note: {ar:'* هذا السعر تقريبي للاستئناس فقط.', en:'* This rate is indicative only.'},
+  cur_note: {ar:'* هذا السعر تقريبي للاستئناس فقط، ويُعتمد السعر الفعلي وقت التنفيذ.', en:'* This rate is indicative only; the actual rate is confirmed at the time of the transaction.'},
   moq_title: {ar:'الحد الأدنى لكمية الطلب', en:'Minimum Order Quantity'},
-  moq_p1: {ar:'<strong>MOQ (Minimum Order Quantity)</strong> هي أقل كمية يقبل المصنع أو المورد بيعها في الطلب الواحد.', en:'<strong>MOQ (Minimum Order Quantity)</strong> is the smallest quantity a factory or supplier accepts per order.'},
-  moq_p2: {ar:'<strong>لماذا يفعل المصنع ذلك؟</strong> لأن تجهيز خط الإنتاج يكلف المصنع تكاليف ثابتة.', en:'<strong>Why do factories do this?</strong> Setting up a production line costs fixed expenses.'},
+  moq_p1: {ar:'<strong>MOQ (Minimum Order Quantity)</strong> هي أقل كمية يقبل المصنع أو المورد بيعها في الطلب الواحد. فإذا كان المصنع قد حدد الحد الأدنى بـ 500 قطعة، فهذا يعني أنه لن يبيع أقل من 500 قطعة حتى لو رغب المشتري في تجربة كمية أصغر.', en:'<strong>MOQ (Minimum Order Quantity)</strong> is the smallest quantity a factory or supplier accepts per order. If a factory sets its MOQ at 500 pieces, it won\'t sell fewer than 500 pieces, even if the buyer wants to try a smaller quantity first.'},
+  moq_p2: {ar:'<strong>لماذا يفعل المصنع ذلك؟</strong> لأن تجهيز خط الإنتاج (القوالب، المواد الخام، إعداد الآلات) يكلف المصنع تكاليف ثابتة بغض النظر عن الكمية، لذا يحرص على ضمان حد أدنى يغطي هذه التكلفة.', en:'<strong>Why do factories do this?</strong> Setting up a production line (molds, raw materials, machine setup) costs the factory fixed expenses regardless of quantity, so they ensure a minimum that covers that cost.'},
   moq_tips_title: {ar:'<strong>نصائح للتعامل مع الـ MOQ:</strong>', en:'<strong>Tips for handling MOQ:</strong>'},
-  moq_li1: {ar:'لو الكمية أكبر من احتياجك، اسأل عن "MOQ تجريبي" أو عينة مدفوعة.', en:'If the quantity exceeds your needs, ask about a "trial MOQ" or a paid sample.'},
-  moq_li2: {ar:'يمكن التفاوض على تقليل الحد الأدنى للكمية مقابل سعر أعلى قليلاً.', en:'You can negotiate a lower MOQ in exchange for a slightly higher price.'},
-  moq_li3: {ar:'إذا كان هناك موردون آخرون بنفس المنتج بحد أدنى أقل، استخدم ذلك كورقة تفاوض.', en:'If other suppliers offer the same product with a lower MOQ, use that as a negotiating point.'},
+  moq_li1: {ar:'لو الكمية أكبر من احتياجك، اسأل عن "MOQ تجريبي" أو عينة مدفوعة قبل الالتزام بالكمية الكاملة', en:'If the quantity exceeds your needs, ask about a "trial MOQ" or a paid sample before committing to the full quantity'},
+  moq_li2: {ar:'يمكن التفاوض على تقليل الحد الأدنى للكمية مقابل سعر أعلى قليلاً للقطعة', en:'You can negotiate a lower MOQ in exchange for a slightly higher price per piece'},
+  moq_li3: {ar:'إذا كان هناك موردون آخرون بنفس المنتج بحد أدنى أقل، يمكن استخدام ذلك كورقة تفاوض', en:'If other suppliers offer the same product with a lower MOQ, use that as a negotiating point'},
   cbm_title: {ar:'المتر المكعب — أهم رقم في تكلفة الشحن', en:'CBM — The Most Important Number in Shipping Cost'},
-  cbm_p1: {ar:'<strong>CBM (Cubic Meter)</strong> هو وحدة قياس حجم الشحنة.', en:'<strong>CBM (Cubic Meter)</strong> is the unit used to measure shipment volume.'},
+  cbm_p1: {ar:'<strong>CBM (Cubic Meter)</strong> هو وحدة قياس حجم الشحنة، وهو الرقم الذي تعتمد عليه شركات الشحن في حساب سعر الشحن البحري (خاصة إذا كانت الشحنة لا تملأ حاوية كاملة — LCL). حتى لو كانت البضاعة خفيفة الوزن، فإن كبر حجمها يعني احتساب التكلفة على أساس الحجم لا الوزن.', en:'<strong>CBM (Cubic Meter)</strong> is the unit used to measure shipment volume, and it\'s the number shipping companies rely on to calculate sea freight cost (especially for less-than-container loads — LCL). Even if the goods are lightweight, a large volume means the cost is calculated based on volume, not weight.'},
   cbm_formula_title: {ar:'معادلة الحساب', en:'Calculation Formula'},
   cbm_formula: {ar:'CBM = الطول × العرض × الارتفاع (بالمتر)', en:'CBM = Length × Width × Height (in meters)'},
   cbm_formula_sub: {ar:'لو القياس بالسنتيمتر: CBM = (الطول × العرض × الارتفاع) ÷ 1,000,000', en:'If measured in centimeters: CBM = (Length × Width × Height) ÷ 1,000,000'},
   dim_l: {ar:'الطول (L)', en:'Length (L)'},
   dim_w: {ar:'العرض (W)', en:'Width (W)'},
   dim_h: {ar:'الارتفاع (H)', en:'Height (H)'},
-  cbm_example: {ar:'<strong>مثال:</strong> كرتونة أبعادها 50 سم × 40 سم × 30 سم = 0.06 CBM.', en:'<strong>Example:</strong> A carton sized 50 × 40 × 30 cm = 0.06 CBM.'},
+  cbm_example: {ar:'<strong>مثال:</strong> كرتونة أبعادها 50 سم × 40 سم × 30 سم = (50×40×30) ÷ 1,000,000 = <strong>0.06 CBM</strong> للكرتونة الواحدة. وإذا كان الطلب 100 كرتونة، فإن الإجمالي = 6 CBM.', en:'<strong>Example:</strong> A carton sized 50 × 40 × 30 cm = (50×40×30) ÷ 1,000,000 = <strong>0.06 CBM</strong> per carton. For an order of 100 cartons, the total = 6 CBM.'},
   cbm_calc_title: {ar:'🧮 احسب حجم شحنتك وتكلفتها التقريبية (شحن بحري)', en:'🧮 Calculate your shipment volume and approximate cost (sea freight)'},
   len_cm: {ar:'الطول (سم)', en:'Length (cm)'},
   width_cm: {ar:'العرض (سم)', en:'Width (cm)'},
@@ -1941,33 +1608,33 @@ const translations = {
   carton_qty: {ar:'عدد الكراتين', en:'Number of Cartons'},
   destination_label: {ar:'الوجهة', en:'Destination'},
   calc_btn: {ar:'احسب', en:'Calculate'},
-  cbm_calc_note: {ar:'* هذه تكلفة تقريبية للاستئناس فقط.', en:'* This is an indicative cost only.'},
+  cbm_calc_note: {ar:'* هذه تكلفة تقريبية للاستئناس فقط، وقد تزيد أو تنقص حسب السوق الفعلي وقت الشحن — تواصل معنا لتأكيد التكلفة النهائية.', en:'* This is an indicative cost only and may vary based on the actual market at shipping time — contact us to confirm the final cost.'},
   container_type: {ar:'نوع الحاوية', en:'Container Type'},
   approx_capacity: {ar:'السعة التقريبية', en:'Approximate Capacity'},
   c20: {ar:'حاوية 20 قدم', en:'20ft Container'},
   c20cap: {ar:'~28 CBM (سعة استخدام فعلية)', en:'~28 CBM (usable capacity)'},
   c40: {ar:'حاوية 40 قدم', en:'40ft Container'},
   c40hc: {ar:'حاوية 40 قدم عالية السعة (High Cube)', en:'40ft High Cube Container'},
-  cbm_table_note: {ar:'* الأرقام تقريبية للسعة الاستخدامية الفعلية.', en:'* Figures are approximate for actual usable capacity.'},
+  cbm_table_note: {ar:'* الأرقام تقريبية للسعة الاستخدامية الفعلية، وتختلف قليلاً حسب شكل البضاعة وطريقة التحميل.', en:'* Figures are approximate for actual usable capacity and vary slightly depending on cargo shape and loading method.'},
   air_title: {ar:'الشحن الجوي — الوزن الفعلي مقابل الوزن الحجمي', en:'Air Freight — Actual vs. Volumetric Weight'},
-  air_p1: {ar:'في الشحن الجوي، تحتسب شركة الشحن التكلفة على أساس <strong>الأعلى بين الوزن الفعلي والوزن الحجمي</strong>.', en:'For air freight, the shipping company charges based on <strong>whichever is higher: actual weight or volumetric weight</strong>.'},
+  air_p1: {ar:'في الشحن الجوي، تحتسب شركة الشحن التكلفة على أساس <strong>الأعلى بين الوزن الفعلي والوزن الحجمي (Volumetric Weight)</strong>. فإذا كانت الشحنة خفيفة الوزن لكن حجمها كبير، تُحتسب التكلفة على أساس الحجم لا الوزن الحقيقي.', en:'For air freight, the shipping company charges based on <strong>whichever is higher: actual weight or volumetric weight</strong>. If a shipment is lightweight but bulky, the cost is calculated based on volume, not actual weight.'},
   air_formula_title: {ar:'معادلة الوزن الحجمي', en:'Volumetric Weight Formula'},
   air_formula: {ar:'الوزن الحجمي (كجم) = (الطول × العرض × الارتفاع بالسم) ÷ 5000', en:'Volumetric Weight (kg) = (Length × Width × Height in cm) ÷ 5000'},
-  air_formula_sub: {ar:'القاسم 5000 معتمد لدى أغلب شركات الشحن السريع من الصين.', en:'5000 is used by most express carriers from China.'},
+  air_formula_sub: {ar:'القاسم 5000 معتمد لدى أغلب شركات الشحن السريع من الصين، وبعض الشركات تستخدم 6000 — تأكد من شركة الشحن', en:'5000 is used by most express carriers from China; some carriers use 6000 — confirm with your carrier'},
   air_calc_title: {ar:'🧮 احسب الوزن الحجمي والتكلفة التقريبية لشحنتك الجوية', en:'🧮 Calculate the volumetric weight and approximate cost of your air shipment'},
   actual_weight_label: {ar:'الوزن الفعلي (كجم)', en:'Actual Weight (kg)'},
-  air_note: {ar:'* الشحن الجوي متاح حالياً للإمارات والسعودية.', en:'* Air freight is currently available for the UAE and Saudi Arabia.'},
-  questions_desc: {ar:'هل لديك سؤال؟ اكتبه هنا وسنجيبك عليه.', en:'Have a question? Write it here and we\'ll answer it.'},
+  air_note: {ar:'* الشحن الجوي متاح حالياً للإمارات والسعودية، وهو أسرع لكنه أعلى تكلفة من الشحن البحري، ويُستخدم غالباً للشحنات المستعجلة أو الخفيفة والصغيرة الحجم. هذه تكلفة تقريبية للاستئناس فقط.', en:'* Air freight is currently available for the UAE and Saudi Arabia. It is faster but more expensive than sea freight, and is usually used for urgent or light, small shipments. This is an indicative cost only.'},
+  questions_desc: {ar:'هل لديك سؤال؟ اكتبه هنا وسنجيبك عليه، وسيظهر السؤال مع الإجابة هنا لبقية العملاء إن كان فيه فائدة للجميع.', en:'Have a question? Write it here and we\'ll answer it. Your question and answer will appear here for other customers if it\'s helpful to everyone.'},
   question_ph: {ar:'اكتب سؤالك هنا...', en:'Write your question here...'},
   send_question_btn: {ar:'إرسال السؤال', en:'Send Question'},
-  import_desc: {ar:'هل وجدت منتجات في تاوباو أو 1688 أو علي بابا وترغب في شرائها؟', en:'Found products on Taobao, 1688, or Alibaba you\'d like to buy?'},
+  import_desc: {ar:'هل وجدت منتجات في تاوباو أو 1688 أو علي بابا وترغب في شرائها؟ أضف كل منتج على حدة، وسنوافيك بعرض سعر شامل الشراء والشحن لكل الطلب دفعة واحدة.', en:'Found products on Taobao, 1688, or Alibaba you\'d like to buy? Add each product separately, and we\'ll send you a quote covering purchase and shipping for the whole order at once.'},
   add_item_btn: {ar:'+ إضافة منتج آخر', en:'+ Add Another Product'},
-  import_notes_ph: {ar:'ملاحظات عامة على الطلب...', en:'General notes on the order...'},
+  import_notes_ph: {ar:'ملاحظات عامة على الطلب: اللون، المقاس، أي تفاصيل إضافية...', en:'General notes on the order: color, size, any additional details...'},
   send_quote_request_btn: {ar:'إرسال طلب عرض سعر', en:'Send Quote Request'},
   factory_title: {ar:'طلب زيارة مصنع', en:'Factory Visit Request'},
-  factory_desc: {ar:'هل وجدت مصنعاً على علي بابا وترغب بمعاينته ميدانياً؟', en:'Found a factory on Alibaba and want it inspected on-site?'},
+  factory_desc: {ar:'هل وجدت مصنعاً على علي بابا أو غيره وترغب بمعاينته ميدانياً قبل الشراء؟ يمكننا القيام بذلك نيابة عنك.', en:'Found a factory on Alibaba or elsewhere and want it inspected on-site before buying? We can do that on your behalf.'},
   factory_terms_title: {ar:'شروط وتكلفة زيارة المصانع', en:'Factory Visit Terms & Cost'},
-  factory_link_ph: {ar:'رابط صفحة المصنع (اختياري)', en:'Factory page link (optional)'},
+  factory_link_ph: {ar:'رابط صفحة المصنع (علي بابا أو غيره) — اختياري', en:'Factory page link (Alibaba or other) — optional'},
   factory_name_ph: {ar:'اسم المصنع *', en:'Factory Name *'},
   factory_specialty_ph: {ar:'تخصص المصنع *', en:'Factory Specialty *'},
   factory_contact_ph: {ar:'رقم أو إيميل المصنع (اختياري)', en:'Factory phone or email (optional)'},
@@ -1979,23 +1646,23 @@ const translations = {
   orders_done: {ar:'طلب منفَّذ', en:'Orders Completed'},
   registered_customers: {ar:'عميل مسجَّل', en:'Registered Customers'},
   terms_h1: {ar:'1. طبيعة الخدمة والوساطة', en:'1. Nature of the Service & Mediation'},
-  terms_p1: {ar:'يعمل هذا الموقع بصفته <strong>وسيطاً فقط</strong> بين العميل والمصنع وشركة الشحن.', en:'This site acts <strong>solely as an intermediary</strong> between the customer, factory, and shipping company.'},
+  terms_p1: {ar:'يعمل هذا الموقع بصفته <strong>وسيطاً فقط</strong> بين العميل من جهة، والمصنع أو المورد الصيني وشركة الشحن الناقلة من جهة أخرى. لا يُعد الموقع مصنّعاً للمنتجات ولا مالكاً لها، ولا شركة شحن، وإنما ينسّق ويسهّل عملية الشراء والشحن نيابة عن العميل مقابل أجر خدمة.', en:'This site acts <strong>solely as an intermediary</strong> between the customer on one side, and the Chinese factory/supplier and the shipping carrier on the other. The site is not a manufacturer or owner of the products, nor a shipping company; it coordinates and facilitates the purchase and shipping process on behalf of the customer for a service fee.'},
   terms_h2: {ar:'2. حدود المسؤولية', en:'2. Limits of Liability'},
-  terms_p2: {ar:'يتحمّل الموقع المسؤولية فقط عن أي تقصير أو خطأ ناتج مباشرة عن فعله هو.', en:'The site is only liable for negligence or errors directly caused by its own actions.'},
+  terms_p2: {ar:'بصفته وسيطاً، <strong>يتحمّل الموقع المسؤولية فقط عن أي تقصير أو خطأ ناتج مباشرة عن فعله هو</strong> (كخطأ في نقل معلومات الطلب، أو إهمال واضح في المتابعة من جانبه). أما الأخطاء أو الأضرار الناتجة عن طرف ثالث — كعيب في تصنيع المنتج، تأخير أو تلف من شركة الشحن، أو تصرفات المورد الأصلي — فهي مسؤولية ذلك الطرف الثالث تحديداً، ولا يتحمّلها الموقع. يسعى الموقع، قدر الإمكان، لمساعدة العميل في متابعة أي مطالبة تجاه الطرف المسؤول الفعلي.', en:'As an intermediary, <strong>the site is only liable for negligence or errors directly caused by its own actions</strong> (such as an error in relaying order information, or clear negligence in follow-up). Errors or damages caused by a third party — such as a manufacturing defect, delay or damage by the shipping company, or actions of the original supplier — are the responsibility of that third party alone, not the site. The site will, where possible, assist the customer in pursuing any claim against the actual responsible party.'},
   terms_h3: {ar:'3. الأسعار والدفع', en:'3. Prices & Payment'},
-  terms_p3: {ar:'الأسعار تقريبية وقابلة للتغيير حسب السوق الفعلي وقت التنفيذ.', en:'Prices are indicative and subject to change based on the actual market.'},
+  terms_p3: {ar:'الأسعار المعروضة أو المقدَّرة عبر حاسبات الموقع تقريبية وقابلة للتغيير حسب سعر الصرف والسوق الفعلي وقت التنفيذ. يُعتمد السعر النهائي بعد التأكيد المباشر عبر واتساب أو لوحة الطلبات. تُحدَّد طريقة الدفع وشروطه (دفعة مقدَّمة، دفعة كاملة، أو غير ذلك) بالتراضي المتبادل بين الطرفين قبل بدء التنفيذ.', en:'Prices shown or estimated via the site\'s calculators are indicative and subject to change based on the exchange rate and actual market at execution time. The final price is confirmed directly via WhatsApp or the orders panel. Payment method and terms (deposit, full payment, or otherwise) are agreed upon mutually between both parties before execution begins.'},
   terms_h4: {ar:'4. مدة الشحن', en:'4. Shipping Duration'},
-  terms_p4: {ar:'تختلف مدة الشحن حسب نوع الشحن والوجهة والظروف اللوجستية.', en:'Shipping duration varies depending on shipping type, destination, and logistical conditions.'},
+  terms_p4: {ar:'تختلف مدة الشحن حسب نوع الشحن (بحري أو جوي) والوجهة والظروف اللوجستية الخارجة عن إرادة الموقع (كالتخليص الجمركي وأحوال الموانئ وأداء شركة الشحن الناقلة). لا يتحمّل الموقع مسؤولية التأخير الناتج عن أسباب خارجة عن سيطرته المباشرة.', en:'Shipping duration varies depending on the shipping type (sea or air), destination, and logistical conditions beyond the site\'s control (such as customs clearance, port conditions, and carrier performance). The site is not liable for delays caused by factors outside its direct control.'},
   terms_h5: {ar:'5. الأضرار والفقدان أثناء الشحن', en:'5. Damage & Loss During Shipping'},
-  terms_p5: {ar:'تكون المسؤولية على شركة الشحن الناقلة وفق سياستها الخاصة.', en:'Liability rests with the carrier per its own policy.'},
+  terms_p5: {ar:'يُبذل أقصى جهد ممكن لاختيار شركات شحن موثوقة ومتابعة الشحنة. في حال وجود تلف أو فقدان أثناء النقل، تكون المسؤولية على شركة الشحن الناقلة وفق سياستها الخاصة، ويقتصر دور الموقع على المساعدة في متابعة أي مطالبة تعويض لدى الجهة الناقلة.', en:'Best efforts are made to select reliable shipping companies and track shipments. In case of damage or loss during transit, liability rests with the carrier per its own policy, and the site\'s role is limited to helping the customer pursue a compensation claim with the carrier.'},
   terms_h6: {ar:'6. الإرجاع والاستبدال', en:'6. Returns & Exchanges'},
-  terms_p6: {ar:'يخضع لسياسة المورد الأصلي في الصين.', en:'Governed by the original supplier\'s policy in China.'},
-  terms_h7: {ar:'7. مسؤولية المارك', en:'7. Shipping Mark Responsibility'},
-  terms_p7: {ar:'يتحمّل العميل مسؤولية استخدام مارك الشحن الخاص به بشكل صحيح.', en:'The customer is responsible for correctly using their Shipping Mark.'},
+  terms_p6: {ar:'نظراً لطبيعة الشراء من مصادر خارجية (تاوباو، 1688، علي بابا)، فإن إمكانية الإرجاع أو الاستبدال تخضع لسياسة المورد الأصلي وحده، ويُبلَّغ العميل بذلك قبل تأكيد أي طلب استيراد.', en:'Due to the nature of purchasing from external sources (Taobao, 1688, Alibaba), the possibility of returns or exchanges is governed solely by the original supplier\'s policy, and the customer is informed of this before confirming any import request.'},
+  terms_h7: {ar:'7. مسؤولية المارك (Shipping Mark)', en:'7. Shipping Mark Responsibility'},
+  terms_p7: {ar:'يتحمّل العميل مسؤولية استخدام مارك الشحن الخاص به بشكل صحيح عند الطلب من أي جهة، وعدم مشاركته مع أطراف أخرى لتفادي أي التباس في تحديد ملكية الشحنات.', en:'The customer is responsible for correctly using their Shipping Mark when ordering from any source, and for not sharing it with others to avoid confusion in identifying shipment ownership.'},
   terms_h8: {ar:'8. الموافقة على الشروط', en:'8. Acceptance of Terms'},
-  terms_p8: {ar:'يُعد إنشاء حساب إقراراً بالموافقة على هذه الشروط.', en:'Creating an account constitutes acceptance of these terms.'},
+  terms_p8: {ar:'يُعد إنشاء حساب على هذا الموقع إقراراً من العميل بقراءته لهذه الشروط وموافقته الكاملة عليها.', en:'Creating an account on this site constitutes an acknowledgment by the customer that they have read these terms and fully agree to them.'},
   terms_h9: {ar:'9. التعديلات', en:'9. Amendments'},
-  terms_p9: {ar:'يحتفظ الموقع بحق تحديث هذه الشروط في أي وقت.', en:'The site reserves the right to update these terms at any time.'},
+  terms_p9: {ar:'يحتفظ الموقع بحق تحديث هذه الشروط في أي وقت، وسيُعمل بأحدث نسخة منشورة على هذه الصفحة.', en:'The site reserves the right to update these terms at any time, and the latest version published on this page will apply.'},
   footer_text: {ar:'AlHossain · للتواصل المباشر عبر واتساب', en:'AlHossain · Contact us directly on WhatsApp'},
   cart_title: {ar:'سلة الطلب', en:'Order Cart'},
   checkout_btn: {ar:'إتمام الطلب عبر واتساب', en:'Checkout via WhatsApp'},
@@ -2003,28 +1670,28 @@ const translations = {
   opt_ss: {ar:'جنوب السودان', en:'South Sudan'},
   opt_uae: {ar:'الإمارات العربية المتحدة', en:'United Arab Emirates'},
   opt_ksa: {ar:'المملكة العربية السعودية', en:'Saudi Arabia'},
-  my_mark_desc: {ar:'مارك الشحن الدائم الخاص بك — استخدمه عند الطلب من أي موقع صيني.', en:'Your permanent Shipping Mark — use it when ordering from any Chinese site.'},
+  my_mark_desc: {ar:'مارك الشحن الدائم الخاص بك — استخدمه عند الطلب من أي موقع صيني كعنوان استلام', en:'Your permanent Shipping Mark — use it as a receiving name when ordering from any Chinese site'},
   show_shipments_btn: {ar:'اعرض كل شحناتي', en:'Show All My Shipments'},
   not_verified: {ar:'لم يتم التحقق من بريدك الإلكتروني بعد.', en:'Your email has not been verified yet.'},
   resend_verify_btn: {ar:'إعادة إرسال رابط التحقق', en:'Resend Verification Link'},
-  track_login_required: {ar:'لأسباب أمنية، لازم تسجّل دخولك الأول.', en:'For security reasons, you must log in first.'},
+  track_login_required: {ar:'لأسباب أمنية، لازم تسجّل دخولك الأول عشان تقدر تشوف شحناتك.', en:'For security reasons, you must log in first to view your shipments.'},
   what_is_mark: {ar:'ما هي الـ Shipping Mark؟', en:'What is a Shipping Mark?'},
-  mark_info_p1: {ar:'الـ Shipping Mark هي رمز تعريفي ثابت يُخصَّص لكل عميل عند التسجيل.', en:'A Shipping Mark is a permanent identifier code assigned to each customer at registration.'},
+  mark_info_p1: {ar:'الـ Shipping Mark هي رمز تعريفي ثابت يُخصَّص لكل عميل عند التسجيل، ويُستخدم في التجارة الدولية لتمييز شحنة العميل عن غيرها من الشحنات، خاصة عندما تُجمَّع بضائع عملاء متعددين داخل حاوية واحدة قادمة من الصين.', en:'A Shipping Mark is a permanent identifier code assigned to each customer at registration, used in international trade to distinguish a customer\'s shipment from others, especially when goods from multiple customers are consolidated in one container from China.'},
   mark_why_title: {ar:'<strong>لماذا هي مهمة؟</strong>', en:'<strong>Why is it important?</strong>'},
-  mark_li1: {ar:'تُسهِّل التعرف على شحنتك في المستودع أو الميناء.', en:'Makes it easy to identify your shipment at the warehouse or port.'},
-  mark_li2: {ar:'تُقلِّل احتمالية اختلاط بضاعتك ببضاعة غيرك.', en:'Reduces the chance of your goods being mixed up with others\'.'},
-  mark_li3: {ar:'تُستخدم كمرجع موحَّد للتتبع داخل هذا الموقع.', en:'Used as a unified reference for tracking on this site.'},
+  mark_li1: {ar:'تُسهِّل التعرف على شحنتك في المستودع أو الميناء وسط شحنات عملاء آخرين', en:'Makes it easy to identify your shipment at the warehouse or port among other customers\' shipments'},
+  mark_li2: {ar:'تُقلِّل احتمالية اختلاط بضاعتك ببضاعة غيرك أو ضياعها', en:'Reduces the chance of your goods being mixed up with others\' or lost'},
+  mark_li3: {ar:'تُستخدم كمرجع موحَّد للتتبع داخل هذا الموقع، مهما تعدَّدت طلباتك أو مصادر شرائك', en:'Used as a unified reference for tracking on this site, no matter how many orders or sources you buy from'},
   mark_how_title: {ar:'<strong>كيف تُستخدم؟</strong>', en:'<strong>How is it used?</strong>'},
-  mark_how_p: {ar:'اكتب هذا الرمز على كل طرد أو كرتونة تشتريها من أي موقع صيني.', en:'Write this code on every parcel or carton you buy from any Chinese site.'},
+  mark_how_p: {ar:'اكتب هذا الرمز على كل طرد أو كرتونة تشتريها من أي موقع صيني (تاوباو، 1688، علي بابا، أو غيرها)، واستخدمه كاسم أو عنوان استلام إضافي عند الطلب، ليتمكن المستودع من ربط البضاعة بك فور وصولها.', en:'Write this code on every parcel or carton you buy from any Chinese site (Taobao, 1688, Alibaba, or others), and use it as an extra receiving name or address when ordering, so the warehouse can link the goods to you as soon as they arrive.'},
   login_title: {ar:'تسجيل الدخول', en:'Login'},
   register_title: {ar:'إنشاء حساب جديد', en:'Create New Account'},
-  auth_subtitle: {ar:'سجّل بالبريد الإلكتروني لتتمكن من إتمام طلبك.', en:'Register with your email to complete your order.'},
+  auth_subtitle: {ar:'سجّل بالبريد الإلكتروني لتتمكن من إتمام طلبك أو إرسال سؤال', en:'Register with your email to complete your order or send a question'},
   login_tab: {ar:'دخول', en:'Login'},
   register_tab: {ar:'حساب جديد', en:'New Account'},
   full_name_ph: {ar:'الاسم الكامل', en:'Full Name'},
   email_ph: {ar:'البريد الإلكتروني', en:'Email Address'},
   password_ph: {ar:'كلمة المرور (6 أحرف على الأقل)', en:'Password (6+ characters)'},
-  custom_code_hint: {ar:'حروف/أرقام إنجليزية فقط، بدون مسافات.', en:'English letters/numbers only, no spaces.'},
+  custom_code_hint: {ar:'حروف/أرقام إنجليزية فقط، بدون مسافات — في حال تركه فارغاً سيُولَّد رقم تلقائي', en:'English letters/numbers only, no spaces — leave blank to auto-generate one'},
   agree_terms_text: {ar:'أوافق على <span class="link-btn" style="display:inline;margin:0;padding:0;" onclick="event.preventDefault(); openTermsInfo();">الشروط والأحكام</span>', en:'I agree to the <span class="link-btn" style="display:inline;margin:0;padding:0;" onclick="event.preventDefault(); openTermsInfo();">Terms & Conditions</span>'},
   login_btn2: {ar:'دخول', en:'Login'},
   create_account_btn: {ar:'إنشاء الحساب', en:'Create Account'},
@@ -2065,20 +1732,20 @@ const translations = {
   billed_weight: {ar:'الوزن المحتسب', en:'Billed Weight'},
   because_higher: {ar:'لأن', en:'Because the'},
   is_higher_of_two: {ar:'هو الأعلى بين الاثنين', en:'is the higher of the two'},
-  raised_to_minimum: {ar:'(وتم رفعه للحد الأدنى)', en:'(raised to the minimum)'},
+  raised_to_minimum: {ar:'(وتم رفعه للحد الأدنى المعتمد لهذه الوجهة)', en:'(raised to the minimum for this destination)'},
   approx_air_cost_to: {ar:'التكلفة التقريبية للشحن الجوي إلى', en:'Approximate air freight cost to'},
   enter_valid_amount: {ar:'يرجى إدخال مبلغ صحيح', en:'Please enter a valid amount'},
-  rate_not_updated: {ar:'لم يُحدَّث سعر الصرف بعد.', en:'The exchange rate has not been updated yet.'},
+  rate_not_updated: {ar:'لم يُحدَّث سعر الصرف بعد من إدارة الموقع، يرجى التواصل عبر واتساب لمعرفة السعر الحالي', en:'The exchange rate has not been updated by the site admin yet — please contact us via WhatsApp for the current rate'},
   sdg_currency: {ar:'جنيه سوداني', en:'SDG'},
   usd_currency: {ar:'دولار أمريكي', en:'USD'},
   aed_currency: {ar:'درهم إماراتي', en:'AED'},
   nav_community: {ar:'المجتمع', en:'Community'},
   community_title: {ar:'مجتمع العملاء', en:'Customer Community'},
-  community_desc: {ar:'مجتمع حقيقي 100% — كل الأعضاء هنا عملاء تعاملنا معهم فعلياً.', en:'A 100% real community — every member here is a customer we have actually dealt with.'},
+  community_desc: {ar:'مجتمع حقيقي 100% — كل الأعضاء هنا عملاء تعاملنا معهم فعلياً أو نعرفهم على أرض الواقع، مش حسابات وهمية. هذه مساحة حرة للتعبير عن رأيك بصراحة، إيجاباً أو سلباً، وسنرد على تعليقاتكم من حساب الإدارة مباشرة.', en:'A 100% real community — every member here is a customer we have actually dealt with or know personally, not fake accounts. This is a free space to share your honest opinion, positive or negative, and we will reply to comments directly from the official Admin account.'},
   post_ph: {ar:'اكتب منشورك هنا...', en:'Write your post here...'},
   publish_btn: {ar:'نشر', en:'Post'},
   load_more: {ar:'تحميل المزيد', en:'Load More'},
-  no_posts_yet: {ar:'لا توجد منشورات بعد.', en:'No posts yet.'},
+  no_posts_yet: {ar:'لا توجد منشورات بعد، كن أول من ينشر!', en:'No posts yet — be the first to post!'},
   comments_label: {ar:'تعليق', en:'Comments'},
   comment_ph: {ar:'اكتب تعليقاً...', en:'Write a comment...'},
   send_btn: {ar:'إرسال', en:'Send'},
@@ -2097,25 +1764,25 @@ const translations = {
   current_password_ph: {ar:'كلمة المرور الحالية (للتأكيد)', en:'Current password (to confirm)'},
   save_email_btn: {ar:'حفظ البريد الجديد', en:'Save New Email'},
   profile_change_password: {ar:'تغيير كلمة المرور', en:'Change Password'},
-  new_password_ph: {ar:'كلمة المرور الجديدة (6 أحرف)', en:'New password (6+ characters)'},
+  new_password_ph: {ar:'كلمة المرور الجديدة (6 أحرف على الأقل)', en:'New password (6+ characters)'},
   save_password_btn: {ar:'حفظ كلمة المرور الجديدة', en:'Save New Password'},
   logout_btn: {ar:'تسجيل الخروج', en:'Log Out'},
   mark_copied: {ar:'تم نسخ المارك', en:'Shipping Mark copied'},
   copy_failed: {ar:'تعذّر النسخ', en:'Copy failed'},
   fill_all_fields: {ar:'يرجى تعبئة كل الحقول', en:'Please fill in all fields'},
-  email_changed: {ar:'تم تغيير البريد الإلكتروني.', en:'Email changed.'},
+  email_changed: {ar:'تم تغيير البريد الإلكتروني، يرجى التحقق منه مجدداً', en:'Email changed — please verify it again'},
   password_changed: {ar:'تم تغيير كلمة المرور بنجاح', en:'Password changed successfully'},
   complaints_title: {ar:'شكاوى ومقترحات', en:'Complaints & Suggestions'},
-  complaints_desc: {ar:'رسالتك هنا خاصة تمامًا.', en:'Your message here is completely private.'},
+  complaints_desc: {ar:'رسالتك هنا خاصة تمامًا ولا تظهر لأي شخص غيرنا. نقرأ كل رسالة ونهتم بمعالجتها.', en:'Your message here is completely private and visible only to us. We read and address every message.'},
   type_complaint: {ar:'شكوى', en:'Complaint'},
   type_suggestion: {ar:'اقتراح', en:'Suggestion'},
   complaint_ph: {ar:'اكتب رسالتك بالتفصيل هنا...', en:'Write your message in detail here...'},
   send_complaint_btn: {ar:'إرسال', en:'Send'},
   write_complaint_first: {ar:'يرجى كتابة رسالتك أولاً', en:'Please write your message first'},
-  complaint_sent: {ar:'تم إرسال رسالتك.', en:'Your message has been sent.'},
+  complaint_sent: {ar:'تم إرسال رسالتك، شكراً لتواصلك معنا', en:'Your message has been sent — thank you for reaching out'},
   nav_ratings: {ar:'التقييمات', en:'Ratings'},
   ratings_title: {ar:'تقييمات العملاء', en:'Customer Ratings'},
-  ratings_desc: {ar:'آراء عملائنا الحقيقية عن تجربتهم.', en:'Real feedback from our customers about their experience.'},
+  ratings_desc: {ar:'آراء عملائنا الحقيقية عن تجربتهم في التعامل معنا.', en:'Real feedback from our customers about their experience with us.'},
   your_rating: {ar:'قيّم تجربتك معنا', en:'Rate your experience with us'},
   rating_comment_ph: {ar:'اكتب تعليقاً (اختياري)...', en:'Write a comment (optional)...'},
   submit_rating_btn: {ar:'إرسال التقييم', en:'Submit Rating'},
@@ -2123,32 +1790,33 @@ const translations = {
   ratings_count_label: {ar:'تقييم', en:'ratings'},
   no_reviews_yet: {ar:'لا توجد تعليقات مكتوبة بعد', en:'No written reviews yet'},
   select_stars_first: {ar:'يرجى اختيار عدد النجوم أولاً', en:'Please select a star rating first'},
-  rating_submitted: {ar:'تم إرسال تقييمك.', en:'Your rating has been submitted.'},
-  reset_link_sent: {ar:'تم إرسال رابط إعادة تعيين كلمة المرور.', en:'A password reset link has been sent.'},
-  verify_link_resent: {ar:'تم إرسال رابط التحقق مجدداً.', en:'Verification link resent.'},
-  question_sent: {ar:'تم إرسال سؤالك.', en:'Your question has been sent.'},
-  visit_request_sent: {ar:'تم إرسال طلب زيارة المصنع.', en:'Factory visit request sent.'},
-  import_request_sent: {ar:'تم إرسال طلبك.', en:'Your request has been sent.'},
+  rating_submitted: {ar:'تم إرسال تقييمك، شكراً لك', en:'Your rating has been submitted, thank you'},
+  reset_link_sent: {ar:'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني', en:'A password reset link has been sent to your email'},
+  verify_link_resent: {ar:'تم إرسال رابط التحقق مجدداً، يرجى تفقّد بريدك الإلكتروني', en:'Verification link resent — please check your email'},
+  question_sent: {ar:'تم إرسال سؤالك، وسيتم الرد عليه قريباً', en:'Your question has been sent and will be answered soon'},
+  visit_request_sent: {ar:'تم إرسال طلب زيارة المصنع بنجاح', en:'Factory visit request sent successfully'},
+  import_request_sent: {ar:'تم إرسال طلبك، سنوافيك بعرض السعر قريباً', en:'Your request has been sent — we will send you a quote soon'},
   added_to_cart: {ar:'تمت الإضافة إلى السلة', en:'Added to cart'},
   loading_shipments: {ar:'جاري تحميل شحناتك...', en:'Loading your shipments...'},
-  login_required_order: {ar:'يرجى تسجيل الدخول أولاً.', en:'Please log in first.'},
-  login_required_request: {ar:'يرجى تسجيل الدخول أولاً.', en:'Please log in first.'},
-  login_required_question: {ar:'يرجى تسجيل الدخول أولاً.', en:'Please log in first.'},
-  add_one_item: {ar:'يرجى إضافة منتج واحد على الأقل.', en:'Please add at least one product.'},
-  fill_factory_required: {ar:'يرجى تعبئة اسم المصنع وتخصصه ومدينته.', en:'Please fill in the factory name, specialty, and city.'},
-  write_question_first: {ar:'يرجى كتابة سؤالك أولاً.', en:'Please write your question first.'},
-  send_error_retry: {ar:'حدث خطأ، يرجى المحاولة لاحقاً.', en:'An error occurred, please try again later.'},
-  please_login_first: {ar:'يرجى تسجيل الدخول أولاً.', en:'Please log in first.'},
-  invalid_email_error: {ar:'صيغة البريد الإلكتروني غير صحيحة.', en:'Invalid email format.'},
-  no_account_error: {ar:'لا يوجد حساب مسجَّل بهذا البريد.', en:'No account registered with this email.'},
-  enter_email_password: {ar:'أدخل الإيميل وكلمة المرور.', en:'Enter your email and password.'},
-  enter_full_name: {ar:'أدخل اسمك الكامل.', en:'Enter your full name.'},
-  must_agree_terms: {ar:'يجب الموافقة على الشروط.', en:'You must agree to the Terms & Conditions.'},
-  name_english_only: {ar:'يرجى كتابة اسمك بحروف إنجليزية أو أرقام فقط.', en:'Please write your name using English letters or numbers only.'},
+  login_required_order: {ar:'يرجى تسجيل الدخول أولاً لإتمام طلبك', en:'Please log in first to complete your order'},
+  login_required_request: {ar:'يرجى تسجيل الدخول أولاً لإرسال الطلب', en:'Please log in first to send the request'},
+  login_required_question: {ar:'يرجى تسجيل الدخول أولاً لإرسال سؤال', en:'Please log in first to send a question'},
+  add_one_item: {ar:'يرجى إضافة منتج واحد على الأقل برابط وكمية', en:'Please add at least one product with a link and quantity'},
+  fill_factory_required: {ar:'يرجى تعبئة اسم المصنع وتخصصه ومدينته على الأقل', en:'Please fill in at least the factory name, specialty, and city'},
+  write_question_first: {ar:'يرجى كتابة سؤالك أولاً', en:'Please write your question first'},
+  send_error_retry: {ar:'حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً', en:'An error occurred while sending — please try again later'},
+  please_login_first: {ar:'يرجى تسجيل الدخول أولاً', en:'Please log in first'},
+  invalid_email_error: {ar:'صيغة البريد الإلكتروني غير صحيحة', en:'Invalid email format'},
+  no_account_error: {ar:'لا يوجد حساب مسجَّل بهذا البريد الإلكتروني', en:'No account registered with this email'},
+  enter_email_password: {ar:'أدخل الإيميل وكلمة المرور', en:'Enter your email and password'},
+  enter_full_name: {ar:'أدخل اسمك الكامل', en:'Enter your full name'},
+  must_agree_terms: {ar:'يجب الموافقة على الشروط والأحكام لإتمام التسجيل', en:'You must agree to the Terms & Conditions to register'},
+  code_taken: {ar:'هذا الكود مستخدم بالفعل، يرجى تجربة كود آخر أو تركه فارغاً ليُولَّد تلقائياً', en:'This code is already taken — try another one or leave it blank to auto-generate'},
+  name_english_only: {ar:'يرجى كتابة اسمك بحروف إنجليزية أو أرقام فقط (مثال: AHMED)', en:'Please write your name using English letters or numbers only (e.g. AHMED)'},
   unnamed_customer: {ar:'عميل', en:'Customer'},
   nav_activity: {ar:'الإشعارات', en:'Notifications'},
   activity_title: {ar:'آخر التحركات في الموقع', en:'Latest Site Activity'},
-  activity_desc: {ar:'تابع أحدث المنشورات والأسئلة والتقييمات.', en:'Follow the latest posts, questions, and ratings.'},
+  activity_desc: {ar:'تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.', en:'Follow the latest posts, questions, and ratings from our real customers.'},
   no_activity_yet: {ar:'لا توجد تحركات بعد', en:'No activity yet'},
   activity_posted: {ar:'نشر منشوراً جديداً', en:'posted a new update'},
   activity_asked: {ar:'طرح سؤالاً جديداً', en:'asked a new question'},
@@ -2157,15 +1825,14 @@ const translations = {
   sail_text: {ar:'جارٍ الإبحار نحو حسابك...', en:'Sailing to your account...'},
   tracking_anim_text: {ar:'جارٍ البحث عن شحناتك...', en:'Searching for your shipments...'},
   logged_in: {ar:'تم تسجيل الدخول', en:'Logged in successfully'},
-  account_created: {ar:'تم إنشاء الحساب.', en:'Account created.'},
-  email_in_use: {ar:'هذا الإيميل مسجل بالفعل.', en:'This email is already registered.'},
-  weak_password: {ar:'كلمة المرور لازم تكون 6 أحرف على الأقل.', en:'Password must be at least 6 characters.'},
-  wrong_password: {ar:'كلمة المرور غير صحيحة.', en:'Incorrect password.'},
-  invalid_credential: {ar:'بيانات الدخول غير صحيحة.', en:'Invalid login credentials.'},
-  generic_error: {ar:'حدث خطأ، حاول مرة أخرى.', en:'An error occurred, please try again.'},
+  account_created: {ar:'تم إنشاء الحساب، يرجى تفقّد بريدك الإلكتروني للتحقق منه', en:'Account created — please check your email to verify it'},
+  email_in_use: {ar:'هذا الإيميل مسجل بالفعل، جرّب تسجيل الدخول', en:'This email is already registered — try logging in'},
+  weak_password: {ar:'كلمة المرور لازم تكون 6 أحرف على الأقل', en:'Password must be at least 6 characters'},
+  wrong_password: {ar:'كلمة المرور غير صحيحة', en:'Incorrect password'},
+  invalid_credential: {ar:'بيانات الدخول غير صحيحة', en:'Invalid login credentials'},
+  generic_error: {ar:'حدث خطأ، حاول مرة أخرى', en:'An error occurred, please try again'},
 };
-
-// ====== دوال عامة ======
+// ====== FUNCTIONS ======
 
 function t(key){
   return translations[key] ? translations[key][currentLang] : key;
@@ -2235,6 +1902,20 @@ function showCraneLoader(){
   el.classList.add('show');
   clearTimeout(el._t);
   el._t = setTimeout(()=> el.classList.remove('show'), 650);
+}
+
+function showTab(tab){
+  document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+  const navBtn = document.querySelector(`nav.tabs button[data-tab="${tab}"]`);
+  if(navBtn) navBtn.classList.add('active');
+  const isAdmin = tab === 'admin';
+  document.getElementById('waFloat').style.display = isAdmin ? 'none' : 'flex';
+  document.getElementById('currencyFloat').style.display = isAdmin ? 'none' : 'flex';
+  if(firebase.analytics){
+    try{ firebase.analytics().logEvent('page_view', { page_title: tab }); }catch(e){}
+  }
 }
 
 function openAuthModal(){
@@ -2308,477 +1989,838 @@ function switchAuthTab(mode){
   document.getElementById('authError').classList.remove('show');
 }
 
-// ====== دوال التبويبات ======
+// ====== DATA LOADING FUNCTIONS ======
 
-const defaultTabs = {
-  home: { status: 'active', label: 'الرئيسية', icon: '🏠' },
-  catalog: { status: 'active', label: 'المنتجات', icon: '📦' },
-  track: { status: 'active', label: 'تتبع طلبي', icon: '📍' },
-  glossary: { status: 'active', label: 'دليل المصطلحات', icon: '📖' },
-  questions: { status: 'active', label: 'الأسئلة', icon: '❓' },
-  importorder: { status: 'active', label: 'اطلب من الصين', icon: '🇨🇳' },
-  factoryvisit: { status: 'active', label: 'زيارة مصنع', icon: '🏭' },
-  community: { status: 'active', label: 'المجتمع', icon: '👥' },
-  ratings: { status: 'active', label: 'التقييمات', icon: '⭐' },
-  activityfeed: { status: 'active', label: 'الإشعارات', icon: '🔔' },
-  about: { status: 'active', label: 'عن المؤسس', icon: '👤' },
-  weeklyoffers: { status: 'active', label: '🔥 العروض', icon: '🔥' }
-};
+async function loadData(){
+  const prodSnap = await db.collection('products').get();
+  products = prodSnap.docs.map(d => ({id: d.id, ...d.data()}));
 
-async function loadTabsSettings() {
-  try {
-    const doc = await db.collection('settings').doc('tabs').get();
-    if (doc.exists) return doc.data();
-    await db.collection('settings').doc('tabs').set(defaultTabs);
-    return defaultTabs;
-  } catch (e) {
-    console.error('Error loading tabs:', e);
-    return defaultTabs;
-  }
-}
-
-async function renderTabsControl() {
-  const wrap = document.getElementById('tabsControlList');
-  if (!wrap) return;
-  const tabs = await loadTabsSettings();
-  wrap.innerHTML = Object.entries(tabs).map(([key, tab]) => `
-    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);flex-wrap:wrap;">
-      <span style="font-weight:700;min-width:120px;">${tab.icon || '📌'} ${tab.label}</span>
-      <select class="tab-status-select" data-tab="${key}" style="padding:5px 10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';flex:1;min-width:120px;">
-        <option value="active" ${tab.status === 'active' ? 'selected' : ''}>✅ متاح</option>
-        <option value="locked" ${tab.status === 'locked' ? 'selected' : ''}>🔒 مغلق</option>
-        <option value="soon" ${tab.status === 'soon' ? 'selected' : ''}>⏳ قريباً</option>
-        <option value="hidden" ${tab.status === 'hidden' ? 'selected' : ''}>👻 مخفي</option>
-      </select>
-      <input class="tab-message-input" data-tab="${key}" placeholder="رسالة مخصصة" value="${tab.message || ''}" style="padding:5px 10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';flex:1;min-width:150px;">
-    </div>
-  `).join('');
-}
-
-async function saveTabsSettings() {
-  const selects = document.querySelectorAll('.tab-status-select');
-  const inputs = document.querySelectorAll('.tab-message-input');
-  const tabs = {};
-  selects.forEach(select => {
-    const key = select.dataset.tab;
-    tabs[key] = tabs[key] || {};
-    tabs[key].status = select.value;
-  });
-  inputs.forEach(input => {
-    const key = input.dataset.tab;
-    tabs[key] = tabs[key] || {};
-    tabs[key].message = input.value.trim() || '';
-  });
-  const currentTabs = await loadTabsSettings();
-  Object.keys(tabs).forEach(key => {
-    if (currentTabs[key]) {
-      tabs[key].label = currentTabs[key].label || key;
-      tabs[key].icon = currentTabs[key].icon || '📌';
-    }
-  });
-  try {
-    await db.collection('settings').doc('tabs').set(tabs);
-    showToast('✅ تم حفظ إعدادات التبويبات');
-    renderTabsControl();
-    updateTabs();
-  } catch (e) {
-    showToast('❌ حدث خطأ: ' + e.message);
-  }
-}
-
-async function updateTabs() {
-  const tabs = await loadTabsSettings();
-  const nav = document.querySelector('nav.tabs');
-  if (!nav) return;
-  const buttons = nav.querySelectorAll('button');
-  buttons.forEach(btn => {
-    const tabKey = btn.dataset.tab;
-    const tabConfig = tabs[tabKey];
-    if (!tabConfig) return;
-    if (tabConfig.status === 'hidden') {
-      btn.style.display = 'none';
-    } else {
-      btn.style.display = 'inline-block';
-      if (tabConfig.status === 'locked' || tabConfig.status === 'soon') {
-        const msg = tabConfig.message || (tabConfig.status === 'locked' ? '🔒 قريباً' : '⏳ قيد التجهيز');
-        btn.innerHTML = `${tabConfig.icon || '📌'} ${tabConfig.label} <span style="font-size:10px;opacity:0.7;">(${msg})</span>`;
-        btn.style.opacity = '0.7';
-        btn.style.cursor = 'not-allowed';
-        btn._originalOnclick = btn.onclick;
-        btn.onclick = () => showToast(`⏳ ${tabConfig.label} غير متاح حالياً: ${msg}`);
-      } else {
-        btn.innerHTML = `${tabConfig.icon || '📌'} ${tabConfig.label}`;
-        btn.style.opacity = '1';
-        btn.style.cursor = 'pointer';
-        if (btn._originalOnclick) {
-          btn.onclick = btn._originalOnclick;
-        } else {
-          btn.onclick = () => showTab(tabKey);
-        }
-      }
-    }
-  });
-}
-// ====== دوال العروض النارية ======
-
-async function loadFlashSale() {
-  try {
-    const doc = await db.collection('settings').doc('flashSale').get();
-    return doc.exists ? doc.data() : null;
-  } catch (e) {
-    console.error('Error loading flash sale:', e);
-    return null;
-  }
-}
-
-async function renderFlashSaleAdmin() {
-  const sale = await loadFlashSale();
-  if (!sale) {
-    document.getElementById('flashSaleStatus').value = 'inactive';
-    document.getElementById('flashProductName').value = '';
-    document.getElementById('flashOriginalPrice').value = '';
-    document.getElementById('flashSalePrice').value = '';
-    document.getElementById('flashMaxQuantity').value = 1;
-    document.getElementById('flashDuration').value = 'week';
-    document.getElementById('flashStartDate').value = '';
-    document.getElementById('flashEndDate').value = '';
-    document.getElementById('flashDescription').value = '';
-    renderFlashSaleHistory();
-    return;
-  }
-  document.getElementById('flashSaleStatus').value = sale.active ? 'active' : 'inactive';
-  document.getElementById('flashProductName').value = sale.productName || '';
-  document.getElementById('flashOriginalPrice').value = sale.originalPrice || '';
-  document.getElementById('flashSalePrice').value = sale.salePrice || '';
-  document.getElementById('flashMaxQuantity').value = sale.maxQuantity || 1;
-  document.getElementById('flashDuration').value = sale.duration || 'week';
-  document.getElementById('flashStartDate').value = sale.startDate || '';
-  document.getElementById('flashEndDate').value = sale.endDate || '';
-  document.getElementById('flashDescription').value = sale.description || '';
-  renderFlashSaleHistory();
-}
-
-async function renderFlashSaleHistory() {
-  const wrap = document.getElementById('flashSaleHistoryList');
-  if (!wrap) return;
-  try {
-    const doc = await db.collection('settings').doc('flashSaleHistory').get();
-    if (!doc.exists || !doc.data().history || doc.data().history.length === 0) {
-      wrap.innerHTML = `<div class="empty">لا توجد عروض سابقة</div>`;
-      return;
-    }
-    const history = doc.data().history || [];
-    wrap.innerHTML = history.slice().reverse().map(sale => `
-      <div style="background:var(--paper-soft);border-radius:10px;padding:12px;margin-bottom:8px;border-right:4px solid var(--gold);">
-        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;">
-          <strong>${sale.productName || 'بدون اسم'}</strong>
-          <span style="color:var(--rust);font-weight:700;">$${sale.salePrice || 0}</span>
-        </div>
-        <div style="font-size:12px;color:#666;">
-          ${sale.sold ? `✅ تم البيع لـ ${sale.soldTo || 'عميل'}` : '❌ لم يتم البيع'}
-          · ${sale.startDate ? new Date(sale.startDate).toLocaleDateString('ar-EG') : ''}
-        </div>
-      </div>
-    `).join('');
-  } catch (e) {
-    wrap.innerHTML = `<div class="empty">خطأ في تحميل التاريخ</div>`;
-  }
-}
-
-async function saveFlashSale() {
-  const btn = document.getElementById('saveFlashBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳ جاري الحفظ...';
-  
-  const active = document.getElementById('flashSaleStatus').value === 'active';
-  const productName = document.getElementById('flashProductName').value.trim();
-  const salePrice = parseFloat(document.getElementById('flashSalePrice').value);
-  const originalPrice = parseFloat(document.getElementById('flashOriginalPrice').value);
-  const maxQuantity = parseInt(document.getElementById('flashMaxQuantity').value) || 1;
-  const duration = document.getElementById('flashDuration').value;
-  const startDate = document.getElementById('flashStartDate').value;
-  const endDate = document.getElementById('flashEndDate').value;
-  const description = document.getElementById('flashDescription').value.trim();
-  
-  if (!productName) { showToast('⚠️ يرجى إدخال اسم المنتج'); btn.disabled = false; btn.textContent = '💾 حفظ العرض الناري'; return; }
-  if (!salePrice || salePrice <= 0) { showToast('⚠️ يرجى إدخال سعر العرض'); btn.disabled = false; btn.textContent = '💾 حفظ العرض الناري'; return; }
-  if (!startDate || !endDate) { showToast('⚠️ يرجى تحديد تاريخ البدء والانتهاء'); btn.disabled = false; btn.textContent = '💾 حفظ العرض الناري'; return; }
-  
-  let finalDuration = duration;
-  if (duration === 'custom') {
-    const customDays = parseInt(document.getElementById('flashCustomDays').value);
-    if (customDays && customDays > 0) {
-      finalDuration = customDays + 'days';
-    } else {
-      showToast('⚠️ يرجى إدخال عدد الأيام للمدة المخصصة');
-      btn.disabled = false;
-      btn.textContent = '💾 حفظ العرض الناري';
-      return;
+  if(products.length === 0){
+    const seed = [
+      {name:'أطقم مطبخ ستانلس', price:3.2},
+      {name:'إكسسوارات موبايل', price:0.8},
+      {name:'أدوات كهربائية منزلية', price:5.5},
+    ];
+    for(const p of seed){
+      const ref = await db.collection('products').add(p);
+      products.push({id: ref.id, ...p});
     }
   }
-  
-  let imageUrl = '';
-  const imageFile = document.getElementById('flashProductImage').files[0];
-  if (imageFile) {
-    try {
-      const imageRef = storage.ref('flashSales/' + Date.now() + '_' + imageFile.name);
-      await imageRef.put(imageFile);
-      imageUrl = await imageRef.getDownloadURL();
-    } catch (e) {
-      showToast('⚠️ خطأ في رفع الصورة: ' + e.message);
-      btn.disabled = false;
-      btn.textContent = '💾 حفظ العرض الناري';
-      return;
-    }
-  }
-  
-  const flashData = {
-    active,
-    productName,
-    originalPrice: originalPrice || salePrice * 1.5,
-    salePrice,
-    maxQuantity: Math.min(maxQuantity, 10),
-    duration: finalDuration,
-    startDate,
-    endDate,
-    description,
-    image: imageUrl,
-    sold: false,
-    soldTo: null,
-    updatedAt: new Date().toISOString()
-  };
-  
-  try {
-    await db.collection('settings').doc('flashSale').set(flashData);
-    if (!active) {
-      const historyDoc = await db.collection('settings').doc('flashSaleHistory').get();
-      const history = historyDoc.exists ? historyDoc.data().history || [] : [];
-      history.push({ ...flashData, archivedAt: new Date().toISOString() });
-      await db.collection('settings').doc('flashSaleHistory').set({ history });
-    }
-    showToast('✅ تم حفظ العرض الناري بنجاح');
-    renderFlashSaleAdmin();
-    renderFlashSalePage();
-  } catch (e) {
-    showToast('❌ حدث خطأ: ' + e.message);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '💾 حفظ العرض الناري';
-  }
-}
 
-function getTimeRemaining(endDate) {
-  const now = new Date();
-  const end = new Date(endDate);
-  const diff = end - now;
-  if (diff <= 0) return null;
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-  return { days, hours, minutes, seconds };
-}
+  const qSnap = await db.collection('questions').get();
+  questions = {};
+  qSnap.docs.forEach(d => { questions[d.id] = d.data(); });
 
-function formatTimeRemaining(remaining) {
-  if (!remaining) return '⏰ انتهى العرض';
-  const parts = [];
-  if (remaining.days > 0) parts.push(`${String(remaining.days).padStart(2, '0')} يوم`);
-  if (remaining.hours > 0 || remaining.days > 0) parts.push(`${String(remaining.hours).padStart(2, '0')} ساعة`);
-  parts.push(`${String(remaining.minutes).padStart(2, '0')} دقيقة`);
-  parts.push(`${String(remaining.seconds).padStart(2, '0')} ثانية`);
-  return parts.join(' ');
-}
+  const aboutDoc = await db.collection('settings').doc('about').get();
+  aboutData = aboutDoc.exists ? aboutDoc.data() : {};
 
-async function renderFlashSalePage() {
-  const sale = await loadFlashSale();
-  const container = document.getElementById('flashSaleContainer');
-  if (!container) return;
-  if (!sale || !sale.active) {
-    container.innerHTML = `
-      <div style="text-align:center;padding:40px 20px;">
-        <div style="font-size:48px;">⏳</div>
-        <h3 style="margin-top:12px;">لا توجد عروض حالياً</h3>
-        <p style="color:#666;">ترقبوا العروض النارية القادمة!</p>
-      </div>
-    `;
-    return;
-  }
-  const timeLeft = getTimeRemaining(sale.endDate);
-  const isExpired = !timeLeft;
-  const isSold = sale.sold;
-  container.innerHTML = `
-    <div style="background:linear-gradient(135deg, var(--ink), var(--rust)); border-radius:20px; padding:30px 20px; color:var(--paper); text-align:center; position:relative; overflow:hidden;">
-      ${isSold ? `<div style="position:absolute;top:20px;right:20px;background:var(--gold);color:var(--ink-dark);padding:8px 20px;border-radius:999px;font-weight:700;font-size:14px;">🔥 تم البيع!</div>` : ''}
-      <div style="font-size:14px;color:var(--gold);font-weight:700;">🔥 العرض الناري</div>
-      <h2 style="color:var(--paper);font-size:28px;margin:8px 0;">${sale.productName}</h2>
-      ${sale.image ? `<img src="${sale.image}" alt="${sale.productName}" style="max-width:200px;max-height:200px;border-radius:12px;margin:12px auto;display:block;">` : ''}
-      <div style="display:flex;gap:12px;justify-content:center;align-items:center;margin:12px 0;">
-        <span style="text-decoration:line-through;color:rgba(255,255,255,0.6);font-size:16px;">$${sale.originalPrice}</span>
-        <span style="font-size:32px;font-weight:900;color:var(--gold);">$${sale.salePrice}</span>
-        <span style="background:var(--gold);color:var(--ink-dark);padding:2px 12px;border-radius:999px;font-size:12px;font-weight:700;">-${Math.round((1 - sale.salePrice/sale.originalPrice) * 100)}%</span>
-      </div>
-      ${sale.description ? `<p style="color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:12px;">${sale.description}</p>` : ''}
-      ${!isExpired && !isSold ? `
-        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:16px;margin:16px auto;max-width:400px;">
-          <div style="font-size:12px;color:rgba(255,255,255,0.7);">⏰ الوقت المتبقي</div>
-          <div style="font-size:28px;font-weight:700;font-family:monospace;letter-spacing:2px;color:var(--gold);" id="flashTimer">${formatTimeRemaining(timeLeft)}</div>
-        </div>
-        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px;">
-          <span style="background:rgba(255,255,255,0.1);padding:6px 16px;border-radius:999px;font-size:13px;">🎯 متبقي ${sale.maxQuantity} فقط</span>
-          <span style="background:rgba(255,255,255,0.1);padding:6px 16px;border-radius:999px;font-size:13px;">🏆 أول ${sale.maxQuantity} يشتري</span>
-        </div>
-        <button class="btn btn-gold" style="margin-top:16px;font-size:18px;padding:14px 40px;" onclick="buyFlashSale()">💳 اشتري الآن - العرض محدود</button>
-      ` : ''}
-      ${isExpired ? `
-        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:16px;margin:12px auto;max-width:400px;">
-          <div style="font-size:20px;">⏰</div>
-          <div style="font-size:16px;font-weight:700;">انتهى العرض</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.7);">ترقبوا العروض القادمة</div>
-        </div>
-      ` : ''}
-      ${isSold ? `
-        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:16px;margin:12px auto;max-width:400px;">
-          <div style="font-size:20px;">🏆</div>
-          <div style="font-size:16px;font-weight:700;">تم بيع العرض!</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.7);">شكراً لكم، ترقبوا العروض القادمة</div>
-        </div>
-      ` : ''}
-    </div>
-  `;
-  if (!isExpired && !isSold) startFlashTimer(sale.endDate);
-}
+  const currencyDoc = await db.collection('settings').doc('currency').get();
+  currencyData = currencyDoc.exists ? currencyDoc.data() : {};
 
-function startFlashTimer(endDate) {
-  if (flashTimerInterval) clearInterval(flashTimerInterval);
-  flashTimerInterval = setInterval(() => {
-    const remaining = getTimeRemaining(endDate);
-    const timerEl = document.getElementById('flashTimer');
-    if (!timerEl) { clearInterval(flashTimerInterval); return; }
-    if (!remaining) {
-      timerEl.textContent = '⏰ انتهى العرض';
-      clearInterval(flashTimerInterval);
-      renderFlashSalePage();
-      return;
-    }
-    timerEl.textContent = formatTimeRemaining(remaining);
-  }, 1000);
-}
+  const locationDoc = await db.collection('settings').doc('agentLocation').get();
+  agentLocationData = locationDoc.exists ? locationDoc.data() : {};
 
-async function buyFlashSale() {
-  if (!currentUser) {
-    openAuthModal();
-    showToast('⚠️ يرجى تسجيل الدخول أولاً');
-    return;
-  }
-  if (!currentUser.emailVerified) {
-    showToast('⚠️ يرجى تأكيد بريدك الإلكتروني أولاً');
-    return;
-  }
-  const sale = await loadFlashSale();
-  if (!sale || !sale.active) { showToast('⚠️ العرض غير متاح حالياً'); return; }
-  if (sale.sold) { showToast('⚠️ تم بيع العرض بالفعل'); return; }
-  const timeLeft = getTimeRemaining(sale.endDate);
-  if (!timeLeft) { showToast('⚠️ انتهى العرض'); return; }
-  
-  // هنا يتم الدفع - بعد نجاح الدفع:
-  await db.collection('settings').doc('flashSale').update({
-    sold: true,
-    soldTo: currentUser.email,
-    soldAt: new Date().toISOString()
-  });
-  
-  const voucherCode = 'SHIP50-' + Date.now().toString(36).toUpperCase();
-  const voucher = {
-    id: 'VOUCHER-' + Date.now(),
-    type: 'shipping',
-    value: 50,
-    code: voucherCode,
-    used: false,
-    expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-    issuedDate: new Date().toISOString(),
-    flashSaleId: 'current'
-  };
-  
-  await db.collection('vouchers').doc(currentUser.email).set({
-    vouchers: firebase.firestore.FieldValue.arrayUnion(voucher)
-  }, { merge: true });
-  
-  notifyAdmin('🔥 تم بيع العرض الناري!', `
-    المنتج: ${sale.productName}
-    السعر: $${sale.salePrice}
-    العميل: ${currentUser.email}
-    القسيمة: ${voucherCode} (50% تخفيض على الشحن)
-  `);
-  
-  showToast('🎉 تهانينا! لقد فزت بالعرض الناري!');
-  renderFlashSalePage();
-}
-
-// ====== دوال صفحة عن المؤسس ======
-
-function expandAbout() {
-  if (isAboutExpanded) return;
-  const hero = document.getElementById('aboutHero');
-  const backBtn = document.getElementById('backBtn');
-  hero.classList.add('expanded');
-  backBtn.classList.add('show');
-  isAboutExpanded = true;
-  startChinaClock();
+  renderAll();
+  renderCurrencyMeta();
+  updateFactoryCityLabel();
   renderAbout();
+
+  db.collection('questions').onSnapshot(snap => {
+    questions = {};
+    snap.docs.forEach(d => { questions[d.id] = d.data(); });
+    renderQaList();
+    renderAdminQa();
+  });
 }
 
-function collapseAbout() {
-  if (!isAboutExpanded) return;
-  const hero = document.getElementById('aboutHero');
-  const backBtn = document.getElementById('backBtn');
-  hero.classList.remove('expanded');
-  backBtn.classList.remove('show');
-  isAboutExpanded = false;
-  stopChinaClock();
+async function loadAdminData(){
+  const orderSnap = await db.collection('orders').get();
+  orders = {};
+  orderSnap.docs.forEach(d => { orders[d.id] = d.data(); });
+
+  const custSnap = await db.collection('customers').get();
+  customers = custSnap.docs.map(d => d.data());
+
+  const importSnap = await db.collection('importRequests').get();
+  importRequests = {};
+  importSnap.docs.forEach(d => { importRequests[d.id] = d.data(); });
+
+  const factorySnap = await db.collection('factoryVisitRequests').get();
+  factoryVisits = {};
+  factorySnap.docs.forEach(d => { factoryVisits[d.id] = d.data(); });
+
+  const complaintsSnap = await db.collection('complaints').get();
+  complaints = {};
+  complaintsSnap.docs.forEach(d => { complaints[d.id] = d.data(); });
+
+  renderAdminProducts();
+  renderAdminOrders();
+  renderAdminCustomers();
+  renderAdminImportRequests();
+  renderAdminFactoryVisits();
+  renderAdminComplaints();
+
+  db.collection('complaints').onSnapshot(snap => {
+    complaints = {};
+    snap.docs.forEach(d => { complaints[d.id] = d.data(); });
+    renderAdminComplaints();
+  });
+
+  db.collection('importRequests').onSnapshot(snap => {
+    importRequests = {};
+    snap.docs.forEach(d => { importRequests[d.id] = d.data(); });
+    renderAdminImportRequests();
+  });
+
+  db.collection('factoryVisitRequests').onSnapshot(snap => {
+    factoryVisits = {};
+    snap.docs.forEach(d => { factoryVisits[d.id] = d.data(); });
+    renderAdminFactoryVisits();
+  });
+
+  db.collection('customers').onSnapshot(snap => {
+    customers = snap.docs.map(d => d.data());
+    renderAdminCustomers();
+  });
+
+  db.collection('orders').onSnapshot(snap => {
+    orders = {};
+    snap.docs.forEach(d => { orders[d.id] = d.data(); });
+    renderAdminOrders();
+  });
 }
 
-function startChinaClock() {
-  if (clockInterval) return;
-  updateChinaClock();
-  clockInterval = setInterval(updateChinaClock, 1000);
+async function loadMyShipments(){
+  if(!currentUser || !currentCustomerData || !currentCustomerData.shippingMark) return;
+  const mark = currentCustomerData.shippingMark;
+
+  const [orderSnap, importSnap, factorySnap] = await Promise.all([
+    db.collection('orders').where('shippingMark','==',mark).get(),
+    db.collection('importRequests').where('shippingMark','==',mark).get(),
+    db.collection('factoryVisitRequests').where('shippingMark','==',mark).get()
+  ]);
+
+  myOrders = {};
+  orderSnap.docs.forEach(d => { myOrders[d.id] = d.data(); });
+  myImportRequests = {};
+  importSnap.docs.forEach(d => { myImportRequests[d.id] = d.data(); });
+  myFactoryVisits = {};
+  factorySnap.docs.forEach(d => { myFactoryVisits[d.id] = d.data(); });
 }
 
-function stopChinaClock() {
-  if (clockInterval) {
-    clearInterval(clockInterval);
-    clockInterval = null;
+// ====== AUTH FUNCTIONS ======
+
+async function generateUniqueMark(rawName, destCode, ownerEmail){
+  let base = (rawName || '').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(!base){
+    const seq = await getNextCustomerSeq();
+    base = `C${String(seq).padStart(3,'0')}`;
+  }
+  if(base.length > 15) base = base.slice(0,15);
+
+  let candidate = `AH-${base}-${destCode}`;
+  let attempt = 1;
+  while(true){
+    const markRef = db.collection('shippingMarks').doc(candidate);
+    const markDoc = await markRef.get();
+    if(!markDoc.exists){
+      await markRef.set({ email: ownerEmail });
+      return candidate;
+    }
+    attempt++;
+    candidate = `AH-${base}${attempt}-${destCode}`;
   }
 }
 
-function updateChinaClock() {
-  const now = new Date();
-  const chinaTime = new Date(now.getTime() + (8 * 60 * 60 * 1000));
-  const hours = String(chinaTime.getUTCHours()).padStart(2, '0');
-  const minutes = String(chinaTime.getUTCMinutes()).padStart(2, '0');
-  const seconds = String(chinaTime.getUTCSeconds()).padStart(2, '0');
-  const clockEl = document.getElementById('chinaClock');
-  if (clockEl) {
-    clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+async function getNextOrderSeq(){
+  const counterRef = db.collection('settings').doc('counters');
+  return await db.runTransaction(async (t) => {
+    const doc = await t.get(counterRef);
+    const current = doc.exists ? (doc.data().orderSeq || 0) : 0;
+    const next = current + 1;
+    t.set(counterRef, { orderSeq: next }, { merge: true });
+    return next;
+  });
+}
+
+async function getNextCustomerSeq(){
+  const counterRef = db.collection('settings').doc('counters');
+  return await db.runTransaction(async (t) => {
+    const doc = await t.get(counterRef);
+    const current = doc.exists ? (doc.data().customerSeq || 0) : 0;
+    const next = current + 1;
+    t.set(counterRef, { customerSeq: next }, { merge: true });
+    return next;
+  });
+}
+
+async function ensureShippingMark(){
+  if(!currentUser) return;
+  if(currentCustomerData && currentCustomerData.shippingMark) return;
+
+  const destCode = currentCustomerData?.destination ? destCodeFromName(currentCustomerData.destination) : 'SD';
+  const nameBase = currentCustomerData?.name || currentUser.email.split('@')[0];
+  const mark = await generateUniqueMark(nameBase, destCode, currentUser.email);
+
+  const data = {
+    email: currentUser.email,
+    name: currentCustomerData?.name || nameBase,
+    destination: currentCustomerData?.destination || destName(destCode),
+    shippingMark: mark,
+    emailVerified: currentUser.emailVerified || false,
+    joinDate: currentCustomerData?.joinDate || new Date().toISOString().slice(0,10)
+  };
+  await db.collection('customers').doc(currentUser.email).set(data, {merge:true});
+  currentCustomerData = data;
+}
+
+async function submitAuth(){
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const name = document.getElementById('authName').value.trim();
+  const destCode = document.getElementById('authDestination').value;
+  const errBox = document.getElementById('authError');
+  errBox.classList.remove('show');
+  if(!email || !password){
+    errBox.textContent = t('enter_email_password');
+    errBox.classList.add('show');
+    return;
   }
+  if(authMode === 'register' && !name){
+    errBox.textContent = t('enter_full_name');
+    errBox.classList.add('show');
+    return;
+  }
+
+  let cleanName = '';
+  if(authMode === 'register'){
+    cleanName = name.toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(!cleanName){
+      errBox.textContent = t('name_english_only');
+      errBox.classList.add('show');
+      return;
+    }
+  }
+
+  if(authMode === 'register' && !document.getElementById('authTermsCheck').checked){
+    errBox.textContent = t('must_agree_terms');
+    errBox.classList.add('show');
+    return;
+  }
+
+  try{
+    if(authMode === 'login'){
+      await auth.signInWithEmailAndPassword(email, password);
+    } else {
+      const userCred = await auth.createUserWithEmailAndPassword(email, password);
+      const shippingMark = await generateUniqueMark(cleanName, destCode, email);
+      await userCred.user.sendEmailVerification();
+      await db.collection('customers').doc(email).set({
+        email: email,
+        name: name,
+        destination: destName(destCode),
+        shippingMark: shippingMark,
+        emailVerified: false,
+        termsAccepted: true,
+        termsAcceptedDate: new Date().toISOString(),
+        joinDate: new Date().toISOString().slice(0,10)
+      });
+    }
+    playSailAnimation(() => {
+      closeAuthModal();
+      showToast(authMode==='login' ? t('logged_in') : t('account_created'));
+    });
+  }catch(e){
+    const map = {
+      'auth/email-already-in-use': t('email_in_use'),
+      'auth/invalid-email': t('invalid_email_error'),
+      'auth/weak-password': t('weak_password'),
+      'auth/user-not-found': t('no_account_error'),
+      'auth/wrong-password': t('wrong_password'),
+      'auth/invalid-credential': t('invalid_credential')
+    };
+    errBox.textContent = map[e.code] || t('generic_error');
+    errBox.classList.add('show');
+  }
+}
+
+async function handleForgotPassword(){
+  const email = document.getElementById('authEmail').value.trim();
+  const errBox = document.getElementById('authError');
+  errBox.classList.remove('show');
+  if(!email){
+    errBox.textContent = 'يرجى إدخال بريدك الإلكتروني أولاً في الحقل أعلاه';
+    errBox.classList.add('show');
+    return;
+  }
+  try{
+    await auth.sendPasswordResetEmail(email);
+    showToast(t('reset_link_sent'));
+  }catch(e){
+    const map = {
+      'auth/invalid-email': t('invalid_email_error'),
+      'auth/user-not-found': t('no_account_error')
+    };
+    errBox.textContent = map[e.code] || t('send_error_retry');
+    errBox.classList.add('show');
+  }
+}
+
+async function reauthCurrentUser(currentPassword){
+  const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, currentPassword);
+  await currentUser.reauthenticateWithCredential(credential);
+}
+
+async function changeMyEmail(){
+  const newEmail = document.getElementById('newEmailInput').value.trim();
+  const password = document.getElementById('emailCurrentPassword').value;
+  if(!newEmail || !password){ showToast(t('fill_all_fields')); return; }
+  try{
+    await reauthCurrentUser(password);
+    const oldEmail = currentUser.email;
+    await currentUser.updateEmail(newEmail);
+    await currentUser.sendEmailVerification();
+    const oldDoc = await db.collection('customers').doc(oldEmail).get();
+    const data = oldDoc.exists ? oldDoc.data() : {};
+    data.email = newEmail;
+    data.emailVerified = false;
+    await db.collection('customers').doc(newEmail).set(data);
+    await db.collection('customers').doc(oldEmail).delete();
+    const oldRating = await db.collection('ratings').doc(oldEmail).get();
+    if(oldRating.exists){
+      await db.collection('ratings').doc(newEmail).set(oldRating.data());
+      await db.collection('ratings').doc(oldEmail).delete();
+    }
+    currentCustomerData = data;
+    document.getElementById('newEmailInput').value = '';
+    document.getElementById('emailCurrentPassword').value = '';
+    renderProfile();
+    showToast(t('email_changed'));
+  }catch(e){
+    showToast(e.code === 'auth/wrong-password' ? t('wrong_password') : t('generic_error'));
+  }
+}
+
+async function changeMyPassword(){
+  const newPassword = document.getElementById('newPasswordInput').value;
+  const currentPassword = document.getElementById('passwordCurrentPassword').value;
+  if(!newPassword || !currentPassword){ showToast(t('fill_all_fields')); return; }
+  if(newPassword.length < 6){ showToast(t('weak_password')); return; }
+  try{
+    await reauthCurrentUser(currentPassword);
+    await currentUser.updatePassword(newPassword);
+    document.getElementById('newPasswordInput').value = '';
+    document.getElementById('passwordCurrentPassword').value = '';
+    showToast(t('password_changed'));
+  }catch(e){
+    showToast(e.code === 'auth/wrong-password' ? t('wrong_password') : t('generic_error'));
+  }
+}
+
+async function resendVerification(){
+  if(!currentUser){ return; }
+  try{
+    await currentUser.sendEmailVerification();
+    showToast(t('verify_link_resent'));
+  }catch(e){
+    showToast(t('send_error_retry'));
+  }
+}
+
+function playSailAnimation(callback){
+  const overlay = document.getElementById('sailOverlay');
+  overlay.classList.add('show');
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    if(callback) callback();
+  }, 2000);
+}
+
+// ====== AUTH STATE OBSERVER ======
+
+auth.onAuthStateChanged(async user => {
+  currentUser = user;
+  const btn = document.getElementById('authBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const profileBar = document.getElementById('userProfileBar');
+  const profileName = document.getElementById('userProfileName');
+  const avatar = document.getElementById('userAvatar');
+  
+  if(user){
+    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
+    btn.onclick = openAuthModal;
+    logoutBtn.style.display = 'inline-block';
+    logoutBtn.textContent = currentLang === 'ar' ? 'خروج' : 'Log out';
+    
+    profileBar.classList.add('show');
+    const displayName = currentCustomerData?.name || user.email.split('@')[0];
+    profileName.textContent = displayName;
+    avatar.textContent = displayName.charAt(0).toUpperCase();
+    
+    try{
+      const doc = await db.collection('customers').doc(user.email).get();
+      currentCustomerData = doc.exists ? doc.data() : null;
+      if(user.emailVerified && currentCustomerData && !currentCustomerData.emailVerified){
+        await db.collection('customers').doc(user.email).update({emailVerified: true});
+        currentCustomerData.emailVerified = true;
+      }
+      if(currentCustomerData?.name) {
+        profileName.textContent = currentCustomerData.name;
+        avatar.textContent = currentCustomerData.name.charAt(0).toUpperCase();
+      }
+    }catch(e){ currentCustomerData = null; }
+    
+    await ensureShippingMark();
+    renderMyShippingMark();
+    if(currentCustomerData && currentCustomerData.shippingMark){
+      await loadMyShipments();
+      renderShipmentsResult();
+    }
+  } else {
+    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
+    btn.onclick = openAuthModal;
+    logoutBtn.style.display = 'none';
+    profileBar.classList.remove('show');
+    currentCustomerData = null;
+    myOrders = {}; myImportRequests = {}; myFactoryVisits = {};
+    renderMyShippingMark();
+  }
+});
+
+// ====== CART FUNCTIONS ======
+
+function addToCart(id){
+  cart[id] = (cart[id]||0)+1;
+  updateCartBadge();
+  showToast(t('added_to_cart'));
+}
+
+function updateCartBadge(){
+  const count = Object.values(cart).reduce((a,b)=>a+b,0);
+  document.getElementById('cartBadge').textContent = count;
+}
+
+function changeQty(id, delta){
+  cart[id] = (cart[id]||0)+delta;
+  if(cart[id]<=0) delete cart[id];
+  updateCartBadge();
+  renderCart();
+}
+
+function renderCart(){
+  const wrap = document.getElementById('cartItems');
+  const ids = Object.keys(cart);
+  if(ids.length===0){
+    wrap.innerHTML = `<div class="empty">${t('cart_empty')}</div>`;
+    document.getElementById('cartTotal').textContent = `${t('total_label')}: 0$`;
+    return;
+  }
+  let total = 0;
+  wrap.innerHTML = ids.map(id=>{
+    const p = products.find(x=>x.id===id);
+    if(!p) return '';
+    const qty = cart[id];
+    total += p.price*qty;
+    return `<div class="cart-item">
+      <div>
+        <div class="name">${p.name}</div>
+        <div class="qty">
+          <button onclick="changeQty('${id}',-1)">-</button>
+          <span>${qty}</span>
+          <button onclick="changeQty('${id}',1)">+</button>
+        </div>
+      </div>
+      <div>$${(p.price*qty).toFixed(2)}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('cartTotal').textContent = `${t('total_label')}: $${total.toFixed(2)}`;
+}
+
+function openCart(){
+  renderCart();
+  document.getElementById('drawer').classList.add('show');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function closeCart(){
+  document.getElementById('drawer').classList.remove('show');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+async function checkoutWhatsApp(){
+  if(!currentUser){ closeCart(); openAuthModal(); showToast(t('login_required_order')); return; }
+  const ids = Object.keys(cart);
+  if(ids.length===0){ showToast(t('cart_empty')); return; }
+  const destCode = document.getElementById('destinationSelect').value;
+  await ensureShippingMark();
+  let total = 0;
+  let lines = ids.map(id=>{
+    const p = products.find(x=>x.id===id);
+    const qty = cart[id];
+    total += p.price*qty;
+    return `- ${p.name} × ${qty} = $${(p.price*qty).toFixed(2)}`;
+  });
+  const orderData = {
+    items: ids.map(id=>({name:products.find(x=>x.id===id).name, qty:cart[id]})),
+    total: total.toFixed(2),
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10),
+    customerEmail: currentUser.email,
+    shippingMark: currentCustomerData.shippingMark,
+    destination: destName(destCode),
+    carrierTracking: ''
+  };
+  const ref = await db.collection('orders').add(orderData);
+  myOrders[ref.id] = orderData;
+  notifyAdmin('طلب جديد على الموقع', `مارك الشحن: ${currentCustomerData.shippingMark}\nالإجمالي: $${total.toFixed(2)}\nالوجهة: ${orderData.destination}`);
+  const msg = `مرحباً، أريد تأكيد طلب جديد.\nمارك الشحن الخاص بي (Shipping Mark): ${currentCustomerData.shippingMark}\n${lines.join('\n')}\nالإجمالي: $${total.toFixed(2)}\nالوجهة: ${orderData.destination}`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  cart = {};
+  updateCartBadge();
+  closeCart();
+  showToast(`تم إرسال طلبك، مارك الشحن: ${currentCustomerData.shippingMark}`);
+}
+
+// ====== CATALOG FUNCTIONS ======
+
+function renderCatalog(){
+  const grid = document.getElementById('productGrid');
+  if(products.length===0){
+    grid.innerHTML = `<div class="empty">${t('no_products')}</div>`;
+    return;
+  }
+  grid.innerHTML = products.map(p => `
+    <div class="product">
+      <div class="thumb">
+        ${p.image ? `<img src="${p.image}" alt="${p.name}">` : p.name.charAt(0)}
+        ${p.video ? `<span class="thumb-video-badge" onclick="playVideo('${p.video}')">▶ ${t('video_label')}</span>` : ''}
+        <button class="thumb-quick-btn" onclick="quickOrder('${p.id}')" title="${t('order_now_whatsapp')}">📩</button>
+      </div>
+      <div class="body">
+        <div class="name">${p.name}</div>
+        <div class="price">$${p.price}</div>
+        <button class="add" onclick="addToCart('${p.id}')">${t('add_to_cart')}</button>
+      </div>
+    </div>`).join('');
+}
+
+function quickOrder(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  const msg = `مرحباً، أريد الاستفسار عن طلب: ${p.name} (${p.price}$)`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ====== ADMIN FUNCTIONS ======
+
+function checkPin(){
+  const val = document.getElementById('pinInput').value;
+  if(val !== ADMIN_PIN){
+    showToast('رمز غير صحيح');
+    return;
+  }
+  if(!currentUser || currentUser.email !== ADMIN_EMAIL){
+    showToast('يجب تسجيل الدخول بحساب المسؤول أولاً');
+    openAuthModal();
+    return;
+  }
+  document.getElementById('adminLockWrap').style.display='none';
+  document.getElementById('adminPanel').style.display='block';
+  showToast('جاري تحميل بيانات الإدارة...');
+  loadAdminData();
+  if(agentLocationData.currentCity){
+    document.getElementById('agentCityInput').value = agentLocationData.currentCity;
+  }
+}
+
+async function addProduct(){
+  const name = document.getElementById('newProdName').value.trim();
+  const price = parseFloat(document.getElementById('newProdPrice').value);
+  const imageFile = document.getElementById('newProdImage').files[0];
+  const videoFile = document.getElementById('newProdVideo').files[0];
+  if(!name || isNaN(price)){ showToast('يرجى إدخال اسم وسعر صحيحين'); return; }
+  if(videoFile && videoFile.size > 15 * 1024 * 1024){
+    showToast('حجم الفيديو أكبر من 15 ميجابايت، يرجى ضغطه أو استخدام رابط يوتيوب/تاوباو بدلاً منه');
+    return;
+  }
+
+  const progress = document.getElementById('uploadProgress');
+  const btn = document.getElementById('addProdBtn');
+  btn.disabled = true;
+
+  const data = {name, price};
+
+  try{
+    if(imageFile){
+      progress.style.display='block';
+      progress.textContent = 'جارٍ رفع الصورة...';
+      const imgRef = storage.ref('products/' + Date.now() + '_' + imageFile.name);
+      await imgRef.put(imageFile);
+      data.image = await imgRef.getDownloadURL();
+    }
+    if(videoFile){
+      progress.style.display='block';
+      progress.textContent = 'جارٍ رفع الفيديو...';
+      const vidRef = storage.ref('products/' + Date.now() + '_' + videoFile.name);
+      await vidRef.put(videoFile);
+      data.video = await vidRef.getDownloadURL();
+    }
+    const ref = await db.collection('products').add(data);
+    products.push({id: ref.id, ...data});
+    document.getElementById('newProdName').value='';
+    document.getElementById('newProdPrice').value='';
+    document.getElementById('newProdImage').value='';
+    document.getElementById('newProdVideo').value='';
+    renderAll();
+    showToast('تمت إضافة المنتج بنجاح');
+  }catch(e){
+    showToast('حدث خطأ أثناء الرفع، يرجى التأكد من إعداد Firebase Storage');
+  }finally{
+    progress.style.display='none';
+    btn.disabled = false;
+  }
+}
+
+async function removeProduct(id){
+  await db.collection('products').doc(id).delete();
+  products = products.filter(p=>p.id!==id);
+  renderAll();
+}
+
+function renderAdminProducts(){
+  const wrap = document.getElementById('adminProductList');
+  if(products.length===0){ wrap.innerHTML='<div class="empty">لا توجد منتجات</div>'; return; }
+  wrap.innerHTML = products.map(p=>`
+    <div class="admin-list-item">
+      <span>${p.name} — $${p.price}</span>
+      <button class="tiny-btn" onclick="removeProduct('${p.id}')">حذف</button>
+    </div>`).join('');
+}
+
+function renderAdminCustomers(search){
+  document.getElementById('customerCount').textContent = customers.length;
+  const wrap = document.getElementById('adminCustomerList');
+  if(!wrap) return;
+  const term = (search||'').trim().toLowerCase();
+  const filtered = term ? customers.filter(c =>
+    (c.name||'').toLowerCase().includes(term) ||
+    (c.email||'').toLowerCase().includes(term) ||
+    (c.shippingMark||'').toLowerCase().includes(term)
+  ) : customers;
+  if(filtered.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا يوجد عملاء مسجلون بعد'}</div>`; return; }
+  wrap.innerHTML = filtered.map(c=>`
+    <div class="admin-list-item">
+      <span><strong>${c.shippingMark||'بدون مارك'}</strong> — ${c.name||''} — ${c.email} — ${c.destination||''} — ${c.emailVerified ? '✅ موثّق' : '⏳ غير موثّق'}</span>
+      <span style="color:#888;font-size:12px;">${c.joinDate||''}</span>
+    </div>`).join('');
+}
+
+function exportCustomers(){
+  if(customers.length===0){ showToast('لا يوجد عملاء لتصديرهم بعد'); return; }
+  let csv = 'ShippingMark,Name,Email,Destination,EmailVerified,JoinDate\n';
+  customers.forEach(c=>{ csv += `${c.shippingMark||''},${c.name||''},${c.email},${c.destination||''},${c.emailVerified?'Yes':'No'},${c.joinDate||''}\n`; });
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'عملاء_AlHossain.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('تم تصدير الملف بنجاح');
+}
+
+function renderAdminOrders(search){
+  const wrap = document.getElementById('adminOrderList');
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(orders);
+  if(term){
+    ids = ids.filter(id=>{
+      const o = orders[id];
+      return (o.shippingMark||'').toLowerCase().includes(term) ||
+             (o.customerEmail||'').toLowerCase().includes(term) ||
+             (o.status||'').toLowerCase().includes(term);
+    });
+  }
+  if(ids.length===0){ wrap.innerHTML=`<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد طلبات بعد'}</div>`; return; }
+  wrap.innerHTML = ids.reverse().map(id=>{
+    const o = orders[id];
+    return `<div class="admin-order-item">
+      <div style="margin-bottom:6px;"><strong>${o.shippingMark||'-'}</strong> · ${o.customerEmail||''} · ${o.destination||''} · $${o.total} · ${o.date}</div>
+      <select onchange="updateStatus('${id}', this.value)" style="margin-bottom:6px;">
+        ${['قيد المراجعة','تم التأكيد','قيد الشحن','تم التسليم','ملغي'].map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <div class="admin-row" style="margin-top:4px;">
+        <input id="carrier_${id}" placeholder="رقم تتبع شركة الشحن" value="${o.carrierTracking||''}">
+        <button class="tiny-btn gold" onclick="saveCarrierTracking('${id}')">حفظ</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function updateStatus(id, status){
+  await db.collection('orders').doc(id).update({status});
+  orders[id].status = status;
+  const o = orders[id];
+  notifyCustomer(o.customerEmail, 'تحديث حالة شحنتك', `مارك الشحن: ${o.shippingMark}\nالحالة الجديدة: ${status}`);
+  showToast('تم تحديث حالة الطلب');
+}
+
+async function saveCarrierTracking(id){
+  const val = document.getElementById('carrier_'+id).value.trim();
+  await db.collection('orders').doc(id).update({carrierTracking: val});
+  orders[id].carrierTracking = val;
+  if(val){
+    const o = orders[id];
+    notifyCustomer(o.customerEmail, 'تم إضافة رقم تتبع لشحنتك', `مارك الشحن: ${o.shippingMark}\nرقم تتبع شركة الشحن: ${val}\nيمكنك متابعة التفاصيل من صفحة "تتبع طلبي" في الموقع.`);
+  }
+  showToast('تم حفظ رقم تتبع شركة الشحن');
+}
+
+function renderAdminImportRequests(search){
+  const wrap = document.getElementById('adminImportList');
+  if(!wrap) return;
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(importRequests);
+  if(term){
+    ids = ids.filter(id=>{
+      const r = importRequests[id];
+      return (r.shippingMark||'').toLowerCase().includes(term) ||
+             (r.customerEmail||'').toLowerCase().includes(term) ||
+             (r.status||'').toLowerCase().includes(term);
+    });
+  }
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد طلبات شراء بعد'}</div>`; return; }
+  wrap.innerHTML = ids.reverse().map(id=>{
+    const r = importRequests[id];
+    const items = r.items || [{link:r.link, name:r.name, qty:r.qty}];
+    const itemsHtml = items.map((it,i)=>`<div>${i+1}. <a href="${it.link}" target="_blank" rel="noopener">رابط المنتج</a> — الكمية: ${it.qty} ${it.name?('— '+it.name):''}</div>`).join('');
+    return `<div class="admin-order-item">
+      <div style="margin-bottom:6px;"><strong>${r.shippingMark||'-'}</strong> · ${r.customerEmail||''} · ${r.destination||''} · ${r.date}</div>
+      <div style="margin-bottom:6px;">${itemsHtml}</div>
+      ${r.notes ? `<div style="margin-bottom:6px;color:#555;">ملاحظات: ${r.notes}</div>` : ''}
+      <select onchange="updateImportStatus('${id}', this.value)" style="margin-bottom:6px;">
+        ${['قيد المراجعة','تم عرض السعر','تم الشراء','وصل المستودع','تم الشحن','ملغي'].map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <div class="admin-row" style="margin-top:4px;">
+        <input id="quote_${id}" placeholder="السعر المعروض ($)" value="${r.quotedPrice||''}">
+        <button class="tiny-btn gold" onclick="saveQuotedPrice('${id}')">حفظ</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function updateImportStatus(id, status){
+  await db.collection('importRequests').doc(id).update({status});
+  importRequests[id].status = status;
+  const r = importRequests[id];
+  notifyCustomer(r.customerEmail, 'تحديث حالة طلب الشراء من الصين', `مارك الشحن: ${r.shippingMark}\nالحالة الجديدة: ${status}`);
+  showToast('تم تحديث حالة طلب الشراء');
+}
+
+async function saveQuotedPrice(id){
+  const val = document.getElementById('quote_'+id).value.trim();
+  await db.collection('importRequests').doc(id).update({quotedPrice: val});
+  importRequests[id].quotedPrice = val;
+  if(val){
+    const r = importRequests[id];
+    notifyCustomer(r.customerEmail, 'تم تحديد سعر طلبك من الصين', `مارك الشحن: ${r.shippingMark}\nالسعر المعروض: $${val}\nيرجى مراجعة التفاصيل والتأكيد عبر واتساب.`);
+  }
+  showToast('تم حفظ السعر المعروض');
+}
+
+function renderAdminFactoryVisits(search){
+  const wrap = document.getElementById('adminFactoryList');
+  if(!wrap) return;
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(factoryVisits);
+  if(term){
+    ids = ids.filter(id=>{
+      const f = factoryVisits[id];
+      return (f.shippingMark||'').toLowerCase().includes(term) ||
+             (f.name||'').toLowerCase().includes(term) ||
+             (f.city||'').toLowerCase().includes(term);
+    });
+  }
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد طلبات زيارة مصانع بعد'}</div>`; return; }
+  wrap.innerHTML = ids.reverse().map(id=>{
+    const f = factoryVisits[id];
+    return `<div class="admin-order-item">
+      <div style="margin-bottom:6px;"><strong>${f.shippingMark||'-'}</strong> · ${f.customerEmail||''} · ${f.date}</div>
+      <div style="margin-bottom:4px;"><strong>${f.name}</strong> — ${f.specialty} — ${f.city}</div>
+      ${f.link ? `<div style="margin-bottom:4px;"><a href="${f.link}" target="_blank" rel="noopener">رابط المصنع</a></div>` : ''}
+      ${f.contact ? `<div style="margin-bottom:4px;color:#555;">تواصل: ${f.contact}</div>` : ''}
+      ${f.notes ? `<div style="margin-bottom:4px;color:#555;">ملاحظات: ${f.notes}</div>` : ''}
+      <div style="margin-bottom:6px;font-size:13px;color:var(--rust);">${f.costNote}</div>
+      <select onchange="updateFactoryVisitStatus('${id}', this.value)">
+        ${['قيد المراجعة','تم التنسيق','تم التنفيذ','ملغي'].map(s=>`<option value="${s}" ${f.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
+}
+
+async function updateFactoryVisitStatus(id, status){
+  await db.collection('factoryVisitRequests').doc(id).update({status});
+  factoryVisits[id].status = status;
+  const f = factoryVisits[id];
+  notifyCustomer(f.customerEmail, 'تحديث حالة طلب زيارة المصنع', `المصنع: ${f.name}\nالحالة الجديدة: ${status}`);
+  showToast('تم تحديث حالة الطلب');
+}
+
+function renderAdminComplaints(search){
+  const wrap = document.getElementById('adminComplaintsList');
+  if(!wrap) return;
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(complaints);
+  if(term){
+    ids = ids.filter(id=>{
+      const c = complaints[id];
+      return (c.text||'').toLowerCase().includes(term) ||
+             (c.customerEmail||'').toLowerCase().includes(term) ||
+             (c.type||'').toLowerCase().includes(term);
+    });
+  }
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد شكاوى أو مقترحات بعد'}</div>`; return; }
+  wrap.innerHTML = ids.reverse().map(id=>{
+    const c = complaints[id];
+    return `<div class="admin-order-item">
+      <div style="margin-bottom:6px;"><strong>${c.type==='complaint'?'شكوى':'اقتراح'}</strong> · ${c.customerEmail} · ${c.date}</div>
+      <div style="margin-bottom:6px;color:#333;">${c.text}</div>
+      <select onchange="updateComplaintStatus('${id}', this.value)">
+        ${['قيد المراجعة','تم الرد','تم الحل','مغلقة'].map(s=>`<option value="${s}" ${c.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
+}
+
+async function updateComplaintStatus(id, status){
+  await db.collection('complaints').doc(id).update({status});
+  complaints[id].status = status;
+  const c = complaints[id];
+  notifyCustomer(c.customerEmail, 'تحديث بخصوص رسالتك', `النوع: ${c.type==='complaint'?'شكوى':'اقتراح'}\nالحالة الجديدة: ${status}`);
+  showToast('تم تحديث الحالة');
+}
+
+// ====== RENDER FUNCTIONS ======
+
+function renderAll(){
+  renderCatalog();
+  renderAdminProducts();
+  renderAdminOrders();
+  renderAdminCustomers();
 }
 
 function renderAbout(){
-  const name = aboutData.name || 'اسم المؤسس';
-  const years = aboutData.years ? aboutData.years : '-';
-  const bio = aboutData.bio || 'لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.';
-  const backgroundPhoto = aboutData.backgroundPhoto || '';
-  
-  document.getElementById('aboutName').textContent = name;
-  document.getElementById('aboutYears').textContent = years;
-  document.getElementById('aboutBio').textContent = bio;
+  document.getElementById('aboutName').textContent = aboutData.name || 'اسم المؤسس';
+  document.getElementById('aboutYears').textContent = aboutData.years ? aboutData.years : '-';
+  document.getElementById('aboutBio').textContent = aboutData.bio || 'لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.';
   document.getElementById('customerCount2').textContent = customers.length;
   document.getElementById('statOrders2').textContent = Object.keys(orders).length;
 
-  const bg = document.getElementById('aboutBackground');
-  if(backgroundPhoto){
-    bg.style.backgroundImage = `url("${backgroundPhoto}")`;
+  const photoWrap = document.getElementById('aboutPhotoWrap');
+  if(aboutData.photo){
+    photoWrap.innerHTML = `<img src="${aboutData.photo}" alt="${aboutData.name||''}">`;
   } else {
-    bg.style.backgroundImage = `url("https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=80")`;
+    photoWrap.innerHTML = `<span>${(aboutData.name||'؟').charAt(0)}</span>`;
   }
 
   const nameInput = document.getElementById('aboutNameInput');
@@ -2795,92 +2837,793 @@ async function saveAbout(){
   const name = document.getElementById('aboutNameInput').value.trim();
   const years = document.getElementById('aboutYearsInput').value;
   const bio = document.getElementById('aboutBioInput').value.trim();
-  const bgPhotoFile = document.getElementById('aboutBgPhotoInput').files[0];
+  const photoFile = document.getElementById('aboutPhotoInput').files[0];
   const btn = document.getElementById('saveAboutBtn');
   btn.disabled = true;
 
   const data = { name, years: years ? parseInt(years) : null, bio };
 
   try{
-    if(bgPhotoFile){
-      const bgRef = storage.ref('about/background_' + Date.now() + '_' + bgPhotoFile.name);
-      await bgRef.put(bgPhotoFile);
-      data.backgroundPhoto = await bgRef.getDownloadURL();
-    } else if(aboutData.backgroundPhoto){
-      data.backgroundPhoto = aboutData.backgroundPhoto;
+    if(photoFile){
+      const photoRef = storage.ref('about/' + Date.now() + '_' + photoFile.name);
+      await photoRef.put(photoFile);
+      data.photo = await photoRef.getDownloadURL();
+    } else if(aboutData.photo){
+      data.photo = aboutData.photo;
     }
-    
     await db.collection('settings').doc('about').set(data);
     aboutData = data;
     renderAbout();
     showToast('تم حفظ صفحة المؤسس بنجاح');
   }catch(e){
-    console.error('Error saving about:', e);
     showToast('حدث خطأ أثناء الحفظ، يرجى التأكد من إعداد Firebase Storage');
   }finally{
     btn.disabled = false;
   }
 }
 
-// ====== دوال showTab ======
-
-const originalShowTab = window.showTab;
-
-window.showTab = function(tab) {
-  if (typeof originalShowTab === 'function') {
-    originalShowTab(tab);
+function renderMyShippingMark(){
+  const loginPrompt = document.getElementById('trackLoginPrompt');
+  const wrap = document.getElementById('myMarkBox');
+  if(!wrap || !loginPrompt) return;
+  if(currentUser && currentCustomerData && currentCustomerData.shippingMark){
+    loginPrompt.style.display = 'none';
+    wrap.style.display = 'block';
+    document.getElementById('myMarkDisplay').textContent = currentCustomerData.shippingMark;
+    const notice = document.getElementById('verifyNotice');
+    notice.style.display = (currentUser && !currentUser.emailVerified) ? 'block' : 'none';
   } else {
-    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
-    document.getElementById(tab).classList.add('active');
-    document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
-    const navBtn = document.querySelector(`nav.tabs button[data-tab="${tab}"]`);
-    if(navBtn) navBtn.classList.add('active');
-    const isAdmin = tab === 'admin';
-    document.getElementById('waFloat').style.display = isAdmin ? 'none' : 'flex';
-    document.getElementById('currencyFloat').style.display = isAdmin ? 'none' : 'flex';
-    if(firebase.analytics){
-      try{ firebase.analytics().logEvent('page_view', { page_title: tab }); }catch(e){}
+    wrap.style.display = 'none';
+    loginPrompt.style.display = 'block';
+  }
+}
+
+function renderProfile(){
+  if(!currentUser || !currentCustomerData) return;
+  document.getElementById('profileName').textContent = currentCustomerData.name || currentUser.email.split('@')[0];
+  document.getElementById('profileMark').textContent = currentCustomerData.shippingMark || '-';
+  document.getElementById('profileEmail').textContent = currentUser.email;
+  document.getElementById('profileDestination').textContent = currentCustomerData.destination || '-';
+  document.getElementById('profileVerified').textContent = currentUser.emailVerified ? '✅ ' + t('verified_yes') : '⏳ ' + t('verified_no');
+}
+
+function copyProfileMark(){
+  const mark = document.getElementById('profileMark').textContent;
+  if(!mark || mark === '-') return;
+  navigator.clipboard.writeText(mark).then(()=>{
+    showToast(t('mark_copied'));
+  }).catch(()=>{
+    showToast(t('copy_failed'));
+  });
+}
+
+function renderShipmentsResult(){
+  const box = document.getElementById('orderResult');
+  const orderMatches = Object.entries(myOrders);
+  const importMatches = Object.entries(myImportRequests);
+  const factoryMatches = Object.entries(myFactoryVisits);
+  if(orderMatches.length===0 && importMatches.length===0 && factoryMatches.length===0){
+    box.innerHTML = `<p>${t('no_shipments_yet')}</p>`;
+    box.classList.add('show');
+    return;
+  }
+  let html = '';
+  if(orderMatches.length){
+    html += `<h3 style="margin:10px 0;font-size:16px;">${t('orders_section')}</h3>`;
+    html += orderMatches.reverse().map(([id,order]) => `
+      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
+        <div><strong>${t('mark_label')}:</strong> ${order.shippingMark}</div>
+        <div><strong>${t('destination_label')}:</strong> ${order.destination||'-'}</div>
+        <div><strong>${t('date_label')}:</strong> ${order.date}</div>
+        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${order.status}</span></div>
+        ${order.carrierTracking ? `<div><strong>${t('carrier_tracking_label')}:</strong> ${order.carrierTracking}</div>` : ''}
+        <div><strong>${t('products_label')}:</strong></div>
+        <ul style="margin:6px 18px;">${order.items.map(i=>`<li>${i.name} × ${i.qty}</li>`).join('')}</ul>
+        <div><strong>${t('total_label')}:</strong> $${order.total}</div>
+      </div>`).join('');
+  }
+  if(importMatches.length){
+    html += `<h3 style="margin:14px 0 10px;font-size:16px;">${t('import_orders_section')}</h3>`;
+    html += importMatches.reverse().map(([id,r]) => {
+      const items = r.items || [{name:r.name, qty:r.qty}];
+      const itemsList = items.map(it=>`<li>${it.name || t('unnamed')} × ${it.qty}</li>`).join('');
+      return `
+      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
+        <div><strong>${t('products_label')}:</strong></div>
+        <ul style="margin:6px 18px;">${itemsList}</ul>
+        <div><strong>${t('destination_label')}:</strong> ${r.destination||'-'}</div>
+        <div><strong>${t('date_label')}:</strong> ${r.date}</div>
+        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${r.status}</span></div>
+        ${r.quotedPrice ? `<div><strong>${t('quoted_price_label')}:</strong> $${r.quotedPrice}</div>` : ''}
+      </div>`;
+    }).join('');
+  }
+  if(factoryMatches.length){
+    html += `<h3 style="margin:14px 0 10px;font-size:16px;">${t('factory_visits_section')}</h3>`;
+    html += factoryMatches.reverse().map(([id,f]) => `
+      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
+        <div><strong>${f.name}</strong> — ${f.specialty} — ${f.city}</div>
+        <div><strong>${t('date_label')}:</strong> ${f.date}</div>
+        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${f.status}</span></div>
+      </div>`).join('');
+  }
+  box.innerHTML = html;
+  box.classList.add('show');
+}
+
+async function showMyShipments(){
+  if(!currentUser || !currentCustomerData || !currentCustomerData.shippingMark){ showToast(t('please_login_first')); return; }
+  const overlay = document.getElementById('trackingAnim');
+  overlay.classList.add('show');
+  const marker = overlay.querySelector('.moving-marker');
+  marker.style.animation = 'none';
+  void marker.offsetWidth;
+  marker.style.animation = '';
+  await loadMyShipments();
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    renderShipmentsResult();
+  }, 2200);
+}
+
+function doLogout(){
+  auth.signOut();
+  showTab('home');
+  document.getElementById('userProfileBar').classList.remove('show');
+  showToast(t('logged_out_msg'));
+}
+
+// ====== CALCULATOR FUNCTIONS ======
+
+function calcCBM(){
+  const L = parseFloat(document.getElementById('cbmL').value);
+  const W = parseFloat(document.getElementById('cbmW').value);
+  const H = parseFloat(document.getElementById('cbmH').value);
+  const qty = parseFloat(document.getElementById('cbmQty').value) || 1;
+  const destCode = document.getElementById('cbmDestination').value;
+  const box = document.getElementById('cbmResult');
+  if(!L || !W || !H){
+    box.innerHTML = t('enter_dimensions');
+    box.classList.add('show');
+    return;
+  }
+  const perUnit = (L*W*H)/1000000;
+  const total = perUnit*qty;
+  const fill20 = ((total/28)*100).toFixed(1);
+  const fill40 = ((total/58)*100).toFixed(1);
+
+  const AED_TO_USD = 3.6725;
+  const seaRatesUsdPerCbm = { SD:200, SS:550, UAE: 800/AED_TO_USD, KSA: 800/AED_TO_USD };
+  let billedCbm = total;
+  if((destCode === 'UAE' || destCode === 'KSA') && billedCbm < 1) billedCbm = 1;
+  const cost = (billedCbm * seaRatesUsdPerCbm[destCode]).toFixed(0);
+
+  box.innerHTML = `
+    <div>${t('single_carton_volume')}: <strong>${perUnit.toFixed(4)} CBM</strong></div>
+    <div class="big">${t('total_label')}: ${total.toFixed(3)} CBM</div>
+    <div style="margin-top:8px;font-size:13px;color:#555;">
+      ${t('equivalent_to')} ${fill20}% ${t('of_20ft')}, ${t('or')} ${fill40}% ${t('of_40ft')}
+    </div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:15px;">
+      <div>${t('approx_sea_cost_to')} ${destName(destCode)}: <strong>$${cost}</strong></div>
+    </div>`;
+  box.classList.add('show');
+}
+
+function calcAirWeight(){
+  const L = parseFloat(document.getElementById('airL').value);
+  const W = parseFloat(document.getElementById('airW').value);
+  const H = parseFloat(document.getElementById('airH').value);
+  const actual = parseFloat(document.getElementById('airActual').value);
+  const destCode = document.getElementById('airDestination').value;
+  const box = document.getElementById('airResult');
+  if(!L || !W || !H || !actual){
+    box.innerHTML = t('enter_all_values');
+    box.classList.add('show');
+    return;
+  }
+  const volumetric = (L*W*H)/5000;
+  let chargeable = Math.max(volumetric, actual);
+  chargeable = Math.ceil(chargeable);
+  const basis = volumetric > actual ? t('volumetric_weight') : t('actual_weight');
+
+  const minWeight = destCode === 'KSA' ? 60 : 1;
+  const billedWeight = Math.max(chargeable, minWeight);
+  const costLow = (billedWeight*30).toFixed(0);
+  const costHigh = (billedWeight*35).toFixed(0);
+
+  box.innerHTML = `
+    <div>${t('volumetric_weight')}: <strong>${volumetric.toFixed(2)} ${t('kg')}</strong></div>
+    <div>${t('actual_weight')}: <strong>${actual.toFixed(2)} ${t('kg')}</strong></div>
+    <div class="big">${t('billed_weight')}: ${billedWeight} ${t('kg')}</div>
+    <div style="margin-top:6px;font-size:13px;color:#555;">${t('because_higher')} ${basis} ${t('is_higher_of_two')}${billedWeight>chargeable ? ' '+t('raised_to_minimum') : ''}</div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:15px;">
+      <div>${t('approx_air_cost_to')} ${destName(destCode)}: <strong>$${costLow} – $${costHigh}</strong></div>
+    </div>`;
+  box.classList.add('show');
+}
+
+function calcCurrency(){
+  const cny = parseFloat(document.getElementById('cnyAmount').value);
+  const box = document.getElementById('currencyResult');
+  if(!cny){ box.innerHTML = t('enter_valid_amount'); box.classList.add('show'); return; }
+  if(!currencyData.sdgRate){
+    box.innerHTML = t('rate_not_updated');
+    box.classList.add('show');
+    return;
+  }
+  const AED_PER_CNY = 1 / 1.50;
+  const USD_PER_CNY = 1 / 5.625;
+
+  const sdg = (cny * currencyData.sdgRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0});
+  const aed = (cny * AED_PER_CNY).toFixed(2);
+  const usd = (cny * USD_PER_CNY).toFixed(2);
+
+  box.innerHTML = `
+    <div class="big">¥${cny} ≈</div>
+    <div style="margin-top:6px;">$${usd} ${t('usd_currency')}</div>
+    <div>${aed} ${t('aed_currency')}</div>
+    <div>${sdg} ${t('sdg_currency')}</div>`;
+  box.classList.add('show');
+}
+
+async function saveSdgRate(){
+  const val = parseFloat(document.getElementById('sdgRateInput').value);
+  if(!val){ showToast('أدخل رقماً صحيحاً'); return; }
+  const data = { sdgRate: val, lastUpdated: new Date().toISOString() };
+  await db.collection('settings').doc('currency').set(data);
+  currencyData = data;
+  renderCurrencyMeta();
+  showToast('تم حفظ سعر الصرف');
+}
+
+function renderCurrencyMeta(){
+  const meta = document.getElementById('sdgRateMeta');
+  if(meta){
+    meta.textContent = currencyData.sdgRate
+      ? `آخر سعر محفوظ: ${currencyData.sdgRate} جنيه لكل يوان — آخر تحديث: ${new Date(currencyData.lastUpdated).toLocaleString('ar-EG')}`
+      : 'لم يُحفظ سعر بعد';
+  }
+  const publicMeta = document.getElementById('currencyMeta');
+  if(publicMeta){
+    publicMeta.textContent = currencyData.sdgRate
+      ? `آخر تحديث للسعر: ${new Date(currencyData.lastUpdated).toLocaleDateString('ar-EG')}`
+      : '';
+  }
+  const input = document.getElementById('sdgRateInput');
+  if(input && currencyData.sdgRate) input.value = currencyData.sdgRate;
+}
+
+// ====== FACTORY VISIT FUNCTIONS ======
+
+async function saveAgentCity(){
+  const val = document.getElementById('agentCityInput').value.trim();
+  if(!val){ showToast('أدخل اسم المدينة'); return; }
+  await db.collection('settings').doc('agentLocation').set({ currentCity: val });
+  agentLocationData = { currentCity: val };
+  updateFactoryCityLabel();
+  showToast('تم حفظ المدينة الحالية');
+}
+
+function updateFactoryCityLabel(){
+  const city = agentLocationData.currentCity ? `(${agentLocationData.currentCity})` : (currentLang==='ar' ? '(يُحدَّد لاحقاً)' : '(to be set)');
+  const p = document.getElementById('factoryTermsP');
+  if(!p) return;
+  if(currentLang === 'ar'){
+    p.innerHTML = `إذا كان المصنع داخل نفس المدينة التي يتواجد فيها المسؤول حالياً <strong id="factoryCurrentCityLabel">${city}</strong>، فتكلفة الزيارة <strong>15$</strong> تشمل: زيارة ميدانية، تفاوض مع المصنع، إتمام عملية الشراء، وفحص البضاعة والمصنع.<br><br>أما إذا كان المصنع في مدينة أخرى، فتكلفة التنقل والسفر تكون على العميل، وتُحدَّد بعد التنسيق المباشر.`;
+  } else {
+    p.innerHTML = `If the factory is in the same city the agent is currently based in <strong id="factoryCurrentCityLabel">${city}</strong>, the visit fee is <strong>$15</strong>, covering: an on-site visit, negotiation with the factory, completing the purchase, and inspecting the goods and factory.<br><br>If the factory is in a different city, travel costs are covered by the customer and will be arranged directly.`;
+  }
+}
+
+function checkFactoryCity(){
+  const city = document.getElementById('factoryCity').value.trim().toLowerCase();
+  const note = document.getElementById('factoryCostNote');
+  if(!city || !agentLocationData.currentCity){ note.style.display='none'; return; }
+  const sameCity = city.includes(agentLocationData.currentCity.toLowerCase()) || agentLocationData.currentCity.toLowerCase().includes(city);
+  note.style.display = 'block';
+  note.textContent = sameCity
+    ? '✅ المصنع في نفس مدينة المسؤول — التكلفة المتوقعة: 15$ شاملة الزيارة والتفاوض والفحص'
+    : '⚠️ المصنع في مدينة مختلفة — تكلفة السفر ستكون على العميل، وسيتم التنسيق بعد إرسال الطلب';
+}
+
+async function submitFactoryVisit(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_request')); return; }
+  const link = document.getElementById('factoryLink').value.trim();
+  const name = document.getElementById('factoryName').value.trim();
+  const specialty = document.getElementById('factorySpecialty').value.trim();
+  const contact = document.getElementById('factoryContact').value.trim();
+  const city = document.getElementById('factoryCity').value.trim();
+  const notes = document.getElementById('factoryNotes').value.trim();
+  if(!name || !specialty || !city){ showToast(t('fill_factory_required')); return; }
+
+  const sameCity = agentLocationData.currentCity && city.toLowerCase().includes(agentLocationData.currentCity.toLowerCase());
+  const costNote = sameCity ? '15$ (نفس مدينة المسؤول)' : 'تكلفة السفر على العميل (مدينة مختلفة)';
+  const mark = currentCustomerData?.shippingMark || '';
+
+  const reqData = {
+    link, name, specialty, contact, city, notes,
+    costNote,
+    customerEmail: currentUser.email,
+    shippingMark: mark,
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10)
+  };
+  await db.collection('factoryVisitRequests').add(reqData);
+  notifyAdmin('طلب زيارة مصنع جديد', `مارك الشحن: ${mark}\nاسم المصنع: ${name}\nالمدينة: ${city}\nالتكلفة المتوقعة: ${costNote}`);
+
+  const msg = `مرحباً، أرغب في طلب زيارة مصنع.\nمارك الشحن الخاص بي: ${mark}\nاسم المصنع: ${name}\nالتخصص: ${specialty}\nالمدينة: ${city}\nرابط المصنع: ${link || '-'}\nتواصل المصنع: ${contact || '-'}\nملاحظات: ${notes || '-'}\nالتكلفة المتوقعة: ${costNote}`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+
+  document.getElementById('factoryLink').value = '';
+  document.getElementById('factoryName').value = '';
+  document.getElementById('factorySpecialty').value = '';
+  document.getElementById('factoryContact').value = '';
+  document.getElementById('factoryCity').value = '';
+  document.getElementById('factoryNotes').value = '';
+  document.getElementById('factoryCostNote').style.display = 'none';
+  showToast(t('visit_request_sent'));
+}
+
+// ====== IMPORT ORDER FUNCTIONS ======
+
+function addImportRow(){
+  importRowCount++;
+  const id = importRowCount;
+  const wrap = document.getElementById('importItemsList');
+  const row = document.createElement('div');
+  row.className = 'import-row';
+  row.id = 'importRow_' + id;
+  row.innerHTML = `
+    <input placeholder="رابط المنتج" class="import-link">
+    <input placeholder="اسم مختصر (اختياري)" class="import-name">
+    <input type="number" placeholder="الكمية" class="import-qty qty-input">
+    <button class="remove-row" onclick="removeImportRow(${id})" title="حذف">✕</button>
+  `;
+  wrap.appendChild(row);
+}
+
+function removeImportRow(id){
+  const row = document.getElementById('importRow_' + id);
+  if(row) row.remove();
+}
+
+async function submitImportRequest(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_request')); return; }
+  const rows = document.querySelectorAll('#importItemsList .import-row');
+  const items = [];
+  rows.forEach(row=>{
+    const link = row.querySelector('.import-link').value.trim();
+    const name = row.querySelector('.import-name').value.trim();
+    const qty = row.querySelector('.import-qty').value.trim();
+    if(link && qty) items.push({link, name, qty});
+  });
+  const notes = document.getElementById('importNotes').value.trim();
+  const destCode = document.getElementById('importDestination').value;
+  if(items.length===0){ showToast(t('add_one_item')); return; }
+
+  const mark = currentCustomerData?.shippingMark || '';
+  const reqData = {
+    items, notes,
+    destination: destName(destCode),
+    customerEmail: currentUser.email,
+    shippingMark: mark,
+    status: 'قيد المراجعة',
+    quotedPrice: '',
+    date: new Date().toISOString().slice(0,10)
+  };
+  await db.collection('importRequests').add(reqData);
+  notifyAdmin('طلب شراء جديد من الصين', `مارك الشحن: ${mark}\nعدد المنتجات: ${items.length}\nالوجهة: ${reqData.destination}`);
+
+  const itemsText = items.map((it,i)=>`${i+1}. ${it.name || 'بدون اسم'} — الكمية: ${it.qty}\nالرابط: ${it.link}`).join('\n');
+  const msg = `مرحباً، أرغب في طلب عرض سعر لشراء منتجات من الصين.\nمارك الشحن الخاص بي: ${mark}\n${itemsText}\nالوجهة: ${reqData.destination}\nملاحظات: ${notes || '-'}`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+
+  document.getElementById('importItemsList').innerHTML = '';
+  addImportRow();
+  document.getElementById('importNotes').value = '';
+  showToast(t('import_request_sent'));
+}
+
+// ====== COMMUNITY FUNCTIONS ======
+
+async function submitPost(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const text = document.getElementById('postInput').value.trim();
+  if(!text){ showToast(t('write_post_first')); return; }
+  await db.collection('communityPosts').add({
+    authorEmail: currentUser.email,
+    authorName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    text: text,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  document.getElementById('postInput').value = '';
+  showToast(t('post_published'));
+  loadCommunityFeed(false);
+  loadActivityFeed();
+}
+
+async function loadCommunityFeed(loadMore){
+  const wrap = document.getElementById('communityFeed');
+  let query = db.collection('communityPosts').orderBy('createdAt','desc').limit(15);
+  if(loadMore && lastPostDoc) query = query.startAfter(lastPostDoc);
+  if(!loadMore){ communityPosts = []; lastPostDoc = null; }
+
+  const snap = await query.get();
+  if(!snap.empty) lastPostDoc = snap.docs[snap.docs.length-1];
+  const newPosts = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  communityPosts = loadMore ? communityPosts.concat(newPosts) : newPosts;
+
+  document.getElementById('loadMorePostsBtn').style.display = snap.docs.length === 15 ? 'block' : 'none';
+
+  if(communityPosts.length === 0){
+    wrap.innerHTML = `<div class="empty">${t('no_posts_yet')}</div>`;
+    return;
+  }
+
+  wrap.innerHTML = communityPosts.map(p => {
+    const dateStr = p.createdAt && p.createdAt.toDate ? p.createdAt.toDate().toLocaleDateString(currentLang==='ar'?'ar-EG':'en-US') : '';
+    const canDelete = currentUser && (currentUser.email === ADMIN_EMAIL || currentUser.email === p.authorEmail);
+    const isAdminPost = p.authorEmail === ADMIN_EMAIL;
+    return `<div class="post-card" id="post_${p.id}" style="${isAdminPost ? 'border:2px solid var(--gold);' : ''}">
+      <div class="post-header">
+        <span class="post-author">${isAdminPost ? '👑 ' + t('admin_badge') : p.authorName}</span>
+        <span class="post-date">${dateStr}</span>
+      </div>
+      <div class="post-text">${p.text}</div>
+      <div class="post-actions">
+        <button class="like-btn" id="likeBtn_${p.id}" onclick="toggleLike('${p.id}')">🤍 <span id="likeCount_${p.id}">0</span></button>
+        <button class="comment-toggle-btn" onclick="toggleComments('${p.id}')">💬 <span id="commentCount_${p.id}">0</span> ${t('comments_label')}</button>
+        ${canDelete ? `<button class="post-delete-btn" onclick="deletePost('${p.id}')">🗑️</button>` : ''}
+      </div>
+      <div class="comments-wrap" id="commentsWrap_${p.id}">
+        <div id="commentsList_${p.id}"></div>
+        <div class="comment-form">
+          <input id="commentInput_${p.id}" placeholder="${t('comment_ph')}">
+          <button onclick="submitComment('${p.id}')">${t('send_btn')}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  communityPosts.forEach(p => {
+    refreshLikeState(p.id);
+    refreshCommentCount(p.id);
+  });
+}
+
+async function refreshLikeState(postId){
+  const countSnap = await db.collection('communityPosts').doc(postId).collection('likes').count().get();
+  const countEl = document.getElementById('likeCount_'+postId);
+  if(countEl) countEl.textContent = countSnap.data().count;
+
+  if(currentUser){
+    const myLike = await db.collection('communityPosts').doc(postId).collection('likes').doc(currentUser.email).get();
+    const btn = document.getElementById('likeBtn_'+postId);
+    if(btn){
+      if(myLike.exists){
+        btn.classList.add('liked');
+        btn.innerHTML = `❤️ <span id="likeCount_${postId}">${countSnap.data().count}</span>`;
+        likedPostIds.add(postId);
+      } else {
+        likedPostIds.delete(postId);
+      }
     }
   }
-  
-  if (tab === 'about') {
-    setTimeout(() => {
-      expandAbout();
-    }, 300);
+}
+
+async function refreshCommentCount(postId){
+  const countSnap = await db.collection('communityPosts').doc(postId).collection('comments').count().get();
+  const el = document.getElementById('commentCount_'+postId);
+  if(el) el.textContent = countSnap.data().count;
+}
+
+async function toggleLike(postId){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const likeRef = db.collection('communityPosts').doc(postId).collection('likes').doc(currentUser.email);
+  const doc = await likeRef.get();
+  if(doc.exists){
+    await likeRef.delete();
   } else {
-    collapseAbout();
+    await likeRef.set({ date: new Date().toISOString() });
   }
-  
-  if (tab === 'weeklyoffers') {
-    renderFlashSalePage();
-  }
-};
+  refreshLikeState(postId);
+}
 
-// ====== باقي الدوال الأساسية ======
+function toggleComments(postId){
+  const wrap = document.getElementById('commentsWrap_'+postId);
+  wrap.classList.toggle('show');
+  if(wrap.classList.contains('show')) loadComments(postId);
+}
 
-// (هنا توضع باقي الدوال: المنتجات، السلة، الطلبات، المصادقة، المجتمع، التقييمات، الأسئلة، الشكاوى، إلخ)
-// بما أن هذه الدوال موجودة بالفعل في الكود القديم، سيتم الاحتفاظ بها كما هي
+async function loadComments(postId){
+  const list = document.getElementById('commentsList_'+postId);
+  list.innerHTML = `<div style="font-size:12px;color:#999;">${t('loading')}</div>`;
+  const snap = await db.collection('communityPosts').doc(postId).collection('comments').orderBy('createdAt','asc').limit(50).get();
+  if(snap.empty){ list.innerHTML = `<div style="font-size:12.5px;color:#999;">${t('no_comments_yet')}</div>`; return; }
+  list.innerHTML = snap.docs.map(d => {
+    const c = d.data();
+    const canDelete = currentUser && (currentUser.email === ADMIN_EMAIL || currentUser.email === c.authorEmail);
+    const isAdminComment = c.authorEmail === ADMIN_EMAIL;
+    return `<div class="comment-item" style="${isAdminComment ? 'background:var(--ink);color:var(--paper);' : ''}">
+      <span class="comment-author" style="${isAdminComment ? 'color:var(--gold);' : ''}">${isAdminComment ? '👑 ' + t('admin_badge') : c.authorName}:</span> ${c.text}
+      ${canDelete ? `<button class="post-delete-btn" style="margin-right:6px;" onclick="deleteComment('${postId}','${d.id}')">🗑️</button>` : ''}
+    </div>`;
+  }).join('');
+}
 
-// ====== التهيئة النهائية ======
+async function submitComment(postId){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const input = document.getElementById('commentInput_'+postId);
+  const text = input.value.trim();
+  if(!text) return;
+  await db.collection('communityPosts').doc(postId).collection('comments').add({
+    authorEmail: currentUser.email,
+    authorName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    text: text,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  input.value = '';
+  loadComments(postId);
+  refreshCommentCount(postId);
+}
 
-document.addEventListener('DOMContentLoaded', async function() {
-  await updateTabs();
-  await renderFlashSalePage();
-  if (currentUser && currentUser.email === ADMIN_EMAIL) {
-    await renderTabsControl();
-    await renderFlashSaleAdmin();
+async function deletePost(postId){
+  await db.collection('communityPosts').doc(postId).delete();
+  loadCommunityFeed(false);
+}
+
+async function deleteComment(postId, commentId){
+  await db.collection('communityPosts').doc(postId).collection('comments').doc(commentId).delete();
+  loadComments(postId);
+  refreshCommentCount(postId);
+}
+
+// ====== RATINGS FUNCTIONS ======
+
+document.addEventListener('click', function(e){
+  const star = e.target.closest('.star-pick');
+  if(star && star.closest('#starPicker')){
+    selectedStars = parseInt(star.getAttribute('data-value'));
+    document.querySelectorAll('#starPicker .star-pick').forEach(s=>{
+      const v = parseInt(s.getAttribute('data-value'));
+      s.textContent = v <= selectedStars ? '★' : '☆';
+      s.classList.toggle('active', v <= selectedStars);
+    });
   }
 });
+
+async function submitRating(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  if(selectedStars === 0){ showToast(t('select_stars_first')); return; }
+  const comment = document.getElementById('ratingComment').value.trim();
+  await db.collection('ratings').doc(currentUser.email).set({
+    rating: selectedStars,
+    comment: comment,
+    customerName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    date: new Date().toISOString().slice(0,10),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  showToast(t('rating_submitted'));
+  loadRatings();
+  loadActivityFeed();
+}
+
+async function loadRatings(){
+  const snap = await db.collection('ratings').orderBy('date','desc').limit(50).get();
+  allRatings = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  renderRatingsSummary();
+  renderReviewsList();
+}
+
+function starsToText(n){
+  return '★'.repeat(n) + '☆'.repeat(5-n);
+}
+
+function renderRatingsSummary(){
+  const avgEl = document.getElementById('ratingsAvg');
+  const starsEl = document.getElementById('ratingsAvgStars');
+  const countEl = document.getElementById('ratingsCount');
+  if(allRatings.length === 0){
+    avgEl.textContent = '-';
+    starsEl.textContent = '☆☆☆☆☆';
+    countEl.textContent = t('no_ratings_yet');
+    return;
+  }
+  const avg = allRatings.reduce((sum,r)=>sum+r.rating,0) / allRatings.length;
+  avgEl.textContent = avg.toFixed(1);
+  starsEl.textContent = starsToText(Math.round(avg));
+  countEl.textContent = `${allRatings.length} ${t('ratings_count_label')}`;
+}
+
+function renderReviewsList(){
+  const wrap = document.getElementById('reviewsList');
+  const withComments = allRatings.filter(r => r.comment);
+  if(withComments.length === 0){
+    wrap.innerHTML = `<div class="empty">${t('no_reviews_yet')}</div>`;
+    return;
+  }
+  wrap.innerHTML = withComments.map(r => {
+    const canDelete = currentUser && (currentUser.email === ADMIN_EMAIL || currentUser.email === r.id);
+    return `<div class="review-item">
+      <div class="review-header">
+        <span class="review-name">${r.customerName}</span>
+        <span class="review-date">${r.date}</span>
+      </div>
+      <div class="review-stars">${starsToText(r.rating)}</div>
+      <div class="review-comment">${r.comment}</div>
+      ${canDelete ? `<button class="post-delete-btn" onclick="deleteRating('${r.id}')">🗑️</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function deleteRating(id){
+  await db.collection('ratings').doc(id).delete();
+  loadRatings();
+}
+
+// ====== QUESTIONS FUNCTIONS ======
+
+async function submitQuestion(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const text = document.getElementById('questionInput').value.trim();
+  if(!text){ showToast(t('write_question_first')); return; }
+  await db.collection('questions').add({
+    question: text,
+    answer: null,
+    askedBy: currentUser.email,
+    authorName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  notifyAdmin('سؤال جديد من عميل', `من: ${currentUser.email}\nالسؤال: ${text}`);
+  document.getElementById('questionInput').value = '';
+  showToast(t('question_sent'));
+  loadActivityFeed();
+}
+
+function renderQaList(){
+  const wrap = document.getElementById('qaList');
+  const ids = Object.keys(questions).reverse();
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${t('no_questions')}</div>`; return; }
+  wrap.innerHTML = ids.map(id=>{
+    const q = questions[id];
+    const askerName = q.authorName || t('unnamed_customer');
+    return `<div class="qa-item">
+      <div class="qa-asker">👤 ${askerName}</div>
+      <div class="qa-q">${t('q_prefix')} ${q.question}</div>
+      <div class="qa-meta">${q.date}</div>
+      ${q.answer ? `<div class="qa-a">${t('a_prefix')} ${q.answer}</div>` : `<div class="qa-pending">${t('awaiting_reply')}</div>`}
+    </div>`;
+  }).join('');
+}
+
+function renderAdminQa(search){
+  const wrap = document.getElementById('adminQaList');
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(questions);
+  if(term){
+    ids = ids.filter(id=>{
+      const q = questions[id];
+      return (q.question||'').toLowerCase().includes(term) ||
+             (q.askedBy||'').toLowerCase().includes(term);
+    });
+  }
+  ids = ids.reverse();
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد أسئلة'}</div>`; return; }
+  wrap.innerHTML = ids.map(id=>{
+    const q = questions[id];
+    return `<div class="admin-qa-item">
+      <div><strong>${q.askedBy}</strong> — ${q.date}</div>
+      <div style="margin:6px 0;">${q.question}</div>
+      <textarea id="ans_${id}" placeholder="اكتب الرد هنا...">${q.answer||''}</textarea>
+      <button class="btn btn-gold" onclick="answerQuestion('${id}')">حفظ الرد</button>
+    </div>`;
+  }).join('');
+}
+
+async function answerQuestion(id){
+  const text = document.getElementById('ans_'+id).value.trim();
+  if(!text){ showToast('يرجى كتابة الرد قبل الحفظ'); return; }
+  await db.collection('questions').doc(id).update({ answer: text, status: 'تم الرد' });
+  const q = questions[id];
+  if(q) notifyCustomer(q.askedBy, 'تم الرد على سؤالك', `سؤالك: ${q.question}\n\nالرد: ${text}`);
+  showToast('تم حفظ الرد بنجاح');
+}
+
+// ====== COMPLAINTS FUNCTIONS ======
+
+async function submitComplaint(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const type = document.getElementById('complaintType').value;
+  const text = document.getElementById('complaintText').value.trim();
+  if(!text){ showToast(t('write_complaint_first')); return; }
+  await db.collection('complaints').add({
+    type: type,
+    text: text,
+    customerEmail: currentUser.email,
+    shippingMark: (currentCustomerData && currentCustomerData.shippingMark) || '',
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10)
+  });
+  notifyAdmin(type==='complaint' ? 'شكوى جديدة من عميل' : 'اقتراح جديد من عميل', `من: ${currentUser.email}\n${text}`);
+  document.getElementById('complaintText').value = '';
+  showToast(t('complaint_sent'));
+}
+
+// ====== ACTIVITY FEED FUNCTIONS ======
+
+async function loadActivityFeed(){
+  const wrap = document.getElementById('activityList');
+  if(!wrap) return;
+
+  const [postsSnap, qSnap, ratingsSnap] = await Promise.all([
+    db.collection('communityPosts').orderBy('createdAt','desc').limit(15).get(),
+    db.collection('questions').orderBy('createdAt','desc').limit(15).get(),
+    db.collection('ratings').orderBy('createdAt','desc').limit(15).get()
+  ]);
+
+  let items = [];
+  postsSnap.docs.forEach(d=>{
+    const p = d.data();
+    if(!p.createdAt) return;
+    items.push({ type:'post', name:p.authorName, text:p.text, ts:p.createdAt.toMillis(), isAdmin: p.authorEmail === ADMIN_EMAIL });
+  });
+  qSnap.docs.forEach(d=>{
+    const q = d.data();
+    if(!q.createdAt) return;
+    items.push({ type:'question', name:q.authorName || t('unnamed_customer'), text:q.question, ts:q.createdAt.toMillis() });
+  });
+  ratingsSnap.docs.forEach(d=>{
+    const r = d.data();
+    if(!r.createdAt) return;
+    items.push({ type:'rating', name:r.customerName, text:r.comment, rating:r.rating, ts:r.createdAt.toMillis() });
+  });
+
+  items.sort((a,b)=> b.ts - a.ts);
+  items = items.slice(0,25);
+
+  if(items.length===0){
+    wrap.innerHTML = `<div class="empty">${t('no_activity_yet')}</div>`;
+    return;
+  }
+
+  wrap.innerHTML = items.map(it=>{
+    const timeStr = new Date(it.ts).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US');
+    let icon, title, snippet, targetTab;
+    if(it.type === 'post'){
+      icon = '📝';
+      title = it.isAdmin ? `👑 ${t('admin_badge')} ${t('activity_posted')}` : `${it.name} ${t('activity_posted')}`;
+      snippet = it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text;
+      targetTab = 'community';
+    } else if(it.type === 'question'){
+      icon = '❓';
+      title = `${it.name} ${t('activity_asked')}`;
+      snippet = it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text;
+      targetTab = 'questions';
+    } else {
+      icon = '⭐';
+      title = `${it.name} ${t('activity_rated')} ${starsToText(it.rating)}`;
+      snippet = it.text ? (it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text) : '';
+      targetTab = 'ratings';
+    }
+    return `<div class="activity-item" onclick="showTab('${targetTab}')">
+      <div class="activity-icon">${icon}</div>
+      <div class="activity-body">
+        <div class="activity-title">${title}</div>
+        ${snippet ? `<div class="activity-snippet">${snippet}</div>` : ''}
+        <div class="activity-time">${timeStr}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ====== INITIALIZATION ======
 
 document.addEventListener('click', function(e){
   if(e.target.closest('button, .add, .tiny-btn')){
     showCraneLoader();
-  }
-});
-
-document.addEventListener('visibilitychange', function() {
-  if (!document.hidden && isAboutExpanded) {
-    updateChinaClock();
   }
 });
 
@@ -2891,144 +3634,10 @@ loadRatings();
 loadActivityFeed();
 addImportRow();
 
-setTimeout(() => {
-  updateTabs();
-  renderFlashSalePage();
-}, 1000);
-
-setInterval(() => {
-  if (document.getElementById('weeklyoffers')?.classList.contains('active')) {
-    renderFlashSalePage();
-  }
-}, 60000);
-
 console.log('✅ AlHossain - تم تحميل الموقع بنجاح');
 console.log('📱 responsive mode - جاهز للجوال');
 console.log('👤 نظام الدخول/الخروج مع بروفايل');
 console.log('🔒 أزرار الحذف (X الأحمر) تم إخفاؤها');
-console.log('✨ صفحة عن المؤسس - تأثير iOS الزجاجي');
-console.log('🕐 ساعة توقيت الصين');
-console.log('🔥 العروض النارية - جاهزة');
-console.log('📌 التحكم في التبويبات - جاهز');
-// ====== مراقبة حالة المستخدم ======
-
-auth.onAuthStateChanged(async user => {
-  console.log('🔥 auth.onAuthStateChanged triggered:', user ? user.email : 'No user');
-  
-  currentUser = user;
-  const btn = document.getElementById('authBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const profileBar = document.getElementById('userProfileBar');
-  const profileName = document.getElementById('userProfileName');
-  const avatar = document.getElementById('userAvatar');
-  
-  if (user) {
-    console.log('✅ User logged in:', user.email);
-    
-    const displayName = user.email.split('@')[0];
-    
-    logoutBtn.style.display = 'inline-block';
-    logoutBtn.textContent = currentLang === 'ar' ? 'خروج' : 'Log out';
-    
-    btn.textContent = displayName;
-    btn.style.background = 'rgba(255,255,255,0.15)';
-    btn.style.borderColor = 'var(--gold)';
-    btn.style.color = 'var(--gold)';
-    btn.onclick = () => showTab('profile');
-    
-    profileBar.classList.add('show');
-    profileName.textContent = displayName;
-    avatar.textContent = displayName.charAt(0).toUpperCase();
-    
-    try {
-      const doc = await db.collection('customers').doc(user.email).get();
-      if (doc.exists) {
-        currentCustomerData = doc.data();
-        console.log('📦 Customer data loaded:', currentCustomerData);
-        
-        if (currentCustomerData.name) {
-          profileName.textContent = currentCustomerData.name;
-          avatar.textContent = currentCustomerData.name.charAt(0).toUpperCase();
-        }
-        btn.textContent = currentCustomerData.name || displayName;
-        
-        if (currentCustomerData.shippingMark) {
-          document.getElementById('myMarkDisplay').textContent = currentCustomerData.shippingMark;
-        }
-      } else {
-        console.log('⚠️ Customer not found in Firestore, creating...');
-        const destCode = 'SD';
-        const nameBase = user.email.split('@')[0];
-        const mark = await generateUniqueMark(nameBase, destCode, user.email);
-        
-        currentCustomerData = {
-          email: user.email,
-          name: nameBase,
-          destination: 'السودان',
-          shippingMark: mark,
-          emailVerified: user.emailVerified || false,
-          joinDate: new Date().toISOString().slice(0,10)
-        };
-        
-        await db.collection('customers').doc(user.email).set(currentCustomerData);
-        console.log('✅ Customer created:', currentCustomerData);
-      }
-      
-      if (user.emailVerified && currentCustomerData && !currentCustomerData.emailVerified) {
-        await db.collection('customers').doc(user.email).update({ emailVerified: true });
-        currentCustomerData.emailVerified = true;
-      }
-      
-    } catch (e) {
-      console.error('❌ Error loading customer data:', e);
-    }
-    
-    if (currentCustomerData && currentCustomerData.shippingMark) {
-      try {
-        await loadMyShipments();
-        renderShipmentsResult();
-      } catch (e) {
-        console.error('❌ Error loading shipments:', e);
-      }
-    }
-    
-    if (user.email === ADMIN_EMAIL) {
-      setTimeout(async () => {
-        try {
-          await renderTabsControl();
-          await renderFlashSaleAdmin();
-        } catch (e) {
-          console.error('❌ Error loading admin data:', e);
-        }
-      }, 1000);
-    }
-    
-    document.getElementById('trackLoginPrompt').style.display = 'none';
-    document.getElementById('myMarkBox').style.display = 'block';
-    
-    showToast('✅ تم تسجيل الدخول بنجاح');
-    
-  } else {
-    console.log('👤 User logged out');
-    
-    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
-    btn.style.background = 'rgba(255,255,255,0.08)';
-    btn.style.borderColor = 'rgba(255,255,255,0.25)';
-    btn.style.color = 'var(--paper)';
-    btn.onclick = openAuthModal;
-    
-    logoutBtn.style.display = 'none';
-    profileBar.classList.remove('show');
-    
-    currentCustomerData = null;
-    myOrders = {};
-    myImportRequests = {};
-    myFactoryVisits = {};
-    
-    document.getElementById('trackLoginPrompt').style.display = 'block';
-    document.getElementById('myMarkBox').style.display = 'none';
-  }
-});
 </script>
 </body>
 </html>

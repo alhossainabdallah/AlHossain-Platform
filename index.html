@@ -477,6 +477,48 @@
   }
   .qa-item{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px; }
 
+  /* FAQ SECTION */
+  .faq-heading{ margin:32px 0 14px; padding-top:20px; border-top:2px dashed var(--line); }
+  .faq-list{ display:flex; flex-direction:column; gap:10px; }
+  .faq-envelope{
+    background:linear-gradient(135deg, rgba(217,164,64,0.14), rgba(217,164,64,0.06));
+    border:1px solid rgba(224,165,24,0.35); border-radius:12px;
+    padding:14px 16px; display:flex; align-items:center; gap:12px;
+    cursor:pointer; transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .faq-envelope:active{ transform:scale(0.98); }
+  .faq-envelope:hover{ box-shadow:0 4px 14px rgba(224,165,24,0.2); }
+  .faq-envelope-icon{ font-size:20px; flex-shrink:0; }
+  .faq-envelope-q{ font-weight:700; font-size:14.5px; color:var(--ink-dark); flex:1; }
+  .faq-envelope-arrow{ color:var(--gold); font-size:13px; }
+
+  .faq-modal-overlay{
+    position:fixed; inset:0; background:rgba(10,27,43,.6); z-index:120;
+    display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  .faq-modal-overlay.show{ display:flex; }
+  .faq-modal{
+    background:var(--white); border-radius:18px; padding:30px 24px 22px;
+    max-width:440px; width:100%; position:relative; text-align:center;
+    transform:scale(0.6) rotateX(-25deg); opacity:0; transform-origin:top center;
+    animation:envelopeOpen .45s cubic-bezier(.34,1.4,.64,1) forwards;
+  }
+  @keyframes envelopeOpen{
+    0%{ transform:scale(0.6) rotateX(-35deg); opacity:0; }
+    60%{ transform:scale(1.02) rotateX(4deg); opacity:1; }
+    100%{ transform:scale(1) rotateX(0deg); opacity:1; }
+  }
+  .faq-modal-icon{ font-size:34px; margin-bottom:10px; }
+  .faq-modal-q{ font-size:17px; color:var(--ink-dark); margin-bottom:14px; line-height:1.6; }
+  .faq-modal-a{ font-size:14.5px; color:#444; line-height:1.9; text-align:right; background:var(--paper-soft); border-radius:12px; padding:16px; }
+  .faq-modal-nav{ display:flex; align-items:center; justify-content:space-between; margin-top:18px; }
+  .faq-nav-btn{
+    background:var(--ink); color:var(--paper); border:none; border-radius:999px;
+    padding:8px 16px; font-family:'Tajawal'; font-size:13px; cursor:pointer;
+  }
+  .faq-nav-btn:disabled{ opacity:0.35; cursor:not-allowed; }
+  .faq-modal-counter{ font-size:12.5px; color:#888; }
+
   /* PROFILE */
   .profile-card{ background:var(--ink); color:var(--paper); border-radius:16px; padding:22px; text-align:center; margin-bottom:20px; }
   .profile-name{ font-family:'Aref Ruqaa'; font-size:24px; margin-bottom:8px; }
@@ -841,7 +883,24 @@
       <button class="btn btn-primary" data-i18n="send_question_btn" onclick="submitQuestion()">إرسال السؤال</button>
     </div>
     <div id="qaList"></div>
+
+    <h2 class="faq-heading" data-i18n="faq_title">الأسئلة الشائعة</h2>
+    <div id="faqList" class="faq-list"></div>
   </section>
+
+  <div class="faq-modal-overlay" id="faqModalOverlay">
+    <div class="faq-modal" id="faqModalCard">
+      <button class="auth-close" onclick="closeFaqModal()" style="position:absolute;left:14px;top:12px;">✕</button>
+      <div class="faq-modal-icon">✉️</div>
+      <h3 class="faq-modal-q" id="faqModalQ"></h3>
+      <p class="faq-modal-a" id="faqModalA"></p>
+      <div class="faq-modal-nav">
+        <button class="faq-nav-btn" id="faqPrevBtn" onclick="navigateFaq(-1)">◀ <span data-i18n="faq_prev">السابق</span></button>
+        <span class="faq-modal-counter" id="faqCounter"></span>
+        <button class="faq-nav-btn" id="faqNextBtn" onclick="navigateFaq(1)"><span data-i18n="faq_next">التالي</span> ▶</button>
+      </div>
+    </div>
+  </div>
 
   <section id="importorder">
     <h2 style="margin-bottom:6px;" data-i18n="import_title">اطلب من الصين</h2>
@@ -1688,6 +1747,9 @@ const translations = {
   china_time_label: {ar:'توقيت الصين الآن', en:'Current time in China'},
   phone_ph: {ar:'رقم الجوال', en:'Phone number'},
   enter_phone_number: {ar:'يرجى إدخال رقم الجوال', en:'Please enter your phone number'},
+  faq_title: {ar:'الأسئلة الشائعة', en:'Frequently Asked Questions'},
+  faq_prev: {ar:'السابق', en:'Previous'},
+  faq_next: {ar:'التالي', en:'Next'},
   activity_title: {ar:'آخر التحركات في الموقع', en:'Latest Site Activity'},
   activity_desc: {ar:'تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.', en:'Follow the latest posts, questions, and ratings from our real customers.'},
   no_activity_yet: {ar:'لا توجد تحركات بعد', en:'No activity yet'},
@@ -1735,9 +1797,10 @@ function applyLanguage(){
   document.getElementById('cartLabel').textContent = translations.cart_label[currentLang];
   document.documentElement.setAttribute('lang', currentLang);
   if(!currentUser){
-    document.getElementById('authBtn').textContent = translations.login_btn[currentLang];
+    document.getElementById('authBtn').textContent = '👤';
   }
   updateFactoryCityLabel();
+  renderFaqList();
 }
 
 function destName(code){
@@ -3634,6 +3697,77 @@ async function submitQuestion(){
   loadActivityFeed();
 }
 
+// ====== الأسئلة الشائعة ======
+const faqData = [
+  { q:{ar:'إزاي أقدر أطلب منتج من الصين من خلالكم؟', en:'How can I order a product from China through you?'},
+    a:{ar:'تقدر تستخدم صفحة "اطلب من الصين"، تحط رابط المنتج من تاوباو أو 1688 أو علي بابا، والكمية المطلوبة، وهنبعتلك عرض سعر شامل الشراء والشحن خلال 24 ساعة.', en:'Use the "Order from China" page, add the product link from Taobao, 1688, or Alibaba along with the quantity, and we\'ll send you a quote covering purchase and shipping within 24 hours.'} },
+  { q:{ar:'إيه هي الـ Shipping Mark وليه لازم أستخدمها؟', en:'What is the Shipping Mark and why do I need it?'},
+    a:{ar:'هي رمز تعريفي ثابت بيتخصص لك عند التسجيل، بتكتبه على كل طرد تشتريه من أي موقع صيني عشان المستودع يعرف يربط البضاعة بيك فور وصولها، ويقلل احتمال ضياعها أو اختلاطها ببضاعة عميل تاني.', en:'It\'s a permanent identifier assigned to you at registration. Write it on every parcel you buy from any Chinese site so the warehouse can link the goods to you upon arrival, reducing the chance of loss or mix-ups.'} },
+  { q:{ar:'كام المدة المتوقعة لوصول الشحنة؟', en:'How long does shipping usually take?'},
+    a:{ar:'بتختلف حسب نوع الشحن (بحري أو جوي) والوجهة. الشحن البحري أرخص لكن أبطأ، والجوي أسرع لكن أغلى. المدة الدقيقة بنأكدها بعد تأكيد الطلب حسب الظروف اللوجستية وقتها.', en:'It depends on the shipping type (sea or air) and destination. Sea freight is cheaper but slower, air freight is faster but pricier. We confirm the exact duration after your order based on logistics at the time.'} },
+  { q:{ar:'هل فيه حد أدنى للكمية (MOQ)؟', en:'Is there a Minimum Order Quantity (MOQ)?'},
+    a:{ar:'بيعتمد على المصنع أو المورد نفسه، مش علينا. بعض الموردين بيقبلوا كمية صغيرة، وبعضهم بيحدد حد أدنى (500 قطعة مثلاً). نقدر نساعدك تتفاوض معاه لو الكمية أكبر من احتياجك.', en:'It depends on the factory or supplier, not us. Some accept small quantities, others set a minimum (e.g. 500 pieces). We can help you negotiate if the MOQ exceeds your needs.'} },
+  { q:{ar:'إزاي أدفع مقابل طلبي؟', en:'How do I pay for my order?'},
+    a:{ar:'بنتفق على طريقة الدفع وشروطه (دفعة مقدمة أو كاملة) بشكل مباشر عبر واتساب بعد ما نأكد السعر النهائي، وده بيختلف حسب حجم الطلب ونوعه.', en:'We agree on the payment method and terms (deposit or full payment) directly via WhatsApp once the final price is confirmed, depending on the order size and type.'} },
+  { q:{ar:'ممكن أعاين المصنع أو المنتج قبل ما أشتري؟', en:'Can I inspect the factory or product before buying?'},
+    a:{ar:'أيوه، من صفحة "زيارة مصنع" تقدر تطلب زيارة ميدانية لأي مصنع لقيته على علي بابا أو غيره، بتكلفة 15$ لو كان في نفس مدينتنا الحالية، أو تكلفة سفر لو في مدينة تانية.', en:'Yes, from the "Factory Visit" page you can request an on-site visit to any factory you found on Alibaba or elsewhere, for $15 if it\'s in our current city, or travel cost if in another city.'} },
+  { q:{ar:'إيه اللي بيحصل لو المنتج وصل فيه عيب أو تلف؟', en:'What happens if the product arrives defective or damaged?'},
+    a:{ar:'لو العيب من التصنيع، المسؤولية بتكون على المورد الأصلي. لو التلف حصل أثناء الشحن، المسؤولية بتكون على شركة الشحن الناقلة. إحنا كوسيط بنساعدك تتابع أي مطالبة تعويض مع الطرف المسؤول الفعلي.', en:'If it\'s a manufacturing defect, the original supplier is responsible. If damage occurred during shipping, the carrier is responsible. As an intermediary, we help you pursue any compensation claim with the actual responsible party.'} },
+  { q:{ar:'إزاي أتابع حالة طلبي؟', en:'How do I track my order status?'},
+    a:{ar:'من صفحة "تتبع طلبي" بعد تسجيل الدخول، هتلاقي كل طلباتك (شراء، استيراد، زيارات مصانع) بحالتها المحدثة أول بأول.', en:'From the "Track My Order" page after logging in, you\'ll find all your orders (purchases, imports, factory visits) with their updated status.'} },
+  { q:{ar:'هل الأسعار المعروضة نهائية؟', en:'Are the displayed prices final?'},
+    a:{ar:'الأسعار في الحاسبات (زي حاسبة الشحن) تقريبية للاستئناس، وبتتأثر بسعر الصرف والسوق وقت التنفيذ. السعر النهائي بيتأكد مباشرة بعد التواصل معانا.', en:'Prices in the calculators (like the shipping calculator) are indicative only and are affected by exchange rates and market conditions. The final price is confirmed directly after contacting us.'} },
+  { q:{ar:'إيه الدول اللي بتوصلوا لها حالياً؟', en:'Which countries do you currently deliver to?'},
+    a:{ar:'حالياً بنغطي السودان وجنوب السودان (شحن بحري)، والإمارات والسعودية (شحن بحري وجوي).', en:'We currently cover Sudan and South Sudan (sea freight), and the UAE and Saudi Arabia (sea and air freight).'} }
+];
+let currentFaqIndex = 0;
+
+function renderFaqList(){
+  const wrap = document.getElementById('faqList');
+  if(!wrap) return;
+  wrap.innerHTML = faqData.map((item, i) => `
+    <div class="faq-envelope" onclick="openFaqModal(${i})">
+      <span class="faq-envelope-icon">✉️</span>
+      <span class="faq-envelope-q">${item.q[currentLang]}</span>
+      <span class="faq-envelope-arrow">◀</span>
+    </div>`).join('');
+}
+
+function openFaqModal(index){
+  currentFaqIndex = index;
+  renderFaqModalContent();
+  const overlay = document.getElementById('faqModalOverlay');
+  const card = document.getElementById('faqModalCard');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = '';
+  overlay.classList.add('show');
+}
+
+function renderFaqModalContent(){
+  const item = faqData[currentFaqIndex];
+  document.getElementById('faqModalQ').textContent = item.q[currentLang];
+  document.getElementById('faqModalA').textContent = item.a[currentLang];
+  document.getElementById('faqCounter').textContent = `${currentFaqIndex+1} / ${faqData.length}`;
+  document.getElementById('faqPrevBtn').disabled = currentFaqIndex === 0;
+  document.getElementById('faqNextBtn').disabled = currentFaqIndex === faqData.length - 1;
+}
+
+function navigateFaq(delta){
+  const next = currentFaqIndex + delta;
+  if(next < 0 || next >= faqData.length) return;
+  currentFaqIndex = next;
+  const card = document.getElementById('faqModalCard');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = '';
+  renderFaqModalContent();
+}
+
+function closeFaqModal(){
+  document.getElementById('faqModalOverlay').classList.remove('show');
+}
+
 function renderQaList(){
   const wrap = document.getElementById('qaList');
   const ids = Object.keys(questions).reverse();
@@ -3726,6 +3860,7 @@ loadRatings();
 loadActivityFeed();
 addImportRow();
 loadTabsSettings().then(applyTabsVisibility);
+renderFaqList();
 renderFlashSalePage();
 </script>
 </body>

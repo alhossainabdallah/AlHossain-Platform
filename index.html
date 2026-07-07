@@ -1,75 +1,3643 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقعي التجاري</title>
-    <meta name="description" content="موقع للتجارة والاستيراد من قوانغتشو وفوشان">
-    <style>
-        /* التنسيقات الأساسية - يمكنك تعديلها */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background-color: #f8f9fa; color: #333; line-height: 1.7; }
-        header { background: #0066cc; color: white; padding: 1rem 2rem; text-align: center; }
-        nav { background: #0052a3; padding: 0.8rem 2rem; }
-        nav a { color: white; margin: 0 1rem; text-decoration: none; font-weight: 500; }
-        nav a:hover { text-decoration: underline; }
-        main { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
-        section { background: white; padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
-        h2 { color: #0066cc; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
-        footer { background: #222; color: white; text-align: center; padding: 1.2rem; margin-top: 2rem; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AlHossain</title>
+<meta name="description" content="AlHossain — وكيلك المعتمد في الصين. تسوّق، اشحن، وتابع طلباتك من الصين بسهولة عبر منصة واحدة.">
+<meta property="og:title" content="AlHossain — بوابتك الإلكترونية في الصين">
+<meta property="og:description" content="تسوّق من تاوباو و1688 وعلي بابا، واحسب تكلفة شحنتك، وتابع طلباتك أونلاين.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AlHossain — بوابتك الإلكترونية في الصين">
+<meta name="twitter:description" content="تسوّق من تاوباو و1688 وعلي بابا، واحسب تكلفة شحنتك، وتابع طلباتك أونلاين.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+  :root{
+    --ink:#14304A;
+    --ink-dark:#0A1B2B;
+    --gold:#D9A441;
+    --rust:#B4552D;
+    --paper:#EDE6D8;
+    --paper-soft:#F5F1E8;
+    --line: rgba(27,58,58,0.15);
+    --white:#fff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Tajawal', sans-serif;
+    background:var(--paper-soft);
+    color:var(--ink-dark);
+    line-height:1.6;
+    -webkit-text-size-adjust: 100%;
+  }
+  h1,h2,h3,.display{
+    font-family:'Tajawal', sans-serif;
+    font-weight:900;
+    color:var(--ink-dark);
+    letter-spacing:0.3px;
+  }
+  .pattern-divider{
+    height:3px;
+    background:var(--gold);
+  }
+  header.site{
+    background:var(--ink);
+    color:var(--paper);
+    padding:16px 16px 20px;
+    position:relative;
+  }
+  header.site .top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  header.site .brand{
+    font-size:24px;
+    color:var(--paper);
+  }
+  header.site .brand span{ color:var(--gold); }
+  
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  
+  .lang-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--paper);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-family: 'Tajawal';
+    font-size: 13px;
+    cursor: pointer;
+    min-width: 45px;
+    transition: .2s;
+  }
+  
+  .lang-btn:hover {
+    background: rgba(255,255,255,0.15);
+  }
+  
+  .auth-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: var(--paper);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: 'Tajawal';
+    font-size: 13px;
+    cursor: pointer;
+    min-width: 55px;
+    transition: .2s;
+  }
+  
+  .auth-btn:hover {
+    background: rgba(255,255,255,0.15);
+  }
+  
+  .logout-btn {
+    background: var(--rust);
+    border-color: var(--rust);
+    color: #fff;
+    font-weight: 700;
+  }
+  
+  .logout-btn:hover {
+    background: #a04422;
+  }
+  
+  .cart-btn{
+    position:relative;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.25);
+    color:var(--paper);
+    padding:6px 14px;
+    border-radius:999px;
+    font-weight:700;
+    font-family:'Tajawal';
+    cursor:pointer;
+    font-size:13px;
+    transition:background .12s ease, color .12s ease;
+  }
+  .cart-btn:active{
+    background:var(--gold);
+    color:var(--ink-dark);
+  }
+  .cart-badge{
+    position:absolute; top:-6px; left:-6px;
+    background:var(--rust); color:#fff;
+    border-radius:50%; width:20px; height:20px;
+    font-size:11px; display:flex; align-items:center; justify-content:center;
+  }
+  
+  #userProfileBar {
+    display: none !important;
+    margin-top: 10px;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  
+  #userProfileBar.show {
+    display: flex !important;
+  }
+  
+  #userProfileBar .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--ink-dark);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  #userProfileBar .profile-info {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  #userProfileBar .profile-label {
+    font-size: 11px;
+    color: var(--gold);
+    font-weight: 700;
+    opacity: 0.8;
+  }
+  
+  #userProfileBar .profile-name {
+    font-size: 14px;
+    color: var(--paper);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  nav.tabs{
+    display:flex; gap:5px; margin-top:14px;
+    overflow-x:auto; flex-wrap:nowrap; white-space:nowrap;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px;
+  }
+  nav.tabs::-webkit-scrollbar{ display:none; }
+  nav.tabs button{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.2);
+    color:var(--paper);
+    padding:7px 14px;
+    border-radius:999px;
+    font-family:'Tajawal';
+    font-size:13px;
+    cursor:pointer;
+    transition:.2s;
+    flex-shrink:0;
+  }
+  nav.tabs button.active{
+    background:var(--gold);
+    color:var(--ink-dark);
+    border-color:var(--gold);
+    font-weight:700;
+  }
+  
+  main{ max-width:900px; margin:0 auto; padding:20px 16px 70px; }
+  section{ display:none; }
+  section.active{ display:block; animation:fade .3s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+
+  .hero{
+    text-align:center;
+    padding:30px 10px 10px;
+  }
+  .hero .eyebrow{
+    color:var(--rust); font-weight:700; letter-spacing:.5px; font-size:14px;
+  }
+  .hero h1{ font-size:30px; margin:10px 0 14px; color:var(--ink-dark); }
+  .hero p{ max-width:520px; margin:0 auto; color:#3d4f4f; font-size:16px; }
+  .hero-cta{ margin-top:22px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .btn{
+    display:inline-block; padding:12px 22px; border-radius:10px;
+    font-weight:700; text-decoration:none; cursor:pointer; border:none; font-family:'Tajawal'; font-size:15px;
+  }
+  .btn-primary{ background:var(--ink); color:var(--paper); }
+  .btn-gold{ background:var(--gold); color:var(--ink-dark); }
+  .btn-outline{ background:transparent; border:2px solid var(--ink); color:var(--ink); }
+
+  .strip{
+    display:flex; gap:14px; margin:34px 0; overflow-x:auto; padding-bottom:6px;
+  }
+  .strip .card{
+    min-width:130px; background:var(--white); border-radius:14px; padding:16px;
+    border:1px solid var(--line); text-align:center; flex-shrink:0;
+  }
+  .strip .card .num{ font-family:'Aref Ruqaa'; font-size:24px; color:var(--rust); }
+  .strip .card .lbl{ font-size:13px; color:#555; margin-top:4px; }
+
+  .catalog-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:14px; }
+  .product{
+    background:var(--white); border:1px solid var(--line); border-radius:14px;
+    overflow:hidden; display:flex; flex-direction:column;
+  }
+  .product .thumb{
+    height:110px; background:linear-gradient(135deg, var(--ink) 0%, var(--rust) 100%);
+    display:flex; align-items:center; justify-content:center; color:var(--paper);
+    font-family:'Aref Ruqaa'; font-size:34px;
+    position:relative; overflow:hidden;
+  }
+  .product .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .thumb-quick-btn{
+    position:absolute; bottom:6px; left:6px; z-index:2;
+    background:#25D366; color:#fff; border:none; border-radius:999px;
+    width:32px; height:32px; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 3px 8px rgba(0,0,0,.3); cursor:pointer; font-size:15px;
+  }
+  .thumb-video-badge{
+    position:absolute; top:6px; right:6px; z-index:2;
+    background:rgba(10,27,43,.75); color:#fff; font-size:11px;
+    padding:3px 8px; border-radius:999px; display:flex; align-items:center; gap:3px;
+  }
+  .product .body{ padding:12px; display:flex; flex-direction:column; gap:6px; flex:1; }
+  .product .name{ font-weight:700; font-size:15px; }
+  .product .price{ color:var(--rust); font-weight:900; font-size:15px; }
+  .product .add{
+    margin-top:auto; background:var(--ink); color:var(--paper); border:none;
+    padding:8px; border-radius:8px; font-family:'Tajawal'; font-weight:700; cursor:pointer; font-size:13px;
+  }
+  .empty{
+    text-align:center; padding:40px 20px; color:#666; background:var(--white);
+    border-radius:14px; border:1px dashed var(--line);
+  }
+  .video-modal-overlay{
+    position:fixed; inset:0; background:rgba(10,27,43,.85); z-index:90;
+    display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  .video-modal-overlay.show{ display:flex; }
+  .video-modal-overlay video{ max-width:100%; max-height:80vh; border-radius:10px; }
+  .video-close{ position:absolute; top:20px; left:20px; background:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:18px; cursor:pointer; }
+
+  .overlay{
+    position:fixed; inset:0; background:rgba(15,38,38,.5); display:none; z-index:40;
+  }
+  .overlay.show{ display:block; }
+  .drawer{
+    position:fixed; top:0; bottom:0; left:0; width:min(360px, 88%);
+    background:var(--white); z-index:50; transform:translateX(-100%);
+    transition:transform .25s ease; display:flex; flex-direction:column; padding:20px;
+  }
+  .drawer.show{ transform:translateX(0); }
+  .drawer h3{ font-size:22px; margin-bottom:14px; }
+  .cart-items{ flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+  .cart-item{ display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--line); padding-bottom:10px; }
+  .cart-item .name{ font-weight:700; font-size:14px; }
+  .cart-item .qty{ display:flex; align-items:center; gap:6px; margin-top:4px; }
+  .cart-item .qty button{ background:var(--paper); border:1px solid var(--line); width:24px; height:24px; border-radius:6px; cursor:pointer; }
+  .cart-total{ font-weight:900; font-size:18px; margin:14px 0; text-align:center; }
+  .close-drawer{ align-self:flex-start; background:none; border:none; font-size:22px; cursor:pointer; color:var(--ink-dark); }
+
+  .track-box{ background:var(--white); border:1px solid var(--line); border-radius:16px; padding:22px; text-align:center; }
+  .my-mark-box{ background:var(--ink); color:var(--paper); border-radius:16px; padding:20px; margin-bottom:16px; text-align:center; }
+  .mark-display{
+    font-family:'Aref Ruqaa'; font-size:26px; color:var(--gold); letter-spacing:1px;
+    background:rgba(255,255,255,0.08); border-radius:10px; padding:10px; margin-top:6px;
+  }
+  .track-box input{
+    width:100%; padding:12px; border-radius:10px; border:1px solid var(--line);
+    font-family:'Tajawal'; font-size:15px; margin:14px 0; text-align:center;
+  }
+  .order-result{ margin-top:18px; text-align:right; background:var(--paper-soft); border-radius:12px; padding:16px; display:none; }
+  .order-result.show{ display:block; }
+  .status-pill{ display:inline-block; padding:5px 14px; border-radius:999px; font-weight:700; font-size:13px; background:var(--gold); color:var(--ink-dark); }
+
+  .admin-lock{ background:var(--white); border:1px solid var(--line); border-radius:16px; padding:24px; text-align:center; max-width:320px; margin:0 auto; }
+  .admin-lock input{ width:100%; padding:10px; text-align:center; border-radius:8px; border:1px solid var(--line); margin:12px 0; font-family:'Tajawal'; }
+  .admin-section{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:16px; }
+  .admin-section h3{ font-size:18px; margin-bottom:10px; }
+  .admin-row{ display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+  .admin-row input, .admin-row select{ padding:8px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; flex:1; min-width:100px; }
+  .admin-list-item{ display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:14px; gap:8px; flex-wrap:wrap; }
+  .admin-order-item{ padding:12px 0; border-bottom:1px solid var(--line); font-size:13.5px; }
+  .admin-order-item select{ width:100%; padding:7px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; }
+  .admin-order-item input{ padding:7px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; flex:1; min-width:120px; }
+  .tiny-btn{ background:var(--rust); color:#fff; border:none; padding:5px 10px; border-radius:6px; font-size:12px; cursor:pointer; }
+  .tiny-btn.gold{ background:var(--gold); color:var(--ink-dark); }
+  
+  .tiny-btn.danger,
+  .post-delete-btn,
+  .remove-row {
+    display: none !important;
+  }
+
+  footer{ text-align:center; padding:24px; color:#5c6b6b; font-size:13px; }
+  .footer-link{ cursor:pointer; text-decoration:underline; }
+
+  .term-card{ background:var(--white); border:1px solid var(--line); border-radius:16px; padding:20px; margin-bottom:20px; }
+  .term-head{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .term-badge{ background:var(--ink); color:var(--gold); font-family:'Aref Ruqaa'; font-size:18px; padding:4px 14px; border-radius:8px; }
+  .term-card h3{ font-size:18px; color:var(--ink-dark); }
+  .term-card p{ margin-bottom:10px; font-size:14.5px; }
+  .formula-box{ background:var(--paper-soft); border-radius:12px; padding:14px 16px; margin:14px 0; text-align:center; }
+  .formula-title{ font-size:12px; color:var(--rust); font-weight:700; margin-bottom:6px; }
+  .formula{ font-family:'Aref Ruqaa'; font-size:18px; color:var(--ink-dark); }
+  .formula-sub{ font-size:12.5px; color:#666; margin-top:6px; }
+  .cbm-diagram{ background:var(--paper-soft); border-radius:12px; padding:10px; margin:14px 0; }
+  .calc-box{ background:var(--paper-soft); border-radius:12px; padding:16px; margin:16px 0; }
+  .calc-title{ font-weight:700; margin-bottom:10px; }
+  .calc-row{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  .calc-row label{ font-size:12px; color:#555; display:block; margin-bottom:4px; }
+  .calc-row input{ width:100%; padding:9px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; }
+  .calc-result{ margin-top:12px; font-size:14px; display:none; background:var(--white); border-radius:10px; padding:12px; }
+  .calc-result.show{ display:block; }
+  .calc-result .big{ font-family:'Aref Ruqaa'; font-size:22px; color:var(--rust); }
+  .ref-table{ width:100%; border-collapse:collapse; margin-top:14px; font-size:14px; }
+  .ref-table th, .ref-table td{ border:1px solid var(--line); padding:8px; text-align:center; }
+  .ref-table th{ background:var(--ink); color:var(--paper); }
+  .price-box{ background:var(--ink); color:var(--paper); border-radius:14px; padding:16px 18px; margin:16px 0; }
+  .price-title{ font-weight:700; margin-bottom:10px; color:var(--gold); }
+  .price-row{ display:flex; justify-content:space-between; padding:6px 0; font-size:14.5px; }
+  .price-note{ font-size:12px; color:rgba(237,230,216,.7); margin-bottom:8px; }
+
+  .about-hero{ text-align:center; padding:20px 10px; }
+  .about-photo{
+    width:120px; height:120px; border-radius:50%; margin:0 auto 14px;
+    background:linear-gradient(135deg, var(--ink) 0%, var(--rust) 100%);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    font-family:'Aref Ruqaa'; font-size:42px; color:var(--paper);
+    border:3px solid var(--gold);
+  }
+  .about-photo img{ width:100%; height:100%; object-fit:cover; }
+  .about-role{ color:var(--rust); font-weight:700; font-size:14px; margin-top:4px; }
+  .about-stats{ display:flex; gap:12px; justify-content:center; margin:24px 0; flex-wrap:wrap; }
+  .about-stat{
+    background:var(--white); border:1px solid var(--line); border-radius:14px;
+    padding:16px 22px; text-align:center; min-width:100px;
+  }
+  .about-stat .num{ font-family:'Aref Ruqaa'; font-size:26px; color:var(--rust); }
+  .about-stat .lbl{ font-size:12px; color:#555; margin-top:4px; }
+  .about-bio{
+    background:var(--white); border:1px solid var(--line); border-radius:16px;
+    padding:22px; font-size:15px; line-height:1.9; white-space:pre-line;
+    max-width:600px; margin:0 auto;
+  }
+
+  #craneLoader{
+    position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-14px);
+    background:var(--ink); border-radius:14px; padding:8px 16px 6px;
+    display:flex; align-items:center; gap:8px; z-index:100;
+    opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
+    box-shadow:0 6px 18px rgba(10,27,43,.35);
+  }
+  #craneLoader.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  #craneLoader svg{ display:block; }
+  #craneLoader .txt{ color:var(--paper); font-size:12px; font-weight:700; }
+  .crane-hook{ animation:hookMove 0.9s ease-in-out infinite; transform-origin:170px 40px; }
+  .crane-box{ animation:boxMove 0.9s ease-in-out infinite; }
+  @keyframes hookMove{
+    0%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(10px) rotate(-3deg); }
+    100%{ transform:translateY(0) rotate(0deg); }
+  }
+  @keyframes boxMove{
+    0%{ transform:translate(0,0); }
+    50%{ transform:translate(-14px,10px); }
+    100%{ transform:translate(0,0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .crane-hook, .crane-box{ animation:none; }
+  }
+
+  #waFloat{
+    position:fixed; bottom:22px; right:22px; z-index:45;
+    width:58px; height:58px; border-radius:50%;
+    background:#25D366; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(0,0,0,.25); text-decoration:none;
+    animation:waPulse 2.4s ease-in-out infinite;
+  }
+  #waFloat svg{ width:30px; height:30px; }
+  #currencyFloat{
+    position:fixed; bottom:22px; left:22px; z-index:45;
+    width:52px; height:52px; border-radius:50%;
+    background:var(--gold); color:var(--ink-dark); border:none;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(0,0,0,.25); cursor:pointer; font-size:24px;
+  }
+  @keyframes waPulse{
+    0%,100%{ box-shadow:0 6px 16px rgba(37,211,102,.4); }
+    50%{ box-shadow:0 6px 22px rgba(37,211,102,.75); }
+  }
+
+  .auth-area{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .auth-btn{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.25);
+    color:var(--paper);
+    padding:6px 14px;
+    border-radius:999px;
+    font-family:'Tajawal';
+    font-size:13px;
+    cursor:pointer;
+    min-width:55px;
+  }
+  .logout-btn{
+    background:var(--rust);
+    border-color:var(--rust);
+    color:#fff;
+    font-weight:700;
+  }
+  .auth-modal-overlay{
+    position:fixed; inset:0; background:rgba(10,27,43,.55); z-index:70;
+    display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  .auth-modal-overlay.show{ display:flex; }
+  .auth-modal{
+    background:var(--white); border-radius:16px; padding:28px; width:100%; max-width:400px;
+  }
+  .auth-modal h3{ text-align:center; margin-bottom:4px; }
+  .password-wrap{ position:relative; margin-bottom:10px; }
+  .password-wrap input{ margin-bottom:0; padding-left:40px; }
+  .toggle-pw-btn{
+    position:absolute; left:8px; top:50%; transform:translateY(-50%);
+    background:none; border:none; cursor:pointer; font-size:16px; padding:4px; opacity:0.6;
+  }
+  .auth-tabs{ display:flex; gap:8px; margin:14px 0; }
+  .auth-tabs button{
+    flex:1; padding:8px; border-radius:8px; border:1px solid var(--line); background:var(--paper-soft);
+    font-family:'Tajawal'; cursor:pointer; font-size:14px;
+  }
+  .auth-tabs button.active{ background:var(--ink); color:var(--paper); }
+  .auth-modal input{
+    width:100%; padding:11px; border-radius:8px; border:1px solid var(--line);
+    font-family:'Tajawal'; margin-bottom:10px;
+  }
+  .auth-modal .err{ color:var(--rust); font-size:13px; margin-bottom:8px; display:none; }
+  .auth-modal .err.show{ display:block; }
+  .auth-close{ display:block; margin:10px auto 0; background:none; border:none; color:#777; cursor:pointer; font-size:13px; }
+  .link-btn{
+    display:block; margin:10px auto 0; background:none; border:none; color:var(--ink);
+    text-decoration:underline; cursor:pointer; font-family:'Tajawal'; font-size:13px;
+  }
+  .info-modal-overlay{
+    position:fixed; inset:0; background:rgba(10,27,43,.6); z-index:95;
+    display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  .info-modal-overlay.show{ display:flex; }
+  .info-modal{
+    background:var(--white); border-radius:16px; padding:26px 22px; max-width:440px;
+    max-height:80vh; overflow-y:auto; position:relative; font-size:14.5px; line-height:1.9;
+  }
+
+  .ask-box{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:20px; }
+  .import-row{ display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; align-items:center; padding-bottom:10px; border-bottom:1px dashed var(--line); }
+  .import-row input{ padding:9px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; flex:1; min-width:110px; }
+  .import-row input.qty-input{ flex:0 0 80px; }
+  .import-row .remove-row{ background:var(--rust); color:#fff; border:none; border-radius:8px; width:32px; height:32px; cursor:pointer; flex-shrink:0; }
+  .ask-box textarea{
+    width:100%; min-height:80px; padding:11px; border-radius:8px; border:1px solid var(--line);
+    font-family:'Tajawal'; resize:vertical; margin-bottom:10px;
+  }
+  .qa-item{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px; }
+
+  .profile-card{ background:var(--ink); color:var(--paper); border-radius:16px; padding:22px; text-align:center; margin-bottom:20px; }
+  .profile-name{ font-family:'Aref Ruqaa'; font-size:24px; margin-bottom:8px; }
+  .profile-mark-row{ display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:14px; }
+  .profile-mark{ font-family:'Aref Ruqaa'; font-size:20px; color:var(--gold); background:rgba(255,255,255,0.08); padding:6px 14px; border-radius:8px; letter-spacing:1px; }
+  .copy-btn{ background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.25); border-radius:8px; width:32px; height:32px; cursor:pointer; color:var(--paper); }
+  .profile-info-line{ font-size:13.5px; color:rgba(237,230,216,.85); margin-bottom:4px; }
+
+  .sail-overlay{
+    position:fixed; inset:0; z-index:200;
+    background:rgba(10,27,43,0.4); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    display:none; align-items:center; justify-content:center; flex-direction:column;
+  }
+  .sail-overlay.show{ display:flex; }
+  .sail-track{
+    animation: sailMove 2s ease-in-out, sailBob 1.6s ease-in-out infinite;
+    transform-origin:center bottom;
+  }
+  .sail-waves-svg{ margin-top:-6px; }
+  .wave-path{ animation: waveShift 1.4s linear infinite; }
+  .wave-2{ animation-duration:1.9s; animation-direction:reverse; }
+  .sail-text{
+    color:var(--paper); font-size:14px; font-weight:700; margin-top:14px;
+  }
+  @keyframes sailMove{
+    0%{ transform:translateX(-60px); }
+    100%{ transform:translateX(60px); }
+  }
+  @keyframes sailBob{
+    0%,100%{ transform:translateY(0) rotate(-2deg); }
+    50%{ transform:translateY(-6px) rotate(2deg); }
+  }
+  @keyframes waveShift{
+    0%{ transform:translateX(0); }
+    100%{ transform:translateX(-50px); }
+  }
+
+  .tracking-anim-overlay{
+    position:fixed; inset:0; z-index:200;
+    background:var(--paper-soft); display:none; align-items:center; justify-content:center;
+    flex-direction:column; padding:24px;
+  }
+  .tracking-anim-overlay.show{ display:flex; }
+  .tracking-route{
+    position:relative; width:100%; max-width:300px; display:flex; justify-content:space-between;
+    align-items:center; margin-bottom:22px;
+  }
+  .route-icon{ font-size:26px; z-index:2; background:var(--paper-soft); padding:0 2px; }
+  .route-line{ flex:1; height:2px; background:var(--gold); margin:0 -2px; }
+  .moving-marker{
+    position:absolute; top:-14px; left:0%; font-size:24px;
+    animation: trackMove 2.2s ease-in-out forwards;
+  }
+  @keyframes trackMove{
+    0%{ left:0%; }
+    100%{ left:90%; }
+  }
+  .tracking-anim-text{ font-size:14.5px; color:var(--ink-dark); font-weight:700; }
+
+  .activity-item{ background:var(--white); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:flex; gap:10px; align-items:flex-start; cursor:pointer; }
+  .activity-icon{ font-size:20px; flex-shrink:0; }
+  .activity-body{ flex:1; }
+  .activity-title{ font-size:13.5px; font-weight:700; margin-bottom:3px; }
+  .activity-snippet{ font-size:13px; color:#666; }
+  .activity-time{ font-size:11px; color:#999; margin-top:4px; }
+
+  .ratings-summary{ background:var(--ink); color:var(--paper); border-radius:16px; padding:24px; text-align:center; margin-bottom:20px; }
+  .ratings-avg{ font-family:'Aref Ruqaa'; font-size:42px; color:var(--gold); }
+  .ratings-stars-display{ font-size:24px; color:var(--gold); letter-spacing:4px; margin:6px 0; }
+  .ratings-count{ font-size:13px; color:rgba(237,230,216,.75); }
+  .star-picker{ text-align:center; font-size:34px; letter-spacing:6px; cursor:pointer; margin-bottom:10px; color:#ccc; }
+  .star-pick.active{ color:var(--gold); }
+  .review-item{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-bottom:12px; }
+  .review-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .review-name{ font-weight:700; font-size:14px; }
+  .review-stars{ color:var(--gold); font-size:15px; letter-spacing:2px; }
+  .review-date{ font-size:11.5px; color:#999; }
+  .review-comment{ font-size:14px; color:#444; margin-top:4px; }
+
+  .post-card{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px; }
+  .post-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .post-author{ font-weight:700; font-size:14.5px; }
+  .post-date{ font-size:12px; color:#999; }
+  .post-text{ font-size:14.5px; line-height:1.8; margin-bottom:10px; white-space:pre-line; }
+  .post-actions{ display:flex; gap:16px; align-items:center; border-top:1px solid var(--line); padding-top:10px; }
+  .like-btn{ background:none; border:none; cursor:pointer; font-size:15px; display:flex; align-items:center; gap:5px; color:#555; }
+  .like-btn.liked{ color:var(--rust); }
+  .comment-toggle-btn{ background:none; border:none; cursor:pointer; font-size:14px; color:#555; }
+  .post-delete-btn{ background:none; border:none; cursor:pointer; color:#bbb; font-size:14px; margin-right:auto; }
+  .comments-wrap{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); display:none; }
+  .comments-wrap.show{ display:block; }
+  .comment-item{ background:var(--paper-soft); border-radius:10px; padding:8px 12px; margin-bottom:8px; font-size:13.5px; }
+  .comment-author{ font-weight:700; font-size:12.5px; }
+  .comment-form{ display:flex; gap:8px; margin-top:8px; }
+  .comment-form input{ flex:1; padding:8px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; font-size:13px; }
+  .comment-form button{ background:var(--ink); color:var(--paper); border:none; border-radius:8px; padding:0 14px; cursor:pointer; font-size:13px; }
+  .qa-asker{ font-size:12.5px; color:var(--rust); font-weight:700; margin-bottom:6px; }
+  .qa-q{ font-weight:700; margin-bottom:6px; }
+  .qa-meta{ font-size:12px; color:#888; margin-bottom:8px; }
+  .qa-a{ background:var(--paper-soft); border-radius:10px; padding:10px 12px; font-size:14px; }
+  .qa-pending{ color:var(--rust); font-size:13px; font-style:italic; }
+  .admin-qa-item{ border-bottom:1px solid var(--line); padding:12px 0; }
+  .admin-qa-item textarea{
+    width:100%; min-height:60px; padding:8px; border-radius:8px; border:1px solid var(--line);
+    font-family:'Tajawal'; margin:8px 0;
+  }
+  .toast{
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    background:var(--ink); color:var(--paper); padding:12px 20px; border-radius:10px;
+    font-size:14px; z-index:60; opacity:0; pointer-events:none; transition:.3s;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
+
+  @media (max-width: 768px) {
+    header.site {
+      padding: 12px 12px 16px;
+    }
+    
+    header.site .top {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+    
+    header.site .brand {
+      font-size: 20px;
+      text-align: center;
+    }
+    
+    header.site .brand + div {
+      text-align: center;
+    }
+    
+    .header-controls {
+      justify-content: center;
+      gap: 5px;
+    }
+    
+    .lang-btn, .auth-btn, .cart-btn {
+      padding: 5px 10px;
+      font-size: 12px;
+      min-width: 40px;
+    }
+    
+    #userProfileBar {
+      padding: 6px 10px;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    
+    #userProfileBar .avatar {
+      width: 30px;
+      height: 30px;
+      font-size: 13px;
+    }
+    
+    #userProfileBar .profile-label {
+      font-size: 10px;
+    }
+    
+    #userProfileBar .profile-name {
+      font-size: 12px;
+    }
+    
+    nav.tabs {
+      gap: 4px;
+      margin-top: 10px;
+    }
+    
+    nav.tabs button {
+      padding: 5px 10px;
+      font-size: 11px;
+    }
+    
+    main {
+      padding: 16px 12px 60px;
+    }
+    
+    .hero h1 {
+      font-size: 24px !important;
+    }
+    
+    .hero p {
+      font-size: 14px;
+    }
+    
+    .grid {
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+    
+    .drawer {
+      width: min(320px, 92%);
+      padding: 16px;
+    }
+    
+    .strip .card {
+      min-width: 120px;
+      padding: 12px;
+    }
+    
+    .calc-row {
+      grid-template-columns: 1fr;
+    }
+    
+    .term-head {
+      flex-wrap: wrap;
+    }
+    
+    .ref-table {
+      font-size: 12px;
+    }
+    
+    .ref-table th, .ref-table td {
+      padding: 4px 6px;
+    }
+    
+    .auth-modal {
+      padding: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    header.site .brand {
+      font-size: 18px;
+    }
+    
+    .hero h1 {
+      font-size: 20px !important;
+    }
+    
+    .grid {
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 8px;
+    }
+    
+    .product .thumb {
+      height: 90px;
+      font-size: 28px;
+    }
+    
+    .product .body {
+      padding: 8px;
+    }
+    
+    .product .name {
+      font-size: 13px;
+    }
+    
+    .product .price {
+      font-size: 13px;
+    }
+    
+    .product .add {
+      font-size: 11px;
+      padding: 6px;
+    }
+    
+    .lang-btn, .auth-btn, .cart-btn {
+      padding: 4px 8px;
+      font-size: 11px;
+      min-width: 35px;
+    }
+    
+    nav.tabs button {
+      padding: 4px 8px;
+      font-size: 10px;
+    }
+    
+    .strip .card {
+      min-width: 100px;
+      padding: 10px;
+    }
+    
+    .strip .card .num {
+      font-size: 20px;
+    }
+    
+    .strip .card .lbl {
+      font-size: 11px;
+    }
+    
+    .btn {
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+  }
+</style>
 </head>
 <body>
+<body>
 
-<header>
-    <h1>موقع الاستيراد والتوريد</h1>
-    <p>قوانغتشو وفوشان - الصين</p>
+<header class="site">
+  <div class="top">
+    <div>
+      <div class="brand">Al<span>Hossain</span></div>
+      <div style="font-size:11px;color:#D9A441;margin-top:2px;">بوابتك الإلكترونية في الصين</div>
+    </div>
+    <div class="header-controls">
+      <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">EN</button>
+      <button class="auth-btn" id="authBtn" onclick="openAuthModal()">دخول</button>
+      <button class="auth-btn logout-btn" id="logoutBtn" onclick="doLogout()" style="display:none;">خروج</button>
+      <button class="cart-btn" onclick="openCart()">🛒 <span id="cartLabel">السلة</span> <span class="cart-badge" id="cartBadge">0</span></button>
+    </div>
+  </div>
+  
+  <!-- بروفايل المستخدم -->
+  <div id="userProfileBar">
+    <div class="avatar" id="userAvatar">👤</div>
+    <div class="profile-info">
+      <div class="profile-label">بروفايل</div>
+      <div class="profile-name" id="userProfileName">المستخدم</div>
+    </div>
+  </div>
+
+  <nav class="tabs">
+    <button class="active" data-tab="home" data-i18n="nav_home" onclick="showTab('home')">الرئيسية</button>
+    <button data-tab="catalog" data-i18n="nav_catalog" onclick="showTab('catalog')">المنتجات</button>
+    <button data-tab="track" data-i18n="nav_track" onclick="showTab('track')">تتبع طلبي</button>
+    <button data-tab="glossary" data-i18n="nav_glossary" onclick="showTab('glossary')">دليل المصطلحات</button>
+    <button data-tab="questions" data-i18n="nav_questions" onclick="showTab('questions')">الأسئلة</button>
+    <button data-tab="importorder" data-i18n="nav_import" onclick="showTab('importorder')">اطلب من الصين</button>
+    <button data-tab="factoryvisit" data-i18n="nav_factory" onclick="showTab('factoryvisit')">زيارة مصنع</button>
+    <button data-tab="community" data-i18n="nav_community" onclick="showTab('community')">المجتمع</button>
+    <button data-tab="ratings" data-i18n="nav_ratings" onclick="showTab('ratings')">التقييمات</button>
+    <button data-tab="activityfeed" data-i18n="nav_activity" onclick="showTab('activityfeed')">🔔 الإشعارات</button>
+    <button data-tab="about" data-i18n="nav_about" onclick="showTab('about')">عن المؤسس</button>
+  </nav>
 </header>
-
-<nav>
-    <a href="#home">الرئيسية</a>
-    <a href="#products">المنتجات</a>
-    <a href="#services">الخدمات</a>
-    <a href="#contact">تواصل معنا</a>
-</nav>
+<div class="pattern-divider"></div>
 
 <main>
-    <section id="home">
-        <h2>مرحباً بكم</h2>
-        <p>نقدم خدمات توريد منتجات الجملة، سكوترات كهربائية، إلكترونيات مستعملة وجديدة، مع دعم كامل للشحن والترتيبات الرسمية.</p>
-    </section>
 
-    <section id="products">
-        <h2>قائمة المنتجات</h2>
-        <ul>
-            <li>سكوترات كهربائية متنوعة</li>
-            <li>إلكترونيات وأجهزة ذكية</li>
-            <li>بضائع جملة عامة</li>
-            <li>أدوات ومعدات متنوعة</li>
-        </ul>
-    </section>
+  <section id="home" class="active">
+    <div class="hero">
+      <div class="eyebrow" data-i18n="hero_eyebrow">وكيلك المعتمد في الصين · تجارة موثوقة</div>
+      <h1 data-i18n="hero_title">كل احتياجاتك التجارية في مكان واحد</h1>
+      <p data-i18n="hero_desc">نستورد ونوفر لك أفضل المنتجات بأسعار تنافسية، مع متابعة مباشرة لطلبك من التأكيد حتى التسليم.</p>
+      <div class="hero-cta">
+        <button class="btn btn-gold" data-i18n="hero_browse" onclick="showTab('catalog')">تصفح المنتجات</button>
+        <button class="btn btn-outline" data-i18n="hero_track" onclick="showTab('track')">تتبع طلبي</button>
+        <a class="btn btn-primary" data-i18n="hero_whatsapp" href="https://wa.link/noa4ss" target="_blank" rel="noopener">تواصل معنا على واتساب</a>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="card"><div class="num">24</div><div class="lbl" data-i18n="strip_response">ساعة للرد</div></div>
+      <div class="card"><div class="num">✓</div><div class="lbl" data-i18n="strip_followup">متابعة مستمرة</div></div>
+      <div class="card"><div class="num">🚢</div><div class="lbl" data-i18n="strip_shipping">شحن بحري وجوي</div></div>
+    </div>
+  </section>
 
-    <section id="services">
-        <h2>خدماتنا</h2>
-        <p>مساعدة في الوصول للأسواق، ترجمة، تنسيق المواصلات، إجراءات الاتصالات المالية والرسمية في الصين.</p>
-    </section>
+  <section id="catalog">
+    <div class="catalog-head">
+      <h2 data-i18n="catalog_title">المنتجات</h2>
+    </div>
+    <div class="grid" id="productGrid"></div>
+  </section>
 
-    <section id="contact">
-        <h2>تواصل معنا</h2>
-        <p>البريد الإلكتروني: info@example.com</p>
-        <p>المنطقة: قوانغتشو / فوشان - الصين</p>
-    </section>
+  <section id="track">
+    <h2 style="margin-bottom:14px;" data-i18n="track_title">تتبع شحناتي</h2>
+
+    <div id="trackLoginPrompt" class="track-box" style="display:none;">
+      <p data-i18n="track_login_required">لأسباب أمنية، لازم تسجّل دخولك الأول عشان تقدر تشوف شحناتك.</p>
+      <button class="btn btn-primary" data-i18n="login_btn" onclick="openAuthModal()">تسجيل الدخول</button>
+    </div>
+
+    <div class="my-mark-box" id="myMarkBox" style="display:none;">
+      <div style="font-size:13px;color:#777;margin-bottom:6px;" data-i18n="my_mark_desc">مارك الشحن الدائم الخاص بك — استخدمه عند الطلب من أي موقع صيني كعنوان استلام</div>
+      <div class="mark-display" id="myMarkDisplay"></div>
+      <button class="btn btn-outline" style="margin-top:10px;" data-i18n="show_shipments_btn" onclick="showMyShipments()">اعرض كل شحناتي</button>
+      <div id="verifyNotice" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.15);font-size:13px;">
+        <div style="margin-bottom:6px;" data-i18n="not_verified">لم يتم التحقق من بريدك الإلكتروني بعد.</div>
+        <button class="link-btn" style="color:var(--gold);" data-i18n="resend_verify_btn" onclick="resendVerification()">إعادة إرسال رابط التحقق</button>
+      </div>
+      <button class="link-btn" data-i18n="what_is_mark" onclick="openMarkInfo()">ما هي الـ Shipping Mark؟</button>
+      <div class="order-result" id="orderResult"></div>
+    </div>
+
+    <div class="tracking-anim-overlay" id="trackingAnim">
+      <div class="tracking-route">
+        <span class="route-icon">🏭</span>
+        <span class="route-line"></span>
+        <span class="route-icon">🚢</span>
+        <span class="route-line"></span>
+        <span class="route-icon">🛃</span>
+        <span class="route-line"></span>
+        <span class="route-icon">🏠</span>
+        <span class="moving-marker">📦</span>
+      </div>
+      <div class="tracking-anim-text" data-i18n="tracking_anim_text">جارٍ البحث عن شحناتك...</div>
+    </div>
+  </section>
+
+  <div class="info-modal-overlay" id="markInfoOverlay">
+    <div class="info-modal">
+      <button class="auth-close" onclick="closeMarkInfo()" style="position:absolute;left:16px;top:14px;">✕</button>
+      <h3 style="margin-bottom:14px;" data-i18n="what_is_mark">ما هي الـ Shipping Mark؟</h3>
+      <p data-i18n="mark_info_p1">الـ Shipping Mark هي رمز تعريفي ثابت يُخصَّص لكل عميل عند التسجيل، ويُستخدم في التجارة الدولية لتمييز شحنة العميل عن غيرها من الشحنات، خاصة عندما تُجمَّع بضائع عملاء متعددين داخل حاوية واحدة قادمة من الصين.</p>
+      <p data-i18n="mark_why_title"><strong>لماذا هي مهمة؟</strong></p>
+      <ul style="margin:8px 22px;">
+        <li data-i18n="mark_li1">تُسهِّل التعرف على شحنتك في المستودع أو الميناء وسط شحنات عملاء آخرين</li>
+        <li data-i18n="mark_li2">تُقلِّل احتمالية اختلاط بضاعتك ببضاعة غيرك أو ضياعها</li>
+        <li data-i18n="mark_li3">تُستخدم كمرجع موحَّد للتتبع داخل هذا الموقع، مهما تعدَّدت طلباتك أو مصادر شرائك</li>
+      </ul>
+      <p data-i18n="mark_how_title"><strong>كيف تُستخدم؟</strong></p>
+      <p data-i18n="mark_how_p">اكتب هذا الرمز على كل طرد أو كرتونة تشتريها من أي موقع صيني (تاوباو، 1688، علي بابا، أو غيرها)، واستخدمه كاسم أو عنوان استلام إضافي عند الطلب، ليتمكن المستودع من ربط البضاعة بك فور وصولها.</p>
+    </div>
+  </div>
+
+  <div class="info-modal-overlay" id="termsInfoOverlay" style="z-index:110;">
+    <div class="info-modal">
+      <button class="auth-close" onclick="closeTermsInfo()" style="position:absolute;left:16px;top:14px;">✕</button>
+      <h3 style="margin-bottom:14px;">الشروط والأحكام</h3>
+      <p style="margin-bottom:10px;"><strong>1. طبيعة الخدمة والوساطة:</strong> يعمل هذا الموقع بصفته وسيطاً فقط بين العميل والمصنع أو المورد الصيني وشركة الشحن الناقلة، ولا يُعد مصنّعاً أو مالكاً للمنتجات ولا شركة شحن.</p>
+      <p style="margin-bottom:10px;"><strong>2. حدود المسؤولية:</strong> يتحمّل الموقع المسؤولية فقط عن أي تقصير أو خطأ ناتج مباشرة عن فعله هو. أما الأخطاء الناتجة عن طرف ثالث (عيب تصنيع، تأخير أو تلف من شركة الشحن، تصرفات المورد) فهي مسؤولية ذلك الطرف تحديداً.</p>
+      <p style="margin-bottom:10px;"><strong>3. الأسعار والدفع:</strong> الأسعار تقريبية وتُعتمد نهائياً بعد التأكيد المباشر. تُحدَّد شروط الدفع بالتراضي بين الطرفين قبل التنفيذ.</p>
+      <p style="margin-bottom:10px;"><strong>4. الشحن:</strong> مدة الشحن والأضرار المحتملة أثناء النقل تخضع لظروف وسياسة شركة الشحن الناقلة، ولا يتحمّل الموقع مسؤوليتها المباشرة.</p>
+      <p style="margin-bottom:10px;"><strong>5. الإرجاع والاستبدال:</strong> يخضع لسياسة المورد الأصلي في الصين.</p>
+      <p style="margin-bottom:10px;"><strong>6. مسؤولية المارك:</strong> يتحمّل العميل مسؤولية استخدام مارك الشحن الخاص به بشكل صحيح وعدم مشاركته مع الغير.</p>
+      <p style="font-size:12.5px;color:#777;">النص الكامل متاح دائماً في صفحة "الشروط والأحكام" أسفل الموقع. الموافقة هنا تُعد إقراراً بقراءة هذه الشروط والموافقة الكاملة عليها.</p>
+    </div>
+  </div>
+
+  <section id="glossary">
+    <h2 style="margin-bottom:6px;" data-i18n="glossary_title">دليل مصطلحات الشحن والاستيراد</h2>
+    <p style="color:#5c6b6b; margin-bottom:20px;" data-i18n="glossary_desc">مصطلحات ستواجهها كثيراً عند الشراء والشحن من الصين — فهمها جيداً يوفر الوقت والمال.</p>
+
+    <div class="term-card">
+      <div class="term-head">
+        <span class="term-badge">MOQ</span>
+        <h3 data-i18n="moq_title">الحد الأدنى لكمية الطلب</h3>
+      </div>
+      <p data-i18n="moq_p1"><strong>MOQ (Minimum Order Quantity)</strong> هي أقل كمية يقبل المصنع أو المورد بيعها في الطلب الواحد. فإذا كان المصنع قد حدد الحد الأدنى بـ 500 قطعة، فهذا يعني أنه لن يبيع أقل من 500 قطعة حتى لو رغب المشتري في تجربة كمية أصغر.</p>
+      <p data-i18n="moq_p2"><strong>لماذا يفعل المصنع ذلك؟</strong> لأن تجهيز خط الإنتاج (القوالب، المواد الخام، إعداد الآلات) يكلف المصنع تكاليف ثابتة بغض النظر عن الكمية، لذا يحرص على ضمان حد أدنى يغطي هذه التكلفة.</p>
+      <p data-i18n="moq_tips_title"><strong>نصائح للتعامل مع الـ MOQ:</strong></p>
+      <ul style="margin:8px 22px;">
+        <li data-i18n="moq_li1">لو الكمية أكبر من احتياجك، اسأل عن "MOQ تجريبي" أو عينة مدفوعة قبل الالتزام بالكمية الكاملة</li>
+        <li data-i18n="moq_li2">يمكن التفاوض على تقليل الحد الأدنى للكمية مقابل سعر أعلى قليلاً للقطعة</li>
+        <li data-i18n="moq_li3">إذا كان هناك موردون آخرون بنفس المنتج بحد أدنى أقل، يمكن استخدام ذلك كورقة تفاوض</li>
+      </ul>
+    </div>
+
+    <div class="term-card">
+      <div class="term-head">
+        <span class="term-badge">CBM</span>
+        <h3 data-i18n="cbm_title">المتر المكعب — أهم رقم في تكلفة الشحن</h3>
+      </div>
+      <p data-i18n="cbm_p1"><strong>CBM (Cubic Meter)</strong> هو وحدة قياس حجم الشحنة، وهو الرقم الذي تعتمد عليه شركات الشحن في حساب سعر الشحن البحري (خاصة إذا كانت الشحنة لا تملأ حاوية كاملة — LCL). حتى لو كانت البضاعة خفيفة الوزن، فإن كبر حجمها يعني احتساب التكلفة على أساس الحجم لا الوزن.</p>
+
+      <div class="formula-box">
+        <div class="formula-title" data-i18n="cbm_formula_title">معادلة الحساب</div>
+        <div class="formula" data-i18n="cbm_formula">CBM = الطول × العرض × الارتفاع (بالمتر)</div>
+        <div class="formula-sub" data-i18n="cbm_formula_sub">لو القياس بالسنتيمتر: CBM = (الطول × العرض × الارتفاع) ÷ 1,000,000</div>
+      </div>
+
+      <div class="cbm-diagram">
+        <svg viewBox="0 0 300 200" width="100%" height="180">
+          <polygon points="60,140 60,60 150,40 150,120" fill="#D9A441" opacity="0.85"/>
+          <polygon points="150,40 150,120 240,150 240,70" fill="#B4552D" opacity="0.85"/>
+          <polygon points="60,60 150,40 240,70 150,90" fill="#14304A" opacity="0.9"/>
+          <line x1="60" y1="150" x2="150" y2="130" stroke="#14304A" stroke-width="1.5" stroke-dasharray="3,3"/>
+          <line x1="150" y1="130" x2="240" y2="160" stroke="#14304A" stroke-width="1.5" stroke-dasharray="3,3"/>
+          <text x="95" y="160" font-size="13" fill="#14304A" font-family="Tajawal" font-weight="700" data-i18n="dim_l">الطول (L)</text>
+          <text x="180" y="172" font-size="13" fill="#14304A" font-family="Tajawal" font-weight="700" data-i18n="dim_w">العرض (W)</text>
+          <text x="15" y="105" font-size="13" fill="#14304A" font-family="Tajawal" font-weight="700" data-i18n="dim_h">الارتفاع (H)</text>
+        </svg>
+      </div>
+
+      <p data-i18n="cbm_example"><strong>مثال:</strong> كرتونة أبعادها 50 سم × 40 سم × 30 سم = (50×40×30) ÷ 1,000,000 = <strong>0.06 CBM</strong> للكرتونة الواحدة. وإذا كان الطلب 100 كرتونة، فإن الإجمالي = 6 CBM.</p>
+
+      <div class="calc-box">
+        <div class="calc-title" data-i18n="cbm_calc_title">🧮 احسب حجم شحنتك وتكلفتها التقريبية (شحن بحري)</div>
+        <div class="calc-row">
+          <div><label data-i18n="len_cm">الطول (سم)</label><input type="number" id="cbmL" placeholder="50"></div>
+          <div><label data-i18n="width_cm">العرض (سم)</label><input type="number" id="cbmW" placeholder="40"></div>
+          <div><label data-i18n="height_cm">الارتفاع (سم)</label><input type="number" id="cbmH" placeholder="30"></div>
+          <div><label data-i18n="carton_qty">عدد الكراتين</label><input type="number" id="cbmQty" placeholder="100"></div>
+        </div>
+        <div style="margin-top:8px;">
+          <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;" data-i18n="destination_label">الوجهة</label>
+          <select id="cbmDestination" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
+            <option value="SD" data-i18n="opt_sd">السودان</option>
+            <option value="SS" data-i18n="opt_ss">جنوب السودان</option>
+            <option value="UAE" data-i18n="opt_uae">الإمارات العربية المتحدة</option>
+            <option value="KSA" data-i18n="opt_ksa">المملكة العربية السعودية</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="margin-top:10px;" data-i18n="calc_btn" onclick="calcCBM()">احسب</button>
+        <div class="calc-result" id="cbmResult"></div>
+        <p style="font-size:12px;color:#777;margin-top:8px;" data-i18n="cbm_calc_note">* هذه تكلفة تقريبية للاستئناس فقط، وقد تزيد أو تنقص حسب السوق الفعلي وقت الشحن — تواصل معنا لتأكيد التكلفة النهائية.</p>
+      </div>
+
+      <table class="ref-table">
+        <tr><th data-i18n="container_type">نوع الحاوية</th><th data-i18n="approx_capacity">السعة التقريبية</th></tr>
+        <tr><td data-i18n="c20">حاوية 20 قدم</td><td data-i18n="c20cap">~28 CBM (سعة استخدام فعلية)</td></tr>
+        <tr><td data-i18n="c40">حاوية 40 قدم</td><td>~58 CBM</td></tr>
+        <tr><td data-i18n="c40hc">حاوية 40 قدم عالية السعة (High Cube)</td><td>~68 CBM</td></tr>
+      </table>
+      <p style="font-size:12px;color:#777;margin-top:6px;" data-i18n="cbm_table_note">* الأرقام تقريبية للسعة الاستخدامية الفعلية، وتختلف قليلاً حسب شكل البضاعة وطريقة التحميل.</p>
+    </div>
+
+    <div class="term-card">
+      <div class="term-head">
+        <span class="term-badge">✈️</span>
+        <h3 data-i18n="air_title">الشحن الجوي — الوزن الفعلي مقابل الوزن الحجمي</h3>
+      </div>
+      <p data-i18n="air_p1">في الشحن الجوي، تحتسب شركة الشحن التكلفة على أساس <strong>الأعلى بين الوزن الفعلي والوزن الحجمي (Volumetric Weight)</strong>. فإذا كانت الشحنة خفيفة الوزن لكن حجمها كبير، تُحتسب التكلفة على أساس الحجم لا الوزن الحقيقي.</p>
+
+      <div class="formula-box">
+        <div class="formula-title" data-i18n="air_formula_title">معادلة الوزن الحجمي</div>
+        <div class="formula" data-i18n="air_formula">الوزن الحجمي (كجم) = (الطول × العرض × الارتفاع بالسم) ÷ 5000</div>
+        <div class="formula-sub" data-i18n="air_formula_sub">القاسم 5000 معتمد لدى أغلب شركات الشحن السريع من الصين، وبعض الشركات تستخدم 6000 — تأكد من شركة الشحن</div>
+      </div>
+
+      <div class="calc-box">
+        <div class="calc-title" data-i18n="air_calc_title">🧮 احسب الوزن الحجمي والتكلفة التقريبية لشحنتك الجوية</div>
+        <div class="calc-row">
+          <div><label data-i18n="len_cm">الطول (سم)</label><input type="number" id="airL" placeholder="60"></div>
+          <div><label data-i18n="width_cm">العرض (سم)</label><input type="number" id="airW" placeholder="50"></div>
+          <div><label data-i18n="height_cm">الارتفاع (سم)</label><input type="number" id="airH" placeholder="40"></div>
+          <div><label data-i18n="actual_weight_label">الوزن الفعلي (كجم)</label><input type="number" id="airActual" placeholder="8"></div>
+        </div>
+        <div style="margin-top:8px;">
+          <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;" data-i18n="destination_label">الوجهة</label>
+          <select id="airDestination" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
+            <option value="UAE" data-i18n="opt_uae">الإمارات العربية المتحدة</option>
+            <option value="KSA" data-i18n="opt_ksa">المملكة العربية السعودية</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="margin-top:10px;" data-i18n="calc_btn" onclick="calcAirWeight()">احسب</button>
+        <div class="calc-result" id="airResult"></div>
+      </div>
+      <p style="font-size:12px;color:#777;margin-top:6px;" data-i18n="air_note">* الشحن الجوي متاح حالياً للإمارات والسعودية، وهو أسرع لكنه أعلى تكلفة من الشحن البحري، ويُستخدم غالباً للشحنات المستعجلة أو الخفيفة والصغيرة الحجم. هذه تكلفة تقريبية للاستئناس فقط.</p>
+    </div>
+  </section>
+
+  <section id="questions">
+    <h2 style="margin-bottom:14px;" data-i18n="questions_title">أسئلة العملاء</h2>
+    <div class="ask-box">
+      <p style="margin-bottom:10px;" data-i18n="questions_desc">هل لديك سؤال؟ اكتبه هنا وسنجيبك عليه، وسيظهر السؤال مع الإجابة هنا لبقية العملاء إن كان فيه فائدة للجميع.</p>
+      <textarea id="questionInput" placeholder="اكتب سؤالك هنا..." data-i18n-ph="question_ph"></textarea>
+      <button class="btn btn-primary" data-i18n="send_question_btn" onclick="submitQuestion()">إرسال السؤال</button>
+    </div>
+    <div id="qaList"></div>
+  </section>
+
+  <section id="importorder">
+    <h2 style="margin-bottom:6px;" data-i18n="import_title">اطلب من الصين</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="import_desc">هل وجدت منتجات في تاوباو أو 1688 أو علي بابا وترغب في شرائها؟ أضف كل منتج على حدة، وسنوافيك بعرض سعر شامل الشراء والشحن لكل الطلب دفعة واحدة.</p>
+    <div class="ask-box">
+      <div id="importItemsList"></div>
+      <button class="btn btn-outline" style="width:100%;margin-bottom:12px;" data-i18n="add_item_btn" onclick="addImportRow()">+ إضافة منتج آخر</button>
+      <div style="margin-bottom:10px;">
+        <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">الوجهة</label>
+        <select id="importDestination" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
+          <option value="SD" data-i18n="opt_sd">السودان</option>
+          <option value="SS" data-i18n="opt_ss">جنوب السودان</option>
+          <option value="UAE" data-i18n="opt_uae">الإمارات العربية المتحدة</option>
+          <option value="KSA" data-i18n="opt_ksa">المملكة العربية السعودية</option>
+        </select>
+      </div>
+      <textarea id="importNotes" placeholder="ملاحظات عامة على الطلب: اللون، المقاس، أي تفاصيل إضافية..." data-i18n-ph="import_notes_ph"></textarea>
+      <button class="btn btn-primary" style="margin-top:10px;" data-i18n="send_quote_request_btn" onclick="submitImportRequest()">إرسال طلب عرض سعر</button>
+    </div>
+    <p style="font-size:12px;color:#777;">ملاحظة: هذه الخدمة مخصصة لطلب عرض سعر يشمل شراء المنتجات ونقلها إلى المستودع، وليست شراءً تلقائياً فورياً.</p>
+  </section>
+
+  <section id="factoryvisit">
+    <h2 style="margin-bottom:6px;" data-i18n="factory_title">طلب زيارة مصنع</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="factory_desc">هل وجدت مصنعاً على علي بابا أو غيره وترغب بمعاينته ميدانياً قبل الشراء؟ يمكننا القيام بذلك نيابة عنك.</p>
+
+    <div class="price-box" style="margin-bottom:20px;">
+      <div class="price-title" data-i18n="factory_terms_title">شروط وتكلفة زيارة المصانع</div>
+      <p style="font-size:14px;line-height:1.8;" id="factoryTermsP">
+        إذا كان المصنع داخل نفس المدينة التي يتواجد فيها المسؤول حالياً <strong id="factoryCurrentCityLabel">(يُحدَّد لاحقاً)</strong>، فتكلفة الزيارة <strong>15$</strong> تشمل: زيارة ميدانية، تفاوض مع المصنع، إتمام عملية الشراء، وفحص البضاعة والمصنع.<br><br>
+        أما إذا كان المصنع في مدينة أخرى، فتكلفة التنقل والسفر تكون على العميل، وتُحدَّد بعد التنسيق المباشر.
+      </p>
+    </div>
+
+    <div class="ask-box">
+      <div class="admin-row">
+        <input id="factoryLink" placeholder="رابط صفحة المصنع (علي بابا أو غيره) — اختياري" data-i18n-ph="factory_link_ph">
+      </div>
+      <div class="admin-row">
+        <input id="factoryName" placeholder="اسم المصنع *" data-i18n-ph="factory_name_ph">
+        <input id="factorySpecialty" placeholder="تخصص المصنع *" data-i18n-ph="factory_specialty_ph">
+      </div>
+      <div class="admin-row">
+        <input id="factoryContact" placeholder="رقم أو إيميل المصنع (اختياري)" data-i18n-ph="factory_contact_ph">
+        <input id="factoryCity" placeholder="مدينة المصنع *" oninput="checkFactoryCity()" data-i18n-ph="factory_city_ph">
+      </div>
+      <textarea id="factoryNotes" placeholder="ملاحظات إضافية (اختياري)" data-i18n-ph="factory_notes_ph"></textarea>
+      <div id="factoryCostNote" style="font-size:13px;color:var(--rust);margin:8px 0;display:none;"></div>
+      <button class="btn btn-primary" style="margin-top:6px;" data-i18n="send_visit_request_btn" onclick="submitFactoryVisit()">إرسال طلب الزيارة</button>
+    </div>
+  </section>
+
+  <section id="community">
+    <h2 style="margin-bottom:6px;" data-i18n="community_title">مجتمع العملاء</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="community_desc">شارك تجربتك، اسأل، أو تفاعل مع باقي العملاء.</p>
+
+    <div class="ask-box">
+      <textarea id="postInput" placeholder="اكتب منشورك هنا..." data-i18n-ph="post_ph"></textarea>
+      <button class="btn btn-primary" style="margin-top:8px;" data-i18n="publish_btn" onclick="submitPost()">نشر</button>
+    </div>
+
+    <div id="communityFeed"></div>
+    <button class="btn btn-outline" id="loadMorePostsBtn" style="width:100%;display:none;" data-i18n="load_more" onclick="loadCommunityFeed(true)">تحميل المزيد</button>
+  </section>
+
+  <section id="ratings">
+    <h2 style="margin-bottom:6px;" data-i18n="ratings_title">تقييمات العملاء</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="ratings_desc">آراء عملائنا الحقيقية عن تجربتهم في التعامل معنا.</p>
+
+    <div class="ratings-summary">
+      <div class="ratings-avg" id="ratingsAvg">-</div>
+      <div class="ratings-stars-display" id="ratingsAvgStars">☆☆☆☆☆</div>
+      <div class="ratings-count" id="ratingsCount"></div>
+    </div>
+
+    <div class="ask-box">
+      <div style="text-align:center;margin-bottom:10px;" data-i18n="your_rating">قيّم تجربتك معنا</div>
+      <div class="star-picker" id="starPicker">
+        <span class="star-pick" data-value="1">☆</span>
+        <span class="star-pick" data-value="2">☆</span>
+        <span class="star-pick" data-value="3">☆</span>
+        <span class="star-pick" data-value="4">☆</span>
+        <span class="star-pick" data-value="5">☆</span>
+      </div>
+      <textarea id="ratingComment" placeholder="اكتب تعليقاً (اختياري)..." data-i18n-ph="rating_comment_ph"></textarea>
+      <button class="btn btn-primary" style="margin-top:8px;" data-i18n="submit_rating_btn" onclick="submitRating()">إرسال التقييم</button>
+    </div>
+
+    <div id="reviewsList"></div>
+  </section>
+
+  <section id="activityfeed">
+    <h2 style="margin-bottom:6px;" data-i18n="activity_title">آخر التحركات في الموقع</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="activity_desc">تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.</p>
+    <div id="activityList"></div>
+  </section>
+
+  <section id="profile">
+    <h2 style="margin-bottom:6px;" data-i18n="profile_title">حسابي</h2>
+    <div class="profile-card">
+      <div class="profile-name" id="profileName">-</div>
+      <div class="profile-mark-row">
+        <span class="profile-mark" id="profileMark">-</span>
+        <button class="copy-btn" onclick="copyProfileMark()" title="نسخ">📋</button>
+      </div>
+      <div class="profile-info-line"><span data-i18n="profile_email_label">البريد الإلكتروني:</span> <span id="profileEmail">-</span></div>
+      <div class="profile-info-line"><span data-i18n="destination_label">الوجهة:</span> <span id="profileDestination">-</span></div>
+      <div class="profile-info-line"><span data-i18n="profile_verified_label">حالة التحقق:</span> <span id="profileVerified">-</span></div>
+    </div>
+
+    <div class="ask-box">
+      <h3 style="font-size:15px;margin-bottom:8px;" data-i18n="profile_change_email">تغيير البريد الإلكتروني</h3>
+      <input id="newEmailInput" type="email" placeholder="البريد الإلكتروني الجديد" data-i18n-ph="new_email_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
+      <input id="emailCurrentPassword" type="password" placeholder="كلمة المرور الحالية (للتأكيد)" data-i18n-ph="current_password_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
+      <button class="btn btn-primary" data-i18n="save_email_btn" onclick="changeMyEmail()">حفظ البريد الجديد</button>
+    </div>
+
+    <div class="ask-box">
+      <h3 style="font-size:15px;margin-bottom:8px;" data-i18n="profile_change_password">تغيير كلمة المرور</h3>
+      <input id="newPasswordInput" type="password" placeholder="كلمة المرور الجديدة (6 أحرف على الأقل)" data-i18n-ph="new_password_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
+      <input id="passwordCurrentPassword" type="password" placeholder="كلمة المرور الحالية (للتأكيد)" data-i18n-ph="current_password_ph" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;">
+      <button class="btn btn-primary" data-i18n="save_password_btn" onclick="changeMyPassword()">حفظ كلمة المرور الجديدة</button>
+    </div>
+
+    <button class="btn btn-outline" style="width:100%;" data-i18n="logout_btn" onclick="auth.signOut(); showTab('home');">تسجيل الخروج</button>
+  </section>
+
+  <section id="about">
+    <div class="about-hero">
+      <div class="about-photo" id="aboutPhotoWrap">
+        <span id="aboutInitial">؟</span>
+      </div>
+      <h2 id="aboutName">اسم المؤسس</h2>
+      <div class="about-role" data-i18n="about_role">مؤسس AlHossain · وكيلك المعتمد في الصين</div>
+    </div>
+    <div class="about-stats">
+      <div class="about-stat"><div class="num" id="aboutYears">-</div><div class="lbl" data-i18n="years_exp">سنوات الخبرة</div></div>
+      <div class="about-stat"><div class="num" id="statOrders2">0</div><div class="lbl" data-i18n="orders_done">طلب منفَّذ</div></div>
+      <div class="about-stat"><div class="num" id="customerCount2">0</div><div class="lbl" data-i18n="registered_customers">عميل مسجَّل</div></div>
+    </div>
+    <div class="about-bio" id="aboutBio">
+      لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.
+    </div>
+  </section>
+
+  <section id="terms">
+    <h2 style="margin-bottom:16px;" data-i18n="terms_title">الشروط والأحكام</h2>
+    <div class="ask-box" style="text-align:right;">
+      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h1">1. طبيعة الخدمة والوساطة</h3>
+      <p style="margin-bottom:14px;" data-i18n="terms_p1">يعمل هذا الموقع بصفته <strong>وسيطاً فقط</strong> بين العميل من جهة، والمصنع أو المورد الصيني وشركة الشحن الناقلة من جهة أخرى. لا يُعد الموقع مصنّعاً للمنتجات ولا مالكاً لها، ولا شركة شحن، وإنما ينسّق ويسهّل عملية الشراء والشحن نيابة عن العميل مقابل أجر خدمة.</p>
+
+      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h2">2. حدود المسؤولية</h3>
+      <p style="margin-bottom:14px;" data-i18n="terms_p2">بصفته وسيطاً، <strong>يتحمّل الموقع المسؤولية فقط عن أي تقصير أو خطأ ناتج مباشرة عن فعله هو</strong> (كخطأ في نقل معلومات الطلب، أو إهمال واضح في المتابعة من جانبه). أما الأخطاء أو الأضرار الناتجة عن طرف ثالث — كعيب في تصنيع المنتج، تأخير أو تلف من شركة الشحن، أو تصرفات المورد الأصلي — فهي مسؤولية ذلك الطرف الثالث تحديداً، ولا يتحمّلها الموقع. يسعى الموقع، قدر الإمكان، لمساعدة العميل في متابعة أي مطالبة تجاه الطرف المسؤول الفعلي.</p>
+
+      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h3">3. الأسعار والدفع</h3>
+      <p style="margin-bottom:14px;" data-i18n="terms_p3">الأسعار المعروضة أو المقدَّرة عبر حاسبات الموقع تقريبية وقابلة للتغيير حسب سعر الصرف والسوق الفعلي وقت التنفيذ. يُعتمد السعر النهائي بعد التأكيد المباشر عبر واتساب أو لوحة الطلبات. تُحدَّد طريقة الدفع وشروطه (دفعة مقدَّمة، دفعة كاملة، أو غير ذلك) بالتراضي المتبادل بين الطرفين قبل بدء التنفيذ.</p>
+
+      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h4">4. مدة الشحن</h3>
+      <p style="margin-bottom:14px;" data-i18n="terms_p4">تختلف مدة الشحن حسب نوع الشحن (بحري أو جوي) والوجهة والظروف اللوجستية الخارجة عن إرادة الموقع (كالتخليص الجمركي وأحوال الموانئ وأداء شركة الشحن الناقلة). لا يتحمّل الموقع مسؤولية التأخير الناتج عن أسباب خارجة عن سيطرته المباشرة.</p>
+
+      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h5">5. الأضرار والفقدان أثناء الشحن</h3>
+      <p style="margin-bottom:14px;" data-i18n="terms_p5">يُبذل أقصى جهد ممكن لاختيار شركات شحن موثوقة ومتابعة الشحنة. في حال وجود تلف أو فقدان أثناء النقل، تكون المسؤولية على شركة الشحن الناقلة وفق سياستها الخاصة، ويقتصر دور الموقع على المساعدة في متابعة أي مطالبة تعويض لدى الجهة الناقلة.</p>
+
+      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h6">6. الإرجاع والاستبدال</h3>
+      <p style="margin-bottom:14px;" data-i18n="terms_p6">نظراً لطبيعة الشراء من مصادر خارجية (تاوباو، 1688، علي بابا)، فإن إمكانية الإرجاع أو الاستبدال تخضع لسياسة المورد الأصلي وحده، ويُبلَّغ العميل بذلك قبل تأكيد أي طلب استيراد.</p>
+
+      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h7">7. مسؤولية المارك (Shipping Mark)</h3>
+      <p style="margin-bottom:14px;" data-i18n="terms_p7">يتحمّل العميل مسؤولية استخدام مارك الشحن الخاص به بشكل صحيح عند الطلب من أي جهة، وعدم مشاركته مع أطراف أخرى لتفادي أي التباس في تحديد ملكية الشحنات.</p>
+
+      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h8">8. الموافقة على الشروط</h3>
+      <p style="margin-bottom:14px;" data-i18n="terms_p8">يُعد إنشاء حساب على هذا الموقع إقراراً من العميل بقراءته لهذه الشروط وموافقته الكاملة عليها.</p>
+
+      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h9">9. التعديلات</h3>
+      <p data-i18n="terms_p9">يحتفظ الموقع بحق تحديث هذه الشروط في أي وقت، وسيُعمل بأحدث نسخة منشورة على هذه الصفحة.</p>
+    </div>
+  </section>
+
+  <section id="complaints">
+    <h2 style="margin-bottom:6px;" data-i18n="complaints_title">شكاوى ومقترحات</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="complaints_desc">رسالتك هنا خاصة تمامًا ولا تظهر لأي شخص غيرنا. نقرأ كل رسالة ونهتم بمعالجتها.</p>
+    <div class="ask-box">
+      <select id="complaintType" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;">
+        <option value="complaint" data-i18n="type_complaint">شكوى</option>
+        <option value="suggestion" data-i18n="type_suggestion">اقتراح</option>
+      </select>
+      <textarea id="complaintText" placeholder="اكتب رسالتك بالتفصيل هنا..." data-i18n-ph="complaint_ph"></textarea>
+      <button class="btn btn-primary" style="margin-top:8px;" data-i18n="send_complaint_btn" onclick="submitComplaint()">إرسال</button>
+    </div>
+  </section>
+
+  <section id="admin">
+    <div id="adminLockWrap">
+      <div class="admin-lock">
+        <h3>دخول الإدارة</h3>
+        <p style="font-size:13px;color:#666;">هذا القسم لصاحب المتجر فقط</p>
+        <input id="pinInput" type="password" placeholder="الرمز السري">
+        <button class="btn btn-primary" onclick="checkPin()" style="width:100%;">دخول</button>
+      </div>
+    </div>
+    <div id="adminPanel" style="display:none;">
+      <div class="admin-section">
+        <h3>إضافة منتج جديد</h3>
+        <div class="admin-row">
+          <input id="newProdName" placeholder="اسم المنتج">
+          <input id="newProdPrice" placeholder="السعر ($)" type="number">
+        </div>
+        <div class="admin-row">
+          <div style="flex:1;min-width:150px;">
+            <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">صورة المنتج</label>
+            <input id="newProdImage" type="file" accept="image/*">
+          </div>
+          <div style="flex:1;min-width:150px;">
+            <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">فيديو (اختياري)</label>
+            <input id="newProdVideo" type="file" accept="video/*">
+          </div>
+        </div>
+        <div id="uploadProgress" style="font-size:13px;color:var(--rust);margin:6px 0;display:none;"></div>
+        <button class="btn btn-gold" onclick="addProduct()" id="addProdBtn">إضافة المنتج</button>
+      </div>
+      <div class="admin-section">
+        <h3>عملاء مسجلين (<span id="customerCount">0</span>)</h3>
+        <button class="btn btn-primary" onclick="exportCustomers()" style="margin-bottom:12px;">تصدير الإيميلات CSV 📥</button>
+        <input class="admin-search" placeholder="بحث بالاسم أو الإيميل أو المارك..." oninput="renderAdminCustomers(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+        <div id="adminCustomerList"></div>
+      </div>
+      <div class="admin-section">
+        <h3>صفحة عن المؤسس</h3>
+        <div class="admin-row">
+          <input id="aboutNameInput" placeholder="الاسم الكامل">
+          <input id="aboutYearsInput" type="number" placeholder="سنوات الخبرة">
+        </div>
+        <div style="margin-bottom:8px;">
+          <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">الصورة الشخصية</label>
+          <input id="aboutPhotoInput" type="file" accept="image/*">
+        </div>
+        <textarea id="aboutBioInput" placeholder="اكتب نبذة عنك: قصتك، خبرتك، وطريقة عملك مع العملاء..." style="width:100%;min-height:100px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;"></textarea>
+        <button class="btn btn-gold" onclick="saveAbout()" id="saveAboutBtn">حفظ صفحة المؤسس</button>
+      </div>
+      <div class="admin-section">
+        <h3>سعر الصرف والموقع الحالي</h3>
+        <div class="admin-row">
+          <input id="sdgRateInput" type="number" placeholder="سعر اليوان الصيني بالجنيه السوداني (مثال: 850)">
+          <button class="tiny-btn gold" onclick="saveSdgRate()">حفظ السعر</button>
+        </div>
+        <div id="sdgRateMeta" style="font-size:12px;color:#777;margin-bottom:10px;"></div>
+        <div class="admin-row">
+          <input id="agentCityInput" placeholder="مدينتك الحالية (للمقارنة مع مدينة المصنع)">
+          <button class="tiny-btn gold" onclick="saveAgentCity()">حفظ المدينة</button>
+        </div>
+      </div>
+      <div class="admin-section">
+        <h3>المنتجات الحالية</h3>
+        <div id="adminProductList"></div>
+      </div>
+      <div class="admin-section">
+        <h3>الطلبات</h3>
+        <input class="admin-search" placeholder="بحث بالمارك أو الإيميل أو الحالة..." oninput="renderAdminOrders(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+        <div id="adminOrderList"></div>
+      </div>
+      <div class="admin-section">
+        <h3>طلبات الشراء من الصين</h3>
+        <input class="admin-search" placeholder="بحث بالمارك أو الإيميل أو الحالة..." oninput="renderAdminImportRequests(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+        <div id="adminImportList"></div>
+      </div>
+      <div class="admin-section">
+        <h3>طلبات زيارة المصانع</h3>
+        <input class="admin-search" placeholder="بحث بالمارك أو اسم المصنع أو المدينة..." oninput="renderAdminFactoryVisits(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+        <div id="adminFactoryList"></div>
+      </div>
+      <div class="admin-section">
+        <h3>الشكاوى والمقترحات</h3>
+        <input class="admin-search" placeholder="بحث بالنص أو الإيميل أو النوع..." oninput="renderAdminComplaints(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+        <div id="adminComplaintsList"></div>
+      </div>
+      <div class="admin-section">
+        <h3>أسئلة العملاء</h3>
+        <input class="admin-search" placeholder="بحث بنص السؤال أو الإيميل..." oninput="renderAdminQa(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+        <div id="adminQaList"></div>
+      </div>
+    </div>
+  </section>
+
 </main>
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="drawer" id="drawer">
+  <button class="close-drawer" onclick="closeCart()">✕</button>
+  <h3 data-i18n="cart_title">سلة الطلب</h3>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-total" id="cartTotal">الإجمالي: 0$</div>
+  <div style="margin-bottom:10px;">
+    <label style="font-size:13px;color:#555;display:block;margin-bottom:5px;" data-i18n="destination_label">وجهة الشحن</label>
+    <select id="destinationSelect" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
+      <option value="SD" data-i18n="opt_sd">السودان</option>
+      <option value="SS" data-i18n="opt_ss">جنوب السودان</option>
+      <option value="UAE" data-i18n="opt_uae">الإمارات العربية المتحدة</option>
+      <option value="KSA" data-i18n="opt_ksa">المملكة العربية السعودية</option>
+    </select>
+  </div>
+  <button class="btn btn-gold" style="width:100%;" data-i18n="checkout_btn" onclick="checkoutWhatsApp()">إتمام الطلب عبر واتساب</button>
+</div>
 
-<footer>
-    <p>&copy; 2026 جميع الحقوق محفوظة</p>
-</footer>
+<div class="toast" id="toast"></div>
 
-<!-- يمكنك إضافة أكواد جافا سكريبت هنا إذا لزم الأمر -->
+<div id="craneLoader">
+  <svg width="60" height="46" viewBox="0 0 190 90">
+    <rect x="118" y="58" width="60" height="26" fill="#D9A441" stroke="#0A1B2B" stroke-width="1.5"/>
+    <line x1="118" y1="66" x2="178" y2="66" stroke="#0A1B2B" stroke-width="1"/>
+    <line x1="118" y1="75" x2="178" y2="75" stroke="#0A1B2B" stroke-width="1"/>
+    <rect x="18" y="10" width="6" height="70" fill="#F5F1E8"/>
+    <rect x="8" y="78" width="26" height="6" fill="#F5F1E8"/>
+    <line x1="21" y1="16" x2="170" y2="30" stroke="#F5F1E8" stroke-width="5" stroke-linecap="round"/>
+    <g class="crane-hook">
+      <line x1="170" y1="30" x2="170" y2="40" stroke="#F5F1E8" stroke-width="2"/>
+      <g class="crane-box">
+        <rect x="152" y="40" width="36" height="24" fill="#B4552D" stroke="#0A1B2B" stroke-width="1.5"/>
+        <line x1="152" y1="52" x2="188" y2="52" stroke="#0A1B2B" stroke-width="1"/>
+      </g>
+    </g>
+  </svg>
+  <span class="txt">جارٍ التحميل...</span>
+</div>
+
+<a id="waFloat" href="https://wa.link/noa4ss" target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">
+  <svg viewBox="0 0 32 32" fill="white"><path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.386.696 4.607 1.898 6.48L4 29l7.72-1.867A11.94 11.94 0 0016 27c6.627 0 12-5.373 12-12S22.628 3 16.001 3zm0 21.75c-1.95 0-3.766-.57-5.29-1.55l-.38-.24-4.58 1.107 1.13-4.46-.25-.4A9.71 9.71 0 016.25 15c0-5.376 4.375-9.75 9.751-9.75S25.75 9.624 25.75 15 21.377 24.75 16.001 24.75zm5.34-7.30c-.29-.145-1.72-.85-1.99-.945-.267-.097-.462-.145-.656.145-.194.29-.75.945-.92 1.14-.17.194-.34.218-.63.073-.29-.146-1.224-.451-2.332-1.437-.862-.768-1.444-1.716-1.613-2.006-.169-.29-.018-.447.127-.592.13-.13.29-.34.435-.51.145-.17.194-.29.29-.484.097-.194.048-.363-.024-.508-.073-.145-.656-1.58-.899-2.165-.237-.568-.478-.49-.656-.5-.17-.008-.363-.01-.557-.01-.194 0-.508.073-.775.363-.267.29-1.017.994-1.017 2.423 0 1.43 1.041 2.812 1.187 3.006.145.194 2.05 3.13 4.966 4.39.694.3 1.235.478 1.657.612.696.221 1.33.19 1.83.115.558-.083 1.72-.703 1.963-1.383.242-.68.242-1.262.169-1.383-.072-.121-.266-.194-.556-.34z"/></svg>
+</a>
+
+<button id="currencyFloat" onclick="openCurrencyModal()" aria-label="محول العملة">💱</button>
+
+<div class="info-modal-overlay" id="currencyModalOverlay">
+  <div class="info-modal">
+    <button class="auth-close" onclick="closeCurrencyModal()" style="position:absolute;left:16px;top:14px;">✕</button>
+    <h3 style="margin-bottom:10px;" data-i18n="cur_title">محوّل العملات (يوان صيني)</h3>
+    <p data-i18n="cur_desc" style="font-size:13.5px;">أسعارنا مكتوبة باليوان الصيني. استخدم هذه الحاسبة لمعرفة ما يعادلها بالدولار، الدرهم، أو الجنيه السوداني.</p>
+    <div class="calc-box" style="margin-top:12px;">
+      <div class="calc-row">
+        <div><label data-i18n="cur_amount_label">المبلغ باليوان الصيني (¥)</label><input type="number" id="cnyAmount" placeholder="100"></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:10px;width:100%;" data-i18n="cur_btn" onclick="calcCurrency()">تحويل</button>
+      <div class="calc-result" id="currencyResult"></div>
+      <div id="currencyMeta" style="margin-top:10px;font-size:12px;color:#777;"></div>
+    </div>
+    <p style="font-size:12px;color:#777;margin-top:10px;" data-i18n="cur_note">* هذا السعر تقريبي للاستئناس فقط، ويُعتمد السعر الفعلي وقت التنفيذ.</p>
+  </div>
+</div>
+
+<div class="auth-modal-overlay" id="authOverlay">
+  <div class="auth-modal">
+    <h3 id="authTitle" data-i18n="login_title">تسجيل الدخول</h3>
+    <p style="text-align:center;color:#777;font-size:13px;" data-i18n="auth_subtitle">سجّل بالبريد الإلكتروني لتتمكن من إتمام طلبك أو إرسال سؤال</p>
+    <div class="auth-tabs">
+      <button class="active" id="tabLogin" data-i18n="login_tab" onclick="switchAuthTab('login')">دخول</button>
+      <button id="tabRegister" data-i18n="register_tab" onclick="switchAuthTab('register')">حساب جديد</button>
+    </div>
+    <input id="authName" placeholder="اسمك بالإنجليزي (حروف وأرقام فقط)" data-i18n-ph="full_name_ph" style="display:none;">
+    <input id="authEmail" type="email" placeholder="البريد الإلكتروني" data-i18n-ph="email_ph">
+    <div class="password-wrap">
+      <input id="authPassword" type="password" placeholder="كلمة المرور (6 أحرف على الأقل)" data-i18n-ph="password_ph">
+      <button type="button" class="toggle-pw-btn" onclick="togglePasswordVisibility('authPassword', this)">👁</button>
+    </div>
+    <select id="authDestination" style="width:100%;padding:11px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;display:none;">
+      <option value="SD" data-i18n="opt_sd">السودان</option>
+      <option value="SS" data-i18n="opt_ss">جنوب السودان</option>
+      <option value="UAE" data-i18n="opt_uae">الإمارات العربية المتحدة</option>
+      <option value="KSA" data-i18n="opt_ksa">المملكة العربية السعودية</option>
+    </select>
+    <div style="font-size:11px;color:#888;margin:-6px 0 10px;display:none;" id="customCodeHint" data-i18n="custom_code_hint">اكتب اسمك بحروف إنجليزية وأرقام فقط (بدون مسافات) — سيُستخدم لتكوين مارك الشحن الدائم الخاص بك</div>
+    <label id="termsAgreeWrap" style="display:none;align-items:flex-start;gap:8px;font-size:12.5px;color:#555;margin-bottom:10px;text-align:right;cursor:pointer;">
+      <input type="checkbox" id="authTermsCheck" style="margin-top:3px;">
+      <span data-i18n="agree_terms_text">أوافق على <span class="link-btn" style="display:inline;margin:0;padding:0;" onclick="event.preventDefault(); openTermsInfo();">الشروط والأحكام</span></span>
+    </label>
+    <div class="err" id="authError"></div>
+    <button class="btn btn-primary" style="width:100%;" id="authSubmitBtn" data-i18n="login_btn2" onclick="submitAuth()">دخول</button>
+    <button class="link-btn" id="forgotPasswordBtn" data-i18n="forgot_password" onclick="handleForgotPassword()">نسيت كلمة المرور؟</button>
+    <button class="auth-close" data-i18n="close_btn" onclick="closeAuthModal()">إغلاق</button>
+  </div>
+</div>
+
+<div class="sail-overlay" id="sailOverlay">
+  <div class="sail-track">
+    <svg class="sail-boat-svg" viewBox="0 0 220 110" width="150" height="75">
+      <path d="M20 70 Q30 90 60 90 L160 90 Q190 90 200 70 L185 70 L35 70 Z" fill="#14304A"/>
+      <path d="M25 70 L195 70 L190 80 Q180 88 160 88 L60 88 Q40 88 30 80 Z" fill="#0A1B2B"/>
+      <rect x="55" y="45" width="34" height="25" fill="#D9A441" stroke="#0A1B2B" stroke-width="1.5"/>
+      <line x1="55" y1="57" x2="89" y2="57" stroke="#0A1B2B" stroke-width="1"/>
+      <rect x="92" y="45" width="34" height="25" fill="#B4552D" stroke="#0A1B2B" stroke-width="1.5"/>
+      <line x1="92" y1="57" x2="126" y2="57" stroke="#0A1B2B" stroke-width="1"/>
+      <rect x="130" y="20" width="26" height="50" fill="#D9A441" stroke="#0A1B2B" stroke-width="1.5"/>
+      <rect x="136" y="27" width="5" height="5" fill="#0A1B2B"/>
+      <rect x="146" y="27" width="5" height="5" fill="#0A1B2B"/>
+      <rect x="136" y="38" width="5" height="5" fill="#0A1B2B"/>
+      <rect x="146" y="38" width="5" height="5" fill="#0A1B2B"/>
+      <line x1="145" y1="20" x2="145" y2="8" stroke="#0A1B2B" stroke-width="2.5"/>
+      <line x1="130" y1="30" x2="160" y2="8" stroke="#0A1B2B" stroke-width="2.5"/>
+    </svg>
+  </div>
+  <svg class="sail-waves-svg" viewBox="0 0 300 30" width="220" height="26" preserveAspectRatio="none">
+    <path class="wave-path wave-1" d="M0 15 Q 25 5, 50 15 T 100 15 T 150 15 T 200 15 T 250 15 T 300 15" fill="none" stroke="#D9A441" stroke-width="2.5" opacity="0.9"/>
+    <path class="wave-path wave-2" d="M0 22 Q 25 14, 50 22 T 100 22 T 150 22 T 200 22 T 250 22 T 300 22" fill="none" stroke="#D9A441" stroke-width="2" opacity="0.5"/>
+  </svg>
+  <div class="sail-text" data-i18n="sail_text">جارٍ الإبحار نحو حسابك...</div>
+</div>
+
+<div class="video-modal-overlay" id="videoModal">
+  <button class="video-close" onclick="closeVideo()">✕</button>
+  <video id="videoPlayer" controls></video>
+</div>
+
+<footer><span data-i18n="footer_text">AlHossain · للتواصل المباشر عبر واتساب</span> · <span class="footer-link" data-i18n="terms_title" onclick="showTab('terms')">الشروط والأحكام</span> · <span class="footer-link" data-i18n="complaints_title" onclick="showTab('complaints')">شكاوى ومقترحات</span> · <span onclick="showTab('admin')" style="cursor:pointer;opacity:0.5;font-size:13px;padding:10px;display:inline-block;">⚙️ إدارة</span></footer>
 <script>
-    // أكواد جافا سكريبت يمكن تعديلها
-    console.log("الموقع يعمل بنجاح");
-</script>
+// ====== CONFIG ======
+const BUSINESS_WHATSAPP = "8613054452062";
+const ADMIN_PIN = "0914785649AlH#";
+const ADMIN_EMAIL = "alhossainabdallah@gmail.com";
 
+const EMAILJS_PUBLIC_KEY = "PASTE_EMAILJS_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID = "PASTE_EMAILJS_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = "PASTE_EMAILJS_TEMPLATE_ID";
+
+const RECAPTCHA_SITE_KEY = "PASTE_RECAPTCHA_SITE_KEY";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAeVPr7MWzteC_jJpqKKxZHm-7uLBy4oEo",
+  authDomain: "alhossain-platform.firebaseapp.com",
+  projectId: "alhossain-platform",
+  storageBucket: "alhossain-platform.firebasestorage.app",
+  messagingSenderId: "420421237857",
+  appId: "1:420421237857:web:f62b3762dd75cc69b73e20",
+  measurementId: "G-8DYEZCW1VG"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+if(RECAPTCHA_SITE_KEY !== "PASTE_RECAPTCHA_SITE_KEY" && firebase.appCheck){
+  firebase.appCheck().activate(RECAPTCHA_SITE_KEY, true);
+}
+
+const db = firebase.firestore();
+const auth = firebase.auth();
+const storage = firebase.storage();
+
+if(firebaseConfig.measurementId && firebaseConfig.measurementId !== "PASTE_MEASUREMENT_ID" && firebase.analytics){
+  firebase.analytics();
+}
+
+if(typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "PASTE_EMAILJS_PUBLIC_KEY"){
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+}
+
+function notifyAdmin(subject, message){
+  sendNotificationEmail(ADMIN_EMAIL, subject, message);
+}
+
+function notifyCustomer(email, subject, message){
+  if(!email) return;
+  sendNotificationEmail(email, subject, message);
+}
+
+function sendNotificationEmail(toEmail, subject, message){
+  if(typeof emailjs === 'undefined' || EMAILJS_PUBLIC_KEY === "PASTE_EMAILJS_PUBLIC_KEY") return;
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    to_email: toEmail,
+    subject: subject,
+    message: message
+  }).catch(()=>{});
+}
+
+let products = [];
+let orders = {};
+let questions = {};
+let customers = [];
+let importRequests = {};
+let factoryVisits = {};
+let myOrders = {};
+let myImportRequests = {};
+let myFactoryVisits = {};
+let complaints = {};
+let communityPosts = [];
+let lastPostDoc = null;
+let likedPostIds = new Set();
+let aboutData = {};
+let currencyData = {};
+let agentLocationData = {};
+let cart = {};
+let currentUser = null;
+let currentLang = 'ar';
+let currentCustomerData = null;
+let authMode = 'login';
+let importRowCount = 0;
+let selectedStars = 0;
+let allRatings = [];
+
+// ====== TRANSLATIONS OBJECT (كامل) ======
+const translations = {
+  nav_home: {ar:'الرئيسية', en:'Home'},
+  nav_catalog: {ar:'المنتجات', en:'Products'},
+  nav_track: {ar:'تتبع طلبي', en:'Track Order'},
+  nav_glossary: {ar:'دليل المصطلحات', en:'Shipping Terms'},
+  nav_questions: {ar:'الأسئلة', en:'Questions'},
+  nav_import: {ar:'اطلب من الصين', en:'Order from China'},
+  nav_factory: {ar:'زيارة مصنع', en:'Factory Visit'},
+  nav_about: {ar:'عن المؤسس', en:'About Us'},
+  hero_eyebrow: {ar:'وكيلك المعتمد في الصين · تجارة موثوقة', en:'Your Trusted Agent in China'},
+  hero_title: {ar:'كل احتياجاتك التجارية في مكان واحد', en:'All Your Trading Needs in One Place'},
+  hero_desc: {ar:'نستورد ونوفر لك أفضل المنتجات بأسعار تنافسية، مع متابعة مباشرة لطلبك من التأكيد حتى التسليم.', en:'We import and source the best products at competitive prices, with direct follow-up from confirmation to delivery.'},
+  hero_browse: {ar:'تصفح المنتجات', en:'Browse Products'},
+  hero_track: {ar:'تتبع طلبي', en:'Track My Order'},
+  hero_whatsapp: {ar:'تواصل معنا على واتساب', en:'Contact Us on WhatsApp'},
+  strip_response: {ar:'ساعة للرد', en:'hr Response'},
+  strip_followup: {ar:'متابعة مستمرة', en:'Ongoing Support'},
+  strip_shipping: {ar:'شحن بحري وجوي', en:'Sea & Air Shipping'},
+  catalog_title: {ar:'المنتجات', en:'Products'},
+  track_title: {ar:'تتبع شحناتي', en:'Track My Shipments'},
+  glossary_title: {ar:'دليل مصطلحات الشحن والاستيراد', en:'Shipping & Import Terms Guide'},
+  questions_title: {ar:'أسئلة العملاء', en:'Customer Questions'},
+  import_title: {ar:'اطلب من الصين', en:'Order from China'},
+  terms_title: {ar:'الشروط والأحكام', en:'Terms & Conditions'},
+  cart_label: {ar:'السلة', en:'Cart'},
+  login_btn: {ar:'تسجيل الدخول', en:'Login'},
+  glossary_desc: {ar:'مصطلحات ستواجهها كثيراً عند الشراء والشحن من الصين — فهمها جيداً يوفر الوقت والمال.', en:'Terms you will encounter often when buying and shipping from China — understanding them saves time and money.'},
+  cur_title: {ar:'محوّل العملة (دولار ↔ جنيه سوداني)', en:'Currency Converter (USD ↔ SDG)'},
+  cur_desc: {ar:'سعر صرف الجنيه السوداني يتغيّر بشكل شبه يومي، لذا لا يعتمد هذا المحوّل على مصدر آلي، بل على سعر يُحدَّث يدوياً من صاحب الموقع بحسب السوق الفعلي.', en:'The Sudanese Pound exchange rate changes almost daily, so this converter does not rely on an automated source, but on a rate updated manually by the site owner based on the actual market.'},
+  cur_amount_label: {ar:'المبلغ بالدولار ($)', en:'Amount in USD ($)'},
+  cur_btn: {ar:'تحويل', en:'Convert'},
+  cur_note: {ar:'* هذا السعر تقريبي للاستئناس فقط، ويُعتمد السعر الفعلي وقت التنفيذ.', en:'* This rate is indicative only; the actual rate is confirmed at the time of the transaction.'},
+  moq_title: {ar:'الحد الأدنى لكمية الطلب', en:'Minimum Order Quantity'},
+  moq_p1: {ar:'<strong>MOQ (Minimum Order Quantity)</strong> هي أقل كمية يقبل المصنع أو المورد بيعها في الطلب الواحد. فإذا كان المصنع قد حدد الحد الأدنى بـ 500 قطعة، فهذا يعني أنه لن يبيع أقل من 500 قطعة حتى لو رغب المشتري في تجربة كمية أصغر.', en:'<strong>MOQ (Minimum Order Quantity)</strong> is the smallest quantity a factory or supplier accepts per order. If a factory sets its MOQ at 500 pieces, it won\'t sell fewer than 500 pieces, even if the buyer wants to try a smaller quantity first.'},
+  moq_p2: {ar:'<strong>لماذا يفعل المصنع ذلك؟</strong> لأن تجهيز خط الإنتاج (القوالب، المواد الخام، إعداد الآلات) يكلف المصنع تكاليف ثابتة بغض النظر عن الكمية، لذا يحرص على ضمان حد أدنى يغطي هذه التكلفة.', en:'<strong>Why do factories do this?</strong> Setting up a production line (molds, raw materials, machine setup) costs the factory fixed expenses regardless of quantity, so they ensure a minimum that covers that cost.'},
+  moq_tips_title: {ar:'<strong>نصائح للتعامل مع الـ MOQ:</strong>', en:'<strong>Tips for handling MOQ:</strong>'},
+  moq_li1: {ar:'لو الكمية أكبر من احتياجك، اسأل عن "MOQ تجريبي" أو عينة مدفوعة قبل الالتزام بالكمية الكاملة', en:'If the quantity exceeds your needs, ask about a "trial MOQ" or a paid sample before committing to the full quantity'},
+  moq_li2: {ar:'يمكن التفاوض على تقليل الحد الأدنى للكمية مقابل سعر أعلى قليلاً للقطعة', en:'You can negotiate a lower MOQ in exchange for a slightly higher price per piece'},
+  moq_li3: {ar:'إذا كان هناك موردون آخرون بنفس المنتج بحد أدنى أقل، يمكن استخدام ذلك كورقة تفاوض', en:'If other suppliers offer the same product with a lower MOQ, use that as a negotiating point'},
+  cbm_title: {ar:'المتر المكعب — أهم رقم في تكلفة الشحن', en:'CBM — The Most Important Number in Shipping Cost'},
+  cbm_p1: {ar:'<strong>CBM (Cubic Meter)</strong> هو وحدة قياس حجم الشحنة، وهو الرقم الذي تعتمد عليه شركات الشحن في حساب سعر الشحن البحري (خاصة إذا كانت الشحنة لا تملأ حاوية كاملة — LCL). حتى لو كانت البضاعة خفيفة الوزن، فإن كبر حجمها يعني احتساب التكلفة على أساس الحجم لا الوزن.', en:'<strong>CBM (Cubic Meter)</strong> is the unit used to measure shipment volume, and it\'s the number shipping companies rely on to calculate sea freight cost (especially for less-than-container loads — LCL). Even if the goods are lightweight, a large volume means the cost is calculated based on volume, not weight.'},
+  cbm_formula_title: {ar:'معادلة الحساب', en:'Calculation Formula'},
+  cbm_formula: {ar:'CBM = الطول × العرض × الارتفاع (بالمتر)', en:'CBM = Length × Width × Height (in meters)'},
+  cbm_formula_sub: {ar:'لو القياس بالسنتيمتر: CBM = (الطول × العرض × الارتفاع) ÷ 1,000,000', en:'If measured in centimeters: CBM = (Length × Width × Height) ÷ 1,000,000'},
+  dim_l: {ar:'الطول (L)', en:'Length (L)'},
+  dim_w: {ar:'العرض (W)', en:'Width (W)'},
+  dim_h: {ar:'الارتفاع (H)', en:'Height (H)'},
+  cbm_example: {ar:'<strong>مثال:</strong> كرتونة أبعادها 50 سم × 40 سم × 30 سم = (50×40×30) ÷ 1,000,000 = <strong>0.06 CBM</strong> للكرتونة الواحدة. وإذا كان الطلب 100 كرتونة، فإن الإجمالي = 6 CBM.', en:'<strong>Example:</strong> A carton sized 50 × 40 × 30 cm = (50×40×30) ÷ 1,000,000 = <strong>0.06 CBM</strong> per carton. For an order of 100 cartons, the total = 6 CBM.'},
+  cbm_calc_title: {ar:'🧮 احسب حجم شحنتك وتكلفتها التقريبية (شحن بحري)', en:'🧮 Calculate your shipment volume and approximate cost (sea freight)'},
+  len_cm: {ar:'الطول (سم)', en:'Length (cm)'},
+  width_cm: {ar:'العرض (سم)', en:'Width (cm)'},
+  height_cm: {ar:'الارتفاع (سم)', en:'Height (cm)'},
+  carton_qty: {ar:'عدد الكراتين', en:'Number of Cartons'},
+  destination_label: {ar:'الوجهة', en:'Destination'},
+  calc_btn: {ar:'احسب', en:'Calculate'},
+  cbm_calc_note: {ar:'* هذه تكلفة تقريبية للاستئناس فقط، وقد تزيد أو تنقص حسب السوق الفعلي وقت الشحن — تواصل معنا لتأكيد التكلفة النهائية.', en:'* This is an indicative cost only and may vary based on the actual market at shipping time — contact us to confirm the final cost.'},
+  container_type: {ar:'نوع الحاوية', en:'Container Type'},
+  approx_capacity: {ar:'السعة التقريبية', en:'Approximate Capacity'},
+  c20: {ar:'حاوية 20 قدم', en:'20ft Container'},
+  c20cap: {ar:'~28 CBM (سعة استخدام فعلية)', en:'~28 CBM (usable capacity)'},
+  c40: {ar:'حاوية 40 قدم', en:'40ft Container'},
+  c40hc: {ar:'حاوية 40 قدم عالية السعة (High Cube)', en:'40ft High Cube Container'},
+  cbm_table_note: {ar:'* الأرقام تقريبية للسعة الاستخدامية الفعلية، وتختلف قليلاً حسب شكل البضاعة وطريقة التحميل.', en:'* Figures are approximate for actual usable capacity and vary slightly depending on cargo shape and loading method.'},
+  air_title: {ar:'الشحن الجوي — الوزن الفعلي مقابل الوزن الحجمي', en:'Air Freight — Actual vs. Volumetric Weight'},
+  air_p1: {ar:'في الشحن الجوي، تحتسب شركة الشحن التكلفة على أساس <strong>الأعلى بين الوزن الفعلي والوزن الحجمي (Volumetric Weight)</strong>. فإذا كانت الشحنة خفيفة الوزن لكن حجمها كبير، تُحتسب التكلفة على أساس الحجم لا الوزن الحقيقي.', en:'For air freight, the shipping company charges based on <strong>whichever is higher: actual weight or volumetric weight</strong>. If a shipment is lightweight but bulky, the cost is calculated based on volume, not actual weight.'},
+  air_formula_title: {ar:'معادلة الوزن الحجمي', en:'Volumetric Weight Formula'},
+  air_formula: {ar:'الوزن الحجمي (كجم) = (الطول × العرض × الارتفاع بالسم) ÷ 5000', en:'Volumetric Weight (kg) = (Length × Width × Height in cm) ÷ 5000'},
+  air_formula_sub: {ar:'القاسم 5000 معتمد لدى أغلب شركات الشحن السريع من الصين، وبعض الشركات تستخدم 6000 — تأكد من شركة الشحن', en:'5000 is used by most express carriers from China; some carriers use 6000 — confirm with your carrier'},
+  air_calc_title: {ar:'🧮 احسب الوزن الحجمي والتكلفة التقريبية لشحنتك الجوية', en:'🧮 Calculate the volumetric weight and approximate cost of your air shipment'},
+  actual_weight_label: {ar:'الوزن الفعلي (كجم)', en:'Actual Weight (kg)'},
+  air_note: {ar:'* الشحن الجوي متاح حالياً للإمارات والسعودية، وهو أسرع لكنه أعلى تكلفة من الشحن البحري، ويُستخدم غالباً للشحنات المستعجلة أو الخفيفة والصغيرة الحجم. هذه تكلفة تقريبية للاستئناس فقط.', en:'* Air freight is currently available for the UAE and Saudi Arabia. It is faster but more expensive than sea freight, and is usually used for urgent or light, small shipments. This is an indicative cost only.'},
+  questions_desc: {ar:'هل لديك سؤال؟ اكتبه هنا وسنجيبك عليه، وسيظهر السؤال مع الإجابة هنا لبقية العملاء إن كان فيه فائدة للجميع.', en:'Have a question? Write it here and we\'ll answer it. Your question and answer will appear here for other customers if it\'s helpful to everyone.'},
+  question_ph: {ar:'اكتب سؤالك هنا...', en:'Write your question here...'},
+  send_question_btn: {ar:'إرسال السؤال', en:'Send Question'},
+  import_desc: {ar:'هل وجدت منتجات في تاوباو أو 1688 أو علي بابا وترغب في شرائها؟ أضف كل منتج على حدة، وسنوافيك بعرض سعر شامل الشراء والشحن لكل الطلب دفعة واحدة.', en:'Found products on Taobao, 1688, or Alibaba you\'d like to buy? Add each product separately, and we\'ll send you a quote covering purchase and shipping for the whole order at once.'},
+  add_item_btn: {ar:'+ إضافة منتج آخر', en:'+ Add Another Product'},
+  import_notes_ph: {ar:'ملاحظات عامة على الطلب: اللون، المقاس، أي تفاصيل إضافية...', en:'General notes on the order: color, size, any additional details...'},
+  send_quote_request_btn: {ar:'إرسال طلب عرض سعر', en:'Send Quote Request'},
+  factory_title: {ar:'طلب زيارة مصنع', en:'Factory Visit Request'},
+  factory_desc: {ar:'هل وجدت مصنعاً على علي بابا أو غيره وترغب بمعاينته ميدانياً قبل الشراء؟ يمكننا القيام بذلك نيابة عنك.', en:'Found a factory on Alibaba or elsewhere and want it inspected on-site before buying? We can do that on your behalf.'},
+  factory_terms_title: {ar:'شروط وتكلفة زيارة المصانع', en:'Factory Visit Terms & Cost'},
+  factory_link_ph: {ar:'رابط صفحة المصنع (علي بابا أو غيره) — اختياري', en:'Factory page link (Alibaba or other) — optional'},
+  factory_name_ph: {ar:'اسم المصنع *', en:'Factory Name *'},
+  factory_specialty_ph: {ar:'تخصص المصنع *', en:'Factory Specialty *'},
+  factory_contact_ph: {ar:'رقم أو إيميل المصنع (اختياري)', en:'Factory phone or email (optional)'},
+  factory_city_ph: {ar:'مدينة المصنع *', en:'Factory City *'},
+  factory_notes_ph: {ar:'ملاحظات إضافية (اختياري)', en:'Additional notes (optional)'},
+  send_visit_request_btn: {ar:'إرسال طلب الزيارة', en:'Send Visit Request'},
+  about_role: {ar:'مؤسس AlHossain · وكيلك المعتمد في الصين', en:'Founder of AlHossain · Your Trusted Agent in China'},
+  years_exp: {ar:'سنوات الخبرة', en:'Years of Experience'},
+  orders_done: {ar:'طلب منفَّذ', en:'Orders Completed'},
+  registered_customers: {ar:'عميل مسجَّل', en:'Registered Customers'},
+  terms_h1: {ar:'1. طبيعة الخدمة والوساطة', en:'1. Nature of the Service & Mediation'},
+  terms_p1: {ar:'يعمل هذا الموقع بصفته <strong>وسيطاً فقط</strong> بين العميل من جهة، والمصنع أو المورد الصيني وشركة الشحن الناقلة من جهة أخرى. لا يُعد الموقع مصنّعاً للمنتجات ولا مالكاً لها، ولا شركة شحن، وإنما ينسّق ويسهّل عملية الشراء والشحن نيابة عن العميل مقابل أجر خدمة.', en:'This site acts <strong>solely as an intermediary</strong> between the customer on one side, and the Chinese factory/supplier and the shipping carrier on the other. The site is not a manufacturer or owner of the products, nor a shipping company; it coordinates and facilitates the purchase and shipping process on behalf of the customer for a service fee.'},
+  terms_h2: {ar:'2. حدود المسؤولية', en:'2. Limits of Liability'},
+  terms_p2: {ar:'بصفته وسيطاً، <strong>يتحمّل الموقع المسؤولية فقط عن أي تقصير أو خطأ ناتج مباشرة عن فعله هو</strong> (كخطأ في نقل معلومات الطلب، أو إهمال واضح في المتابعة من جانبه). أما الأخطاء أو الأضرار الناتجة عن طرف ثالث — كعيب في تصنيع المنتج، تأخير أو تلف من شركة الشحن، أو تصرفات المورد الأصلي — فهي مسؤولية ذلك الطرف الثالث تحديداً، ولا يتحمّلها الموقع. يسعى الموقع، قدر الإمكان، لمساعدة العميل في متابعة أي مطالبة تجاه الطرف المسؤول الفعلي.', en:'As an intermediary, <strong>the site is only liable for negligence or errors directly caused by its own actions</strong> (such as an error in relaying order information, or clear negligence in follow-up). Errors or damages caused by a third party — such as a manufacturing defect, delay or damage by the shipping company, or actions of the original supplier — are the responsibility of that third party alone, not the site. The site will, where possible, assist the customer in pursuing any claim against the actual responsible party.'},
+  terms_h3: {ar:'3. الأسعار والدفع', en:'3. Prices & Payment'},
+  terms_p3: {ar:'الأسعار المعروضة أو المقدَّرة عبر حاسبات الموقع تقريبية وقابلة للتغيير حسب سعر الصرف والسوق الفعلي وقت التنفيذ. يُعتمد السعر النهائي بعد التأكيد المباشر عبر واتساب أو لوحة الطلبات. تُحدَّد طريقة الدفع وشروطه (دفعة مقدَّمة، دفعة كاملة، أو غير ذلك) بالتراضي المتبادل بين الطرفين قبل بدء التنفيذ.', en:'Prices shown or estimated via the site\'s calculators are indicative and subject to change based on the exchange rate and actual market at execution time. The final price is confirmed directly via WhatsApp or the orders panel. Payment method and terms (deposit, full payment, or otherwise) are agreed upon mutually between both parties before execution begins.'},
+  terms_h4: {ar:'4. مدة الشحن', en:'4. Shipping Duration'},
+  terms_p4: {ar:'تختلف مدة الشحن حسب نوع الشحن (بحري أو جوي) والوجهة والظروف اللوجستية الخارجة عن إرادة الموقع (كالتخليص الجمركي وأحوال الموانئ وأداء شركة الشحن الناقلة). لا يتحمّل الموقع مسؤولية التأخير الناتج عن أسباب خارجة عن سيطرته المباشرة.', en:'Shipping duration varies depending on the shipping type (sea or air), destination, and logistical conditions beyond the site\'s control (such as customs clearance, port conditions, and carrier performance). The site is not liable for delays caused by factors outside its direct control.'},
+  terms_h5: {ar:'5. الأضرار والفقدان أثناء الشحن', en:'5. Damage & Loss During Shipping'},
+  terms_p5: {ar:'يُبذل أقصى جهد ممكن لاختيار شركات شحن موثوقة ومتابعة الشحنة. في حال وجود تلف أو فقدان أثناء النقل، تكون المسؤولية على شركة الشحن الناقلة وفق سياستها الخاصة، ويقتصر دور الموقع على المساعدة في متابعة أي مطالبة تعويض لدى الجهة الناقلة.', en:'Best efforts are made to select reliable shipping companies and track shipments. In case of damage or loss during transit, liability rests with the carrier per its own policy, and the site\'s role is limited to helping the customer pursue a compensation claim with the carrier.'},
+  terms_h6: {ar:'6. الإرجاع والاستبدال', en:'6. Returns & Exchanges'},
+  terms_p6: {ar:'نظراً لطبيعة الشراء من مصادر خارجية (تاوباو، 1688، علي بابا)، فإن إمكانية الإرجاع أو الاستبدال تخضع لسياسة المورد الأصلي وحده، ويُبلَّغ العميل بذلك قبل تأكيد أي طلب استيراد.', en:'Due to the nature of purchasing from external sources (Taobao, 1688, Alibaba), the possibility of returns or exchanges is governed solely by the original supplier\'s policy, and the customer is informed of this before confirming any import request.'},
+  terms_h7: {ar:'7. مسؤولية المارك (Shipping Mark)', en:'7. Shipping Mark Responsibility'},
+  terms_p7: {ar:'يتحمّل العميل مسؤولية استخدام مارك الشحن الخاص به بشكل صحيح عند الطلب من أي جهة، وعدم مشاركته مع أطراف أخرى لتفادي أي التباس في تحديد ملكية الشحنات.', en:'The customer is responsible for correctly using their Shipping Mark when ordering from any source, and for not sharing it with others to avoid confusion in identifying shipment ownership.'},
+  terms_h8: {ar:'8. الموافقة على الشروط', en:'8. Acceptance of Terms'},
+  terms_p8: {ar:'يُعد إنشاء حساب على هذا الموقع إقراراً من العميل بقراءته لهذه الشروط وموافقته الكاملة عليها.', en:'Creating an account on this site constitutes an acknowledgment by the customer that they have read these terms and fully agree to them.'},
+  terms_h9: {ar:'9. التعديلات', en:'9. Amendments'},
+  terms_p9: {ar:'يحتفظ الموقع بحق تحديث هذه الشروط في أي وقت، وسيُعمل بأحدث نسخة منشورة على هذه الصفحة.', en:'The site reserves the right to update these terms at any time, and the latest version published on this page will apply.'},
+  footer_text: {ar:'AlHossain · للتواصل المباشر عبر واتساب', en:'AlHossain · Contact us directly on WhatsApp'},
+  cart_title: {ar:'سلة الطلب', en:'Order Cart'},
+  checkout_btn: {ar:'إتمام الطلب عبر واتساب', en:'Checkout via WhatsApp'},
+  opt_sd: {ar:'السودان', en:'Sudan'},
+  opt_ss: {ar:'جنوب السودان', en:'South Sudan'},
+  opt_uae: {ar:'الإمارات العربية المتحدة', en:'United Arab Emirates'},
+  opt_ksa: {ar:'المملكة العربية السعودية', en:'Saudi Arabia'},
+  my_mark_desc: {ar:'مارك الشحن الدائم الخاص بك — استخدمه عند الطلب من أي موقع صيني كعنوان استلام', en:'Your permanent Shipping Mark — use it as a receiving name when ordering from any Chinese site'},
+  show_shipments_btn: {ar:'اعرض كل شحناتي', en:'Show All My Shipments'},
+  not_verified: {ar:'لم يتم التحقق من بريدك الإلكتروني بعد.', en:'Your email has not been verified yet.'},
+  resend_verify_btn: {ar:'إعادة إرسال رابط التحقق', en:'Resend Verification Link'},
+  track_login_required: {ar:'لأسباب أمنية، لازم تسجّل دخولك الأول عشان تقدر تشوف شحناتك.', en:'For security reasons, you must log in first to view your shipments.'},
+  what_is_mark: {ar:'ما هي الـ Shipping Mark؟', en:'What is a Shipping Mark?'},
+  mark_info_p1: {ar:'الـ Shipping Mark هي رمز تعريفي ثابت يُخصَّص لكل عميل عند التسجيل، ويُستخدم في التجارة الدولية لتمييز شحنة العميل عن غيرها من الشحنات، خاصة عندما تُجمَّع بضائع عملاء متعددين داخل حاوية واحدة قادمة من الصين.', en:'A Shipping Mark is a permanent identifier code assigned to each customer at registration, used in international trade to distinguish a customer\'s shipment from others, especially when goods from multiple customers are consolidated in one container from China.'},
+  mark_why_title: {ar:'<strong>لماذا هي مهمة؟</strong>', en:'<strong>Why is it important?</strong>'},
+  mark_li1: {ar:'تُسهِّل التعرف على شحنتك في المستودع أو الميناء وسط شحنات عملاء آخرين', en:'Makes it easy to identify your shipment at the warehouse or port among other customers\' shipments'},
+  mark_li2: {ar:'تُقلِّل احتمالية اختلاط بضاعتك ببضاعة غيرك أو ضياعها', en:'Reduces the chance of your goods being mixed up with others\' or lost'},
+  mark_li3: {ar:'تُستخدم كمرجع موحَّد للتتبع داخل هذا الموقع، مهما تعدَّدت طلباتك أو مصادر شرائك', en:'Used as a unified reference for tracking on this site, no matter how many orders or sources you buy from'},
+  mark_how_title: {ar:'<strong>كيف تُستخدم؟</strong>', en:'<strong>How is it used?</strong>'},
+  mark_how_p: {ar:'اكتب هذا الرمز على كل طرد أو كرتونة تشتريها من أي موقع صيني (تاوباو، 1688، علي بابا، أو غيرها)، واستخدمه كاسم أو عنوان استلام إضافي عند الطلب، ليتمكن المستودع من ربط البضاعة بك فور وصولها.', en:'Write this code on every parcel or carton you buy from any Chinese site (Taobao, 1688, Alibaba, or others), and use it as an extra receiving name or address when ordering, so the warehouse can link the goods to you as soon as they arrive.'},
+  login_title: {ar:'تسجيل الدخول', en:'Login'},
+  register_title: {ar:'إنشاء حساب جديد', en:'Create New Account'},
+  auth_subtitle: {ar:'سجّل بالبريد الإلكتروني لتتمكن من إتمام طلبك أو إرسال سؤال', en:'Register with your email to complete your order or send a question'},
+  login_tab: {ar:'دخول', en:'Login'},
+  register_tab: {ar:'حساب جديد', en:'New Account'},
+  full_name_ph: {ar:'الاسم الكامل', en:'Full Name'},
+  email_ph: {ar:'البريد الإلكتروني', en:'Email Address'},
+  password_ph: {ar:'كلمة المرور (6 أحرف على الأقل)', en:'Password (6+ characters)'},
+  custom_code_hint: {ar:'حروف/أرقام إنجليزية فقط، بدون مسافات — في حال تركه فارغاً سيُولَّد رقم تلقائي', en:'English letters/numbers only, no spaces — leave blank to auto-generate one'},
+  agree_terms_text: {ar:'أوافق على <span class="link-btn" style="display:inline;margin:0;padding:0;" onclick="event.preventDefault(); openTermsInfo();">الشروط والأحكام</span>', en:'I agree to the <span class="link-btn" style="display:inline;margin:0;padding:0;" onclick="event.preventDefault(); openTermsInfo();">Terms & Conditions</span>'},
+  login_btn2: {ar:'دخول', en:'Login'},
+  create_account_btn: {ar:'إنشاء الحساب', en:'Create Account'},
+  forgot_password: {ar:'نسيت كلمة المرور؟', en:'Forgot Password?'},
+  close_btn: {ar:'إغلاق', en:'Close'},
+  no_products: {ar:'لا توجد منتجات بعد', en:'No products yet'},
+  video_label: {ar:'فيديو', en:'Video'},
+  order_now_whatsapp: {ar:'اطلب الآن عبر واتساب', en:'Order now via WhatsApp'},
+  add_to_cart: {ar:'أضف إلى السلة', en:'Add to Cart'},
+  cart_empty: {ar:'السلة فارغة', en:'Cart is empty'},
+  total_label: {ar:'الإجمالي', en:'Total'},
+  no_questions: {ar:'لا توجد أسئلة بعد', en:'No questions yet'},
+  q_prefix: {ar:'س:', en:'Q:'},
+  a_prefix: {ar:'ج:', en:'A:'},
+  awaiting_reply: {ar:'بانتظار الرد...', en:'Awaiting reply...'},
+  no_shipments_yet: {ar:'لا توجد شحنات مسجّلة على حسابك بعد.', en:'No shipments registered on your account yet.'},
+  orders_section: {ar:'الطلبات', en:'Orders'},
+  import_orders_section: {ar:'طلبات الشراء من الصين', en:'Import Requests from China'},
+  factory_visits_section: {ar:'طلبات زيارة المصانع', en:'Factory Visit Requests'},
+  mark_label: {ar:'المارك', en:'Shipping Mark'},
+  date_label: {ar:'التاريخ', en:'Date'},
+  status_label: {ar:'الحالة', en:'Status'},
+  carrier_tracking_label: {ar:'رقم تتبع شركة الشحن', en:'Carrier Tracking Number'},
+  products_label: {ar:'المنتجات', en:'Products'},
+  quoted_price_label: {ar:'السعر المعروض', en:'Quoted Price'},
+  unnamed: {ar:'بدون اسم', en:'Unnamed'},
+  enter_dimensions: {ar:'من فضلك أدخل الطول والعرض والارتفاع', en:'Please enter length, width, and height'},
+  single_carton_volume: {ar:'حجم الكرتونة الواحدة', en:'Volume per carton'},
+  equivalent_to: {ar:'يعادل تقريباً', en:'Approximately equivalent to'},
+  of_20ft: {ar:'من حاوية 20 قدم', en:'of a 20ft container'},
+  of_40ft: {ar:'من حاوية 40 قدم', en:'of a 40ft container'},
+  or: {ar:'أو', en:'or'},
+  approx_sea_cost_to: {ar:'التكلفة التقريبية للشحن البحري إلى', en:'Approximate sea freight cost to'},
+  enter_all_values: {ar:'من فضلك أدخل كل القيم', en:'Please enter all values'},
+  volumetric_weight: {ar:'الوزن الحجمي', en:'Volumetric Weight'},
+  actual_weight: {ar:'الوزن الفعلي', en:'Actual Weight'},
+  kg: {ar:'كجم', en:'kg'},
+  billed_weight: {ar:'الوزن المحتسب', en:'Billed Weight'},
+  because_higher: {ar:'لأن', en:'Because the'},
+  is_higher_of_two: {ar:'هو الأعلى بين الاثنين', en:'is the higher of the two'},
+  raised_to_minimum: {ar:'(وتم رفعه للحد الأدنى المعتمد لهذه الوجهة)', en:'(raised to the minimum for this destination)'},
+  approx_air_cost_to: {ar:'التكلفة التقريبية للشحن الجوي إلى', en:'Approximate air freight cost to'},
+  enter_valid_amount: {ar:'يرجى إدخال مبلغ صحيح', en:'Please enter a valid amount'},
+  rate_not_updated: {ar:'لم يُحدَّث سعر الصرف بعد من إدارة الموقع، يرجى التواصل عبر واتساب لمعرفة السعر الحالي', en:'The exchange rate has not been updated by the site admin yet — please contact us via WhatsApp for the current rate'},
+  sdg_currency: {ar:'جنيه سوداني', en:'SDG'},
+  usd_currency: {ar:'دولار أمريكي', en:'USD'},
+  aed_currency: {ar:'درهم إماراتي', en:'AED'},
+  nav_community: {ar:'المجتمع', en:'Community'},
+  community_title: {ar:'مجتمع العملاء', en:'Customer Community'},
+  community_desc: {ar:'مجتمع حقيقي 100% — كل الأعضاء هنا عملاء تعاملنا معهم فعلياً أو نعرفهم على أرض الواقع، مش حسابات وهمية. هذه مساحة حرة للتعبير عن رأيك بصراحة، إيجاباً أو سلباً، وسنرد على تعليقاتكم من حساب الإدارة مباشرة.', en:'A 100% real community — every member here is a customer we have actually dealt with or know personally, not fake accounts. This is a free space to share your honest opinion, positive or negative, and we will reply to comments directly from the official Admin account.'},
+  post_ph: {ar:'اكتب منشورك هنا...', en:'Write your post here...'},
+  publish_btn: {ar:'نشر', en:'Post'},
+  load_more: {ar:'تحميل المزيد', en:'Load More'},
+  no_posts_yet: {ar:'لا توجد منشورات بعد، كن أول من ينشر!', en:'No posts yet — be the first to post!'},
+  comments_label: {ar:'تعليق', en:'Comments'},
+  comment_ph: {ar:'اكتب تعليقاً...', en:'Write a comment...'},
+  send_btn: {ar:'إرسال', en:'Send'},
+  no_comments_yet: {ar:'لا توجد تعليقات بعد', en:'No comments yet'},
+  loading: {ar:'جاري التحميل...', en:'Loading...'},
+  write_post_first: {ar:'يرجى كتابة منشورك أولاً', en:'Please write your post first'},
+  post_published: {ar:'تم نشر منشورك', en:'Your post has been published'},
+  admin_badge: {ar:'الإدارة', en:'Admin'},
+  profile_title: {ar:'حسابي', en:'My Account'},
+  profile_email_label: {ar:'البريد الإلكتروني:', en:'Email:'},
+  profile_verified_label: {ar:'حالة التحقق:', en:'Verification Status:'},
+  verified_yes: {ar:'موثّق', en:'Verified'},
+  verified_no: {ar:'غير موثّق', en:'Not verified'},
+  profile_change_email: {ar:'تغيير البريد الإلكتروني', en:'Change Email'},
+  new_email_ph: {ar:'البريد الإلكتروني الجديد', en:'New email address'},
+  current_password_ph: {ar:'كلمة المرور الحالية (للتأكيد)', en:'Current password (to confirm)'},
+  save_email_btn: {ar:'حفظ البريد الجديد', en:'Save New Email'},
+  profile_change_password: {ar:'تغيير كلمة المرور', en:'Change Password'},
+  new_password_ph: {ar:'كلمة المرور الجديدة (6 أحرف على الأقل)', en:'New password (6+ characters)'},
+  save_password_btn: {ar:'حفظ كلمة المرور الجديدة', en:'Save New Password'},
+  logout_btn: {ar:'تسجيل الخروج', en:'Log Out'},
+  mark_copied: {ar:'تم نسخ المارك', en:'Shipping Mark copied'},
+  copy_failed: {ar:'تعذّر النسخ', en:'Copy failed'},
+  fill_all_fields: {ar:'يرجى تعبئة كل الحقول', en:'Please fill in all fields'},
+  email_changed: {ar:'تم تغيير البريد الإلكتروني، يرجى التحقق منه مجدداً', en:'Email changed — please verify it again'},
+  password_changed: {ar:'تم تغيير كلمة المرور بنجاح', en:'Password changed successfully'},
+  complaints_title: {ar:'شكاوى ومقترحات', en:'Complaints & Suggestions'},
+  complaints_desc: {ar:'رسالتك هنا خاصة تمامًا ولا تظهر لأي شخص غيرنا. نقرأ كل رسالة ونهتم بمعالجتها.', en:'Your message here is completely private and visible only to us. We read and address every message.'},
+  type_complaint: {ar:'شكوى', en:'Complaint'},
+  type_suggestion: {ar:'اقتراح', en:'Suggestion'},
+  complaint_ph: {ar:'اكتب رسالتك بالتفصيل هنا...', en:'Write your message in detail here...'},
+  send_complaint_btn: {ar:'إرسال', en:'Send'},
+  write_complaint_first: {ar:'يرجى كتابة رسالتك أولاً', en:'Please write your message first'},
+  complaint_sent: {ar:'تم إرسال رسالتك، شكراً لتواصلك معنا', en:'Your message has been sent — thank you for reaching out'},
+  nav_ratings: {ar:'التقييمات', en:'Ratings'},
+  ratings_title: {ar:'تقييمات العملاء', en:'Customer Ratings'},
+  ratings_desc: {ar:'آراء عملائنا الحقيقية عن تجربتهم في التعامل معنا.', en:'Real feedback from our customers about their experience with us.'},
+  your_rating: {ar:'قيّم تجربتك معنا', en:'Rate your experience with us'},
+  rating_comment_ph: {ar:'اكتب تعليقاً (اختياري)...', en:'Write a comment (optional)...'},
+  submit_rating_btn: {ar:'إرسال التقييم', en:'Submit Rating'},
+  no_ratings_yet: {ar:'لا توجد تقييمات بعد', en:'No ratings yet'},
+  ratings_count_label: {ar:'تقييم', en:'ratings'},
+  no_reviews_yet: {ar:'لا توجد تعليقات مكتوبة بعد', en:'No written reviews yet'},
+  select_stars_first: {ar:'يرجى اختيار عدد النجوم أولاً', en:'Please select a star rating first'},
+  rating_submitted: {ar:'تم إرسال تقييمك، شكراً لك', en:'Your rating has been submitted, thank you'},
+  reset_link_sent: {ar:'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني', en:'A password reset link has been sent to your email'},
+  verify_link_resent: {ar:'تم إرسال رابط التحقق مجدداً، يرجى تفقّد بريدك الإلكتروني', en:'Verification link resent — please check your email'},
+  question_sent: {ar:'تم إرسال سؤالك، وسيتم الرد عليه قريباً', en:'Your question has been sent and will be answered soon'},
+  visit_request_sent: {ar:'تم إرسال طلب زيارة المصنع بنجاح', en:'Factory visit request sent successfully'},
+  import_request_sent: {ar:'تم إرسال طلبك، سنوافيك بعرض السعر قريباً', en:'Your request has been sent — we will send you a quote soon'},
+  added_to_cart: {ar:'تمت الإضافة إلى السلة', en:'Added to cart'},
+  loading_shipments: {ar:'جاري تحميل شحناتك...', en:'Loading your shipments...'},
+  login_required_order: {ar:'يرجى تسجيل الدخول أولاً لإتمام طلبك', en:'Please log in first to complete your order'},
+  login_required_request: {ar:'يرجى تسجيل الدخول أولاً لإرسال الطلب', en:'Please log in first to send the request'},
+  login_required_question: {ar:'يرجى تسجيل الدخول أولاً لإرسال سؤال', en:'Please log in first to send a question'},
+  add_one_item: {ar:'يرجى إضافة منتج واحد على الأقل برابط وكمية', en:'Please add at least one product with a link and quantity'},
+  fill_factory_required: {ar:'يرجى تعبئة اسم المصنع وتخصصه ومدينته على الأقل', en:'Please fill in at least the factory name, specialty, and city'},
+  write_question_first: {ar:'يرجى كتابة سؤالك أولاً', en:'Please write your question first'},
+  send_error_retry: {ar:'حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً', en:'An error occurred while sending — please try again later'},
+  please_login_first: {ar:'يرجى تسجيل الدخول أولاً', en:'Please log in first'},
+  invalid_email_error: {ar:'صيغة البريد الإلكتروني غير صحيحة', en:'Invalid email format'},
+  no_account_error: {ar:'لا يوجد حساب مسجَّل بهذا البريد الإلكتروني', en:'No account registered with this email'},
+  enter_email_password: {ar:'أدخل الإيميل وكلمة المرور', en:'Enter your email and password'},
+  enter_full_name: {ar:'أدخل اسمك الكامل', en:'Enter your full name'},
+  must_agree_terms: {ar:'يجب الموافقة على الشروط والأحكام لإتمام التسجيل', en:'You must agree to the Terms & Conditions to register'},
+  code_taken: {ar:'هذا الكود مستخدم بالفعل، يرجى تجربة كود آخر أو تركه فارغاً ليُولَّد تلقائياً', en:'This code is already taken — try another one or leave it blank to auto-generate'},
+  name_english_only: {ar:'يرجى كتابة اسمك بحروف إنجليزية أو أرقام فقط (مثال: AHMED)', en:'Please write your name using English letters or numbers only (e.g. AHMED)'},
+  unnamed_customer: {ar:'عميل', en:'Customer'},
+  nav_activity: {ar:'الإشعارات', en:'Notifications'},
+  activity_title: {ar:'آخر التحركات في الموقع', en:'Latest Site Activity'},
+  activity_desc: {ar:'تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.', en:'Follow the latest posts, questions, and ratings from our real customers.'},
+  no_activity_yet: {ar:'لا توجد تحركات بعد', en:'No activity yet'},
+  activity_posted: {ar:'نشر منشوراً جديداً', en:'posted a new update'},
+  activity_asked: {ar:'طرح سؤالاً جديداً', en:'asked a new question'},
+  activity_rated: {ar:'قيّم تجربته', en:'rated their experience'},
+  logged_out_msg: {ar:'تم تسجيل الخروج بنجاح', en:'Logged out successfully'},
+  sail_text: {ar:'جارٍ الإبحار نحو حسابك...', en:'Sailing to your account...'},
+  tracking_anim_text: {ar:'جارٍ البحث عن شحناتك...', en:'Searching for your shipments...'},
+  logged_in: {ar:'تم تسجيل الدخول', en:'Logged in successfully'},
+  account_created: {ar:'تم إنشاء الحساب، يرجى تفقّد بريدك الإلكتروني للتحقق منه', en:'Account created — please check your email to verify it'},
+  email_in_use: {ar:'هذا الإيميل مسجل بالفعل، جرّب تسجيل الدخول', en:'This email is already registered — try logging in'},
+  weak_password: {ar:'كلمة المرور لازم تكون 6 أحرف على الأقل', en:'Password must be at least 6 characters'},
+  wrong_password: {ar:'كلمة المرور غير صحيحة', en:'Incorrect password'},
+  invalid_credential: {ar:'بيانات الدخول غير صحيحة', en:'Invalid login credentials'},
+  generic_error: {ar:'حدث خطأ، حاول مرة أخرى', en:'An error occurred, please try again'},
+};
+// ====== FUNCTIONS ======
+
+function t(key){
+  return translations[key] ? translations[key][currentLang] : key;
+}
+
+function toggleLanguage(){
+  currentLang = currentLang === 'ar' ? 'en' : 'ar';
+  applyLanguage();
+  updateAuthButtons();
+}
+
+function applyLanguage(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(!translations[key]) return;
+    const tag = el.tagName;
+    if(tag === 'INPUT' || tag === 'TEXTAREA'){
+      el.placeholder = translations[key][currentLang];
+    } else {
+      el.innerHTML = translations[key][currentLang];
+    }
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-ph');
+    if(translations[key]) el.placeholder = translations[key][currentLang];
+  });
+  document.getElementById('langBtn').textContent = currentLang === 'ar' ? 'EN' : 'AR';
+  document.getElementById('cartLabel').textContent = translations.cart_label[currentLang];
+  document.documentElement.setAttribute('lang', currentLang);
+  updateFactoryCityLabel();
+}
+
+function updateAuthButtons(){
+  const btn = document.getElementById('authBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  if(currentUser){
+    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
+    logoutBtn.textContent = currentLang === 'ar' ? 'خروج' : 'Log out';
+  } else {
+    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
+  }
+}
+
+function destName(code){
+  const map = { SD:'opt_sd', SS:'opt_ss', UAE:'opt_uae', KSA:'opt_ksa' };
+  return map[code] ? t(map[code]) : code;
+}
+
+function destCodeFromName(name){
+  const codes = ['SD','SS','UAE','KSA'];
+  for(const c of codes){
+    const key = 'opt_' + c.toLowerCase();
+    if(translations[key] && (translations[key].ar === name || translations[key].en === name)) return c;
+  }
+  return 'SD';
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+function showCraneLoader(){
+  const el = document.getElementById('craneLoader');
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(()=> el.classList.remove('show'), 650);
+}
+
+function showTab(tab){
+  document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+  const navBtn = document.querySelector(`nav.tabs button[data-tab="${tab}"]`);
+  if(navBtn) navBtn.classList.add('active');
+  const isAdmin = tab === 'admin';
+  document.getElementById('waFloat').style.display = isAdmin ? 'none' : 'flex';
+  document.getElementById('currencyFloat').style.display = isAdmin ? 'none' : 'flex';
+  if(firebase.analytics){
+    try{ firebase.analytics().logEvent('page_view', { page_title: tab }); }catch(e){}
+  }
+}
+
+function openAuthModal(){
+  document.getElementById('authOverlay').classList.add('show');
+}
+
+function closeAuthModal(){
+  document.getElementById('authOverlay').classList.remove('show');
+  document.getElementById('authError').classList.remove('show');
+}
+
+function openCurrencyModal(){
+  document.getElementById('currencyModalOverlay').classList.add('show');
+}
+
+function closeCurrencyModal(){
+  document.getElementById('currencyModalOverlay').classList.remove('show');
+}
+
+function openTermsInfo(){
+  document.getElementById('termsInfoOverlay').classList.add('show');
+}
+
+function closeTermsInfo(){
+  document.getElementById('termsInfoOverlay').classList.remove('show');
+}
+
+function openMarkInfo(){
+  document.getElementById('markInfoOverlay').classList.add('show');
+}
+
+function closeMarkInfo(){
+  document.getElementById('markInfoOverlay').classList.remove('show');
+}
+
+function closeVideo(){
+  const modal = document.getElementById('videoModal');
+  document.getElementById('videoPlayer').pause();
+  document.getElementById('videoPlayer').src = '';
+  modal.classList.remove('show');
+}
+
+function playVideo(url){
+  const modal = document.getElementById('videoModal');
+  document.getElementById('videoPlayer').src = url;
+  modal.classList.add('show');
+}
+
+function togglePasswordVisibility(inputId, btn){
+  const input = document.getElementById(inputId);
+  if(input.type === 'password'){
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
+function switchAuthTab(mode){
+  authMode = mode;
+  document.getElementById('tabLogin').classList.toggle('active', mode==='login');
+  document.getElementById('tabRegister').classList.toggle('active', mode==='register');
+  document.getElementById('authTitle').textContent = translations[mode==='login' ? 'login_title' : 'register_title'][currentLang];
+  document.getElementById('authSubmitBtn').textContent = translations[mode==='login' ? 'login_btn2' : 'create_account_btn'][currentLang];
+  document.getElementById('authName').style.display = mode==='register' ? 'block' : 'none';
+  document.getElementById('authDestination').style.display = mode==='register' ? 'block' : 'none';
+  document.getElementById('customCodeHint').style.display = mode==='register' ? 'block' : 'none';
+  document.getElementById('termsAgreeWrap').style.display = mode==='register' ? 'flex' : 'none';
+  document.getElementById('forgotPasswordBtn').style.display = mode==='login' ? 'block' : 'none';
+  document.getElementById('authError').classList.remove('show');
+}
+
+// ====== DATA LOADING FUNCTIONS ======
+
+async function loadData(){
+  const prodSnap = await db.collection('products').get();
+  products = prodSnap.docs.map(d => ({id: d.id, ...d.data()}));
+
+  if(products.length === 0){
+    const seed = [
+      {name:'أطقم مطبخ ستانلس', price:3.2},
+      {name:'إكسسوارات موبايل', price:0.8},
+      {name:'أدوات كهربائية منزلية', price:5.5},
+    ];
+    for(const p of seed){
+      const ref = await db.collection('products').add(p);
+      products.push({id: ref.id, ...p});
+    }
+  }
+
+  const qSnap = await db.collection('questions').get();
+  questions = {};
+  qSnap.docs.forEach(d => { questions[d.id] = d.data(); });
+
+  const aboutDoc = await db.collection('settings').doc('about').get();
+  aboutData = aboutDoc.exists ? aboutDoc.data() : {};
+
+  const currencyDoc = await db.collection('settings').doc('currency').get();
+  currencyData = currencyDoc.exists ? currencyDoc.data() : {};
+
+  const locationDoc = await db.collection('settings').doc('agentLocation').get();
+  agentLocationData = locationDoc.exists ? locationDoc.data() : {};
+
+  renderAll();
+  renderCurrencyMeta();
+  updateFactoryCityLabel();
+  renderAbout();
+
+  db.collection('questions').onSnapshot(snap => {
+    questions = {};
+    snap.docs.forEach(d => { questions[d.id] = d.data(); });
+    renderQaList();
+    renderAdminQa();
+  });
+}
+
+async function loadAdminData(){
+  const orderSnap = await db.collection('orders').get();
+  orders = {};
+  orderSnap.docs.forEach(d => { orders[d.id] = d.data(); });
+
+  const custSnap = await db.collection('customers').get();
+  customers = custSnap.docs.map(d => d.data());
+
+  const importSnap = await db.collection('importRequests').get();
+  importRequests = {};
+  importSnap.docs.forEach(d => { importRequests[d.id] = d.data(); });
+
+  const factorySnap = await db.collection('factoryVisitRequests').get();
+  factoryVisits = {};
+  factorySnap.docs.forEach(d => { factoryVisits[d.id] = d.data(); });
+
+  const complaintsSnap = await db.collection('complaints').get();
+  complaints = {};
+  complaintsSnap.docs.forEach(d => { complaints[d.id] = d.data(); });
+
+  renderAdminProducts();
+  renderAdminOrders();
+  renderAdminCustomers();
+  renderAdminImportRequests();
+  renderAdminFactoryVisits();
+  renderAdminComplaints();
+
+  db.collection('complaints').onSnapshot(snap => {
+    complaints = {};
+    snap.docs.forEach(d => { complaints[d.id] = d.data(); });
+    renderAdminComplaints();
+  });
+
+  db.collection('importRequests').onSnapshot(snap => {
+    importRequests = {};
+    snap.docs.forEach(d => { importRequests[d.id] = d.data(); });
+    renderAdminImportRequests();
+  });
+
+  db.collection('factoryVisitRequests').onSnapshot(snap => {
+    factoryVisits = {};
+    snap.docs.forEach(d => { factoryVisits[d.id] = d.data(); });
+    renderAdminFactoryVisits();
+  });
+
+  db.collection('customers').onSnapshot(snap => {
+    customers = snap.docs.map(d => d.data());
+    renderAdminCustomers();
+  });
+
+  db.collection('orders').onSnapshot(snap => {
+    orders = {};
+    snap.docs.forEach(d => { orders[d.id] = d.data(); });
+    renderAdminOrders();
+  });
+}
+
+async function loadMyShipments(){
+  if(!currentUser || !currentCustomerData || !currentCustomerData.shippingMark) return;
+  const mark = currentCustomerData.shippingMark;
+
+  const [orderSnap, importSnap, factorySnap] = await Promise.all([
+    db.collection('orders').where('shippingMark','==',mark).get(),
+    db.collection('importRequests').where('shippingMark','==',mark).get(),
+    db.collection('factoryVisitRequests').where('shippingMark','==',mark).get()
+  ]);
+
+  myOrders = {};
+  orderSnap.docs.forEach(d => { myOrders[d.id] = d.data(); });
+  myImportRequests = {};
+  importSnap.docs.forEach(d => { myImportRequests[d.id] = d.data(); });
+  myFactoryVisits = {};
+  factorySnap.docs.forEach(d => { myFactoryVisits[d.id] = d.data(); });
+}
+
+// ====== AUTH FUNCTIONS ======
+
+async function generateUniqueMark(rawName, destCode, ownerEmail){
+  let base = (rawName || '').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(!base){
+    const seq = await getNextCustomerSeq();
+    base = `C${String(seq).padStart(3,'0')}`;
+  }
+  if(base.length > 15) base = base.slice(0,15);
+
+  let candidate = `AH-${base}-${destCode}`;
+  let attempt = 1;
+  while(true){
+    const markRef = db.collection('shippingMarks').doc(candidate);
+    const markDoc = await markRef.get();
+    if(!markDoc.exists){
+      await markRef.set({ email: ownerEmail });
+      return candidate;
+    }
+    attempt++;
+    candidate = `AH-${base}${attempt}-${destCode}`;
+  }
+}
+
+async function getNextOrderSeq(){
+  const counterRef = db.collection('settings').doc('counters');
+  return await db.runTransaction(async (t) => {
+    const doc = await t.get(counterRef);
+    const current = doc.exists ? (doc.data().orderSeq || 0) : 0;
+    const next = current + 1;
+    t.set(counterRef, { orderSeq: next }, { merge: true });
+    return next;
+  });
+}
+
+async function getNextCustomerSeq(){
+  const counterRef = db.collection('settings').doc('counters');
+  return await db.runTransaction(async (t) => {
+    const doc = await t.get(counterRef);
+    const current = doc.exists ? (doc.data().customerSeq || 0) : 0;
+    const next = current + 1;
+    t.set(counterRef, { customerSeq: next }, { merge: true });
+    return next;
+  });
+}
+
+async function ensureShippingMark(){
+  if(!currentUser) return;
+  if(currentCustomerData && currentCustomerData.shippingMark) return;
+
+  const destCode = currentCustomerData?.destination ? destCodeFromName(currentCustomerData.destination) : 'SD';
+  const nameBase = currentCustomerData?.name || currentUser.email.split('@')[0];
+  const mark = await generateUniqueMark(nameBase, destCode, currentUser.email);
+
+  const data = {
+    email: currentUser.email,
+    name: currentCustomerData?.name || nameBase,
+    destination: currentCustomerData?.destination || destName(destCode),
+    shippingMark: mark,
+    emailVerified: currentUser.emailVerified || false,
+    joinDate: currentCustomerData?.joinDate || new Date().toISOString().slice(0,10)
+  };
+  await db.collection('customers').doc(currentUser.email).set(data, {merge:true});
+  currentCustomerData = data;
+}
+
+async function submitAuth(){
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const name = document.getElementById('authName').value.trim();
+  const destCode = document.getElementById('authDestination').value;
+  const errBox = document.getElementById('authError');
+  errBox.classList.remove('show');
+  if(!email || !password){
+    errBox.textContent = t('enter_email_password');
+    errBox.classList.add('show');
+    return;
+  }
+  if(authMode === 'register' && !name){
+    errBox.textContent = t('enter_full_name');
+    errBox.classList.add('show');
+    return;
+  }
+
+  let cleanName = '';
+  if(authMode === 'register'){
+    cleanName = name.toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(!cleanName){
+      errBox.textContent = t('name_english_only');
+      errBox.classList.add('show');
+      return;
+    }
+  }
+
+  if(authMode === 'register' && !document.getElementById('authTermsCheck').checked){
+    errBox.textContent = t('must_agree_terms');
+    errBox.classList.add('show');
+    return;
+  }
+
+  try{
+    if(authMode === 'login'){
+      await auth.signInWithEmailAndPassword(email, password);
+    } else {
+      const userCred = await auth.createUserWithEmailAndPassword(email, password);
+      const shippingMark = await generateUniqueMark(cleanName, destCode, email);
+      await userCred.user.sendEmailVerification();
+      await db.collection('customers').doc(email).set({
+        email: email,
+        name: name,
+        destination: destName(destCode),
+        shippingMark: shippingMark,
+        emailVerified: false,
+        termsAccepted: true,
+        termsAcceptedDate: new Date().toISOString(),
+        joinDate: new Date().toISOString().slice(0,10)
+      });
+    }
+    playSailAnimation(() => {
+      closeAuthModal();
+      showToast(authMode==='login' ? t('logged_in') : t('account_created'));
+    });
+  }catch(e){
+    const map = {
+      'auth/email-already-in-use': t('email_in_use'),
+      'auth/invalid-email': t('invalid_email_error'),
+      'auth/weak-password': t('weak_password'),
+      'auth/user-not-found': t('no_account_error'),
+      'auth/wrong-password': t('wrong_password'),
+      'auth/invalid-credential': t('invalid_credential')
+    };
+    errBox.textContent = map[e.code] || t('generic_error');
+    errBox.classList.add('show');
+  }
+}
+
+async function handleForgotPassword(){
+  const email = document.getElementById('authEmail').value.trim();
+  const errBox = document.getElementById('authError');
+  errBox.classList.remove('show');
+  if(!email){
+    errBox.textContent = 'يرجى إدخال بريدك الإلكتروني أولاً في الحقل أعلاه';
+    errBox.classList.add('show');
+    return;
+  }
+  try{
+    await auth.sendPasswordResetEmail(email);
+    showToast(t('reset_link_sent'));
+  }catch(e){
+    const map = {
+      'auth/invalid-email': t('invalid_email_error'),
+      'auth/user-not-found': t('no_account_error')
+    };
+    errBox.textContent = map[e.code] || t('send_error_retry');
+    errBox.classList.add('show');
+  }
+}
+
+async function reauthCurrentUser(currentPassword){
+  const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, currentPassword);
+  await currentUser.reauthenticateWithCredential(credential);
+}
+
+async function changeMyEmail(){
+  const newEmail = document.getElementById('newEmailInput').value.trim();
+  const password = document.getElementById('emailCurrentPassword').value;
+  if(!newEmail || !password){ showToast(t('fill_all_fields')); return; }
+  try{
+    await reauthCurrentUser(password);
+    const oldEmail = currentUser.email;
+    await currentUser.updateEmail(newEmail);
+    await currentUser.sendEmailVerification();
+    const oldDoc = await db.collection('customers').doc(oldEmail).get();
+    const data = oldDoc.exists ? oldDoc.data() : {};
+    data.email = newEmail;
+    data.emailVerified = false;
+    await db.collection('customers').doc(newEmail).set(data);
+    await db.collection('customers').doc(oldEmail).delete();
+    const oldRating = await db.collection('ratings').doc(oldEmail).get();
+    if(oldRating.exists){
+      await db.collection('ratings').doc(newEmail).set(oldRating.data());
+      await db.collection('ratings').doc(oldEmail).delete();
+    }
+    currentCustomerData = data;
+    document.getElementById('newEmailInput').value = '';
+    document.getElementById('emailCurrentPassword').value = '';
+    renderProfile();
+    showToast(t('email_changed'));
+  }catch(e){
+    showToast(e.code === 'auth/wrong-password' ? t('wrong_password') : t('generic_error'));
+  }
+}
+
+async function changeMyPassword(){
+  const newPassword = document.getElementById('newPasswordInput').value;
+  const currentPassword = document.getElementById('passwordCurrentPassword').value;
+  if(!newPassword || !currentPassword){ showToast(t('fill_all_fields')); return; }
+  if(newPassword.length < 6){ showToast(t('weak_password')); return; }
+  try{
+    await reauthCurrentUser(currentPassword);
+    await currentUser.updatePassword(newPassword);
+    document.getElementById('newPasswordInput').value = '';
+    document.getElementById('passwordCurrentPassword').value = '';
+    showToast(t('password_changed'));
+  }catch(e){
+    showToast(e.code === 'auth/wrong-password' ? t('wrong_password') : t('generic_error'));
+  }
+}
+
+async function resendVerification(){
+  if(!currentUser){ return; }
+  try{
+    await currentUser.sendEmailVerification();
+    showToast(t('verify_link_resent'));
+  }catch(e){
+    showToast(t('send_error_retry'));
+  }
+}
+
+function playSailAnimation(callback){
+  const overlay = document.getElementById('sailOverlay');
+  overlay.classList.add('show');
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    if(callback) callback();
+  }, 2000);
+}
+
+// ====== AUTH STATE OBSERVER ======
+
+auth.onAuthStateChanged(async user => {
+  currentUser = user;
+  const btn = document.getElementById('authBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const profileBar = document.getElementById('userProfileBar');
+  const profileName = document.getElementById('userProfileName');
+  const avatar = document.getElementById('userAvatar');
+  
+  if(user){
+    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
+    btn.onclick = openAuthModal;
+    logoutBtn.style.display = 'inline-block';
+    logoutBtn.textContent = currentLang === 'ar' ? 'خروج' : 'Log out';
+    
+    profileBar.classList.add('show');
+    const displayName = currentCustomerData?.name || user.email.split('@')[0];
+    profileName.textContent = displayName;
+    avatar.textContent = displayName.charAt(0).toUpperCase();
+    
+    try{
+      const doc = await db.collection('customers').doc(user.email).get();
+      currentCustomerData = doc.exists ? doc.data() : null;
+      if(user.emailVerified && currentCustomerData && !currentCustomerData.emailVerified){
+        await db.collection('customers').doc(user.email).update({emailVerified: true});
+        currentCustomerData.emailVerified = true;
+      }
+      if(currentCustomerData?.name) {
+        profileName.textContent = currentCustomerData.name;
+        avatar.textContent = currentCustomerData.name.charAt(0).toUpperCase();
+      }
+    }catch(e){ currentCustomerData = null; }
+    
+    await ensureShippingMark();
+    renderMyShippingMark();
+    if(currentCustomerData && currentCustomerData.shippingMark){
+      await loadMyShipments();
+      renderShipmentsResult();
+    }
+  } else {
+    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
+    btn.onclick = openAuthModal;
+    logoutBtn.style.display = 'none';
+    profileBar.classList.remove('show');
+    currentCustomerData = null;
+    myOrders = {}; myImportRequests = {}; myFactoryVisits = {};
+    renderMyShippingMark();
+  }
+});
+
+// ====== CART FUNCTIONS ======
+
+function addToCart(id){
+  cart[id] = (cart[id]||0)+1;
+  updateCartBadge();
+  showToast(t('added_to_cart'));
+}
+
+function updateCartBadge(){
+  const count = Object.values(cart).reduce((a,b)=>a+b,0);
+  document.getElementById('cartBadge').textContent = count;
+}
+
+function changeQty(id, delta){
+  cart[id] = (cart[id]||0)+delta;
+  if(cart[id]<=0) delete cart[id];
+  updateCartBadge();
+  renderCart();
+}
+
+function renderCart(){
+  const wrap = document.getElementById('cartItems');
+  const ids = Object.keys(cart);
+  if(ids.length===0){
+    wrap.innerHTML = `<div class="empty">${t('cart_empty')}</div>`;
+    document.getElementById('cartTotal').textContent = `${t('total_label')}: 0$`;
+    return;
+  }
+  let total = 0;
+  wrap.innerHTML = ids.map(id=>{
+    const p = products.find(x=>x.id===id);
+    if(!p) return '';
+    const qty = cart[id];
+    total += p.price*qty;
+    return `<div class="cart-item">
+      <div>
+        <div class="name">${p.name}</div>
+        <div class="qty">
+          <button onclick="changeQty('${id}',-1)">-</button>
+          <span>${qty}</span>
+          <button onclick="changeQty('${id}',1)">+</button>
+        </div>
+      </div>
+      <div>$${(p.price*qty).toFixed(2)}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('cartTotal').textContent = `${t('total_label')}: $${total.toFixed(2)}`;
+}
+
+function openCart(){
+  renderCart();
+  document.getElementById('drawer').classList.add('show');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function closeCart(){
+  document.getElementById('drawer').classList.remove('show');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+async function checkoutWhatsApp(){
+  if(!currentUser){ closeCart(); openAuthModal(); showToast(t('login_required_order')); return; }
+  const ids = Object.keys(cart);
+  if(ids.length===0){ showToast(t('cart_empty')); return; }
+  const destCode = document.getElementById('destinationSelect').value;
+  await ensureShippingMark();
+  let total = 0;
+  let lines = ids.map(id=>{
+    const p = products.find(x=>x.id===id);
+    const qty = cart[id];
+    total += p.price*qty;
+    return `- ${p.name} × ${qty} = $${(p.price*qty).toFixed(2)}`;
+  });
+  const orderData = {
+    items: ids.map(id=>({name:products.find(x=>x.id===id).name, qty:cart[id]})),
+    total: total.toFixed(2),
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10),
+    customerEmail: currentUser.email,
+    shippingMark: currentCustomerData.shippingMark,
+    destination: destName(destCode),
+    carrierTracking: ''
+  };
+  const ref = await db.collection('orders').add(orderData);
+  myOrders[ref.id] = orderData;
+  notifyAdmin('طلب جديد على الموقع', `مارك الشحن: ${currentCustomerData.shippingMark}\nالإجمالي: $${total.toFixed(2)}\nالوجهة: ${orderData.destination}`);
+  const msg = `مرحباً، أريد تأكيد طلب جديد.\nمارك الشحن الخاص بي (Shipping Mark): ${currentCustomerData.shippingMark}\n${lines.join('\n')}\nالإجمالي: $${total.toFixed(2)}\nالوجهة: ${orderData.destination}`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  cart = {};
+  updateCartBadge();
+  closeCart();
+  showToast(`تم إرسال طلبك، مارك الشحن: ${currentCustomerData.shippingMark}`);
+}
+
+// ====== CATALOG FUNCTIONS ======
+
+function renderCatalog(){
+  const grid = document.getElementById('productGrid');
+  if(products.length===0){
+    grid.innerHTML = `<div class="empty">${t('no_products')}</div>`;
+    return;
+  }
+  grid.innerHTML = products.map(p => `
+    <div class="product">
+      <div class="thumb">
+        ${p.image ? `<img src="${p.image}" alt="${p.name}">` : p.name.charAt(0)}
+        ${p.video ? `<span class="thumb-video-badge" onclick="playVideo('${p.video}')">▶ ${t('video_label')}</span>` : ''}
+        <button class="thumb-quick-btn" onclick="quickOrder('${p.id}')" title="${t('order_now_whatsapp')}">📩</button>
+      </div>
+      <div class="body">
+        <div class="name">${p.name}</div>
+        <div class="price">$${p.price}</div>
+        <button class="add" onclick="addToCart('${p.id}')">${t('add_to_cart')}</button>
+      </div>
+    </div>`).join('');
+}
+
+function quickOrder(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  const msg = `مرحباً، أريد الاستفسار عن طلب: ${p.name} (${p.price}$)`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ====== ADMIN FUNCTIONS ======
+
+function checkPin(){
+  const val = document.getElementById('pinInput').value;
+  if(val !== ADMIN_PIN){
+    showToast('رمز غير صحيح');
+    return;
+  }
+  if(!currentUser || currentUser.email !== ADMIN_EMAIL){
+    showToast('يجب تسجيل الدخول بحساب المسؤول أولاً');
+    openAuthModal();
+    return;
+  }
+  document.getElementById('adminLockWrap').style.display='none';
+  document.getElementById('adminPanel').style.display='block';
+  showToast('جاري تحميل بيانات الإدارة...');
+  loadAdminData();
+  if(agentLocationData.currentCity){
+    document.getElementById('agentCityInput').value = agentLocationData.currentCity;
+  }
+}
+
+async function addProduct(){
+  const name = document.getElementById('newProdName').value.trim();
+  const price = parseFloat(document.getElementById('newProdPrice').value);
+  const imageFile = document.getElementById('newProdImage').files[0];
+  const videoFile = document.getElementById('newProdVideo').files[0];
+  if(!name || isNaN(price)){ showToast('يرجى إدخال اسم وسعر صحيحين'); return; }
+  if(videoFile && videoFile.size > 15 * 1024 * 1024){
+    showToast('حجم الفيديو أكبر من 15 ميجابايت، يرجى ضغطه أو استخدام رابط يوتيوب/تاوباو بدلاً منه');
+    return;
+  }
+
+  const progress = document.getElementById('uploadProgress');
+  const btn = document.getElementById('addProdBtn');
+  btn.disabled = true;
+
+  const data = {name, price};
+
+  try{
+    if(imageFile){
+      progress.style.display='block';
+      progress.textContent = 'جارٍ رفع الصورة...';
+      const imgRef = storage.ref('products/' + Date.now() + '_' + imageFile.name);
+      await imgRef.put(imageFile);
+      data.image = await imgRef.getDownloadURL();
+    }
+    if(videoFile){
+      progress.style.display='block';
+      progress.textContent = 'جارٍ رفع الفيديو...';
+      const vidRef = storage.ref('products/' + Date.now() + '_' + videoFile.name);
+      await vidRef.put(videoFile);
+      data.video = await vidRef.getDownloadURL();
+    }
+    const ref = await db.collection('products').add(data);
+    products.push({id: ref.id, ...data});
+    document.getElementById('newProdName').value='';
+    document.getElementById('newProdPrice').value='';
+    document.getElementById('newProdImage').value='';
+    document.getElementById('newProdVideo').value='';
+    renderAll();
+    showToast('تمت إضافة المنتج بنجاح');
+  }catch(e){
+    showToast('حدث خطأ أثناء الرفع، يرجى التأكد من إعداد Firebase Storage');
+  }finally{
+    progress.style.display='none';
+    btn.disabled = false;
+  }
+}
+
+async function removeProduct(id){
+  await db.collection('products').doc(id).delete();
+  products = products.filter(p=>p.id!==id);
+  renderAll();
+}
+
+function renderAdminProducts(){
+  const wrap = document.getElementById('adminProductList');
+  if(products.length===0){ wrap.innerHTML='<div class="empty">لا توجد منتجات</div>'; return; }
+  wrap.innerHTML = products.map(p=>`
+    <div class="admin-list-item">
+      <span>${p.name} — $${p.price}</span>
+      <button class="tiny-btn" onclick="removeProduct('${p.id}')">حذف</button>
+    </div>`).join('');
+}
+
+function renderAdminCustomers(search){
+  document.getElementById('customerCount').textContent = customers.length;
+  const wrap = document.getElementById('adminCustomerList');
+  if(!wrap) return;
+  const term = (search||'').trim().toLowerCase();
+  const filtered = term ? customers.filter(c =>
+    (c.name||'').toLowerCase().includes(term) ||
+    (c.email||'').toLowerCase().includes(term) ||
+    (c.shippingMark||'').toLowerCase().includes(term)
+  ) : customers;
+  if(filtered.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا يوجد عملاء مسجلون بعد'}</div>`; return; }
+  wrap.innerHTML = filtered.map(c=>`
+    <div class="admin-list-item">
+      <span><strong>${c.shippingMark||'بدون مارك'}</strong> — ${c.name||''} — ${c.email} — ${c.destination||''} — ${c.emailVerified ? '✅ موثّق' : '⏳ غير موثّق'}</span>
+      <span style="color:#888;font-size:12px;">${c.joinDate||''}</span>
+    </div>`).join('');
+}
+
+function exportCustomers(){
+  if(customers.length===0){ showToast('لا يوجد عملاء لتصديرهم بعد'); return; }
+  let csv = 'ShippingMark,Name,Email,Destination,EmailVerified,JoinDate\n';
+  customers.forEach(c=>{ csv += `${c.shippingMark||''},${c.name||''},${c.email},${c.destination||''},${c.emailVerified?'Yes':'No'},${c.joinDate||''}\n`; });
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'عملاء_AlHossain.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('تم تصدير الملف بنجاح');
+}
+
+function renderAdminOrders(search){
+  const wrap = document.getElementById('adminOrderList');
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(orders);
+  if(term){
+    ids = ids.filter(id=>{
+      const o = orders[id];
+      return (o.shippingMark||'').toLowerCase().includes(term) ||
+             (o.customerEmail||'').toLowerCase().includes(term) ||
+             (o.status||'').toLowerCase().includes(term);
+    });
+  }
+  if(ids.length===0){ wrap.innerHTML=`<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد طلبات بعد'}</div>`; return; }
+  wrap.innerHTML = ids.reverse().map(id=>{
+    const o = orders[id];
+    return `<div class="admin-order-item">
+      <div style="margin-bottom:6px;"><strong>${o.shippingMark||'-'}</strong> · ${o.customerEmail||''} · ${o.destination||''} · $${o.total} · ${o.date}</div>
+      <select onchange="updateStatus('${id}', this.value)" style="margin-bottom:6px;">
+        ${['قيد المراجعة','تم التأكيد','قيد الشحن','تم التسليم','ملغي'].map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <div class="admin-row" style="margin-top:4px;">
+        <input id="carrier_${id}" placeholder="رقم تتبع شركة الشحن" value="${o.carrierTracking||''}">
+        <button class="tiny-btn gold" onclick="saveCarrierTracking('${id}')">حفظ</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function updateStatus(id, status){
+  await db.collection('orders').doc(id).update({status});
+  orders[id].status = status;
+  const o = orders[id];
+  notifyCustomer(o.customerEmail, 'تحديث حالة شحنتك', `مارك الشحن: ${o.shippingMark}\nالحالة الجديدة: ${status}`);
+  showToast('تم تحديث حالة الطلب');
+}
+
+async function saveCarrierTracking(id){
+  const val = document.getElementById('carrier_'+id).value.trim();
+  await db.collection('orders').doc(id).update({carrierTracking: val});
+  orders[id].carrierTracking = val;
+  if(val){
+    const o = orders[id];
+    notifyCustomer(o.customerEmail, 'تم إضافة رقم تتبع لشحنتك', `مارك الشحن: ${o.shippingMark}\nرقم تتبع شركة الشحن: ${val}\nيمكنك متابعة التفاصيل من صفحة "تتبع طلبي" في الموقع.`);
+  }
+  showToast('تم حفظ رقم تتبع شركة الشحن');
+}
+
+function renderAdminImportRequests(search){
+  const wrap = document.getElementById('adminImportList');
+  if(!wrap) return;
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(importRequests);
+  if(term){
+    ids = ids.filter(id=>{
+      const r = importRequests[id];
+      return (r.shippingMark||'').toLowerCase().includes(term) ||
+             (r.customerEmail||'').toLowerCase().includes(term) ||
+             (r.status||'').toLowerCase().includes(term);
+    });
+  }
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد طلبات شراء بعد'}</div>`; return; }
+  wrap.innerHTML = ids.reverse().map(id=>{
+    const r = importRequests[id];
+    const items = r.items || [{link:r.link, name:r.name, qty:r.qty}];
+    const itemsHtml = items.map((it,i)=>`<div>${i+1}. <a href="${it.link}" target="_blank" rel="noopener">رابط المنتج</a> — الكمية: ${it.qty} ${it.name?('— '+it.name):''}</div>`).join('');
+    return `<div class="admin-order-item">
+      <div style="margin-bottom:6px;"><strong>${r.shippingMark||'-'}</strong> · ${r.customerEmail||''} · ${r.destination||''} · ${r.date}</div>
+      <div style="margin-bottom:6px;">${itemsHtml}</div>
+      ${r.notes ? `<div style="margin-bottom:6px;color:#555;">ملاحظات: ${r.notes}</div>` : ''}
+      <select onchange="updateImportStatus('${id}', this.value)" style="margin-bottom:6px;">
+        ${['قيد المراجعة','تم عرض السعر','تم الشراء','وصل المستودع','تم الشحن','ملغي'].map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <div class="admin-row" style="margin-top:4px;">
+        <input id="quote_${id}" placeholder="السعر المعروض ($)" value="${r.quotedPrice||''}">
+        <button class="tiny-btn gold" onclick="saveQuotedPrice('${id}')">حفظ</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function updateImportStatus(id, status){
+  await db.collection('importRequests').doc(id).update({status});
+  importRequests[id].status = status;
+  const r = importRequests[id];
+  notifyCustomer(r.customerEmail, 'تحديث حالة طلب الشراء من الصين', `مارك الشحن: ${r.shippingMark}\nالحالة الجديدة: ${status}`);
+  showToast('تم تحديث حالة طلب الشراء');
+}
+
+async function saveQuotedPrice(id){
+  const val = document.getElementById('quote_'+id).value.trim();
+  await db.collection('importRequests').doc(id).update({quotedPrice: val});
+  importRequests[id].quotedPrice = val;
+  if(val){
+    const r = importRequests[id];
+    notifyCustomer(r.customerEmail, 'تم تحديد سعر طلبك من الصين', `مارك الشحن: ${r.shippingMark}\nالسعر المعروض: $${val}\nيرجى مراجعة التفاصيل والتأكيد عبر واتساب.`);
+  }
+  showToast('تم حفظ السعر المعروض');
+}
+
+function renderAdminFactoryVisits(search){
+  const wrap = document.getElementById('adminFactoryList');
+  if(!wrap) return;
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(factoryVisits);
+  if(term){
+    ids = ids.filter(id=>{
+      const f = factoryVisits[id];
+      return (f.shippingMark||'').toLowerCase().includes(term) ||
+             (f.name||'').toLowerCase().includes(term) ||
+             (f.city||'').toLowerCase().includes(term);
+    });
+  }
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد طلبات زيارة مصانع بعد'}</div>`; return; }
+  wrap.innerHTML = ids.reverse().map(id=>{
+    const f = factoryVisits[id];
+    return `<div class="admin-order-item">
+      <div style="margin-bottom:6px;"><strong>${f.shippingMark||'-'}</strong> · ${f.customerEmail||''} · ${f.date}</div>
+      <div style="margin-bottom:4px;"><strong>${f.name}</strong> — ${f.specialty} — ${f.city}</div>
+      ${f.link ? `<div style="margin-bottom:4px;"><a href="${f.link}" target="_blank" rel="noopener">رابط المصنع</a></div>` : ''}
+      ${f.contact ? `<div style="margin-bottom:4px;color:#555;">تواصل: ${f.contact}</div>` : ''}
+      ${f.notes ? `<div style="margin-bottom:4px;color:#555;">ملاحظات: ${f.notes}</div>` : ''}
+      <div style="margin-bottom:6px;font-size:13px;color:var(--rust);">${f.costNote}</div>
+      <select onchange="updateFactoryVisitStatus('${id}', this.value)">
+        ${['قيد المراجعة','تم التنسيق','تم التنفيذ','ملغي'].map(s=>`<option value="${s}" ${f.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
+}
+
+async function updateFactoryVisitStatus(id, status){
+  await db.collection('factoryVisitRequests').doc(id).update({status});
+  factoryVisits[id].status = status;
+  const f = factoryVisits[id];
+  notifyCustomer(f.customerEmail, 'تحديث حالة طلب زيارة المصنع', `المصنع: ${f.name}\nالحالة الجديدة: ${status}`);
+  showToast('تم تحديث حالة الطلب');
+}
+
+function renderAdminComplaints(search){
+  const wrap = document.getElementById('adminComplaintsList');
+  if(!wrap) return;
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(complaints);
+  if(term){
+    ids = ids.filter(id=>{
+      const c = complaints[id];
+      return (c.text||'').toLowerCase().includes(term) ||
+             (c.customerEmail||'').toLowerCase().includes(term) ||
+             (c.type||'').toLowerCase().includes(term);
+    });
+  }
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد شكاوى أو مقترحات بعد'}</div>`; return; }
+  wrap.innerHTML = ids.reverse().map(id=>{
+    const c = complaints[id];
+    return `<div class="admin-order-item">
+      <div style="margin-bottom:6px;"><strong>${c.type==='complaint'?'شكوى':'اقتراح'}</strong> · ${c.customerEmail} · ${c.date}</div>
+      <div style="margin-bottom:6px;color:#333;">${c.text}</div>
+      <select onchange="updateComplaintStatus('${id}', this.value)">
+        ${['قيد المراجعة','تم الرد','تم الحل','مغلقة'].map(s=>`<option value="${s}" ${c.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
+}
+
+async function updateComplaintStatus(id, status){
+  await db.collection('complaints').doc(id).update({status});
+  complaints[id].status = status;
+  const c = complaints[id];
+  notifyCustomer(c.customerEmail, 'تحديث بخصوص رسالتك', `النوع: ${c.type==='complaint'?'شكوى':'اقتراح'}\nالحالة الجديدة: ${status}`);
+  showToast('تم تحديث الحالة');
+}
+
+// ====== RENDER FUNCTIONS ======
+
+function renderAll(){
+  renderCatalog();
+  renderAdminProducts();
+  renderAdminOrders();
+  renderAdminCustomers();
+}
+
+function renderAbout(){
+  document.getElementById('aboutName').textContent = aboutData.name || 'اسم المؤسس';
+  document.getElementById('aboutYears').textContent = aboutData.years ? aboutData.years : '-';
+  document.getElementById('aboutBio').textContent = aboutData.bio || 'لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.';
+  document.getElementById('customerCount2').textContent = customers.length;
+  document.getElementById('statOrders2').textContent = Object.keys(orders).length;
+
+  const photoWrap = document.getElementById('aboutPhotoWrap');
+  if(aboutData.photo){
+    photoWrap.innerHTML = `<img src="${aboutData.photo}" alt="${aboutData.name||''}">`;
+  } else {
+    photoWrap.innerHTML = `<span>${(aboutData.name||'؟').charAt(0)}</span>`;
+  }
+
+  const nameInput = document.getElementById('aboutNameInput');
+  const yearsInput = document.getElementById('aboutYearsInput');
+  const bioInput = document.getElementById('aboutBioInput');
+  if(nameInput){
+    nameInput.value = aboutData.name || '';
+    yearsInput.value = aboutData.years || '';
+    bioInput.value = aboutData.bio || '';
+  }
+}
+
+async function saveAbout(){
+  const name = document.getElementById('aboutNameInput').value.trim();
+  const years = document.getElementById('aboutYearsInput').value;
+  const bio = document.getElementById('aboutBioInput').value.trim();
+  const photoFile = document.getElementById('aboutPhotoInput').files[0];
+  const btn = document.getElementById('saveAboutBtn');
+  btn.disabled = true;
+
+  const data = { name, years: years ? parseInt(years) : null, bio };
+
+  try{
+    if(photoFile){
+      const photoRef = storage.ref('about/' + Date.now() + '_' + photoFile.name);
+      await photoRef.put(photoFile);
+      data.photo = await photoRef.getDownloadURL();
+    } else if(aboutData.photo){
+      data.photo = aboutData.photo;
+    }
+    await db.collection('settings').doc('about').set(data);
+    aboutData = data;
+    renderAbout();
+    showToast('تم حفظ صفحة المؤسس بنجاح');
+  }catch(e){
+    showToast('حدث خطأ أثناء الحفظ، يرجى التأكد من إعداد Firebase Storage');
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+function renderMyShippingMark(){
+  const loginPrompt = document.getElementById('trackLoginPrompt');
+  const wrap = document.getElementById('myMarkBox');
+  if(!wrap || !loginPrompt) return;
+  if(currentUser && currentCustomerData && currentCustomerData.shippingMark){
+    loginPrompt.style.display = 'none';
+    wrap.style.display = 'block';
+    document.getElementById('myMarkDisplay').textContent = currentCustomerData.shippingMark;
+    const notice = document.getElementById('verifyNotice');
+    notice.style.display = (currentUser && !currentUser.emailVerified) ? 'block' : 'none';
+  } else {
+    wrap.style.display = 'none';
+    loginPrompt.style.display = 'block';
+  }
+}
+
+function renderProfile(){
+  if(!currentUser || !currentCustomerData) return;
+  document.getElementById('profileName').textContent = currentCustomerData.name || currentUser.email.split('@')[0];
+  document.getElementById('profileMark').textContent = currentCustomerData.shippingMark || '-';
+  document.getElementById('profileEmail').textContent = currentUser.email;
+  document.getElementById('profileDestination').textContent = currentCustomerData.destination || '-';
+  document.getElementById('profileVerified').textContent = currentUser.emailVerified ? '✅ ' + t('verified_yes') : '⏳ ' + t('verified_no');
+}
+
+function copyProfileMark(){
+  const mark = document.getElementById('profileMark').textContent;
+  if(!mark || mark === '-') return;
+  navigator.clipboard.writeText(mark).then(()=>{
+    showToast(t('mark_copied'));
+  }).catch(()=>{
+    showToast(t('copy_failed'));
+  });
+}
+
+function renderShipmentsResult(){
+  const box = document.getElementById('orderResult');
+  const orderMatches = Object.entries(myOrders);
+  const importMatches = Object.entries(myImportRequests);
+  const factoryMatches = Object.entries(myFactoryVisits);
+  if(orderMatches.length===0 && importMatches.length===0 && factoryMatches.length===0){
+    box.innerHTML = `<p>${t('no_shipments_yet')}</p>`;
+    box.classList.add('show');
+    return;
+  }
+  let html = '';
+  if(orderMatches.length){
+    html += `<h3 style="margin:10px 0;font-size:16px;">${t('orders_section')}</h3>`;
+    html += orderMatches.reverse().map(([id,order]) => `
+      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
+        <div><strong>${t('mark_label')}:</strong> ${order.shippingMark}</div>
+        <div><strong>${t('destination_label')}:</strong> ${order.destination||'-'}</div>
+        <div><strong>${t('date_label')}:</strong> ${order.date}</div>
+        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${order.status}</span></div>
+        ${order.carrierTracking ? `<div><strong>${t('carrier_tracking_label')}:</strong> ${order.carrierTracking}</div>` : ''}
+        <div><strong>${t('products_label')}:</strong></div>
+        <ul style="margin:6px 18px;">${order.items.map(i=>`<li>${i.name} × ${i.qty}</li>`).join('')}</ul>
+        <div><strong>${t('total_label')}:</strong> $${order.total}</div>
+      </div>`).join('');
+  }
+  if(importMatches.length){
+    html += `<h3 style="margin:14px 0 10px;font-size:16px;">${t('import_orders_section')}</h3>`;
+    html += importMatches.reverse().map(([id,r]) => {
+      const items = r.items || [{name:r.name, qty:r.qty}];
+      const itemsList = items.map(it=>`<li>${it.name || t('unnamed')} × ${it.qty}</li>`).join('');
+      return `
+      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
+        <div><strong>${t('products_label')}:</strong></div>
+        <ul style="margin:6px 18px;">${itemsList}</ul>
+        <div><strong>${t('destination_label')}:</strong> ${r.destination||'-'}</div>
+        <div><strong>${t('date_label')}:</strong> ${r.date}</div>
+        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${r.status}</span></div>
+        ${r.quotedPrice ? `<div><strong>${t('quoted_price_label')}:</strong> $${r.quotedPrice}</div>` : ''}
+      </div>`;
+    }).join('');
+  }
+  if(factoryMatches.length){
+    html += `<h3 style="margin:14px 0 10px;font-size:16px;">${t('factory_visits_section')}</h3>`;
+    html += factoryMatches.reverse().map(([id,f]) => `
+      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
+        <div><strong>${f.name}</strong> — ${f.specialty} — ${f.city}</div>
+        <div><strong>${t('date_label')}:</strong> ${f.date}</div>
+        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${f.status}</span></div>
+      </div>`).join('');
+  }
+  box.innerHTML = html;
+  box.classList.add('show');
+}
+
+async function showMyShipments(){
+  if(!currentUser || !currentCustomerData || !currentCustomerData.shippingMark){ showToast(t('please_login_first')); return; }
+  const overlay = document.getElementById('trackingAnim');
+  overlay.classList.add('show');
+  const marker = overlay.querySelector('.moving-marker');
+  marker.style.animation = 'none';
+  void marker.offsetWidth;
+  marker.style.animation = '';
+  await loadMyShipments();
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    renderShipmentsResult();
+  }, 2200);
+}
+
+function doLogout(){
+  auth.signOut();
+  showTab('home');
+  document.getElementById('userProfileBar').classList.remove('show');
+  showToast(t('logged_out_msg'));
+}
+
+// ====== CALCULATOR FUNCTIONS ======
+
+function calcCBM(){
+  const L = parseFloat(document.getElementById('cbmL').value);
+  const W = parseFloat(document.getElementById('cbmW').value);
+  const H = parseFloat(document.getElementById('cbmH').value);
+  const qty = parseFloat(document.getElementById('cbmQty').value) || 1;
+  const destCode = document.getElementById('cbmDestination').value;
+  const box = document.getElementById('cbmResult');
+  if(!L || !W || !H){
+    box.innerHTML = t('enter_dimensions');
+    box.classList.add('show');
+    return;
+  }
+  const perUnit = (L*W*H)/1000000;
+  const total = perUnit*qty;
+  const fill20 = ((total/28)*100).toFixed(1);
+  const fill40 = ((total/58)*100).toFixed(1);
+
+  const AED_TO_USD = 3.6725;
+  const seaRatesUsdPerCbm = { SD:200, SS:550, UAE: 800/AED_TO_USD, KSA: 800/AED_TO_USD };
+  let billedCbm = total;
+  if((destCode === 'UAE' || destCode === 'KSA') && billedCbm < 1) billedCbm = 1;
+  const cost = (billedCbm * seaRatesUsdPerCbm[destCode]).toFixed(0);
+
+  box.innerHTML = `
+    <div>${t('single_carton_volume')}: <strong>${perUnit.toFixed(4)} CBM</strong></div>
+    <div class="big">${t('total_label')}: ${total.toFixed(3)} CBM</div>
+    <div style="margin-top:8px;font-size:13px;color:#555;">
+      ${t('equivalent_to')} ${fill20}% ${t('of_20ft')}, ${t('or')} ${fill40}% ${t('of_40ft')}
+    </div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:15px;">
+      <div>${t('approx_sea_cost_to')} ${destName(destCode)}: <strong>$${cost}</strong></div>
+    </div>`;
+  box.classList.add('show');
+}
+
+function calcAirWeight(){
+  const L = parseFloat(document.getElementById('airL').value);
+  const W = parseFloat(document.getElementById('airW').value);
+  const H = parseFloat(document.getElementById('airH').value);
+  const actual = parseFloat(document.getElementById('airActual').value);
+  const destCode = document.getElementById('airDestination').value;
+  const box = document.getElementById('airResult');
+  if(!L || !W || !H || !actual){
+    box.innerHTML = t('enter_all_values');
+    box.classList.add('show');
+    return;
+  }
+  const volumetric = (L*W*H)/5000;
+  let chargeable = Math.max(volumetric, actual);
+  chargeable = Math.ceil(chargeable);
+  const basis = volumetric > actual ? t('volumetric_weight') : t('actual_weight');
+
+  const minWeight = destCode === 'KSA' ? 60 : 1;
+  const billedWeight = Math.max(chargeable, minWeight);
+  const costLow = (billedWeight*30).toFixed(0);
+  const costHigh = (billedWeight*35).toFixed(0);
+
+  box.innerHTML = `
+    <div>${t('volumetric_weight')}: <strong>${volumetric.toFixed(2)} ${t('kg')}</strong></div>
+    <div>${t('actual_weight')}: <strong>${actual.toFixed(2)} ${t('kg')}</strong></div>
+    <div class="big">${t('billed_weight')}: ${billedWeight} ${t('kg')}</div>
+    <div style="margin-top:6px;font-size:13px;color:#555;">${t('because_higher')} ${basis} ${t('is_higher_of_two')}${billedWeight>chargeable ? ' '+t('raised_to_minimum') : ''}</div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:15px;">
+      <div>${t('approx_air_cost_to')} ${destName(destCode)}: <strong>$${costLow} – $${costHigh}</strong></div>
+    </div>`;
+  box.classList.add('show');
+}
+
+function calcCurrency(){
+  const cny = parseFloat(document.getElementById('cnyAmount').value);
+  const box = document.getElementById('currencyResult');
+  if(!cny){ box.innerHTML = t('enter_valid_amount'); box.classList.add('show'); return; }
+  if(!currencyData.sdgRate){
+    box.innerHTML = t('rate_not_updated');
+    box.classList.add('show');
+    return;
+  }
+  const AED_PER_CNY = 1 / 1.50;
+  const USD_PER_CNY = 1 / 5.625;
+
+  const sdg = (cny * currencyData.sdgRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0});
+  const aed = (cny * AED_PER_CNY).toFixed(2);
+  const usd = (cny * USD_PER_CNY).toFixed(2);
+
+  box.innerHTML = `
+    <div class="big">¥${cny} ≈</div>
+    <div style="margin-top:6px;">$${usd} ${t('usd_currency')}</div>
+    <div>${aed} ${t('aed_currency')}</div>
+    <div>${sdg} ${t('sdg_currency')}</div>`;
+  box.classList.add('show');
+}
+
+async function saveSdgRate(){
+  const val = parseFloat(document.getElementById('sdgRateInput').value);
+  if(!val){ showToast('أدخل رقماً صحيحاً'); return; }
+  const data = { sdgRate: val, lastUpdated: new Date().toISOString() };
+  await db.collection('settings').doc('currency').set(data);
+  currencyData = data;
+  renderCurrencyMeta();
+  showToast('تم حفظ سعر الصرف');
+}
+
+function renderCurrencyMeta(){
+  const meta = document.getElementById('sdgRateMeta');
+  if(meta){
+    meta.textContent = currencyData.sdgRate
+      ? `آخر سعر محفوظ: ${currencyData.sdgRate} جنيه لكل يوان — آخر تحديث: ${new Date(currencyData.lastUpdated).toLocaleString('ar-EG')}`
+      : 'لم يُحفظ سعر بعد';
+  }
+  const publicMeta = document.getElementById('currencyMeta');
+  if(publicMeta){
+    publicMeta.textContent = currencyData.sdgRate
+      ? `آخر تحديث للسعر: ${new Date(currencyData.lastUpdated).toLocaleDateString('ar-EG')}`
+      : '';
+  }
+  const input = document.getElementById('sdgRateInput');
+  if(input && currencyData.sdgRate) input.value = currencyData.sdgRate;
+}
+
+// ====== FACTORY VISIT FUNCTIONS ======
+
+async function saveAgentCity(){
+  const val = document.getElementById('agentCityInput').value.trim();
+  if(!val){ showToast('أدخل اسم المدينة'); return; }
+  await db.collection('settings').doc('agentLocation').set({ currentCity: val });
+  agentLocationData = { currentCity: val };
+  updateFactoryCityLabel();
+  showToast('تم حفظ المدينة الحالية');
+}
+
+function updateFactoryCityLabel(){
+  const city = agentLocationData.currentCity ? `(${agentLocationData.currentCity})` : (currentLang==='ar' ? '(يُحدَّد لاحقاً)' : '(to be set)');
+  const p = document.getElementById('factoryTermsP');
+  if(!p) return;
+  if(currentLang === 'ar'){
+    p.innerHTML = `إذا كان المصنع داخل نفس المدينة التي يتواجد فيها المسؤول حالياً <strong id="factoryCurrentCityLabel">${city}</strong>، فتكلفة الزيارة <strong>15$</strong> تشمل: زيارة ميدانية، تفاوض مع المصنع، إتمام عملية الشراء، وفحص البضاعة والمصنع.<br><br>أما إذا كان المصنع في مدينة أخرى، فتكلفة التنقل والسفر تكون على العميل، وتُحدَّد بعد التنسيق المباشر.`;
+  } else {
+    p.innerHTML = `If the factory is in the same city the agent is currently based in <strong id="factoryCurrentCityLabel">${city}</strong>, the visit fee is <strong>$15</strong>, covering: an on-site visit, negotiation with the factory, completing the purchase, and inspecting the goods and factory.<br><br>If the factory is in a different city, travel costs are covered by the customer and will be arranged directly.`;
+  }
+}
+
+function checkFactoryCity(){
+  const city = document.getElementById('factoryCity').value.trim().toLowerCase();
+  const note = document.getElementById('factoryCostNote');
+  if(!city || !agentLocationData.currentCity){ note.style.display='none'; return; }
+  const sameCity = city.includes(agentLocationData.currentCity.toLowerCase()) || agentLocationData.currentCity.toLowerCase().includes(city);
+  note.style.display = 'block';
+  note.textContent = sameCity
+    ? '✅ المصنع في نفس مدينة المسؤول — التكلفة المتوقعة: 15$ شاملة الزيارة والتفاوض والفحص'
+    : '⚠️ المصنع في مدينة مختلفة — تكلفة السفر ستكون على العميل، وسيتم التنسيق بعد إرسال الطلب';
+}
+
+async function submitFactoryVisit(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_request')); return; }
+  const link = document.getElementById('factoryLink').value.trim();
+  const name = document.getElementById('factoryName').value.trim();
+  const specialty = document.getElementById('factorySpecialty').value.trim();
+  const contact = document.getElementById('factoryContact').value.trim();
+  const city = document.getElementById('factoryCity').value.trim();
+  const notes = document.getElementById('factoryNotes').value.trim();
+  if(!name || !specialty || !city){ showToast(t('fill_factory_required')); return; }
+
+  const sameCity = agentLocationData.currentCity && city.toLowerCase().includes(agentLocationData.currentCity.toLowerCase());
+  const costNote = sameCity ? '15$ (نفس مدينة المسؤول)' : 'تكلفة السفر على العميل (مدينة مختلفة)';
+  const mark = currentCustomerData?.shippingMark || '';
+
+  const reqData = {
+    link, name, specialty, contact, city, notes,
+    costNote,
+    customerEmail: currentUser.email,
+    shippingMark: mark,
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10)
+  };
+  await db.collection('factoryVisitRequests').add(reqData);
+  notifyAdmin('طلب زيارة مصنع جديد', `مارك الشحن: ${mark}\nاسم المصنع: ${name}\nالمدينة: ${city}\nالتكلفة المتوقعة: ${costNote}`);
+
+  const msg = `مرحباً، أرغب في طلب زيارة مصنع.\nمارك الشحن الخاص بي: ${mark}\nاسم المصنع: ${name}\nالتخصص: ${specialty}\nالمدينة: ${city}\nرابط المصنع: ${link || '-'}\nتواصل المصنع: ${contact || '-'}\nملاحظات: ${notes || '-'}\nالتكلفة المتوقعة: ${costNote}`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+
+  document.getElementById('factoryLink').value = '';
+  document.getElementById('factoryName').value = '';
+  document.getElementById('factorySpecialty').value = '';
+  document.getElementById('factoryContact').value = '';
+  document.getElementById('factoryCity').value = '';
+  document.getElementById('factoryNotes').value = '';
+  document.getElementById('factoryCostNote').style.display = 'none';
+  showToast(t('visit_request_sent'));
+}
+
+// ====== IMPORT ORDER FUNCTIONS ======
+
+function addImportRow(){
+  importRowCount++;
+  const id = importRowCount;
+  const wrap = document.getElementById('importItemsList');
+  const row = document.createElement('div');
+  row.className = 'import-row';
+  row.id = 'importRow_' + id;
+  row.innerHTML = `
+    <input placeholder="رابط المنتج" class="import-link">
+    <input placeholder="اسم مختصر (اختياري)" class="import-name">
+    <input type="number" placeholder="الكمية" class="import-qty qty-input">
+    <button class="remove-row" onclick="removeImportRow(${id})" title="حذف">✕</button>
+  `;
+  wrap.appendChild(row);
+}
+
+function removeImportRow(id){
+  const row = document.getElementById('importRow_' + id);
+  if(row) row.remove();
+}
+
+async function submitImportRequest(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_request')); return; }
+  const rows = document.querySelectorAll('#importItemsList .import-row');
+  const items = [];
+  rows.forEach(row=>{
+    const link = row.querySelector('.import-link').value.trim();
+    const name = row.querySelector('.import-name').value.trim();
+    const qty = row.querySelector('.import-qty').value.trim();
+    if(link && qty) items.push({link, name, qty});
+  });
+  const notes = document.getElementById('importNotes').value.trim();
+  const destCode = document.getElementById('importDestination').value;
+  if(items.length===0){ showToast(t('add_one_item')); return; }
+
+  const mark = currentCustomerData?.shippingMark || '';
+  const reqData = {
+    items, notes,
+    destination: destName(destCode),
+    customerEmail: currentUser.email,
+    shippingMark: mark,
+    status: 'قيد المراجعة',
+    quotedPrice: '',
+    date: new Date().toISOString().slice(0,10)
+  };
+  await db.collection('importRequests').add(reqData);
+  notifyAdmin('طلب شراء جديد من الصين', `مارك الشحن: ${mark}\nعدد المنتجات: ${items.length}\nالوجهة: ${reqData.destination}`);
+
+  const itemsText = items.map((it,i)=>`${i+1}. ${it.name || 'بدون اسم'} — الكمية: ${it.qty}\nالرابط: ${it.link}`).join('\n');
+  const msg = `مرحباً، أرغب في طلب عرض سعر لشراء منتجات من الصين.\nمارك الشحن الخاص بي: ${mark}\n${itemsText}\nالوجهة: ${reqData.destination}\nملاحظات: ${notes || '-'}`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+
+  document.getElementById('importItemsList').innerHTML = '';
+  addImportRow();
+  document.getElementById('importNotes').value = '';
+  showToast(t('import_request_sent'));
+}
+
+// ====== COMMUNITY FUNCTIONS ======
+
+async function submitPost(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const text = document.getElementById('postInput').value.trim();
+  if(!text){ showToast(t('write_post_first')); return; }
+  await db.collection('communityPosts').add({
+    authorEmail: currentUser.email,
+    authorName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    text: text,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  document.getElementById('postInput').value = '';
+  showToast(t('post_published'));
+  loadCommunityFeed(false);
+  loadActivityFeed();
+}
+
+async function loadCommunityFeed(loadMore){
+  const wrap = document.getElementById('communityFeed');
+  let query = db.collection('communityPosts').orderBy('createdAt','desc').limit(15);
+  if(loadMore && lastPostDoc) query = query.startAfter(lastPostDoc);
+  if(!loadMore){ communityPosts = []; lastPostDoc = null; }
+
+  const snap = await query.get();
+  if(!snap.empty) lastPostDoc = snap.docs[snap.docs.length-1];
+  const newPosts = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  communityPosts = loadMore ? communityPosts.concat(newPosts) : newPosts;
+
+  document.getElementById('loadMorePostsBtn').style.display = snap.docs.length === 15 ? 'block' : 'none';
+
+  if(communityPosts.length === 0){
+    wrap.innerHTML = `<div class="empty">${t('no_posts_yet')}</div>`;
+    return;
+  }
+
+  wrap.innerHTML = communityPosts.map(p => {
+    const dateStr = p.createdAt && p.createdAt.toDate ? p.createdAt.toDate().toLocaleDateString(currentLang==='ar'?'ar-EG':'en-US') : '';
+    const canDelete = currentUser && (currentUser.email === ADMIN_EMAIL || currentUser.email === p.authorEmail);
+    const isAdminPost = p.authorEmail === ADMIN_EMAIL;
+    return `<div class="post-card" id="post_${p.id}" style="${isAdminPost ? 'border:2px solid var(--gold);' : ''}">
+      <div class="post-header">
+        <span class="post-author">${isAdminPost ? '👑 ' + t('admin_badge') : p.authorName}</span>
+        <span class="post-date">${dateStr}</span>
+      </div>
+      <div class="post-text">${p.text}</div>
+      <div class="post-actions">
+        <button class="like-btn" id="likeBtn_${p.id}" onclick="toggleLike('${p.id}')">🤍 <span id="likeCount_${p.id}">0</span></button>
+        <button class="comment-toggle-btn" onclick="toggleComments('${p.id}')">💬 <span id="commentCount_${p.id}">0</span> ${t('comments_label')}</button>
+        ${canDelete ? `<button class="post-delete-btn" onclick="deletePost('${p.id}')">🗑️</button>` : ''}
+      </div>
+      <div class="comments-wrap" id="commentsWrap_${p.id}">
+        <div id="commentsList_${p.id}"></div>
+        <div class="comment-form">
+          <input id="commentInput_${p.id}" placeholder="${t('comment_ph')}">
+          <button onclick="submitComment('${p.id}')">${t('send_btn')}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  communityPosts.forEach(p => {
+    refreshLikeState(p.id);
+    refreshCommentCount(p.id);
+  });
+}
+
+async function refreshLikeState(postId){
+  const countSnap = await db.collection('communityPosts').doc(postId).collection('likes').count().get();
+  const countEl = document.getElementById('likeCount_'+postId);
+  if(countEl) countEl.textContent = countSnap.data().count;
+
+  if(currentUser){
+    const myLike = await db.collection('communityPosts').doc(postId).collection('likes').doc(currentUser.email).get();
+    const btn = document.getElementById('likeBtn_'+postId);
+    if(btn){
+      if(myLike.exists){
+        btn.classList.add('liked');
+        btn.innerHTML = `❤️ <span id="likeCount_${postId}">${countSnap.data().count}</span>`;
+        likedPostIds.add(postId);
+      } else {
+        likedPostIds.delete(postId);
+      }
+    }
+  }
+}
+
+async function refreshCommentCount(postId){
+  const countSnap = await db.collection('communityPosts').doc(postId).collection('comments').count().get();
+  const el = document.getElementById('commentCount_'+postId);
+  if(el) el.textContent = countSnap.data().count;
+}
+
+async function toggleLike(postId){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const likeRef = db.collection('communityPosts').doc(postId).collection('likes').doc(currentUser.email);
+  const doc = await likeRef.get();
+  if(doc.exists){
+    await likeRef.delete();
+  } else {
+    await likeRef.set({ date: new Date().toISOString() });
+  }
+  refreshLikeState(postId);
+}
+
+function toggleComments(postId){
+  const wrap = document.getElementById('commentsWrap_'+postId);
+  wrap.classList.toggle('show');
+  if(wrap.classList.contains('show')) loadComments(postId);
+}
+
+async function loadComments(postId){
+  const list = document.getElementById('commentsList_'+postId);
+  list.innerHTML = `<div style="font-size:12px;color:#999;">${t('loading')}</div>`;
+  const snap = await db.collection('communityPosts').doc(postId).collection('comments').orderBy('createdAt','asc').limit(50).get();
+  if(snap.empty){ list.innerHTML = `<div style="font-size:12.5px;color:#999;">${t('no_comments_yet')}</div>`; return; }
+  list.innerHTML = snap.docs.map(d => {
+    const c = d.data();
+    const canDelete = currentUser && (currentUser.email === ADMIN_EMAIL || currentUser.email === c.authorEmail);
+    const isAdminComment = c.authorEmail === ADMIN_EMAIL;
+    return `<div class="comment-item" style="${isAdminComment ? 'background:var(--ink);color:var(--paper);' : ''}">
+      <span class="comment-author" style="${isAdminComment ? 'color:var(--gold);' : ''}">${isAdminComment ? '👑 ' + t('admin_badge') : c.authorName}:</span> ${c.text}
+      ${canDelete ? `<button class="post-delete-btn" style="margin-right:6px;" onclick="deleteComment('${postId}','${d.id}')">🗑️</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function submitComment(postId){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const input = document.getElementById('commentInput_'+postId);
+  const text = input.value.trim();
+  if(!text) return;
+  await db.collection('communityPosts').doc(postId).collection('comments').add({
+    authorEmail: currentUser.email,
+    authorName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    text: text,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  input.value = '';
+  loadComments(postId);
+  refreshCommentCount(postId);
+}
+
+async function deletePost(postId){
+  await db.collection('communityPosts').doc(postId).delete();
+  loadCommunityFeed(false);
+}
+
+async function deleteComment(postId, commentId){
+  await db.collection('communityPosts').doc(postId).collection('comments').doc(commentId).delete();
+  loadComments(postId);
+  refreshCommentCount(postId);
+}
+
+// ====== RATINGS FUNCTIONS ======
+
+document.addEventListener('click', function(e){
+  const star = e.target.closest('.star-pick');
+  if(star && star.closest('#starPicker')){
+    selectedStars = parseInt(star.getAttribute('data-value'));
+    document.querySelectorAll('#starPicker .star-pick').forEach(s=>{
+      const v = parseInt(s.getAttribute('data-value'));
+      s.textContent = v <= selectedStars ? '★' : '☆';
+      s.classList.toggle('active', v <= selectedStars);
+    });
+  }
+});
+
+async function submitRating(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  if(selectedStars === 0){ showToast(t('select_stars_first')); return; }
+  const comment = document.getElementById('ratingComment').value.trim();
+  await db.collection('ratings').doc(currentUser.email).set({
+    rating: selectedStars,
+    comment: comment,
+    customerName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    date: new Date().toISOString().slice(0,10),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  showToast(t('rating_submitted'));
+  loadRatings();
+  loadActivityFeed();
+}
+
+async function loadRatings(){
+  const snap = await db.collection('ratings').orderBy('date','desc').limit(50).get();
+  allRatings = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  renderRatingsSummary();
+  renderReviewsList();
+}
+
+function starsToText(n){
+  return '★'.repeat(n) + '☆'.repeat(5-n);
+}
+
+function renderRatingsSummary(){
+  const avgEl = document.getElementById('ratingsAvg');
+  const starsEl = document.getElementById('ratingsAvgStars');
+  const countEl = document.getElementById('ratingsCount');
+  if(allRatings.length === 0){
+    avgEl.textContent = '-';
+    starsEl.textContent = '☆☆☆☆☆';
+    countEl.textContent = t('no_ratings_yet');
+    return;
+  }
+  const avg = allRatings.reduce((sum,r)=>sum+r.rating,0) / allRatings.length;
+  avgEl.textContent = avg.toFixed(1);
+  starsEl.textContent = starsToText(Math.round(avg));
+  countEl.textContent = `${allRatings.length} ${t('ratings_count_label')}`;
+}
+
+function renderReviewsList(){
+  const wrap = document.getElementById('reviewsList');
+  const withComments = allRatings.filter(r => r.comment);
+  if(withComments.length === 0){
+    wrap.innerHTML = `<div class="empty">${t('no_reviews_yet')}</div>`;
+    return;
+  }
+  wrap.innerHTML = withComments.map(r => {
+    const canDelete = currentUser && (currentUser.email === ADMIN_EMAIL || currentUser.email === r.id);
+    return `<div class="review-item">
+      <div class="review-header">
+        <span class="review-name">${r.customerName}</span>
+        <span class="review-date">${r.date}</span>
+      </div>
+      <div class="review-stars">${starsToText(r.rating)}</div>
+      <div class="review-comment">${r.comment}</div>
+      ${canDelete ? `<button class="post-delete-btn" onclick="deleteRating('${r.id}')">🗑️</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function deleteRating(id){
+  await db.collection('ratings').doc(id).delete();
+  loadRatings();
+}
+
+// ====== QUESTIONS FUNCTIONS ======
+
+async function submitQuestion(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const text = document.getElementById('questionInput').value.trim();
+  if(!text){ showToast(t('write_question_first')); return; }
+  await db.collection('questions').add({
+    question: text,
+    answer: null,
+    askedBy: currentUser.email,
+    authorName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  notifyAdmin('سؤال جديد من عميل', `من: ${currentUser.email}\nالسؤال: ${text}`);
+  document.getElementById('questionInput').value = '';
+  showToast(t('question_sent'));
+  loadActivityFeed();
+}
+
+function renderQaList(){
+  const wrap = document.getElementById('qaList');
+  const ids = Object.keys(questions).reverse();
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${t('no_questions')}</div>`; return; }
+  wrap.innerHTML = ids.map(id=>{
+    const q = questions[id];
+    const askerName = q.authorName || t('unnamed_customer');
+    return `<div class="qa-item">
+      <div class="qa-asker">👤 ${askerName}</div>
+      <div class="qa-q">${t('q_prefix')} ${q.question}</div>
+      <div class="qa-meta">${q.date}</div>
+      ${q.answer ? `<div class="qa-a">${t('a_prefix')} ${q.answer}</div>` : `<div class="qa-pending">${t('awaiting_reply')}</div>`}
+    </div>`;
+  }).join('');
+}
+
+function renderAdminQa(search){
+  const wrap = document.getElementById('adminQaList');
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(questions);
+  if(term){
+    ids = ids.filter(id=>{
+      const q = questions[id];
+      return (q.question||'').toLowerCase().includes(term) ||
+             (q.askedBy||'').toLowerCase().includes(term);
+    });
+  }
+  ids = ids.reverse();
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد أسئلة'}</div>`; return; }
+  wrap.innerHTML = ids.map(id=>{
+    const q = questions[id];
+    return `<div class="admin-qa-item">
+      <div><strong>${q.askedBy}</strong> — ${q.date}</div>
+      <div style="margin:6px 0;">${q.question}</div>
+      <textarea id="ans_${id}" placeholder="اكتب الرد هنا...">${q.answer||''}</textarea>
+      <button class="btn btn-gold" onclick="answerQuestion('${id}')">حفظ الرد</button>
+    </div>`;
+  }).join('');
+}
+
+async function answerQuestion(id){
+  const text = document.getElementById('ans_'+id).value.trim();
+  if(!text){ showToast('يرجى كتابة الرد قبل الحفظ'); return; }
+  await db.collection('questions').doc(id).update({ answer: text, status: 'تم الرد' });
+  const q = questions[id];
+  if(q) notifyCustomer(q.askedBy, 'تم الرد على سؤالك', `سؤالك: ${q.question}\n\nالرد: ${text}`);
+  showToast('تم حفظ الرد بنجاح');
+}
+
+// ====== COMPLAINTS FUNCTIONS ======
+
+async function submitComplaint(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const type = document.getElementById('complaintType').value;
+  const text = document.getElementById('complaintText').value.trim();
+  if(!text){ showToast(t('write_complaint_first')); return; }
+  await db.collection('complaints').add({
+    type: type,
+    text: text,
+    customerEmail: currentUser.email,
+    shippingMark: (currentCustomerData && currentCustomerData.shippingMark) || '',
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10)
+  });
+  notifyAdmin(type==='complaint' ? 'شكوى جديدة من عميل' : 'اقتراح جديد من عميل', `من: ${currentUser.email}\n${text}`);
+  document.getElementById('complaintText').value = '';
+  showToast(t('complaint_sent'));
+}
+
+// ====== ACTIVITY FEED FUNCTIONS ======
+
+async function loadActivityFeed(){
+  const wrap = document.getElementById('activityList');
+  if(!wrap) return;
+
+  const [postsSnap, qSnap, ratingsSnap] = await Promise.all([
+    db.collection('communityPosts').orderBy('createdAt','desc').limit(15).get(),
+    db.collection('questions').orderBy('createdAt','desc').limit(15).get(),
+    db.collection('ratings').orderBy('createdAt','desc').limit(15).get()
+  ]);
+
+  let items = [];
+  postsSnap.docs.forEach(d=>{
+    const p = d.data();
+    if(!p.createdAt) return;
+    items.push({ type:'post', name:p.authorName, text:p.text, ts:p.createdAt.toMillis(), isAdmin: p.authorEmail === ADMIN_EMAIL });
+  });
+  qSnap.docs.forEach(d=>{
+    const q = d.data();
+    if(!q.createdAt) return;
+    items.push({ type:'question', name:q.authorName || t('unnamed_customer'), text:q.question, ts:q.createdAt.toMillis() });
+  });
+  ratingsSnap.docs.forEach(d=>{
+    const r = d.data();
+    if(!r.createdAt) return;
+    items.push({ type:'rating', name:r.customerName, text:r.comment, rating:r.rating, ts:r.createdAt.toMillis() });
+  });
+
+  items.sort((a,b)=> b.ts - a.ts);
+  items = items.slice(0,25);
+
+  if(items.length===0){
+    wrap.innerHTML = `<div class="empty">${t('no_activity_yet')}</div>`;
+    return;
+  }
+
+  wrap.innerHTML = items.map(it=>{
+    const timeStr = new Date(it.ts).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US');
+    let icon, title, snippet, targetTab;
+    if(it.type === 'post'){
+      icon = '📝';
+      title = it.isAdmin ? `👑 ${t('admin_badge')} ${t('activity_posted')}` : `${it.name} ${t('activity_posted')}`;
+      snippet = it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text;
+      targetTab = 'community';
+    } else if(it.type === 'question'){
+      icon = '❓';
+      title = `${it.name} ${t('activity_asked')}`;
+      snippet = it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text;
+      targetTab = 'questions';
+    } else {
+      icon = '⭐';
+      title = `${it.name} ${t('activity_rated')} ${starsToText(it.rating)}`;
+      snippet = it.text ? (it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text) : '';
+      targetTab = 'ratings';
+    }
+    return `<div class="activity-item" onclick="showTab('${targetTab}')">
+      <div class="activity-icon">${icon}</div>
+      <div class="activity-body">
+        <div class="activity-title">${title}</div>
+        ${snippet ? `<div class="activity-snippet">${snippet}</div>` : ''}
+        <div class="activity-time">${timeStr}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ====== INITIALIZATION ======
+
+document.addEventListener('click', function(e){
+  if(e.target.closest('button, .add, .tiny-btn')){
+    showCraneLoader();
+  }
+});
+
+// تحميل البيانات
+loadData();
+loadCommunityFeed(false);
+loadRatings();
+loadActivityFeed();
+addImportRow();
+
+console.log('✅ AlHossain - تم تحميل الموقع بنجاح');
+console.log('📱 responsive mode - جاهز للجوال');
+console.log('👤 نظام الدخول/الخروج مع بروفايل');
+console.log('🔒 أزرار الحذف (X الأحمر) تم إخفاؤها');
+</script>
 </body>
 </html>

@@ -354,16 +354,15 @@
   /* CRANE LOADER */
   #craneLoader{
     position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-14px);
-    background:var(--ink); border-radius:14px; padding:8px 16px 6px;
+    background:var(--ink); border-radius:12px; padding:7px 10px;
     display:flex; align-items:center; gap:8px; z-index:100;
     opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
     box-shadow:0 6px 18px rgba(10,27,43,.35);
   }
   #craneLoader.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-  #craneLoader .txt{ color:var(--paper); font-size:12px; font-weight:700; }
-  .dots-grid{ display:grid; grid-template-columns:repeat(3, 8px); gap:5px; }
+  .dots-grid{ display:grid; grid-template-columns:repeat(3, 5px); gap:3px; }
   .dots-grid span{
-    width:8px; height:8px; border-radius:50%;
+    width:5px; height:5px; border-radius:50%;
     background:var(--paper); opacity:.35;
     animation:dotPulse 1.1s ease-in-out infinite;
   }
@@ -479,7 +478,12 @@
 
   /* FAQ SECTION */
   .faq-heading{ margin:32px 0 14px; padding-top:20px; border-top:2px dashed var(--line); }
-  .faq-list{ display:flex; flex-direction:column; gap:10px; }
+  .faq-list{
+    display:flex; flex-direction:column; gap:12px;
+    background:linear-gradient(135deg, #14304A 0%, #B4552D 45%, #E0A518 100%);
+    border-radius:24px; padding:18px 14px;
+    position:relative; overflow:hidden;
+  }
   .faq-envelope{
     background:rgba(255,255,255,0.35);
     backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%);
@@ -530,6 +534,12 @@
   }
   .faq-nav-btn:disabled{ opacity:0.35; cursor:not-allowed; }
   .faq-modal-counter{ font-size:12.5px; color:var(--ink-dark); font-weight:700; }
+  .faq-close-bar{
+    display:block; width:100%; margin-top:16px; padding:11px;
+    background:rgba(255,255,255,0.25); backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.4); border-radius:999px;
+    color:var(--ink-dark); font-family:'Tajawal'; font-weight:700; font-size:13.5px; cursor:pointer;
+  }
 
   /* PROFILE */
   .profile-card{ background:var(--ink); color:var(--paper); border-radius:16px; padding:22px; text-align:center; margin-bottom:20px; }
@@ -902,7 +912,6 @@
 
   <div class="faq-modal-overlay" id="faqModalOverlay">
     <div class="faq-modal" id="faqModalCard">
-      <button class="auth-close" onclick="closeFaqModal()" style="position:absolute;left:14px;top:12px;">✕</button>
       <div class="faq-modal-icon">✉️</div>
       <h3 class="faq-modal-q" id="faqModalQ"></h3>
       <p class="faq-modal-a" id="faqModalA"></p>
@@ -911,6 +920,7 @@
         <span class="faq-modal-counter" id="faqCounter"></span>
         <button class="faq-nav-btn" id="faqNextBtn" onclick="navigateFaq(1)"><span data-i18n="faq_next">التالي</span> ▶</button>
       </div>
+      <button class="faq-close-bar" onclick="closeFaqModal()" data-i18n="faq_close">✕ إغلاق</button>
     </div>
   </div>
 
@@ -1274,7 +1284,6 @@
     <span></span><span></span><span></span>
     <span></span><span></span><span></span>
   </div>
-  <span class="txt">جارٍ التحميل...</span>
 </div>
 
 <a id="waFloat" href="https://wa.link/noa4ss" target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">
@@ -1762,6 +1771,7 @@ const translations = {
   faq_title: {ar:'الأسئلة الشائعة', en:'Frequently Asked Questions'},
   faq_prev: {ar:'السابق', en:'Previous'},
   faq_next: {ar:'التالي', en:'Next'},
+  faq_close: {ar:'✕ إغلاق', en:'✕ Close'},
   activity_title: {ar:'آخر التحركات في الموقع', en:'Latest Site Activity'},
   activity_desc: {ar:'تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.', en:'Follow the latest posts, questions, and ratings from our real customers.'},
   no_activity_yet: {ar:'لا توجد تحركات بعد', en:'No activity yet'},
@@ -3711,26 +3721,26 @@ async function submitQuestion(){
 
 // ====== الأسئلة الشائعة ======
 const faqData = [
-  { q:{ar:'إزاي أقدر أطلب منتج من الصين من خلالكم؟', en:'How can I order a product from China through you?'},
-    a:{ar:'تقدر تستخدم صفحة "اطلب من الصين"، تحط رابط المنتج من تاوباو أو 1688 أو علي بابا، والكمية المطلوبة، وهنبعتلك عرض سعر شامل الشراء والشحن خلال 24 ساعة.', en:'Use the "Order from China" page, add the product link from Taobao, 1688, or Alibaba along with the quantity, and we\'ll send you a quote covering purchase and shipping within 24 hours.'} },
-  { q:{ar:'إيه هي الـ Shipping Mark وليه لازم أستخدمها؟', en:'What is the Shipping Mark and why do I need it?'},
-    a:{ar:'هي رمز تعريفي ثابت بيتخصص لك عند التسجيل، بتكتبه على كل طرد تشتريه من أي موقع صيني عشان المستودع يعرف يربط البضاعة بيك فور وصولها، ويقلل احتمال ضياعها أو اختلاطها ببضاعة عميل تاني.', en:'It\'s a permanent identifier assigned to you at registration. Write it on every parcel you buy from any Chinese site so the warehouse can link the goods to you upon arrival, reducing the chance of loss or mix-ups.'} },
-  { q:{ar:'كام المدة المتوقعة لوصول الشحنة؟', en:'How long does shipping usually take?'},
-    a:{ar:'بتختلف حسب نوع الشحن (بحري أو جوي) والوجهة. الشحن البحري أرخص لكن أبطأ، والجوي أسرع لكن أغلى. المدة الدقيقة بنأكدها بعد تأكيد الطلب حسب الظروف اللوجستية وقتها.', en:'It depends on the shipping type (sea or air) and destination. Sea freight is cheaper but slower, air freight is faster but pricier. We confirm the exact duration after your order based on logistics at the time.'} },
-  { q:{ar:'هل فيه حد أدنى للكمية (MOQ)؟', en:'Is there a Minimum Order Quantity (MOQ)?'},
-    a:{ar:'بيعتمد على المصنع أو المورد نفسه، مش علينا. بعض الموردين بيقبلوا كمية صغيرة، وبعضهم بيحدد حد أدنى (500 قطعة مثلاً). نقدر نساعدك تتفاوض معاه لو الكمية أكبر من احتياجك.', en:'It depends on the factory or supplier, not us. Some accept small quantities, others set a minimum (e.g. 500 pieces). We can help you negotiate if the MOQ exceeds your needs.'} },
-  { q:{ar:'إزاي أدفع مقابل طلبي؟', en:'How do I pay for my order?'},
-    a:{ar:'بنتفق على طريقة الدفع وشروطه (دفعة مقدمة أو كاملة) بشكل مباشر عبر واتساب بعد ما نأكد السعر النهائي، وده بيختلف حسب حجم الطلب ونوعه.', en:'We agree on the payment method and terms (deposit or full payment) directly via WhatsApp once the final price is confirmed, depending on the order size and type.'} },
-  { q:{ar:'ممكن أعاين المصنع أو المنتج قبل ما أشتري؟', en:'Can I inspect the factory or product before buying?'},
-    a:{ar:'أيوه، من صفحة "زيارة مصنع" تقدر تطلب زيارة ميدانية لأي مصنع لقيته على علي بابا أو غيره، بتكلفة 15$ لو كان في نفس مدينتنا الحالية، أو تكلفة سفر لو في مدينة تانية.', en:'Yes, from the "Factory Visit" page you can request an on-site visit to any factory you found on Alibaba or elsewhere, for $15 if it\'s in our current city, or travel cost if in another city.'} },
-  { q:{ar:'إيه اللي بيحصل لو المنتج وصل فيه عيب أو تلف؟', en:'What happens if the product arrives defective or damaged?'},
-    a:{ar:'لو العيب من التصنيع، المسؤولية بتكون على المورد الأصلي. لو التلف حصل أثناء الشحن، المسؤولية بتكون على شركة الشحن الناقلة. إحنا كوسيط بنساعدك تتابع أي مطالبة تعويض مع الطرف المسؤول الفعلي.', en:'If it\'s a manufacturing defect, the original supplier is responsible. If damage occurred during shipping, the carrier is responsible. As an intermediary, we help you pursue any compensation claim with the actual responsible party.'} },
-  { q:{ar:'إزاي أتابع حالة طلبي؟', en:'How do I track my order status?'},
-    a:{ar:'من صفحة "تتبع طلبي" بعد تسجيل الدخول، هتلاقي كل طلباتك (شراء، استيراد، زيارات مصانع) بحالتها المحدثة أول بأول.', en:'From the "Track My Order" page after logging in, you\'ll find all your orders (purchases, imports, factory visits) with their updated status.'} },
+  { q:{ar:'كيف يمكنني طلب منتج من الصين من خلالكم؟', en:'How can I order a product from China through you?'},
+    a:{ar:'يمكنك استخدام صفحة "اطلب من الصين"، وإضافة رابط المنتج من تاوباو أو 1688 أو علي بابا مع الكمية المطلوبة، وسنرسل إليك عرض سعر شامل الشراء والشحن خلال 24 ساعة.', en:'Use the "Order from China" page, add the product link from Taobao, 1688, or Alibaba along with the quantity, and we\'ll send you a quote covering purchase and shipping within 24 hours.'} },
+  { q:{ar:'ما هي الـ Shipping Mark ولماذا يجب استخدامها؟', en:'What is the Shipping Mark and why do I need it?'},
+    a:{ar:'هي رمز تعريفي ثابت يُخصَّص لك عند التسجيل، تكتبه على كل طرد تشتريه من أي موقع صيني حتى يتمكن المستودع من ربط البضاعة بك فور وصولها، مما يقلل احتمال ضياعها أو اختلاطها ببضاعة عميل آخر.', en:'It\'s a permanent identifier assigned to you at registration. Write it on every parcel you buy from any Chinese site so the warehouse can link the goods to you upon arrival, reducing the chance of loss or mix-ups.'} },
+  { q:{ar:'كم المدة المتوقعة لوصول الشحنة؟', en:'How long does shipping usually take?'},
+    a:{ar:'تختلف المدة حسب نوع الشحن (بحري أو جوي) والوجهة. الشحن البحري أقل تكلفة لكنه أبطأ، بينما الجوي أسرع لكنه أعلى تكلفة. نؤكد المدة الدقيقة بعد تأكيد الطلب وفق الظروف اللوجستية حينها.', en:'It depends on the shipping type (sea or air) and destination. Sea freight is cheaper but slower, air freight is faster but pricier. We confirm the exact duration after your order based on logistics at the time.'} },
+  { q:{ar:'هل يوجد حد أدنى لكمية الطلب (MOQ)؟', en:'Is there a Minimum Order Quantity (MOQ)?'},
+    a:{ar:'يعتمد ذلك على المصنع أو المورد نفسه، وليس علينا. بعض الموردين يقبلون كميات صغيرة، بينما يحدد آخرون حداً أدنى (500 قطعة مثلاً). يمكننا مساعدتك في التفاوض إذا كانت الكمية أكبر من احتياجك.', en:'It depends on the factory or supplier, not us. Some accept small quantities, others set a minimum (e.g. 500 pieces). We can help you negotiate if the MOQ exceeds your needs.'} },
+  { q:{ar:'كيف أدفع مقابل طلبي؟', en:'How do I pay for my order?'},
+    a:{ar:'يتم الاتفاق على طريقة الدفع وشروطه (دفعة مقدَّمة أو كاملة) مباشرة عبر واتساب بعد تأكيد السعر النهائي، ويختلف ذلك حسب حجم الطلب ونوعه.', en:'We agree on the payment method and terms (deposit or full payment) directly via WhatsApp once the final price is confirmed, depending on the order size and type.'} },
+  { q:{ar:'هل يمكنني معاينة المصنع أو المنتج قبل الشراء؟', en:'Can I inspect the factory or product before buying?'},
+    a:{ar:'نعم، من خلال صفحة "زيارة مصنع" يمكنك طلب زيارة ميدانية لأي مصنع وجدته على علي بابا أو غيره، بتكلفة 15$ إذا كان في نفس مدينتنا الحالية، أو تكلفة سفر إذا كان في مدينة أخرى.', en:'Yes, from the "Factory Visit" page you can request an on-site visit to any factory you found on Alibaba or elsewhere, for $15 if it\'s in our current city, or travel cost if in another city.'} },
+  { q:{ar:'ماذا يحدث إذا وصل المنتج به عيب أو تلف؟', en:'What happens if the product arrives defective or damaged?'},
+    a:{ar:'إذا كان العيب ناتجاً عن التصنيع، تكون المسؤولية على المورد الأصلي. أما إذا حدث التلف أثناء الشحن، فتكون المسؤولية على شركة الشحن الناقلة. ونحن كوسيط نساعدك في متابعة أي مطالبة تعويض مع الطرف المسؤول الفعلي.', en:'If it\'s a manufacturing defect, the original supplier is responsible. If damage occurred during shipping, the carrier is responsible. As an intermediary, we help you pursue any compensation claim with the actual responsible party.'} },
+  { q:{ar:'كيف أتابع حالة طلبي؟', en:'How do I track my order status?'},
+    a:{ar:'من خلال صفحة "تتبع طلبي" بعد تسجيل الدخول، ستجد جميع طلباتك (شراء، استيراد، زيارات مصانع) مع حالتها المحدَّثة أولاً بأول.', en:'From the "Track My Order" page after logging in, you\'ll find all your orders (purchases, imports, factory visits) with their updated status.'} },
   { q:{ar:'هل الأسعار المعروضة نهائية؟', en:'Are the displayed prices final?'},
-    a:{ar:'الأسعار في الحاسبات (زي حاسبة الشحن) تقريبية للاستئناس، وبتتأثر بسعر الصرف والسوق وقت التنفيذ. السعر النهائي بيتأكد مباشرة بعد التواصل معانا.', en:'Prices in the calculators (like the shipping calculator) are indicative only and are affected by exchange rates and market conditions. The final price is confirmed directly after contacting us.'} },
-  { q:{ar:'إيه الدول اللي بتوصلوا لها حالياً؟', en:'Which countries do you currently deliver to?'},
-    a:{ar:'حالياً بنغطي السودان وجنوب السودان (شحن بحري)، والإمارات والسعودية (شحن بحري وجوي).', en:'We currently cover Sudan and South Sudan (sea freight), and the UAE and Saudi Arabia (sea and air freight).'} }
+    a:{ar:'الأسعار الظاهرة في الحاسبات (مثل حاسبة الشحن) تقريبية للاستئناس فقط، وتتأثر بسعر الصرف والسوق وقت التنفيذ. يُعتمد السعر النهائي مباشرة بعد التواصل معنا.', en:'Prices in the calculators (like the shipping calculator) are indicative only and are affected by exchange rates and market conditions. The final price is confirmed directly after contacting us.'} },
+  { q:{ar:'ما هي الدول التي تصلون إليها حالياً؟', en:'Which countries do you currently deliver to?'},
+    a:{ar:'نغطي حالياً السودان وجنوب السودان (شحن بحري)، بالإضافة إلى الإمارات والسعودية (شحن بحري وجوي).', en:'We currently cover Sudan and South Sudan (sea freight), and the UAE and Saudi Arabia (sea and air freight).'} }
 ];
 let currentFaqIndex = 0;
 

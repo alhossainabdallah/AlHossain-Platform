@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AlHossain</title>
 <meta name="description" content="AlHossain — وكيلك المعتمد في الصين. تسوّق، اشحن، وتابع طلباتك من الصين بسهولة عبر منصة واحدة.">
 <meta property="og:title" content="AlHossain — بوابتك الإلكترونية في الصين">
@@ -11,6 +11,8 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AlHossain — بوابتك الإلكترونية في الصين">
 <meta name="twitter:description" content="تسوّق من تاوباو و1688 وعلي بابا، واحسب تكلفة شحنتك، وتابع طلباتك أونلاين.">
+<!-- اختياري: بعد رفع شعار للموقع، أضف هنا رابطه المباشر لتظهر الصورة عند مشاركة الرابط:
+<meta property="og:image" content="ضع هنا رابط الصورة المباشر"> -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -38,7 +40,6 @@
     background:var(--paper-soft);
     color:var(--ink-dark);
     line-height:1.6;
-    -webkit-text-size-adjust: 100%;
   }
   h1,h2,h3,.display{
     font-family:'Tajawal', sans-serif;
@@ -53,80 +54,49 @@
   header.site{
     background:var(--ink);
     color:var(--paper);
-    padding:16px 16px 20px;
+    padding:22px 20px 26px;
     position:relative;
   }
   header.site .top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:10px;
+    display:flex; justify-content:space-between; align-items:center; gap:8px;
   }
+  header.site .top > div:first-child{ min-width:0; overflow:hidden; }
   header.site .brand{
-    font-size:24px;
+    font-size:26px;
     color:var(--paper);
   }
+  #userGreeting{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   header.site .brand span{ color:var(--gold); }
-  
-  .header-controls {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
+  nav.tabs{
+    display:flex; gap:6px; margin-top:18px;
+    overflow-x:auto; flex-wrap:nowrap; white-space:nowrap;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px;
   }
-  
-  .lang-btn {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: var(--paper);
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-family: 'Tajawal';
-    font-size: 13px;
-    cursor: pointer;
-    min-width: 45px;
-    transition: .2s;
+  nav.tabs::-webkit-scrollbar{ display:none; }
+  nav.tabs button{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.2);
+    color:var(--paper);
+    padding:8px 16px;
+    border-radius:999px;
+    font-family:'Tajawal';
+    font-size:14px;
+    cursor:pointer;
+    transition:.2s;
+    flex-shrink:0;
   }
-  
-  .lang-btn:hover {
-    background: rgba(255,255,255,0.15);
+  nav.tabs button.active{
+    background:var(--gold);
+    color:var(--ink-dark);
+    border-color:var(--gold);
+    font-weight:700;
   }
-  
-  .auth-btn {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.25);
-    color: var(--paper);
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-family: 'Tajawal';
-    font-size: 13px;
-    cursor: pointer;
-    min-width: 55px;
-    transition: .2s;
-  }
-  
-  .auth-btn:hover {
-    background: rgba(255,255,255,0.15);
-  }
-  
-  .logout-btn {
-    background: var(--rust);
-    border-color: var(--rust);
-    color: #fff;
-    font-weight: 700;
-  }
-  
-  .logout-btn:hover {
-    background: #a04422;
-  }
-  
   .cart-btn{
     position:relative;
     background:rgba(255,255,255,0.08);
     border:1px solid rgba(255,255,255,0.25);
     color:var(--paper);
-    padding:6px 14px;
+    padding:7px 14px;
     border-radius:999px;
     font-weight:700;
     font-family:'Tajawal';
@@ -144,95 +114,20 @@
     border-radius:50%; width:20px; height:20px;
     font-size:11px; display:flex; align-items:center; justify-content:center;
   }
-  
-  #userProfileBar {
-    display: none !important;
-    margin-top: 10px;
-    padding: 8px 14px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 12px;
-    align-items: center;
-    gap: 12px;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-  
-  #userProfileBar.show {
-    display: flex !important;
-  }
-  
-  #userProfileBar .avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    color: var(--ink-dark);
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-  
-  #userProfileBar .profile-info {
-    flex: 1;
-    min-width: 0;
-  }
-  
-  #userProfileBar .profile-label {
-    font-size: 11px;
-    color: var(--gold);
-    font-weight: 700;
-    opacity: 0.8;
-  }
-  
-  #userProfileBar .profile-name {
-    font-size: 14px;
-    color: var(--paper);
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  nav.tabs{
-    display:flex; gap:5px; margin-top:14px;
-    overflow-x:auto; flex-wrap:nowrap; white-space:nowrap;
-    -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px;
-  }
-  nav.tabs::-webkit-scrollbar{ display:none; }
-  nav.tabs button{
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.2);
-    color:var(--paper);
-    padding:7px 14px;
-    border-radius:999px;
-    font-family:'Tajawal';
-    font-size:13px;
-    cursor:pointer;
-    transition:.2s;
-    flex-shrink:0;
-  }
-  nav.tabs button.active{
-    background:var(--gold);
-    color:var(--ink-dark);
-    border-color:var(--gold);
-    font-weight:700;
-  }
-  
-  main{ max-width:900px; margin:0 auto; padding:20px 16px 70px; }
+  main{ max-width:900px; margin:0 auto; padding:24px 18px 80px; }
   section{ display:none; }
   section.active{ display:block; animation:fade .3s ease; }
   @keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
 
+  /* HOME */
   .hero{
     text-align:center;
-    padding:30px 10px 10px;
+    padding:36px 10px 10px;
   }
   .hero .eyebrow{
     color:var(--rust); font-weight:700; letter-spacing:.5px; font-size:14px;
   }
-  .hero h1{ font-size:30px; margin:10px 0 14px; color:var(--ink-dark); }
+  .hero h1{ font-size:34px; margin:10px 0 14px; color:var(--ink-dark); }
   .hero p{ max-width:520px; margin:0 auto; color:#3d4f4f; font-size:16px; }
   .hero-cta{ margin-top:22px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .btn{
@@ -247,12 +142,13 @@
     display:flex; gap:14px; margin:34px 0; overflow-x:auto; padding-bottom:6px;
   }
   .strip .card{
-    min-width:130px; background:var(--white); border-radius:14px; padding:16px;
+    min-width:150px; background:var(--white); border-radius:14px; padding:16px;
     border:1px solid var(--line); text-align:center; flex-shrink:0;
   }
-  .strip .card .num{ font-family:'Aref Ruqaa'; font-size:24px; color:var(--rust); }
+  .strip .card .num{ font-family:'Aref Ruqaa'; font-size:26px; color:var(--rust); }
   .strip .card .lbl{ font-size:13px; color:#555; margin-top:4px; }
 
+  /* CATALOG */
   .catalog-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
   .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:14px; }
   .product{
@@ -296,6 +192,7 @@
   .video-modal-overlay video{ max-width:100%; max-height:80vh; border-radius:10px; }
   .video-close{ position:absolute; top:20px; left:20px; background:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:18px; cursor:pointer; }
 
+  /* CART DRAWER */
   .overlay{
     position:fixed; inset:0; background:rgba(15,38,38,.5); display:none; z-index:40;
   }
@@ -315,6 +212,7 @@
   .cart-total{ font-weight:900; font-size:18px; margin:14px 0; text-align:center; }
   .close-drawer{ align-self:flex-start; background:none; border:none; font-size:22px; cursor:pointer; color:var(--ink-dark); }
 
+  /* TRACK */
   .track-box{ background:var(--white); border:1px solid var(--line); border-radius:16px; padding:22px; text-align:center; }
   .my-mark-box{ background:var(--ink); color:var(--paper); border-radius:16px; padding:20px; margin-bottom:16px; text-align:center; }
   .mark-display{
@@ -329,6 +227,7 @@
   .order-result.show{ display:block; }
   .status-pill{ display:inline-block; padding:5px 14px; border-radius:999px; font-weight:700; font-size:13px; background:var(--gold); color:var(--ink-dark); }
 
+  /* ADMIN */
   .admin-lock{ background:var(--white); border:1px solid var(--line); border-radius:16px; padding:24px; text-align:center; max-width:320px; margin:0 auto; }
   .admin-lock input{ width:100%; padding:10px; text-align:center; border-radius:8px; border:1px solid var(--line); margin:12px 0; font-family:'Tajawal'; }
   .admin-section{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:16px; }
@@ -341,16 +240,11 @@
   .admin-order-item input{ padding:7px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; flex:1; min-width:120px; }
   .tiny-btn{ background:var(--rust); color:#fff; border:none; padding:5px 10px; border-radius:6px; font-size:12px; cursor:pointer; }
   .tiny-btn.gold{ background:var(--gold); color:var(--ink-dark); }
-  
-  .tiny-btn.danger,
-  .post-delete-btn,
-  .remove-row {
-    display: none !important;
-  }
 
   footer{ text-align:center; padding:24px; color:#5c6b6b; font-size:13px; }
   .footer-link{ cursor:pointer; text-decoration:underline; }
 
+  /* GLOSSARY */
   .term-card{ background:var(--white); border:1px solid var(--line); border-radius:16px; padding:20px; margin-bottom:20px; }
   .term-head{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
   .term-badge{ background:var(--ink); color:var(--gold); font-family:'Aref Ruqaa'; font-size:18px; padding:4px 14px; border-radius:8px; }
@@ -377,6 +271,7 @@
   .price-row{ display:flex; justify-content:space-between; padding:6px 0; font-size:14.5px; }
   .price-note{ font-size:12px; color:rgba(237,230,216,.7); margin-bottom:8px; }
 
+  /* ABOUT */
   .about-hero{ text-align:center; padding:20px 10px; }
   .about-photo{
     width:120px; height:120px; border-radius:50%; margin:0 auto 14px;
@@ -400,6 +295,7 @@
     max-width:600px; margin:0 auto;
   }
 
+  /* CRANE LOADER */
   #craneLoader{
     position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-14px);
     background:var(--ink); border-radius:14px; padding:8px 16px 6px;
@@ -426,6 +322,7 @@
     .crane-hook, .crane-box{ animation:none; }
   }
 
+  /* WHATSAPP FLOAT BUTTON */
   #waFloat{
     position:fixed; bottom:22px; right:22px; z-index:45;
     width:58px; height:58px; border-radius:50%;
@@ -446,23 +343,15 @@
     50%{ box-shadow:0 6px 22px rgba(37,211,102,.75); }
   }
 
-  .auth-area{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  /* AUTH */
+  .auth-area{ display:flex; align-items:center; gap:8px; }
   .auth-btn{
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.25);
-    color:var(--paper);
-    padding:6px 14px;
-    border-radius:999px;
-    font-family:'Tajawal';
-    font-size:13px;
-    cursor:pointer;
-    min-width:55px;
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.25);
+    color:var(--paper); padding:7px 12px; border-radius:999px; font-family:'Tajawal';
+    font-size:13px; cursor:pointer; flex-shrink:0; min-width:38px; text-align:center;
   }
   .logout-btn{
-    background:var(--rust);
-    border-color:var(--rust);
-    color:#fff;
-    font-weight:700;
+    background:var(--rust); border-color:var(--rust); color:#fff; font-weight:700;
   }
   .auth-modal-overlay{
     position:fixed; inset:0; background:rgba(10,27,43,.55); z-index:70;
@@ -506,6 +395,7 @@
     max-height:80vh; overflow-y:auto; position:relative; font-size:14.5px; line-height:1.9;
   }
 
+  /* QUESTIONS PAGE */
   .ask-box{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:20px; }
   .import-row{ display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; align-items:center; padding-bottom:10px; border-bottom:1px dashed var(--line); }
   .import-row input{ padding:9px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; flex:1; min-width:110px; }
@@ -517,6 +407,7 @@
   }
   .qa-item{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px; }
 
+  /* PROFILE */
   .profile-card{ background:var(--ink); color:var(--paper); border-radius:16px; padding:22px; text-align:center; margin-bottom:20px; }
   .profile-name{ font-family:'Aref Ruqaa'; font-size:24px; margin-bottom:8px; }
   .profile-mark-row{ display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:14px; }
@@ -524,6 +415,7 @@
   .copy-btn{ background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.25); border-radius:8px; width:32px; height:32px; cursor:pointer; color:var(--paper); }
   .profile-info-line{ font-size:13.5px; color:rgba(237,230,216,.85); margin-bottom:4px; }
 
+  /* SAIL ANIMATION */
   .sail-overlay{
     position:fixed; inset:0; z-index:200;
     background:rgba(10,27,43,0.4); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
@@ -553,6 +445,7 @@
     100%{ transform:translateX(-50px); }
   }
 
+  /* TRACKING ANIMATION */
   .tracking-anim-overlay{
     position:fixed; inset:0; z-index:200;
     background:var(--paper-soft); display:none; align-items:center; justify-content:center;
@@ -575,6 +468,7 @@
   }
   .tracking-anim-text{ font-size:14.5px; color:var(--ink-dark); font-weight:700; }
 
+  /* ACTIVITY FEED */
   .activity-item{ background:var(--white); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:flex; gap:10px; align-items:flex-start; cursor:pointer; }
   .activity-icon{ font-size:20px; flex-shrink:0; }
   .activity-body{ flex:1; }
@@ -582,6 +476,7 @@
   .activity-snippet{ font-size:13px; color:#666; }
   .activity-time{ font-size:11px; color:#999; margin-top:4px; }
 
+  /* RATINGS */
   .ratings-summary{ background:var(--ink); color:var(--paper); border-radius:16px; padding:24px; text-align:center; margin-bottom:20px; }
   .ratings-avg{ font-family:'Aref Ruqaa'; font-size:42px; color:var(--gold); }
   .ratings-stars-display{ font-size:24px; color:var(--gold); letter-spacing:4px; margin:6px 0; }
@@ -595,6 +490,7 @@
   .review-date{ font-size:11.5px; color:#999; }
   .review-comment{ font-size:14px; color:#444; margin-top:4px; }
 
+  /* COMMUNITY */
   .post-card{ background:var(--white); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px; }
   .post-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
   .post-author{ font-weight:700; font-size:14.5px; }
@@ -628,209 +524,24 @@
     font-size:14px; z-index:60; opacity:0; pointer-events:none; transition:.3s;
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
-
-  @media (max-width: 768px) {
-    header.site {
-      padding: 12px 12px 16px;
-    }
-    
-    header.site .top {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 8px;
-    }
-    
-    header.site .brand {
-      font-size: 20px;
-      text-align: center;
-    }
-    
-    header.site .brand + div {
-      text-align: center;
-    }
-    
-    .header-controls {
-      justify-content: center;
-      gap: 5px;
-    }
-    
-    .lang-btn, .auth-btn, .cart-btn {
-      padding: 5px 10px;
-      font-size: 12px;
-      min-width: 40px;
-    }
-    
-    #userProfileBar {
-      padding: 6px 10px;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    
-    #userProfileBar .avatar {
-      width: 30px;
-      height: 30px;
-      font-size: 13px;
-    }
-    
-    #userProfileBar .profile-label {
-      font-size: 10px;
-    }
-    
-    #userProfileBar .profile-name {
-      font-size: 12px;
-    }
-    
-    nav.tabs {
-      gap: 4px;
-      margin-top: 10px;
-    }
-    
-    nav.tabs button {
-      padding: 5px 10px;
-      font-size: 11px;
-    }
-    
-    main {
-      padding: 16px 12px 60px;
-    }
-    
-    .hero h1 {
-      font-size: 24px !important;
-    }
-    
-    .hero p {
-      font-size: 14px;
-    }
-    
-    .grid {
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 10px;
-    }
-    
-    .drawer {
-      width: min(320px, 92%);
-      padding: 16px;
-    }
-    
-    .strip .card {
-      min-width: 120px;
-      padding: 12px;
-    }
-    
-    .calc-row {
-      grid-template-columns: 1fr;
-    }
-    
-    .term-head {
-      flex-wrap: wrap;
-    }
-    
-    .ref-table {
-      font-size: 12px;
-    }
-    
-    .ref-table th, .ref-table td {
-      padding: 4px 6px;
-    }
-    
-    .auth-modal {
-      padding: 20px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    header.site .brand {
-      font-size: 18px;
-    }
-    
-    .hero h1 {
-      font-size: 20px !important;
-    }
-    
-    .grid {
-      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-      gap: 8px;
-    }
-    
-    .product .thumb {
-      height: 90px;
-      font-size: 28px;
-    }
-    
-    .product .body {
-      padding: 8px;
-    }
-    
-    .product .name {
-      font-size: 13px;
-    }
-    
-    .product .price {
-      font-size: 13px;
-    }
-    
-    .product .add {
-      font-size: 11px;
-      padding: 6px;
-    }
-    
-    .lang-btn, .auth-btn, .cart-btn {
-      padding: 4px 8px;
-      font-size: 11px;
-      min-width: 35px;
-    }
-    
-    nav.tabs button {
-      padding: 4px 8px;
-      font-size: 10px;
-    }
-    
-    .strip .card {
-      min-width: 100px;
-      padding: 10px;
-    }
-    
-    .strip .card .num {
-      font-size: 20px;
-    }
-    
-    .strip .card .lbl {
-      font-size: 11px;
-    }
-    
-    .btn {
-      padding: 10px 16px;
-      font-size: 13px;
-    }
-  }
 </style>
 </head>
-<body>
 <body>
 
 <header class="site">
   <div class="top">
     <div>
       <div class="brand">Al<span>Hossain</span></div>
-      <div style="font-size:11px;color:#D9A441;margin-top:2px;">بوابتك الإلكترونية في الصين</div>
+      <div style="font-size:11px;color:#D9A441;margin-top:2px;" id="taglineText">بوابتك الإلكترونية في الصين</div>
+      <div style="font-size:12px;color:var(--paper);margin-top:3px;display:none;font-weight:700;" id="userGreeting"></div>
     </div>
-    <div class="header-controls">
-      <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">EN</button>
-      <button class="auth-btn" id="authBtn" onclick="openAuthModal()">دخول</button>
-      <button class="auth-btn logout-btn" id="logoutBtn" onclick="doLogout()" style="display:none;">خروج</button>
+    <div class="auth-area">
+      <button class="auth-btn" onclick="toggleLanguage()" id="langBtn">EN</button>
+      <button class="auth-btn" id="authBtn" onclick="openAuthModal()">👤</button>
+      <button class="auth-btn logout-btn" id="logoutBtn" onclick="doLogout()" style="display:none;">🚪</button>
       <button class="cart-btn" onclick="openCart()">🛒 <span id="cartLabel">السلة</span> <span class="cart-badge" id="cartBadge">0</span></button>
     </div>
   </div>
-  
-  <!-- بروفايل المستخدم -->
-  <div id="userProfileBar">
-    <div class="avatar" id="userAvatar">👤</div>
-    <div class="profile-info">
-      <div class="profile-label">بروفايل</div>
-      <div class="profile-name" id="userProfileName">المستخدم</div>
-    </div>
-  </div>
-
   <nav class="tabs">
     <button class="active" data-tab="home" data-i18n="nav_home" onclick="showTab('home')">الرئيسية</button>
     <button data-tab="catalog" data-i18n="nav_catalog" onclick="showTab('catalog')">المنتجات</button>
@@ -843,6 +554,7 @@
     <button data-tab="ratings" data-i18n="nav_ratings" onclick="showTab('ratings')">التقييمات</button>
     <button data-tab="activityfeed" data-i18n="nav_activity" onclick="showTab('activityfeed')">🔔 الإشعارات</button>
     <button data-tab="about" data-i18n="nav_about" onclick="showTab('about')">عن المؤسس</button>
+    <button data-tab="weeklyoffers" data-i18n="nav_offers" onclick="showTab('weeklyoffers')">🔥 العروض</button>
   </nav>
 </header>
 <div class="pattern-divider"></div>
@@ -1206,6 +918,10 @@
     </div>
   </section>
 
+  <section id="weeklyoffers">
+    <div id="flashSaleContainer"></div>
+  </section>
+
   <section id="terms">
     <h2 style="margin-bottom:16px;" data-i18n="terms_title">الشروط والأحكام</h2>
     <div class="ask-box" style="text-align:right;">
@@ -1286,6 +1002,45 @@
         <input class="admin-search" placeholder="بحث بالاسم أو الإيميل أو المارك..." oninput="renderAdminCustomers(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
         <div id="adminCustomerList"></div>
       </div>
+
+      <div class="admin-section">
+        <h3>📌 التحكم في التبويبات</h3>
+        <p style="font-size:13px;color:#666;margin-bottom:12px;">تحكم في ظهور وإخفاء التبويبات في الموقع</p>
+        <div id="tabsControlList"></div>
+        <button class="btn btn-gold" onclick="saveTabsSettings()" style="margin-top:12px;">💾 حفظ إعدادات التبويبات</button>
+      </div>
+
+      <div class="admin-section">
+        <h3>🔥 إدارة العروض النارية</h3>
+        <div style="background:var(--paper-soft);border-radius:12px;padding:16px;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
+            <label style="font-weight:700;">حالة العرض:</label>
+            <select id="flashSaleStatus" style="padding:8px 16px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
+              <option value="inactive">⏸ غير مفعل</option>
+              <option value="active">▶ مفعل</option>
+            </select>
+          </div>
+          <div class="admin-row">
+            <input id="flashProductName" placeholder="اسم المنتج *">
+            <input id="flashSalePrice" type="number" placeholder="سعر العرض ($) *" step="0.01">
+          </div>
+          <div class="admin-row">
+            <input id="flashOriginalPrice" type="number" placeholder="السعر الأصلي ($)" step="0.01">
+            <input id="flashMaxQuantity" type="number" placeholder="العدد المتاح (1-10)" value="1" min="1" max="10">
+          </div>
+          <div class="admin-row">
+            <input id="flashStartDate" type="datetime-local" placeholder="تاريخ البدء *">
+            <input id="flashEndDate" type="datetime-local" placeholder="تاريخ الانتهاء *">
+          </div>
+          <div style="margin-bottom:8px;">
+            <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">🖼️ صورة المنتج (اختياري)</label>
+            <input id="flashProductImage" type="file" accept="image/*">
+          </div>
+          <textarea id="flashDescription" placeholder="وصف العرض (اختياري)" style="width:100%;min-height:60px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;"></textarea>
+          <button class="btn btn-gold" onclick="saveFlashSale()" style="width:100%;" id="saveFlashBtn">💾 حفظ العرض الناري</button>
+        </div>
+      </div>
+
       <div class="admin-section">
         <h3>صفحة عن المؤسس</h3>
         <div class="admin-row">
@@ -1344,6 +1099,7 @@
   </section>
 
 </main>
+
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
 <div class="drawer" id="drawer">
   <button class="close-drawer" onclick="closeCart()">✕</button>
@@ -1366,12 +1122,16 @@
 
 <div id="craneLoader">
   <svg width="60" height="46" viewBox="0 0 190 90">
+    <!-- الحاوية -->
     <rect x="118" y="58" width="60" height="26" fill="#D9A441" stroke="#0A1B2B" stroke-width="1.5"/>
     <line x1="118" y1="66" x2="178" y2="66" stroke="#0A1B2B" stroke-width="1"/>
     <line x1="118" y1="75" x2="178" y2="75" stroke="#0A1B2B" stroke-width="1"/>
+    <!-- عمود الرافعة -->
     <rect x="18" y="10" width="6" height="70" fill="#F5F1E8"/>
     <rect x="8" y="78" width="26" height="6" fill="#F5F1E8"/>
+    <!-- ذراع الرافعة -->
     <line x1="21" y1="16" x2="170" y2="30" stroke="#F5F1E8" stroke-width="5" stroke-linecap="round"/>
+    <!-- خطاف وصندوق متحرك -->
     <g class="crane-hook">
       <line x1="170" y1="30" x2="170" y2="40" stroke="#F5F1E8" stroke-width="2"/>
       <g class="crane-box">
@@ -1441,17 +1201,21 @@
 <div class="sail-overlay" id="sailOverlay">
   <div class="sail-track">
     <svg class="sail-boat-svg" viewBox="0 0 220 110" width="150" height="75">
+      <!-- جسم السفينة -->
       <path d="M20 70 Q30 90 60 90 L160 90 Q190 90 200 70 L185 70 L35 70 Z" fill="#14304A"/>
       <path d="M25 70 L195 70 L190 80 Q180 88 160 88 L60 88 Q40 88 30 80 Z" fill="#0A1B2B"/>
+      <!-- الحاويات -->
       <rect x="55" y="45" width="34" height="25" fill="#D9A441" stroke="#0A1B2B" stroke-width="1.5"/>
       <line x1="55" y1="57" x2="89" y2="57" stroke="#0A1B2B" stroke-width="1"/>
       <rect x="92" y="45" width="34" height="25" fill="#B4552D" stroke="#0A1B2B" stroke-width="1.5"/>
       <line x1="92" y1="57" x2="126" y2="57" stroke="#0A1B2B" stroke-width="1"/>
+      <!-- مبنى القيادة -->
       <rect x="130" y="20" width="26" height="50" fill="#D9A441" stroke="#0A1B2B" stroke-width="1.5"/>
       <rect x="136" y="27" width="5" height="5" fill="#0A1B2B"/>
       <rect x="146" y="27" width="5" height="5" fill="#0A1B2B"/>
       <rect x="136" y="38" width="5" height="5" fill="#0A1B2B"/>
       <rect x="146" y="38" width="5" height="5" fill="#0A1B2B"/>
+      <!-- الرافعة -->
       <line x1="145" y1="20" x2="145" y2="8" stroke="#0A1B2B" stroke-width="2.5"/>
       <line x1="130" y1="30" x2="160" y2="8" stroke="#0A1B2B" stroke-width="2.5"/>
     </svg>
@@ -1469,18 +1233,22 @@
 </div>
 
 <footer><span data-i18n="footer_text">AlHossain · للتواصل المباشر عبر واتساب</span> · <span class="footer-link" data-i18n="terms_title" onclick="showTab('terms')">الشروط والأحكام</span> · <span class="footer-link" data-i18n="complaints_title" onclick="showTab('complaints')">شكاوى ومقترحات</span> · <span onclick="showTab('admin')" style="cursor:pointer;opacity:0.5;font-size:13px;padding:10px;display:inline-block;">⚙️ إدارة</span></footer>
+
 <script>
-// ====== CONFIG ======
-const BUSINESS_WHATSAPP = "8613054452062";
+// ====== CONFIG — عدّل هذا القسم قبل النشر ======
+const BUSINESS_WHATSAPP = "8613054452062"; // رقم واتساب نشاطك
 const ADMIN_PIN = "0914785649AlH#";
 const ADMIN_EMAIL = "alhossainabdallah@gmail.com";
 
+// إعدادات تنبيهات الإيميل (EmailJS) — اختياري، شوف تعليمات الإعداد في دليل النشر
 const EMAILJS_PUBLIC_KEY = "PASTE_EMAILJS_PUBLIC_KEY";
 const EMAILJS_SERVICE_ID = "PASTE_EMAILJS_SERVICE_ID";
 const EMAILJS_TEMPLATE_ID = "PASTE_EMAILJS_TEMPLATE_ID";
 
+// حماية إضافية (اختياري لكن موصى به بشدة) — Firebase App Check عبر reCAPTCHA v3
 const RECAPTCHA_SITE_KEY = "PASTE_RECAPTCHA_SITE_KEY";
 
+// الصق إعدادات Firebase من Firebase Console هنا (شوف تعليمات النشر)
 const firebaseConfig = {
   apiKey: "AIzaSyAeVPr7MWzteC_jJpqKKxZHm-7uLBy4oEo",
   authDomain: "alhossain-platform.firebaseapp.com",
@@ -1524,7 +1292,7 @@ function sendNotificationEmail(toEmail, subject, message){
     to_email: toEmail,
     subject: subject,
     message: message
-  }).catch(()=>{});
+  }).catch(()=>{ /* فشل التنبيه لا يوقف عمل الموقع */ });
 }
 
 let products = [];
@@ -1546,13 +1314,7 @@ let agentLocationData = {};
 let cart = {};
 let currentUser = null;
 let currentLang = 'ar';
-let currentCustomerData = null;
-let authMode = 'login';
-let importRowCount = 0;
-let selectedStars = 0;
-let allRatings = [];
 
-// ====== TRANSLATIONS OBJECT (كامل) ======
 const translations = {
   nav_home: {ar:'الرئيسية', en:'Home'},
   nav_catalog: {ar:'المنتجات', en:'Products'},
@@ -1579,12 +1341,15 @@ const translations = {
   terms_title: {ar:'الشروط والأحكام', en:'Terms & Conditions'},
   cart_label: {ar:'السلة', en:'Cart'},
   login_btn: {ar:'تسجيل الدخول', en:'Login'},
+
   glossary_desc: {ar:'مصطلحات ستواجهها كثيراً عند الشراء والشحن من الصين — فهمها جيداً يوفر الوقت والمال.', en:'Terms you will encounter often when buying and shipping from China — understanding them saves time and money.'},
+
   cur_title: {ar:'محوّل العملة (دولار ↔ جنيه سوداني)', en:'Currency Converter (USD ↔ SDG)'},
   cur_desc: {ar:'سعر صرف الجنيه السوداني يتغيّر بشكل شبه يومي، لذا لا يعتمد هذا المحوّل على مصدر آلي، بل على سعر يُحدَّث يدوياً من صاحب الموقع بحسب السوق الفعلي.', en:'The Sudanese Pound exchange rate changes almost daily, so this converter does not rely on an automated source, but on a rate updated manually by the site owner based on the actual market.'},
   cur_amount_label: {ar:'المبلغ بالدولار ($)', en:'Amount in USD ($)'},
   cur_btn: {ar:'تحويل', en:'Convert'},
   cur_note: {ar:'* هذا السعر تقريبي للاستئناس فقط، ويُعتمد السعر الفعلي وقت التنفيذ.', en:'* This rate is indicative only; the actual rate is confirmed at the time of the transaction.'},
+
   moq_title: {ar:'الحد الأدنى لكمية الطلب', en:'Minimum Order Quantity'},
   moq_p1: {ar:'<strong>MOQ (Minimum Order Quantity)</strong> هي أقل كمية يقبل المصنع أو المورد بيعها في الطلب الواحد. فإذا كان المصنع قد حدد الحد الأدنى بـ 500 قطعة، فهذا يعني أنه لن يبيع أقل من 500 قطعة حتى لو رغب المشتري في تجربة كمية أصغر.', en:'<strong>MOQ (Minimum Order Quantity)</strong> is the smallest quantity a factory or supplier accepts per order. If a factory sets its MOQ at 500 pieces, it won\'t sell fewer than 500 pieces, even if the buyer wants to try a smaller quantity first.'},
   moq_p2: {ar:'<strong>لماذا يفعل المصنع ذلك؟</strong> لأن تجهيز خط الإنتاج (القوالب، المواد الخام، إعداد الآلات) يكلف المصنع تكاليف ثابتة بغض النظر عن الكمية، لذا يحرص على ضمان حد أدنى يغطي هذه التكلفة.', en:'<strong>Why do factories do this?</strong> Setting up a production line (molds, raw materials, machine setup) costs the factory fixed expenses regardless of quantity, so they ensure a minimum that covers that cost.'},
@@ -1592,6 +1357,7 @@ const translations = {
   moq_li1: {ar:'لو الكمية أكبر من احتياجك، اسأل عن "MOQ تجريبي" أو عينة مدفوعة قبل الالتزام بالكمية الكاملة', en:'If the quantity exceeds your needs, ask about a "trial MOQ" or a paid sample before committing to the full quantity'},
   moq_li2: {ar:'يمكن التفاوض على تقليل الحد الأدنى للكمية مقابل سعر أعلى قليلاً للقطعة', en:'You can negotiate a lower MOQ in exchange for a slightly higher price per piece'},
   moq_li3: {ar:'إذا كان هناك موردون آخرون بنفس المنتج بحد أدنى أقل، يمكن استخدام ذلك كورقة تفاوض', en:'If other suppliers offer the same product with a lower MOQ, use that as a negotiating point'},
+
   cbm_title: {ar:'المتر المكعب — أهم رقم في تكلفة الشحن', en:'CBM — The Most Important Number in Shipping Cost'},
   cbm_p1: {ar:'<strong>CBM (Cubic Meter)</strong> هو وحدة قياس حجم الشحنة، وهو الرقم الذي تعتمد عليه شركات الشحن في حساب سعر الشحن البحري (خاصة إذا كانت الشحنة لا تملأ حاوية كاملة — LCL). حتى لو كانت البضاعة خفيفة الوزن، فإن كبر حجمها يعني احتساب التكلفة على أساس الحجم لا الوزن.', en:'<strong>CBM (Cubic Meter)</strong> is the unit used to measure shipment volume, and it\'s the number shipping companies rely on to calculate sea freight cost (especially for less-than-container loads — LCL). Even if the goods are lightweight, a large volume means the cost is calculated based on volume, not weight.'},
   cbm_formula_title: {ar:'معادلة الحساب', en:'Calculation Formula'},
@@ -1616,6 +1382,7 @@ const translations = {
   c40: {ar:'حاوية 40 قدم', en:'40ft Container'},
   c40hc: {ar:'حاوية 40 قدم عالية السعة (High Cube)', en:'40ft High Cube Container'},
   cbm_table_note: {ar:'* الأرقام تقريبية للسعة الاستخدامية الفعلية، وتختلف قليلاً حسب شكل البضاعة وطريقة التحميل.', en:'* Figures are approximate for actual usable capacity and vary slightly depending on cargo shape and loading method.'},
+
   air_title: {ar:'الشحن الجوي — الوزن الفعلي مقابل الوزن الحجمي', en:'Air Freight — Actual vs. Volumetric Weight'},
   air_p1: {ar:'في الشحن الجوي، تحتسب شركة الشحن التكلفة على أساس <strong>الأعلى بين الوزن الفعلي والوزن الحجمي (Volumetric Weight)</strong>. فإذا كانت الشحنة خفيفة الوزن لكن حجمها كبير، تُحتسب التكلفة على أساس الحجم لا الوزن الحقيقي.', en:'For air freight, the shipping company charges based on <strong>whichever is higher: actual weight or volumetric weight</strong>. If a shipment is lightweight but bulky, the cost is calculated based on volume, not actual weight.'},
   air_formula_title: {ar:'معادلة الوزن الحجمي', en:'Volumetric Weight Formula'},
@@ -1624,13 +1391,16 @@ const translations = {
   air_calc_title: {ar:'🧮 احسب الوزن الحجمي والتكلفة التقريبية لشحنتك الجوية', en:'🧮 Calculate the volumetric weight and approximate cost of your air shipment'},
   actual_weight_label: {ar:'الوزن الفعلي (كجم)', en:'Actual Weight (kg)'},
   air_note: {ar:'* الشحن الجوي متاح حالياً للإمارات والسعودية، وهو أسرع لكنه أعلى تكلفة من الشحن البحري، ويُستخدم غالباً للشحنات المستعجلة أو الخفيفة والصغيرة الحجم. هذه تكلفة تقريبية للاستئناس فقط.', en:'* Air freight is currently available for the UAE and Saudi Arabia. It is faster but more expensive than sea freight, and is usually used for urgent or light, small shipments. This is an indicative cost only.'},
+
   questions_desc: {ar:'هل لديك سؤال؟ اكتبه هنا وسنجيبك عليه، وسيظهر السؤال مع الإجابة هنا لبقية العملاء إن كان فيه فائدة للجميع.', en:'Have a question? Write it here and we\'ll answer it. Your question and answer will appear here for other customers if it\'s helpful to everyone.'},
   question_ph: {ar:'اكتب سؤالك هنا...', en:'Write your question here...'},
   send_question_btn: {ar:'إرسال السؤال', en:'Send Question'},
+
   import_desc: {ar:'هل وجدت منتجات في تاوباو أو 1688 أو علي بابا وترغب في شرائها؟ أضف كل منتج على حدة، وسنوافيك بعرض سعر شامل الشراء والشحن لكل الطلب دفعة واحدة.', en:'Found products on Taobao, 1688, or Alibaba you\'d like to buy? Add each product separately, and we\'ll send you a quote covering purchase and shipping for the whole order at once.'},
   add_item_btn: {ar:'+ إضافة منتج آخر', en:'+ Add Another Product'},
   import_notes_ph: {ar:'ملاحظات عامة على الطلب: اللون، المقاس، أي تفاصيل إضافية...', en:'General notes on the order: color, size, any additional details...'},
   send_quote_request_btn: {ar:'إرسال طلب عرض سعر', en:'Send Quote Request'},
+
   factory_title: {ar:'طلب زيارة مصنع', en:'Factory Visit Request'},
   factory_desc: {ar:'هل وجدت مصنعاً على علي بابا أو غيره وترغب بمعاينته ميدانياً قبل الشراء؟ يمكننا القيام بذلك نيابة عنك.', en:'Found a factory on Alibaba or elsewhere and want it inspected on-site before buying? We can do that on your behalf.'},
   factory_terms_title: {ar:'شروط وتكلفة زيارة المصانع', en:'Factory Visit Terms & Cost'},
@@ -1641,10 +1411,12 @@ const translations = {
   factory_city_ph: {ar:'مدينة المصنع *', en:'Factory City *'},
   factory_notes_ph: {ar:'ملاحظات إضافية (اختياري)', en:'Additional notes (optional)'},
   send_visit_request_btn: {ar:'إرسال طلب الزيارة', en:'Send Visit Request'},
+
   about_role: {ar:'مؤسس AlHossain · وكيلك المعتمد في الصين', en:'Founder of AlHossain · Your Trusted Agent in China'},
   years_exp: {ar:'سنوات الخبرة', en:'Years of Experience'},
   orders_done: {ar:'طلب منفَّذ', en:'Orders Completed'},
   registered_customers: {ar:'عميل مسجَّل', en:'Registered Customers'},
+
   terms_h1: {ar:'1. طبيعة الخدمة والوساطة', en:'1. Nature of the Service & Mediation'},
   terms_p1: {ar:'يعمل هذا الموقع بصفته <strong>وسيطاً فقط</strong> بين العميل من جهة، والمصنع أو المورد الصيني وشركة الشحن الناقلة من جهة أخرى. لا يُعد الموقع مصنّعاً للمنتجات ولا مالكاً لها، ولا شركة شحن، وإنما ينسّق ويسهّل عملية الشراء والشحن نيابة عن العميل مقابل أجر خدمة.', en:'This site acts <strong>solely as an intermediary</strong> between the customer on one side, and the Chinese factory/supplier and the shipping carrier on the other. The site is not a manufacturer or owner of the products, nor a shipping company; it coordinates and facilitates the purchase and shipping process on behalf of the customer for a service fee.'},
   terms_h2: {ar:'2. حدود المسؤولية', en:'2. Limits of Liability'},
@@ -1663,18 +1435,25 @@ const translations = {
   terms_p8: {ar:'يُعد إنشاء حساب على هذا الموقع إقراراً من العميل بقراءته لهذه الشروط وموافقته الكاملة عليها.', en:'Creating an account on this site constitutes an acknowledgment by the customer that they have read these terms and fully agree to them.'},
   terms_h9: {ar:'9. التعديلات', en:'9. Amendments'},
   terms_p9: {ar:'يحتفظ الموقع بحق تحديث هذه الشروط في أي وقت، وسيُعمل بأحدث نسخة منشورة على هذه الصفحة.', en:'The site reserves the right to update these terms at any time, and the latest version published on this page will apply.'},
+
   footer_text: {ar:'AlHossain · للتواصل المباشر عبر واتساب', en:'AlHossain · Contact us directly on WhatsApp'},
+
   cart_title: {ar:'سلة الطلب', en:'Order Cart'},
   checkout_btn: {ar:'إتمام الطلب عبر واتساب', en:'Checkout via WhatsApp'},
+
   opt_sd: {ar:'السودان', en:'Sudan'},
   opt_ss: {ar:'جنوب السودان', en:'South Sudan'},
   opt_uae: {ar:'الإمارات العربية المتحدة', en:'United Arab Emirates'},
   opt_ksa: {ar:'المملكة العربية السعودية', en:'Saudi Arabia'},
+
+  track_title: {ar:'تتبع شحناتي', en:'Track My Shipments'},
   my_mark_desc: {ar:'مارك الشحن الدائم الخاص بك — استخدمه عند الطلب من أي موقع صيني كعنوان استلام', en:'Your permanent Shipping Mark — use it as a receiving name when ordering from any Chinese site'},
   show_shipments_btn: {ar:'اعرض كل شحناتي', en:'Show All My Shipments'},
   not_verified: {ar:'لم يتم التحقق من بريدك الإلكتروني بعد.', en:'Your email has not been verified yet.'},
   resend_verify_btn: {ar:'إعادة إرسال رابط التحقق', en:'Resend Verification Link'},
+  track_p: {ar:'أو أدخل رمز الشحنة (Shipping Mark) لعرض كل الطلبات المرتبطة به', en:'Or enter your Shipping Mark to view all orders linked to it'},
   track_login_required: {ar:'لأسباب أمنية، لازم تسجّل دخولك الأول عشان تقدر تشوف شحناتك.', en:'For security reasons, you must log in first to view your shipments.'},
+  search_btn: {ar:'بحث', en:'Search'},
   what_is_mark: {ar:'ما هي الـ Shipping Mark؟', en:'What is a Shipping Mark?'},
   mark_info_p1: {ar:'الـ Shipping Mark هي رمز تعريفي ثابت يُخصَّص لكل عميل عند التسجيل، ويُستخدم في التجارة الدولية لتمييز شحنة العميل عن غيرها من الشحنات، خاصة عندما تُجمَّع بضائع عملاء متعددين داخل حاوية واحدة قادمة من الصين.', en:'A Shipping Mark is a permanent identifier code assigned to each customer at registration, used in international trade to distinguish a customer\'s shipment from others, especially when goods from multiple customers are consolidated in one container from China.'},
   mark_why_title: {ar:'<strong>لماذا هي مهمة؟</strong>', en:'<strong>Why is it important?</strong>'},
@@ -1683,6 +1462,7 @@ const translations = {
   mark_li3: {ar:'تُستخدم كمرجع موحَّد للتتبع داخل هذا الموقع، مهما تعدَّدت طلباتك أو مصادر شرائك', en:'Used as a unified reference for tracking on this site, no matter how many orders or sources you buy from'},
   mark_how_title: {ar:'<strong>كيف تُستخدم؟</strong>', en:'<strong>How is it used?</strong>'},
   mark_how_p: {ar:'اكتب هذا الرمز على كل طرد أو كرتونة تشتريها من أي موقع صيني (تاوباو، 1688، علي بابا، أو غيرها)، واستخدمه كاسم أو عنوان استلام إضافي عند الطلب، ليتمكن المستودع من ربط البضاعة بك فور وصولها.', en:'Write this code on every parcel or carton you buy from any Chinese site (Taobao, 1688, Alibaba, or others), and use it as an extra receiving name or address when ordering, so the warehouse can link the goods to you as soon as they arrive.'},
+
   login_title: {ar:'تسجيل الدخول', en:'Login'},
   register_title: {ar:'إنشاء حساب جديد', en:'Create New Account'},
   auth_subtitle: {ar:'سجّل بالبريد الإلكتروني لتتمكن من إتمام طلبك أو إرسال سؤال', en:'Register with your email to complete your order or send a question'},
@@ -1691,22 +1471,27 @@ const translations = {
   full_name_ph: {ar:'الاسم الكامل', en:'Full Name'},
   email_ph: {ar:'البريد الإلكتروني', en:'Email Address'},
   password_ph: {ar:'كلمة المرور (6 أحرف على الأقل)', en:'Password (6+ characters)'},
+  custom_code_ph: {ar:'كود مفضل لمارك الشحن (اختياري) مثال: AHMED', en:'Preferred Shipping Mark code (optional) e.g. AHMED'},
   custom_code_hint: {ar:'حروف/أرقام إنجليزية فقط، بدون مسافات — في حال تركه فارغاً سيُولَّد رقم تلقائي', en:'English letters/numbers only, no spaces — leave blank to auto-generate one'},
   agree_terms_text: {ar:'أوافق على <span class="link-btn" style="display:inline;margin:0;padding:0;" onclick="event.preventDefault(); openTermsInfo();">الشروط والأحكام</span>', en:'I agree to the <span class="link-btn" style="display:inline;margin:0;padding:0;" onclick="event.preventDefault(); openTermsInfo();">Terms & Conditions</span>'},
   login_btn2: {ar:'دخول', en:'Login'},
   create_account_btn: {ar:'إنشاء الحساب', en:'Create Account'},
   forgot_password: {ar:'نسيت كلمة المرور؟', en:'Forgot Password?'},
   close_btn: {ar:'إغلاق', en:'Close'},
+
   no_products: {ar:'لا توجد منتجات بعد', en:'No products yet'},
   video_label: {ar:'فيديو', en:'Video'},
   order_now_whatsapp: {ar:'اطلب الآن عبر واتساب', en:'Order now via WhatsApp'},
   add_to_cart: {ar:'أضف إلى السلة', en:'Add to Cart'},
+
   cart_empty: {ar:'السلة فارغة', en:'Cart is empty'},
   total_label: {ar:'الإجمالي', en:'Total'},
+
   no_questions: {ar:'لا توجد أسئلة بعد', en:'No questions yet'},
   q_prefix: {ar:'س:', en:'Q:'},
   a_prefix: {ar:'ج:', en:'A:'},
   awaiting_reply: {ar:'بانتظار الرد...', en:'Awaiting reply...'},
+
   no_shipments_yet: {ar:'لا توجد شحنات مسجّلة على حسابك بعد.', en:'No shipments registered on your account yet.'},
   orders_section: {ar:'الطلبات', en:'Orders'},
   import_orders_section: {ar:'طلبات الشراء من الصين', en:'Import Requests from China'},
@@ -1718,6 +1503,7 @@ const translations = {
   products_label: {ar:'المنتجات', en:'Products'},
   quoted_price_label: {ar:'السعر المعروض', en:'Quoted Price'},
   unnamed: {ar:'بدون اسم', en:'Unnamed'},
+
   enter_dimensions: {ar:'من فضلك أدخل الطول والعرض والارتفاع', en:'Please enter length, width, and height'},
   single_carton_volume: {ar:'حجم الكرتونة الواحدة', en:'Volume per carton'},
   equivalent_to: {ar:'يعادل تقريباً', en:'Approximately equivalent to'},
@@ -1725,6 +1511,7 @@ const translations = {
   of_40ft: {ar:'من حاوية 40 قدم', en:'of a 40ft container'},
   or: {ar:'أو', en:'or'},
   approx_sea_cost_to: {ar:'التكلفة التقريبية للشحن البحري إلى', en:'Approximate sea freight cost to'},
+
   enter_all_values: {ar:'من فضلك أدخل كل القيم', en:'Please enter all values'},
   volumetric_weight: {ar:'الوزن الحجمي', en:'Volumetric Weight'},
   actual_weight: {ar:'الوزن الفعلي', en:'Actual Weight'},
@@ -1734,11 +1521,13 @@ const translations = {
   is_higher_of_two: {ar:'هو الأعلى بين الاثنين', en:'is the higher of the two'},
   raised_to_minimum: {ar:'(وتم رفعه للحد الأدنى المعتمد لهذه الوجهة)', en:'(raised to the minimum for this destination)'},
   approx_air_cost_to: {ar:'التكلفة التقريبية للشحن الجوي إلى', en:'Approximate air freight cost to'},
+
   enter_valid_amount: {ar:'يرجى إدخال مبلغ صحيح', en:'Please enter a valid amount'},
   rate_not_updated: {ar:'لم يُحدَّث سعر الصرف بعد من إدارة الموقع، يرجى التواصل عبر واتساب لمعرفة السعر الحالي', en:'The exchange rate has not been updated by the site admin yet — please contact us via WhatsApp for the current rate'},
   sdg_currency: {ar:'جنيه سوداني', en:'SDG'},
   usd_currency: {ar:'دولار أمريكي', en:'USD'},
   aed_currency: {ar:'درهم إماراتي', en:'AED'},
+
   nav_community: {ar:'المجتمع', en:'Community'},
   community_title: {ar:'مجتمع العملاء', en:'Customer Community'},
   community_desc: {ar:'مجتمع حقيقي 100% — كل الأعضاء هنا عملاء تعاملنا معهم فعلياً أو نعرفهم على أرض الواقع، مش حسابات وهمية. هذه مساحة حرة للتعبير عن رأيك بصراحة، إيجاباً أو سلباً، وسنرد على تعليقاتكم من حساب الإدارة مباشرة.', en:'A 100% real community — every member here is a customer we have actually dealt with or know personally, not fake accounts. This is a free space to share your honest opinion, positive or negative, and we will reply to comments directly from the official Admin account.'},
@@ -1754,6 +1543,7 @@ const translations = {
   write_post_first: {ar:'يرجى كتابة منشورك أولاً', en:'Please write your post first'},
   post_published: {ar:'تم نشر منشورك', en:'Your post has been published'},
   admin_badge: {ar:'الإدارة', en:'Admin'},
+
   profile_title: {ar:'حسابي', en:'My Account'},
   profile_email_label: {ar:'البريد الإلكتروني:', en:'Email:'},
   profile_verified_label: {ar:'حالة التحقق:', en:'Verification Status:'},
@@ -1772,6 +1562,7 @@ const translations = {
   fill_all_fields: {ar:'يرجى تعبئة كل الحقول', en:'Please fill in all fields'},
   email_changed: {ar:'تم تغيير البريد الإلكتروني، يرجى التحقق منه مجدداً', en:'Email changed — please verify it again'},
   password_changed: {ar:'تم تغيير كلمة المرور بنجاح', en:'Password changed successfully'},
+
   complaints_title: {ar:'شكاوى ومقترحات', en:'Complaints & Suggestions'},
   complaints_desc: {ar:'رسالتك هنا خاصة تمامًا ولا تظهر لأي شخص غيرنا. نقرأ كل رسالة ونهتم بمعالجتها.', en:'Your message here is completely private and visible only to us. We read and address every message.'},
   type_complaint: {ar:'شكوى', en:'Complaint'},
@@ -1780,6 +1571,7 @@ const translations = {
   send_complaint_btn: {ar:'إرسال', en:'Send'},
   write_complaint_first: {ar:'يرجى كتابة رسالتك أولاً', en:'Please write your message first'},
   complaint_sent: {ar:'تم إرسال رسالتك، شكراً لتواصلك معنا', en:'Your message has been sent — thank you for reaching out'},
+
   nav_ratings: {ar:'التقييمات', en:'Ratings'},
   ratings_title: {ar:'تقييمات العملاء', en:'Customer Ratings'},
   ratings_desc: {ar:'آراء عملائنا الحقيقية عن تجربتهم في التعامل معنا.', en:'Real feedback from our customers about their experience with us.'},
@@ -1791,6 +1583,7 @@ const translations = {
   no_reviews_yet: {ar:'لا توجد تعليقات مكتوبة بعد', en:'No written reviews yet'},
   select_stars_first: {ar:'يرجى اختيار عدد النجوم أولاً', en:'Please select a star rating first'},
   rating_submitted: {ar:'تم إرسال تقييمك، شكراً لك', en:'Your rating has been submitted, thank you'},
+
   reset_link_sent: {ar:'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني', en:'A password reset link has been sent to your email'},
   verify_link_resent: {ar:'تم إرسال رابط التحقق مجدداً، يرجى تفقّد بريدك الإلكتروني', en:'Verification link resent — please check your email'},
   question_sent: {ar:'تم إرسال سؤالك، وسيتم الرد عليه قريباً', en:'Your question has been sent and will be answered soon'},
@@ -1808,19 +1601,24 @@ const translations = {
   please_login_first: {ar:'يرجى تسجيل الدخول أولاً', en:'Please log in first'},
   invalid_email_error: {ar:'صيغة البريد الإلكتروني غير صحيحة', en:'Invalid email format'},
   no_account_error: {ar:'لا يوجد حساب مسجَّل بهذا البريد الإلكتروني', en:'No account registered with this email'},
+
   enter_email_password: {ar:'أدخل الإيميل وكلمة المرور', en:'Enter your email and password'},
   enter_full_name: {ar:'أدخل اسمك الكامل', en:'Enter your full name'},
   must_agree_terms: {ar:'يجب الموافقة على الشروط والأحكام لإتمام التسجيل', en:'You must agree to the Terms & Conditions to register'},
   code_taken: {ar:'هذا الكود مستخدم بالفعل، يرجى تجربة كود آخر أو تركه فارغاً ليُولَّد تلقائياً', en:'This code is already taken — try another one or leave it blank to auto-generate'},
   name_english_only: {ar:'يرجى كتابة اسمك بحروف إنجليزية أو أرقام فقط (مثال: AHMED)', en:'Please write your name using English letters or numbers only (e.g. AHMED)'},
+
   unnamed_customer: {ar:'عميل', en:'Customer'},
+
   nav_activity: {ar:'الإشعارات', en:'Notifications'},
+  nav_offers: {ar:'🔥 العروض', en:'🔥 Offers'},
   activity_title: {ar:'آخر التحركات في الموقع', en:'Latest Site Activity'},
   activity_desc: {ar:'تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.', en:'Follow the latest posts, questions, and ratings from our real customers.'},
   no_activity_yet: {ar:'لا توجد تحركات بعد', en:'No activity yet'},
   activity_posted: {ar:'نشر منشوراً جديداً', en:'posted a new update'},
   activity_asked: {ar:'طرح سؤالاً جديداً', en:'asked a new question'},
   activity_rated: {ar:'قيّم تجربته', en:'rated their experience'},
+
   logged_out_msg: {ar:'تم تسجيل الخروج بنجاح', en:'Logged out successfully'},
   sail_text: {ar:'جارٍ الإبحار نحو حسابك...', en:'Sailing to your account...'},
   tracking_anim_text: {ar:'جارٍ البحث عن شحناتك...', en:'Searching for your shipments...'},
@@ -1832,7 +1630,6 @@ const translations = {
   invalid_credential: {ar:'بيانات الدخول غير صحيحة', en:'Invalid login credentials'},
   generic_error: {ar:'حدث خطأ، حاول مرة أخرى', en:'An error occurred, please try again'},
 };
-// ====== FUNCTIONS ======
 
 function t(key){
   return translations[key] ? translations[key][currentLang] : key;
@@ -1841,7 +1638,6 @@ function t(key){
 function toggleLanguage(){
   currentLang = currentLang === 'ar' ? 'en' : 'ar';
   applyLanguage();
-  updateAuthButtons();
 }
 
 function applyLanguage(){
@@ -1862,134 +1658,18 @@ function applyLanguage(){
   document.getElementById('langBtn').textContent = currentLang === 'ar' ? 'EN' : 'AR';
   document.getElementById('cartLabel').textContent = translations.cart_label[currentLang];
   document.documentElement.setAttribute('lang', currentLang);
-  updateFactoryCityLabel();
-}
-
-function updateAuthButtons(){
-  const btn = document.getElementById('authBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
-  if(currentUser){
-    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
-    logoutBtn.textContent = currentLang === 'ar' ? 'خروج' : 'Log out';
-  } else {
-    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
+  if(!currentUser){
+    document.getElementById('authBtn').textContent = translations.login_btn[currentLang];
   }
+  updateFactoryCityLabel();
 }
 
 function destName(code){
   const map = { SD:'opt_sd', SS:'opt_ss', UAE:'opt_uae', KSA:'opt_ksa' };
   return map[code] ? t(map[code]) : code;
 }
-
-function destCodeFromName(name){
-  const codes = ['SD','SS','UAE','KSA'];
-  for(const c of codes){
-    const key = 'opt_' + c.toLowerCase();
-    if(translations[key] && (translations[key].ar === name || translations[key].en === name)) return c;
-  }
-  return 'SD';
-}
-
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2200);
-}
-
-function showCraneLoader(){
-  const el = document.getElementById('craneLoader');
-  el.classList.add('show');
-  clearTimeout(el._t);
-  el._t = setTimeout(()=> el.classList.remove('show'), 650);
-}
-
-function showTab(tab){
-  document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(tab).classList.add('active');
-  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
-  const navBtn = document.querySelector(`nav.tabs button[data-tab="${tab}"]`);
-  if(navBtn) navBtn.classList.add('active');
-  const isAdmin = tab === 'admin';
-  document.getElementById('waFloat').style.display = isAdmin ? 'none' : 'flex';
-  document.getElementById('currencyFloat').style.display = isAdmin ? 'none' : 'flex';
-  if(firebase.analytics){
-    try{ firebase.analytics().logEvent('page_view', { page_title: tab }); }catch(e){}
-  }
-}
-
-function openAuthModal(){
-  document.getElementById('authOverlay').classList.add('show');
-}
-
-function closeAuthModal(){
-  document.getElementById('authOverlay').classList.remove('show');
-  document.getElementById('authError').classList.remove('show');
-}
-
-function openCurrencyModal(){
-  document.getElementById('currencyModalOverlay').classList.add('show');
-}
-
-function closeCurrencyModal(){
-  document.getElementById('currencyModalOverlay').classList.remove('show');
-}
-
-function openTermsInfo(){
-  document.getElementById('termsInfoOverlay').classList.add('show');
-}
-
-function closeTermsInfo(){
-  document.getElementById('termsInfoOverlay').classList.remove('show');
-}
-
-function openMarkInfo(){
-  document.getElementById('markInfoOverlay').classList.add('show');
-}
-
-function closeMarkInfo(){
-  document.getElementById('markInfoOverlay').classList.remove('show');
-}
-
-function closeVideo(){
-  const modal = document.getElementById('videoModal');
-  document.getElementById('videoPlayer').pause();
-  document.getElementById('videoPlayer').src = '';
-  modal.classList.remove('show');
-}
-
-function playVideo(url){
-  const modal = document.getElementById('videoModal');
-  document.getElementById('videoPlayer').src = url;
-  modal.classList.add('show');
-}
-
-function togglePasswordVisibility(inputId, btn){
-  const input = document.getElementById(inputId);
-  if(input.type === 'password'){
-    input.type = 'text';
-    btn.textContent = '🙈';
-  } else {
-    input.type = 'password';
-    btn.textContent = '👁';
-  }
-}
-
-function switchAuthTab(mode){
-  authMode = mode;
-  document.getElementById('tabLogin').classList.toggle('active', mode==='login');
-  document.getElementById('tabRegister').classList.toggle('active', mode==='register');
-  document.getElementById('authTitle').textContent = translations[mode==='login' ? 'login_title' : 'register_title'][currentLang];
-  document.getElementById('authSubmitBtn').textContent = translations[mode==='login' ? 'login_btn2' : 'create_account_btn'][currentLang];
-  document.getElementById('authName').style.display = mode==='register' ? 'block' : 'none';
-  document.getElementById('authDestination').style.display = mode==='register' ? 'block' : 'none';
-  document.getElementById('customCodeHint').style.display = mode==='register' ? 'block' : 'none';
-  document.getElementById('termsAgreeWrap').style.display = mode==='register' ? 'flex' : 'none';
-  document.getElementById('forgotPasswordBtn').style.display = mode==='login' ? 'block' : 'none';
-  document.getElementById('authError').classList.remove('show');
-}
-
-// ====== DATA LOADING FUNCTIONS ======
+let currentCustomerData = null;
+let authMode = 'login';
 
 async function loadData(){
   const prodSnap = await db.collection('products').get();
@@ -2033,6 +1713,7 @@ async function loadData(){
   });
 }
 
+// تُستدعى فقط بعد التحقق من أن المستخدم هو المسؤول (checkPin)
 async function loadAdminData(){
   const orderSnap = await db.collection('orders').get();
   orders = {};
@@ -2090,6 +1771,7 @@ async function loadAdminData(){
   });
 }
 
+// تُستدعى فقط للعميل المسجل دخوله، وتجيب شحناته الخاصة به فقط عبر استعلام مقيّد بمارك الشحن
 async function loadMyShipments(){
   if(!currentUser || !currentCustomerData || !currentCustomerData.shippingMark) return;
   const mark = currentCustomerData.shippingMark;
@@ -2108,28 +1790,407 @@ async function loadMyShipments(){
   factorySnap.docs.forEach(d => { myFactoryVisits[d.id] = d.data(); });
 }
 
-// ====== AUTH FUNCTIONS ======
+// تضمن إن أي عميل مسجل دخول عنده مارك شحن دائم، حتى لو حساب قديم لسه مالوش مارك لأي سبب
+async function ensureShippingMark(){
+  if(!currentUser) return;
+  if(currentCustomerData && currentCustomerData.shippingMark) return; // عنده مارك بالفعل، مفيش داعي
 
-async function generateUniqueMark(rawName, destCode, ownerEmail){
-  let base = (rawName || '').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-  if(!base){
-    const seq = await getNextCustomerSeq();
-    base = `C${String(seq).padStart(3,'0')}`;
+  const destCode = currentCustomerData?.destination ? destCodeFromName(currentCustomerData.destination) : 'SD';
+  const nameBase = currentCustomerData?.name || currentUser.email.split('@')[0];
+  const mark = await generateUniqueMark(nameBase, destCode, currentUser.email);
+
+  const data = {
+    email: currentUser.email,
+    name: currentCustomerData?.name || nameBase,
+    destination: currentCustomerData?.destination || destName(destCode),
+    shippingMark: mark,
+    emailVerified: currentUser.emailVerified || false,
+    joinDate: currentCustomerData?.joinDate || new Date().toISOString().slice(0,10)
+  };
+  await db.collection('customers').doc(currentUser.email).set(data, {merge:true});
+  currentCustomerData = data;
+}
+
+function destCodeFromName(name){
+  const codes = ['SD','SS','UAE','KSA'];
+  for(const c of codes){
+    const key = 'opt_' + c.toLowerCase();
+    if(translations[key] && (translations[key].ar === name || translations[key].en === name)) return c;
   }
-  if(base.length > 15) base = base.slice(0,15);
+  return 'SD';
+}
 
-  let candidate = `AH-${base}-${destCode}`;
-  let attempt = 1;
-  while(true){
-    const markRef = db.collection('shippingMarks').doc(candidate);
-    const markDoc = await markRef.get();
-    if(!markDoc.exists){
-      await markRef.set({ email: ownerEmail });
-      return candidate;
+auth.onAuthStateChanged(async user => {
+  currentUser = user;
+  const btn = document.getElementById('authBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const greeting = document.getElementById('userGreeting');
+  const tagline = document.getElementById('taglineText');
+  if(user){
+    btn.textContent = '👤';
+    btn.onclick = () => { showTab('profile'); renderProfile(); };
+    logoutBtn.style.display = 'inline-block';
+    greeting.style.display = 'block';
+    greeting.textContent = '👋 ' + ((currentCustomerData && currentCustomerData.name) || user.email.split('@')[0]);
+    tagline.style.display = 'none';
+    try{
+      const doc = await db.collection('customers').doc(user.email).get();
+      currentCustomerData = doc.exists ? doc.data() : null;
+      if(currentCustomerData && currentCustomerData.name) greeting.textContent = '👋 ' + currentCustomerData.name;
+      if(user.emailVerified && currentCustomerData && !currentCustomerData.emailVerified){
+        await db.collection('customers').doc(user.email).update({emailVerified: true});
+        currentCustomerData.emailVerified = true;
+      }
+    }catch(e){ currentCustomerData = null; }
+    await ensureShippingMark();
+    renderMyShippingMark();
+    if(currentCustomerData && currentCustomerData.shippingMark){
+      await loadMyShipments();
+      renderShipmentsResult();
     }
-    attempt++;
-    candidate = `AH-${base}${attempt}-${destCode}`;
+  } else {
+    btn.textContent = '👤';
+    btn.onclick = openAuthModal;
+    logoutBtn.style.display = 'none';
+    greeting.style.display = 'none';
+    tagline.style.display = 'block';
+    currentCustomerData = null;
+    myOrders = {}; myImportRequests = {}; myFactoryVisits = {};
+    renderMyShippingMark();
   }
+});
+
+function playSailAnimation(callback){
+  const overlay = document.getElementById('sailOverlay');
+  overlay.classList.add('show');
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    if(callback) callback();
+  }, 2000);
+}
+
+function doLogout(){
+  auth.signOut();
+  showTab('home');
+  showToast(t('logged_out_msg'));
+}
+
+function renderAll(){
+  renderCatalog();
+  renderAdminProducts();
+  renderAdminOrders();
+  renderAdminCustomers();
+}
+
+function renderAdminCustomers(search){
+  document.getElementById('customerCount').textContent = customers.length;
+  const wrap = document.getElementById('adminCustomerList');
+  if(!wrap) return;
+  const term = (search||'').trim().toLowerCase();
+  const filtered = term ? customers.filter(c =>
+    (c.name||'').toLowerCase().includes(term) ||
+    (c.email||'').toLowerCase().includes(term) ||
+    (c.shippingMark||'').toLowerCase().includes(term)
+  ) : customers;
+  if(filtered.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا يوجد عملاء مسجلون بعد'}</div>`; return; }
+  wrap.innerHTML = filtered.map(c=>`
+    <div class="admin-list-item">
+      <span><strong>${c.shippingMark||'بدون مارك'}</strong> — ${c.name||''} — ${c.email} — ${c.destination||''} — ${c.emailVerified ? '✅ موثّق' : '⏳ غير موثّق'}</span>
+      <span style="color:#888;font-size:12px;">${c.joinDate||''}</span>
+    </div>`).join('');
+}
+
+function exportCustomers(){
+  if(customers.length===0){ showToast('لا يوجد عملاء لتصديرهم بعد'); return; }
+  let csv = 'ShippingMark,Name,Email,Destination,EmailVerified,JoinDate\n';
+  customers.forEach(c=>{ csv += `${c.shippingMark||''},${c.name||''},${c.email},${c.destination||''},${c.emailVerified?'Yes':'No'},${c.joinDate||''}\n`; });
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'عملاء_AlHossain.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('تم تصدير الملف بنجاح');
+}
+
+function renderAbout(){
+  document.getElementById('aboutName').textContent = aboutData.name || 'اسم المؤسس';
+  document.getElementById('aboutYears').textContent = aboutData.years ? aboutData.years : '-';
+  document.getElementById('aboutBio').textContent = aboutData.bio || 'لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.';
+  document.getElementById('customerCount2').textContent = customers.length;
+  document.getElementById('statOrders2').textContent = Object.keys(orders).length;
+
+  const photoWrap = document.getElementById('aboutPhotoWrap');
+  if(aboutData.photo){
+    photoWrap.innerHTML = `<img src="${aboutData.photo}" alt="${aboutData.name||''}">`;
+  } else {
+    photoWrap.innerHTML = `<span>${(aboutData.name||'؟').charAt(0)}</span>`;
+  }
+
+  // تعبئة نموذج الإدارة بالقيم الحالية
+  const nameInput = document.getElementById('aboutNameInput');
+  const yearsInput = document.getElementById('aboutYearsInput');
+  const bioInput = document.getElementById('aboutBioInput');
+  if(nameInput){
+    nameInput.value = aboutData.name || '';
+    yearsInput.value = aboutData.years || '';
+    bioInput.value = aboutData.bio || '';
+  }
+}
+
+async function saveAbout(){
+  const name = document.getElementById('aboutNameInput').value.trim();
+  const years = document.getElementById('aboutYearsInput').value;
+  const bio = document.getElementById('aboutBioInput').value.trim();
+  const photoFile = document.getElementById('aboutPhotoInput').files[0];
+  const btn = document.getElementById('saveAboutBtn');
+  btn.disabled = true;
+
+  const data = { name, years: years ? parseInt(years) : null, bio };
+
+  try{
+    if(photoFile){
+      const photoRef = storage.ref('about/' + Date.now() + '_' + photoFile.name);
+      await photoRef.put(photoFile);
+      data.photo = await photoRef.getDownloadURL();
+    } else if(aboutData.photo){
+      data.photo = aboutData.photo;
+    }
+    await db.collection('settings').doc('about').set(data);
+    aboutData = data;
+    renderAbout();
+    showToast('تم حفظ صفحة المؤسس بنجاح');
+  }catch(e){
+    showToast('حدث خطأ أثناء الحفظ، يرجى التأكد من إعداد Firebase Storage');
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+async function saveSdgRate(){
+  const val = parseFloat(document.getElementById('sdgRateInput').value);
+  if(!val){ showToast('أدخل رقماً صحيحاً'); return; }
+  const data = { sdgRate: val, lastUpdated: new Date().toISOString() };
+  await db.collection('settings').doc('currency').set(data);
+  currencyData = data;
+  renderCurrencyMeta();
+  showToast('تم حفظ سعر الصرف');
+}
+
+function renderCurrencyMeta(){
+  const meta = document.getElementById('sdgRateMeta');
+  if(meta){
+    meta.textContent = currencyData.sdgRate
+      ? `آخر سعر محفوظ: ${currencyData.sdgRate} جنيه لكل يوان — آخر تحديث: ${new Date(currencyData.lastUpdated).toLocaleString('ar-EG')}`
+      : 'لم يُحفظ سعر بعد';
+  }
+  const publicMeta = document.getElementById('currencyMeta');
+  if(publicMeta){
+    publicMeta.textContent = currencyData.sdgRate
+      ? `آخر تحديث للسعر: ${new Date(currencyData.lastUpdated).toLocaleDateString('ar-EG')}`
+      : '';
+  }
+  const input = document.getElementById('sdgRateInput');
+  if(input && currencyData.sdgRate) input.value = currencyData.sdgRate;
+}
+
+function calcCurrency(){
+  const cny = parseFloat(document.getElementById('cnyAmount').value);
+  const box = document.getElementById('currencyResult');
+  if(!cny){ box.innerHTML = t('enter_valid_amount'); box.classList.add('show'); return; }
+  if(!currencyData.sdgRate){
+    box.innerHTML = t('rate_not_updated');
+    box.classList.add('show');
+    return;
+  }
+  // أسعار العمل الداخلية (ثابتة، بناءً على أسعارك الخاصة اللي فيها هامش الربح)
+  const AED_PER_CNY = 1 / 1.50;   // الدرهم = 1.50 يوان
+  const USD_PER_CNY = 1 / 5.625;  // الدولار = 3.75 درهم = 5.625 يوان
+
+  const sdg = (cny * currencyData.sdgRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0});
+  const aed = (cny * AED_PER_CNY).toFixed(2);
+  const usd = (cny * USD_PER_CNY).toFixed(2);
+
+  box.innerHTML = `
+    <div class="big">¥${cny} ≈</div>
+    <div style="margin-top:6px;">$${usd} ${t('usd_currency')}</div>
+    <div>${aed} ${t('aed_currency')}</div>
+    <div>${sdg} ${t('sdg_currency')}</div>`;
+  box.classList.add('show');
+}
+
+async function saveAgentCity(){
+  const val = document.getElementById('agentCityInput').value.trim();
+  if(!val){ showToast('أدخل اسم المدينة'); return; }
+  await db.collection('settings').doc('agentLocation').set({ currentCity: val });
+  agentLocationData = { currentCity: val };
+  updateFactoryCityLabel();
+  showToast('تم حفظ المدينة الحالية');
+}
+
+function updateFactoryCityLabel(){
+  const city = agentLocationData.currentCity ? `(${agentLocationData.currentCity})` : (currentLang==='ar' ? '(يُحدَّد لاحقاً)' : '(to be set)');
+  const p = document.getElementById('factoryTermsP');
+  if(!p) return;
+  if(currentLang === 'ar'){
+    p.innerHTML = `إذا كان المصنع داخل نفس المدينة التي يتواجد فيها المسؤول حالياً <strong id="factoryCurrentCityLabel">${city}</strong>، فتكلفة الزيارة <strong>15$</strong> تشمل: زيارة ميدانية، تفاوض مع المصنع، إتمام عملية الشراء، وفحص البضاعة والمصنع.<br><br>أما إذا كان المصنع في مدينة أخرى، فتكلفة التنقل والسفر تكون على العميل، وتُحدَّد بعد التنسيق المباشر.`;
+  } else {
+    p.innerHTML = `If the factory is in the same city the agent is currently based in <strong id="factoryCurrentCityLabel">${city}</strong>, the visit fee is <strong>$15</strong>, covering: an on-site visit, negotiation with the factory, completing the purchase, and inspecting the goods and factory.<br><br>If the factory is in a different city, travel costs are covered by the customer and will be arranged directly.`;
+  }
+}
+
+function checkFactoryCity(){
+  const city = document.getElementById('factoryCity').value.trim().toLowerCase();
+  const note = document.getElementById('factoryCostNote');
+  if(!city || !agentLocationData.currentCity){ note.style.display='none'; return; }
+  const sameCity = city.includes(agentLocationData.currentCity.toLowerCase()) || agentLocationData.currentCity.toLowerCase().includes(city);
+  note.style.display = 'block';
+  note.textContent = sameCity
+    ? '✅ المصنع في نفس مدينة المسؤول — التكلفة المتوقعة: 15$ شاملة الزيارة والتفاوض والفحص'
+    : '⚠️ المصنع في مدينة مختلفة — تكلفة السفر ستكون على العميل، وسيتم التنسيق بعد إرسال الطلب';
+}
+
+async function submitFactoryVisit(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_request')); return; }
+  const link = document.getElementById('factoryLink').value.trim();
+  const name = document.getElementById('factoryName').value.trim();
+  const specialty = document.getElementById('factorySpecialty').value.trim();
+  const contact = document.getElementById('factoryContact').value.trim();
+  const city = document.getElementById('factoryCity').value.trim();
+  const notes = document.getElementById('factoryNotes').value.trim();
+  if(!name || !specialty || !city){ showToast(t('fill_factory_required')); return; }
+
+  const sameCity = agentLocationData.currentCity && city.toLowerCase().includes(agentLocationData.currentCity.toLowerCase());
+  const costNote = sameCity ? '15$ (نفس مدينة المسؤول)' : 'تكلفة السفر على العميل (مدينة مختلفة)';
+  const mark = currentCustomerData?.shippingMark || '';
+
+  const reqData = {
+    link, name, specialty, contact, city, notes,
+    costNote,
+    customerEmail: currentUser.email,
+    shippingMark: mark,
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10)
+  };
+  await db.collection('factoryVisitRequests').add(reqData);
+  notifyAdmin('طلب زيارة مصنع جديد', `مارك الشحن: ${mark}\nاسم المصنع: ${name}\nالمدينة: ${city}\nالتكلفة المتوقعة: ${costNote}`);
+
+  const msg = `مرحباً، أرغب في طلب زيارة مصنع.\nمارك الشحن الخاص بي: ${mark}\nاسم المصنع: ${name}\nالتخصص: ${specialty}\nالمدينة: ${city}\nرابط المصنع: ${link || '-'}\nتواصل المصنع: ${contact || '-'}\nملاحظات: ${notes || '-'}\nالتكلفة المتوقعة: ${costNote}`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+
+  document.getElementById('factoryLink').value = '';
+  document.getElementById('factoryName').value = '';
+  document.getElementById('factorySpecialty').value = '';
+  document.getElementById('factoryContact').value = '';
+  document.getElementById('factoryCity').value = '';
+  document.getElementById('factoryNotes').value = '';
+  document.getElementById('factoryCostNote').style.display = 'none';
+  showToast(t('visit_request_sent'));
+}
+
+function renderCatalog(){
+  const grid = document.getElementById('productGrid');
+  if(products.length===0){
+    grid.innerHTML = `<div class="empty">${t('no_products')}</div>`;
+    return;
+  }
+  grid.innerHTML = products.map(p => `
+    <div class="product">
+      <div class="thumb">
+        ${p.image ? `<img src="${p.image}" alt="${p.name}">` : p.name.charAt(0)}
+        ${p.video ? `<span class="thumb-video-badge" onclick="playVideo('${p.video}')">▶ ${t('video_label')}</span>` : ''}
+        <button class="thumb-quick-btn" onclick="quickOrder('${p.id}')" title="${t('order_now_whatsapp')}">📩</button>
+      </div>
+      <div class="body">
+        <div class="name">${p.name}</div>
+        <div class="price">$${p.price}</div>
+        <button class="add" onclick="addToCart('${p.id}')">${t('add_to_cart')}</button>
+      </div>
+    </div>`).join('');
+}
+
+function quickOrder(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  const msg = `مرحباً، أريد الاستفسار عن طلب: ${p.name} (${p.price}$)`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function playVideo(url){
+  const modal = document.getElementById('videoModal');
+  document.getElementById('videoPlayer').src = url;
+  modal.classList.add('show');
+}
+function closeVideo(){
+  const modal = document.getElementById('videoModal');
+  document.getElementById('videoPlayer').pause();
+  document.getElementById('videoPlayer').src = '';
+  modal.classList.remove('show');
+}
+
+function openMarkInfo(){
+  document.getElementById('markInfoOverlay').classList.add('show');
+}
+function closeMarkInfo(){
+  document.getElementById('markInfoOverlay').classList.remove('show');
+}
+
+function addToCart(id){
+  cart[id] = (cart[id]||0)+1;
+  updateCartBadge();
+  showToast(t('added_to_cart'));
+}
+
+function updateCartBadge(){
+  const count = Object.values(cart).reduce((a,b)=>a+b,0);
+  document.getElementById('cartBadge').textContent = count;
+}
+
+function renderCart(){
+  const wrap = document.getElementById('cartItems');
+  const ids = Object.keys(cart);
+  if(ids.length===0){
+    wrap.innerHTML = `<div class="empty">${t('cart_empty')}</div>`;
+    document.getElementById('cartTotal').textContent = `${t('total_label')}: 0$`;
+    return;
+  }
+  let total = 0;
+  wrap.innerHTML = ids.map(id=>{
+    const p = products.find(x=>x.id===id);
+    if(!p) return '';
+    const qty = cart[id];
+    total += p.price*qty;
+    return `<div class="cart-item">
+      <div>
+        <div class="name">${p.name}</div>
+        <div class="qty">
+          <button onclick="changeQty('${id}',-1)">-</button>
+          <span>${qty}</span>
+          <button onclick="changeQty('${id}',1)">+</button>
+        </div>
+      </div>
+      <div>$${(p.price*qty).toFixed(2)}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('cartTotal').textContent = `${t('total_label')}: $${total.toFixed(2)}`;
+}
+
+function changeQty(id, delta){
+  cart[id] = (cart[id]||0)+delta;
+  if(cart[id]<=0) delete cart[id];
+  updateCartBadge();
+  renderCart();
+}
+
+function openCart(){
+  renderCart();
+  document.getElementById('drawer').classList.add('show');
+  document.getElementById('overlay').classList.add('show');
+}
+function closeCart(){
+  document.getElementById('drawer').classList.remove('show');
+  document.getElementById('overlay').classList.remove('show');
 }
 
 async function getNextOrderSeq(){
@@ -2154,116 +2215,154 @@ async function getNextCustomerSeq(){
   });
 }
 
-async function ensureShippingMark(){
-  if(!currentUser) return;
-  if(currentCustomerData && currentCustomerData.shippingMark) return;
+// تولّد مارك شحن فريد مبني على اسم المستخدم (بالإنجليزي)، وتضيف رقم تلقائي لو الاسم متكرر
+async function generateUniqueMark(rawName, destCode, ownerEmail){
+  let base = (rawName || '').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(!base){
+    // احتياطي: لو الاسم فاضي بعد التنقية (حالة نادرة)، نستخدم رقم تسلسلي تلقائي بدلاً منه
+    const seq = await getNextCustomerSeq();
+    base = `C${String(seq).padStart(3,'0')}`;
+  }
+  if(base.length > 15) base = base.slice(0,15);
 
-  const destCode = currentCustomerData?.destination ? destCodeFromName(currentCustomerData.destination) : 'SD';
-  const nameBase = currentCustomerData?.name || currentUser.email.split('@')[0];
-  const mark = await generateUniqueMark(nameBase, destCode, currentUser.email);
+  let candidate = `AH-${base}-${destCode}`;
+  let attempt = 1;
+  while(true){
+    const markRef = db.collection('shippingMarks').doc(candidate);
+    const markDoc = await markRef.get();
+    if(!markDoc.exists){
+      await markRef.set({ email: ownerEmail });
+      return candidate;
+    }
+    attempt++;
+    candidate = `AH-${base}${attempt}-${destCode}`;
+  }
+}
 
-  const data = {
-    email: currentUser.email,
-    name: currentCustomerData?.name || nameBase,
-    destination: currentCustomerData?.destination || destName(destCode),
-    shippingMark: mark,
-    emailVerified: currentUser.emailVerified || false,
-    joinDate: currentCustomerData?.joinDate || new Date().toISOString().slice(0,10)
+async function checkoutWhatsApp(){
+  if(!currentUser){ closeCart(); openAuthModal(); showToast(t('login_required_order')); return; }
+  const ids = Object.keys(cart);
+  if(ids.length===0){ showToast(t('cart_empty')); return; }
+  const destCode = document.getElementById('destinationSelect').value;
+
+  // لو العميل قديم ومفيهوش مارك ثابتة لأي سبب، نتأكد إنه اتولّدله واحد الآن
+  await ensureShippingMark();
+
+  let total = 0;
+  let lines = ids.map(id=>{
+    const p = products.find(x=>x.id===id);
+    const qty = cart[id];
+    total += p.price*qty;
+    return `- ${p.name} × ${qty} = $${(p.price*qty).toFixed(2)}`;
+  });
+  const orderData = {
+    items: ids.map(id=>({name:products.find(x=>x.id===id).name, qty:cart[id]})),
+    total: total.toFixed(2),
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10),
+    customerEmail: currentUser.email,
+    shippingMark: currentCustomerData.shippingMark,
+    destination: destName(destCode),
+    carrierTracking: ''
   };
-  await db.collection('customers').doc(currentUser.email).set(data, {merge:true});
-  currentCustomerData = data;
+  const ref = await db.collection('orders').add(orderData);
+  myOrders[ref.id] = orderData;
+  notifyAdmin('طلب جديد على الموقع', `مارك الشحن: ${currentCustomerData.shippingMark}\nالإجمالي: $${total.toFixed(2)}\nالوجهة: ${orderData.destination}`);
+  const msg = `مرحباً، أريد تأكيد طلب جديد.\nمارك الشحن الخاص بي (Shipping Mark): ${currentCustomerData.shippingMark}\n${lines.join('\n')}\nالإجمالي: $${total.toFixed(2)}\nالوجهة: ${orderData.destination}`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  cart = {};
+  updateCartBadge();
+  closeCart();
+  showToast(`تم إرسال طلبك، مارك الشحن: ${currentCustomerData.shippingMark}`);
 }
 
-async function submitAuth(){
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const name = document.getElementById('authName').value.trim();
-  const destCode = document.getElementById('authDestination').value;
-  const errBox = document.getElementById('authError');
-  errBox.classList.remove('show');
-  if(!email || !password){
-    errBox.textContent = t('enter_email_password');
-    errBox.classList.add('show');
+function renderShipmentsResult(){
+  const box = document.getElementById('orderResult');
+  const orderMatches = Object.entries(myOrders);
+  const importMatches = Object.entries(myImportRequests);
+  const factoryMatches = Object.entries(myFactoryVisits);
+  if(orderMatches.length===0 && importMatches.length===0 && factoryMatches.length===0){
+    box.innerHTML = `<p>${t('no_shipments_yet')}</p>`;
+    box.classList.add('show');
     return;
   }
-  if(authMode === 'register' && !name){
-    errBox.textContent = t('enter_full_name');
-    errBox.classList.add('show');
-    return;
+  let html = '';
+  if(orderMatches.length){
+    html += `<h3 style="margin:10px 0;font-size:16px;">${t('orders_section')}</h3>`;
+    html += orderMatches.reverse().map(([id,order]) => `
+      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
+        <div><strong>${t('mark_label')}:</strong> ${order.shippingMark}</div>
+        <div><strong>${t('destination_label')}:</strong> ${order.destination||'-'}</div>
+        <div><strong>${t('date_label')}:</strong> ${order.date}</div>
+        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${order.status}</span></div>
+        ${order.carrierTracking ? `<div><strong>${t('carrier_tracking_label')}:</strong> ${order.carrierTracking}</div>` : ''}
+        <div><strong>${t('products_label')}:</strong></div>
+        <ul style="margin:6px 18px;">${order.items.map(i=>`<li>${i.name} × ${i.qty}</li>`).join('')}</ul>
+        <div><strong>${t('total_label')}:</strong> $${order.total}</div>
+      </div>`).join('');
   }
-
-  let cleanName = '';
-  if(authMode === 'register'){
-    cleanName = name.toUpperCase().replace(/[^A-Z0-9]/g,'');
-    if(!cleanName){
-      errBox.textContent = t('name_english_only');
-      errBox.classList.add('show');
-      return;
-    }
+  if(importMatches.length){
+    html += `<h3 style="margin:14px 0 10px;font-size:16px;">${t('import_orders_section')}</h3>`;
+    html += importMatches.reverse().map(([id,r]) => {
+      const items = r.items || [{name:r.name, qty:r.qty}];
+      const itemsList = items.map(it=>`<li>${it.name || t('unnamed')} × ${it.qty}</li>`).join('');
+      return `
+      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
+        <div><strong>${t('products_label')}:</strong></div>
+        <ul style="margin:6px 18px;">${itemsList}</ul>
+        <div><strong>${t('destination_label')}:</strong> ${r.destination||'-'}</div>
+        <div><strong>${t('date_label')}:</strong> ${r.date}</div>
+        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${r.status}</span></div>
+        ${r.quotedPrice ? `<div><strong>${t('quoted_price_label')}:</strong> $${r.quotedPrice}</div>` : ''}
+      </div>`;
+    }).join('');
   }
-
-  if(authMode === 'register' && !document.getElementById('authTermsCheck').checked){
-    errBox.textContent = t('must_agree_terms');
-    errBox.classList.add('show');
-    return;
+  if(factoryMatches.length){
+    html += `<h3 style="margin:14px 0 10px;font-size:16px;">${t('factory_visits_section')}</h3>`;
+    html += factoryMatches.reverse().map(([id,f]) => `
+      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
+        <div><strong>${f.name}</strong> — ${f.specialty} — ${f.city}</div>
+        <div><strong>${t('date_label')}:</strong> ${f.date}</div>
+        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${f.status}</span></div>
+      </div>`).join('');
   }
+  box.innerHTML = html;
+  box.classList.add('show');
+}
 
-  try{
-    if(authMode === 'login'){
-      await auth.signInWithEmailAndPassword(email, password);
-    } else {
-      const userCred = await auth.createUserWithEmailAndPassword(email, password);
-      const shippingMark = await generateUniqueMark(cleanName, destCode, email);
-      await userCred.user.sendEmailVerification();
-      await db.collection('customers').doc(email).set({
-        email: email,
-        name: name,
-        destination: destName(destCode),
-        shippingMark: shippingMark,
-        emailVerified: false,
-        termsAccepted: true,
-        termsAcceptedDate: new Date().toISOString(),
-        joinDate: new Date().toISOString().slice(0,10)
-      });
-    }
-    playSailAnimation(() => {
-      closeAuthModal();
-      showToast(authMode==='login' ? t('logged_in') : t('account_created'));
-    });
-  }catch(e){
-    const map = {
-      'auth/email-already-in-use': t('email_in_use'),
-      'auth/invalid-email': t('invalid_email_error'),
-      'auth/weak-password': t('weak_password'),
-      'auth/user-not-found': t('no_account_error'),
-      'auth/wrong-password': t('wrong_password'),
-      'auth/invalid-credential': t('invalid_credential')
-    };
-    errBox.textContent = map[e.code] || t('generic_error');
-    errBox.classList.add('show');
+function renderMyShippingMark(){
+  const loginPrompt = document.getElementById('trackLoginPrompt');
+  const wrap = document.getElementById('myMarkBox');
+  if(!wrap || !loginPrompt) return;
+  if(currentUser && currentCustomerData && currentCustomerData.shippingMark){
+    loginPrompt.style.display = 'none';
+    wrap.style.display = 'block';
+    document.getElementById('myMarkDisplay').textContent = currentCustomerData.shippingMark;
+    const notice = document.getElementById('verifyNotice');
+    notice.style.display = (currentUser && !currentUser.emailVerified) ? 'block' : 'none';
+  } else {
+    wrap.style.display = 'none';
+    loginPrompt.style.display = 'block';
   }
 }
 
-async function handleForgotPassword(){
-  const email = document.getElementById('authEmail').value.trim();
-  const errBox = document.getElementById('authError');
-  errBox.classList.remove('show');
-  if(!email){
-    errBox.textContent = 'يرجى إدخال بريدك الإلكتروني أولاً في الحقل أعلاه';
-    errBox.classList.add('show');
-    return;
-  }
-  try{
-    await auth.sendPasswordResetEmail(email);
-    showToast(t('reset_link_sent'));
-  }catch(e){
-    const map = {
-      'auth/invalid-email': t('invalid_email_error'),
-      'auth/user-not-found': t('no_account_error')
-    };
-    errBox.textContent = map[e.code] || t('send_error_retry');
-    errBox.classList.add('show');
-  }
+function renderProfile(){
+  if(!currentUser || !currentCustomerData) return;
+  document.getElementById('profileName').textContent = currentCustomerData.name || currentUser.email.split('@')[0];
+  document.getElementById('profileMark').textContent = currentCustomerData.shippingMark || '-';
+  document.getElementById('profileEmail').textContent = currentUser.email;
+  document.getElementById('profileDestination').textContent = currentCustomerData.destination || '-';
+  document.getElementById('profileVerified').textContent = currentUser.emailVerified ? '✅ ' + t('verified_yes') : '⏳ ' + t('verified_no');
+}
+
+function copyProfileMark(){
+  const mark = document.getElementById('profileMark').textContent;
+  if(!mark || mark === '-') return;
+  navigator.clipboard.writeText(mark).then(()=>{
+    showToast(t('mark_copied'));
+  }).catch(()=>{
+    showToast(t('copy_failed'));
+  });
 }
 
 async function reauthCurrentUser(currentPassword){
@@ -2278,19 +2377,25 @@ async function changeMyEmail(){
   try{
     await reauthCurrentUser(password);
     const oldEmail = currentUser.email;
+
     await currentUser.updateEmail(newEmail);
     await currentUser.sendEmailVerification();
+
+    // ترحيل بيانات العميل للمستند الجديد بالإيميل الجديد
     const oldDoc = await db.collection('customers').doc(oldEmail).get();
     const data = oldDoc.exists ? oldDoc.data() : {};
     data.email = newEmail;
     data.emailVerified = false;
     await db.collection('customers').doc(newEmail).set(data);
     await db.collection('customers').doc(oldEmail).delete();
+
+    // ترحيل مستند التقييم لو موجود
     const oldRating = await db.collection('ratings').doc(oldEmail).get();
     if(oldRating.exists){
       await db.collection('ratings').doc(newEmail).set(oldRating.data());
       await db.collection('ratings').doc(oldEmail).delete();
     }
+
     currentCustomerData = data;
     document.getElementById('newEmailInput').value = '';
     document.getElementById('emailCurrentPassword').value = '';
@@ -2327,191 +2432,206 @@ async function resendVerification(){
   }
 }
 
-function playSailAnimation(callback){
-  const overlay = document.getElementById('sailOverlay');
+async function showMyShipments(){
+  if(!currentUser || !currentCustomerData || !currentCustomerData.shippingMark){ showToast(t('please_login_first')); return; }
+  const overlay = document.getElementById('trackingAnim');
   overlay.classList.add('show');
+  const marker = overlay.querySelector('.moving-marker');
+  marker.style.animation = 'none';
+  void marker.offsetWidth; // إعادة تشغيل الأنيميشن من الصفر في كل مرة
+  marker.style.animation = '';
+  await loadMyShipments();
   setTimeout(()=>{
     overlay.classList.remove('show');
-    if(callback) callback();
-  }, 2000);
+    renderShipmentsResult();
+  }, 2200);
 }
 
-// ====== AUTH STATE OBSERVER ======
+// ====== نظام التحكم في التبويبات ======
+const defaultTabs = {
+  home:{label:'الرئيسية'}, catalog:{label:'المنتجات'}, track:{label:'تتبع طلبي'},
+  glossary:{label:'دليل المصطلحات'}, questions:{label:'الأسئلة'}, importorder:{label:'اطلب من الصين'},
+  factoryvisit:{label:'زيارة مصنع'}, community:{label:'المجتمع'}, ratings:{label:'التقييمات'},
+  activityfeed:{label:'الإشعارات'}, about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}
+};
 
-auth.onAuthStateChanged(async user => {
-  currentUser = user;
-  const btn = document.getElementById('authBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const profileBar = document.getElementById('userProfileBar');
-  const profileName = document.getElementById('userProfileName');
-  const avatar = document.getElementById('userAvatar');
-  
-  if(user){
-    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
-    btn.onclick = openAuthModal;
-    logoutBtn.style.display = 'inline-block';
-    logoutBtn.textContent = currentLang === 'ar' ? 'خروج' : 'Log out';
-    
-    profileBar.classList.add('show');
-    const displayName = currentCustomerData?.name || user.email.split('@')[0];
-    profileName.textContent = displayName;
-    avatar.textContent = displayName.charAt(0).toUpperCase();
-    
-    try{
-      const doc = await db.collection('customers').doc(user.email).get();
-      currentCustomerData = doc.exists ? doc.data() : null;
-      if(user.emailVerified && currentCustomerData && !currentCustomerData.emailVerified){
-        await db.collection('customers').doc(user.email).update({emailVerified: true});
-        currentCustomerData.emailVerified = true;
-      }
-      if(currentCustomerData?.name) {
-        profileName.textContent = currentCustomerData.name;
-        avatar.textContent = currentCustomerData.name.charAt(0).toUpperCase();
-      }
-    }catch(e){ currentCustomerData = null; }
-    
-    await ensureShippingMark();
-    renderMyShippingMark();
-    if(currentCustomerData && currentCustomerData.shippingMark){
-      await loadMyShipments();
-      renderShipmentsResult();
-    }
-  } else {
-    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
-    btn.onclick = openAuthModal;
-    logoutBtn.style.display = 'none';
-    profileBar.classList.remove('show');
-    currentCustomerData = null;
-    myOrders = {}; myImportRequests = {}; myFactoryVisits = {};
-    renderMyShippingMark();
-  }
-});
-
-// ====== CART FUNCTIONS ======
-
-function addToCart(id){
-  cart[id] = (cart[id]||0)+1;
-  updateCartBadge();
-  showToast(t('added_to_cart'));
+async function loadTabsSettings(){
+  try{
+    const doc = await db.collection('settings').doc('tabs').get();
+    if(doc.exists) return doc.data();
+    return {};
+  }catch(e){ return {}; }
 }
 
-function updateCartBadge(){
-  const count = Object.values(cart).reduce((a,b)=>a+b,0);
-  document.getElementById('cartBadge').textContent = count;
-}
-
-function changeQty(id, delta){
-  cart[id] = (cart[id]||0)+delta;
-  if(cart[id]<=0) delete cart[id];
-  updateCartBadge();
-  renderCart();
-}
-
-function renderCart(){
-  const wrap = document.getElementById('cartItems');
-  const ids = Object.keys(cart);
-  if(ids.length===0){
-    wrap.innerHTML = `<div class="empty">${t('cart_empty')}</div>`;
-    document.getElementById('cartTotal').textContent = `${t('total_label')}: 0$`;
-    return;
-  }
-  let total = 0;
-  wrap.innerHTML = ids.map(id=>{
-    const p = products.find(x=>x.id===id);
-    if(!p) return '';
-    const qty = cart[id];
-    total += p.price*qty;
-    return `<div class="cart-item">
-      <div>
-        <div class="name">${p.name}</div>
-        <div class="qty">
-          <button onclick="changeQty('${id}',-1)">-</button>
-          <span>${qty}</span>
-          <button onclick="changeQty('${id}',1)">+</button>
-        </div>
-      </div>
-      <div>$${(p.price*qty).toFixed(2)}</div>
+async function renderTabsControl(){
+  const wrap = document.getElementById('tabsControlList');
+  if(!wrap) return;
+  const saved = await loadTabsSettings();
+  wrap.innerHTML = Object.entries(defaultTabs).map(([key, def])=>{
+    const status = (saved[key] && saved[key].status) || 'active';
+    return `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);flex-wrap:wrap;">
+      <span style="font-weight:700;min-width:110px;font-size:13px;">${def.label}</span>
+      <select class="tab-status-select" data-tab="${key}" style="padding:5px 10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';flex:1;min-width:110px;">
+        <option value="active" ${status==='active'?'selected':''}>✅ متاح</option>
+        <option value="soon" ${status==='soon'?'selected':''}>⏳ قريباً</option>
+        <option value="hidden" ${status==='hidden'?'selected':''}>👻 مخفي</option>
+      </select>
     </div>`;
   }).join('');
-  document.getElementById('cartTotal').textContent = `${t('total_label')}: $${total.toFixed(2)}`;
 }
 
-function openCart(){
-  renderCart();
-  document.getElementById('drawer').classList.add('show');
-  document.getElementById('overlay').classList.add('show');
+async function saveTabsSettings(){
+  const selects = document.querySelectorAll('.tab-status-select');
+  const tabs = {};
+  selects.forEach(s=>{ tabs[s.dataset.tab] = { status: s.value }; });
+  await db.collection('settings').doc('tabs').set(tabs);
+  showToast('تم حفظ إعدادات التبويبات');
+  applyTabsVisibility(tabs);
 }
 
-function closeCart(){
-  document.getElementById('drawer').classList.remove('show');
-  document.getElementById('overlay').classList.remove('show');
-}
-
-async function checkoutWhatsApp(){
-  if(!currentUser){ closeCart(); openAuthModal(); showToast(t('login_required_order')); return; }
-  const ids = Object.keys(cart);
-  if(ids.length===0){ showToast(t('cart_empty')); return; }
-  const destCode = document.getElementById('destinationSelect').value;
-  await ensureShippingMark();
-  let total = 0;
-  let lines = ids.map(id=>{
-    const p = products.find(x=>x.id===id);
-    const qty = cart[id];
-    total += p.price*qty;
-    return `- ${p.name} × ${qty} = $${(p.price*qty).toFixed(2)}`;
+function applyTabsVisibility(tabs){
+  document.querySelectorAll('nav.tabs button[data-tab]').forEach(btn=>{
+    const key = btn.dataset.tab;
+    const cfg = tabs[key];
+    if(!cfg || cfg.status === 'active'){
+      btn.style.display = '';
+      btn.style.opacity = '1';
+      btn.onclick = () => showTab(key);
+    } else if(cfg.status === 'hidden'){
+      btn.style.display = 'none';
+    } else if(cfg.status === 'soon'){
+      btn.style.display = '';
+      btn.style.opacity = '0.55';
+      btn.onclick = () => showToast('⏳ هذا القسم قيد التجهيز حالياً');
+    }
   });
-  const orderData = {
-    items: ids.map(id=>({name:products.find(x=>x.id===id).name, qty:cart[id]})),
-    total: total.toFixed(2),
-    status: 'قيد المراجعة',
-    date: new Date().toISOString().slice(0,10),
-    customerEmail: currentUser.email,
-    shippingMark: currentCustomerData.shippingMark,
-    destination: destName(destCode),
-    carrierTracking: ''
-  };
-  const ref = await db.collection('orders').add(orderData);
-  myOrders[ref.id] = orderData;
-  notifyAdmin('طلب جديد على الموقع', `مارك الشحن: ${currentCustomerData.shippingMark}\nالإجمالي: $${total.toFixed(2)}\nالوجهة: ${orderData.destination}`);
-  const msg = `مرحباً، أريد تأكيد طلب جديد.\nمارك الشحن الخاص بي (Shipping Mark): ${currentCustomerData.shippingMark}\n${lines.join('\n')}\nالإجمالي: $${total.toFixed(2)}\nالوجهة: ${orderData.destination}`;
-  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-  cart = {};
-  updateCartBadge();
-  closeCart();
-  showToast(`تم إرسال طلبك، مارك الشحن: ${currentCustomerData.shippingMark}`);
 }
 
-// ====== CATALOG FUNCTIONS ======
+// ====== نظام العروض النارية ======
+async function loadFlashSale(){
+  try{
+    const doc = await db.collection('settings').doc('flashSale').get();
+    return doc.exists ? doc.data() : null;
+  }catch(e){ return null; }
+}
 
-function renderCatalog(){
-  const grid = document.getElementById('productGrid');
-  if(products.length===0){
-    grid.innerHTML = `<div class="empty">${t('no_products')}</div>`;
+async function renderFlashSaleAdmin(){
+  const sale = await loadFlashSale();
+  if(!sale) return;
+  document.getElementById('flashSaleStatus').value = sale.active ? 'active' : 'inactive';
+  document.getElementById('flashProductName').value = sale.productName || '';
+  document.getElementById('flashOriginalPrice').value = sale.originalPrice || '';
+  document.getElementById('flashSalePrice').value = sale.salePrice || '';
+  document.getElementById('flashMaxQuantity').value = sale.maxQuantity || 1;
+  document.getElementById('flashStartDate').value = sale.startDate || '';
+  document.getElementById('flashEndDate').value = sale.endDate || '';
+  document.getElementById('flashDescription').value = sale.description || '';
+}
+
+async function saveFlashSale(){
+  const btn = document.getElementById('saveFlashBtn');
+  btn.disabled = true;
+  const active = document.getElementById('flashSaleStatus').value === 'active';
+  const productName = document.getElementById('flashProductName').value.trim();
+  const salePrice = parseFloat(document.getElementById('flashSalePrice').value);
+  const originalPrice = parseFloat(document.getElementById('flashOriginalPrice').value) || salePrice;
+  const maxQuantity = Math.min(parseInt(document.getElementById('flashMaxQuantity').value) || 1, 10);
+  const startDate = document.getElementById('flashStartDate').value;
+  const endDate = document.getElementById('flashEndDate').value;
+  const description = document.getElementById('flashDescription').value.trim();
+
+  if(!productName || !salePrice || !startDate || !endDate){
+    showToast('يرجى تعبئة اسم المنتج والسعر وتاريخي البدء والانتهاء');
+    btn.disabled = false;
     return;
   }
-  grid.innerHTML = products.map(p => `
-    <div class="product">
-      <div class="thumb">
-        ${p.image ? `<img src="${p.image}" alt="${p.name}">` : p.name.charAt(0)}
-        ${p.video ? `<span class="thumb-video-badge" onclick="playVideo('${p.video}')">▶ ${t('video_label')}</span>` : ''}
-        <button class="thumb-quick-btn" onclick="quickOrder('${p.id}')" title="${t('order_now_whatsapp')}">📩</button>
-      </div>
-      <div class="body">
-        <div class="name">${p.name}</div>
-        <div class="price">$${p.price}</div>
-        <button class="add" onclick="addToCart('${p.id}')">${t('add_to_cart')}</button>
-      </div>
-    </div>`).join('');
+
+  const data = { active, productName, originalPrice, salePrice, maxQuantity, startDate, endDate, description, sold:false, soldTo:null };
+
+  try{
+    const imageFile = document.getElementById('flashProductImage').files[0];
+    if(imageFile){
+      const imgRef = storage.ref('flashSales/' + Date.now() + '_' + imageFile.name);
+      await imgRef.put(imageFile);
+      data.image = await imgRef.getDownloadURL();
+    }
+    await db.collection('settings').doc('flashSale').set(data, {merge:true});
+    showToast('تم حفظ العرض الناري بنجاح');
+    renderFlashSalePage();
+  }catch(e){
+    showToast('حدث خطأ أثناء الحفظ');
+  }finally{
+    btn.disabled = false;
+  }
 }
 
-function quickOrder(id){
-  const p = products.find(x=>x.id===id);
-  if(!p) return;
-  const msg = `مرحباً، أريد الاستفسار عن طلب: ${p.name} (${p.price}$)`;
+function getTimeRemaining(endDate){
+  const diff = new Date(endDate) - new Date();
+  if(diff <= 0) return null;
+  return {
+    days: Math.floor(diff/(1000*60*60*24)),
+    hours: Math.floor((diff/(1000*60*60))%24),
+    minutes: Math.floor((diff/(1000*60))%60),
+    seconds: Math.floor((diff/1000)%60)
+  };
+}
+
+function formatTimeRemaining(r){
+  if(!r) return 'انتهى العرض';
+  const parts = [];
+  if(r.days>0) parts.push(`${r.days} يوم`);
+  parts.push(`${String(r.hours).padStart(2,'0')}:${String(r.minutes).padStart(2,'0')}:${String(r.seconds).padStart(2,'0')}`);
+  return parts.join(' ');
+}
+
+let flashTimerInterval = null;
+
+async function renderFlashSalePage(){
+  const container = document.getElementById('flashSaleContainer');
+  if(!container) return;
+  const sale = await loadFlashSale();
+  if(!sale || !sale.active){
+    container.innerHTML = `<div class="empty">لا توجد عروض نارية حالياً، ترقّبوا القادم!</div>`;
+    return;
+  }
+  const timeLeft = getTimeRemaining(sale.endDate);
+  const expired = !timeLeft;
+  container.innerHTML = `
+    <div style="background:linear-gradient(135deg, var(--ink), var(--rust)); border-radius:20px; padding:28px 20px; color:var(--paper); text-align:center;">
+      <div style="font-size:13px;color:var(--gold);font-weight:700;">🔥 العرض الناري</div>
+      <h2 style="color:var(--paper);font-size:24px;margin:8px 0;">${sale.productName}</h2>
+      ${sale.image ? `<img src="${sale.image}" style="max-width:180px;border-radius:12px;margin:10px auto;display:block;">` : ''}
+      <div style="display:flex;gap:10px;justify-content:center;align-items:center;margin:10px 0;">
+        <span style="text-decoration:line-through;color:rgba(255,255,255,0.6);">$${sale.originalPrice}</span>
+        <span style="font-size:26px;font-weight:900;color:var(--gold);">$${sale.salePrice}</span>
+      </div>
+      ${sale.description ? `<p style="font-size:13.5px;color:rgba(255,255,255,0.85);margin-bottom:10px;">${sale.description}</p>` : ''}
+      ${(!expired && !sale.sold) ? `
+        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:14px;margin:12px auto;max-width:320px;">
+          <div style="font-size:11px;color:rgba(255,255,255,0.7);">⏰ الوقت المتبقي</div>
+          <div style="font-size:20px;font-weight:700;font-family:monospace;color:var(--gold);" id="flashTimer">${formatTimeRemaining(timeLeft)}</div>
+        </div>
+        <button class="btn btn-gold" onclick="quickOrderFlashSale()">اطلب الآن عبر واتساب 📩</button>
+      ` : `<div style="margin-top:10px;font-weight:700;">${sale.sold ? '✅ تم بيع هذا العرض' : '⏰ انتهى العرض'}</div>`}
+    </div>`;
+  if(!expired && !sale.sold) startFlashTimer(sale.endDate);
+}
+
+function startFlashTimer(endDate){
+  if(flashTimerInterval) clearInterval(flashTimerInterval);
+  flashTimerInterval = setInterval(()=>{
+    const r = getTimeRemaining(endDate);
+    const el = document.getElementById('flashTimer');
+    if(!el){ clearInterval(flashTimerInterval); return; }
+    if(!r){ clearInterval(flashTimerInterval); renderFlashSalePage(); return; }
+    el.textContent = formatTimeRemaining(r);
+  }, 1000);
+}
+
+function quickOrderFlashSale(){
+  const msg = `مرحباً، أرغب في الاستفسار عن العرض الناري الحالي.`;
   window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
 }
-
-// ====== ADMIN FUNCTIONS ======
 
 function checkPin(){
   const val = document.getElementById('pinInput').value;
@@ -2528,6 +2648,8 @@ function checkPin(){
   document.getElementById('adminPanel').style.display='block';
   showToast('جاري تحميل بيانات الإدارة...');
   loadAdminData();
+  renderTabsControl();
+  renderFlashSaleAdmin();
   if(agentLocationData.currentCity){
     document.getElementById('agentCityInput').value = agentLocationData.currentCity;
   }
@@ -2595,38 +2717,6 @@ function renderAdminProducts(){
       <span>${p.name} — $${p.price}</span>
       <button class="tiny-btn" onclick="removeProduct('${p.id}')">حذف</button>
     </div>`).join('');
-}
-
-function renderAdminCustomers(search){
-  document.getElementById('customerCount').textContent = customers.length;
-  const wrap = document.getElementById('adminCustomerList');
-  if(!wrap) return;
-  const term = (search||'').trim().toLowerCase();
-  const filtered = term ? customers.filter(c =>
-    (c.name||'').toLowerCase().includes(term) ||
-    (c.email||'').toLowerCase().includes(term) ||
-    (c.shippingMark||'').toLowerCase().includes(term)
-  ) : customers;
-  if(filtered.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا يوجد عملاء مسجلون بعد'}</div>`; return; }
-  wrap.innerHTML = filtered.map(c=>`
-    <div class="admin-list-item">
-      <span><strong>${c.shippingMark||'بدون مارك'}</strong> — ${c.name||''} — ${c.email} — ${c.destination||''} — ${c.emailVerified ? '✅ موثّق' : '⏳ غير موثّق'}</span>
-      <span style="color:#888;font-size:12px;">${c.joinDate||''}</span>
-    </div>`).join('');
-}
-
-function exportCustomers(){
-  if(customers.length===0){ showToast('لا يوجد عملاء لتصديرهم بعد'); return; }
-  let csv = 'ShippingMark,Name,Email,Destination,EmailVerified,JoinDate\n';
-  customers.forEach(c=>{ csv += `${c.shippingMark||''},${c.name||''},${c.email},${c.destination||''},${c.emailVerified?'Yes':'No'},${c.joinDate||''}\n`; });
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'عملاء_AlHossain.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('تم تصدير الملف بنجاح');
 }
 
 function renderAdminOrders(search){
@@ -2766,215 +2856,6 @@ async function updateFactoryVisitStatus(id, status){
   showToast('تم تحديث حالة الطلب');
 }
 
-function renderAdminComplaints(search){
-  const wrap = document.getElementById('adminComplaintsList');
-  if(!wrap) return;
-  const term = (search||'').trim().toLowerCase();
-  let ids = Object.keys(complaints);
-  if(term){
-    ids = ids.filter(id=>{
-      const c = complaints[id];
-      return (c.text||'').toLowerCase().includes(term) ||
-             (c.customerEmail||'').toLowerCase().includes(term) ||
-             (c.type||'').toLowerCase().includes(term);
-    });
-  }
-  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد شكاوى أو مقترحات بعد'}</div>`; return; }
-  wrap.innerHTML = ids.reverse().map(id=>{
-    const c = complaints[id];
-    return `<div class="admin-order-item">
-      <div style="margin-bottom:6px;"><strong>${c.type==='complaint'?'شكوى':'اقتراح'}</strong> · ${c.customerEmail} · ${c.date}</div>
-      <div style="margin-bottom:6px;color:#333;">${c.text}</div>
-      <select onchange="updateComplaintStatus('${id}', this.value)">
-        ${['قيد المراجعة','تم الرد','تم الحل','مغلقة'].map(s=>`<option value="${s}" ${c.status===s?'selected':''}>${s}</option>`).join('')}
-      </select>
-    </div>`;
-  }).join('');
-}
-
-async function updateComplaintStatus(id, status){
-  await db.collection('complaints').doc(id).update({status});
-  complaints[id].status = status;
-  const c = complaints[id];
-  notifyCustomer(c.customerEmail, 'تحديث بخصوص رسالتك', `النوع: ${c.type==='complaint'?'شكوى':'اقتراح'}\nالحالة الجديدة: ${status}`);
-  showToast('تم تحديث الحالة');
-}
-
-// ====== RENDER FUNCTIONS ======
-
-function renderAll(){
-  renderCatalog();
-  renderAdminProducts();
-  renderAdminOrders();
-  renderAdminCustomers();
-}
-
-function renderAbout(){
-  document.getElementById('aboutName').textContent = aboutData.name || 'اسم المؤسس';
-  document.getElementById('aboutYears').textContent = aboutData.years ? aboutData.years : '-';
-  document.getElementById('aboutBio').textContent = aboutData.bio || 'لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.';
-  document.getElementById('customerCount2').textContent = customers.length;
-  document.getElementById('statOrders2').textContent = Object.keys(orders).length;
-
-  const photoWrap = document.getElementById('aboutPhotoWrap');
-  if(aboutData.photo){
-    photoWrap.innerHTML = `<img src="${aboutData.photo}" alt="${aboutData.name||''}">`;
-  } else {
-    photoWrap.innerHTML = `<span>${(aboutData.name||'؟').charAt(0)}</span>`;
-  }
-
-  const nameInput = document.getElementById('aboutNameInput');
-  const yearsInput = document.getElementById('aboutYearsInput');
-  const bioInput = document.getElementById('aboutBioInput');
-  if(nameInput){
-    nameInput.value = aboutData.name || '';
-    yearsInput.value = aboutData.years || '';
-    bioInput.value = aboutData.bio || '';
-  }
-}
-
-async function saveAbout(){
-  const name = document.getElementById('aboutNameInput').value.trim();
-  const years = document.getElementById('aboutYearsInput').value;
-  const bio = document.getElementById('aboutBioInput').value.trim();
-  const photoFile = document.getElementById('aboutPhotoInput').files[0];
-  const btn = document.getElementById('saveAboutBtn');
-  btn.disabled = true;
-
-  const data = { name, years: years ? parseInt(years) : null, bio };
-
-  try{
-    if(photoFile){
-      const photoRef = storage.ref('about/' + Date.now() + '_' + photoFile.name);
-      await photoRef.put(photoFile);
-      data.photo = await photoRef.getDownloadURL();
-    } else if(aboutData.photo){
-      data.photo = aboutData.photo;
-    }
-    await db.collection('settings').doc('about').set(data);
-    aboutData = data;
-    renderAbout();
-    showToast('تم حفظ صفحة المؤسس بنجاح');
-  }catch(e){
-    showToast('حدث خطأ أثناء الحفظ، يرجى التأكد من إعداد Firebase Storage');
-  }finally{
-    btn.disabled = false;
-  }
-}
-
-function renderMyShippingMark(){
-  const loginPrompt = document.getElementById('trackLoginPrompt');
-  const wrap = document.getElementById('myMarkBox');
-  if(!wrap || !loginPrompt) return;
-  if(currentUser && currentCustomerData && currentCustomerData.shippingMark){
-    loginPrompt.style.display = 'none';
-    wrap.style.display = 'block';
-    document.getElementById('myMarkDisplay').textContent = currentCustomerData.shippingMark;
-    const notice = document.getElementById('verifyNotice');
-    notice.style.display = (currentUser && !currentUser.emailVerified) ? 'block' : 'none';
-  } else {
-    wrap.style.display = 'none';
-    loginPrompt.style.display = 'block';
-  }
-}
-
-function renderProfile(){
-  if(!currentUser || !currentCustomerData) return;
-  document.getElementById('profileName').textContent = currentCustomerData.name || currentUser.email.split('@')[0];
-  document.getElementById('profileMark').textContent = currentCustomerData.shippingMark || '-';
-  document.getElementById('profileEmail').textContent = currentUser.email;
-  document.getElementById('profileDestination').textContent = currentCustomerData.destination || '-';
-  document.getElementById('profileVerified').textContent = currentUser.emailVerified ? '✅ ' + t('verified_yes') : '⏳ ' + t('verified_no');
-}
-
-function copyProfileMark(){
-  const mark = document.getElementById('profileMark').textContent;
-  if(!mark || mark === '-') return;
-  navigator.clipboard.writeText(mark).then(()=>{
-    showToast(t('mark_copied'));
-  }).catch(()=>{
-    showToast(t('copy_failed'));
-  });
-}
-
-function renderShipmentsResult(){
-  const box = document.getElementById('orderResult');
-  const orderMatches = Object.entries(myOrders);
-  const importMatches = Object.entries(myImportRequests);
-  const factoryMatches = Object.entries(myFactoryVisits);
-  if(orderMatches.length===0 && importMatches.length===0 && factoryMatches.length===0){
-    box.innerHTML = `<p>${t('no_shipments_yet')}</p>`;
-    box.classList.add('show');
-    return;
-  }
-  let html = '';
-  if(orderMatches.length){
-    html += `<h3 style="margin:10px 0;font-size:16px;">${t('orders_section')}</h3>`;
-    html += orderMatches.reverse().map(([id,order]) => `
-      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
-        <div><strong>${t('mark_label')}:</strong> ${order.shippingMark}</div>
-        <div><strong>${t('destination_label')}:</strong> ${order.destination||'-'}</div>
-        <div><strong>${t('date_label')}:</strong> ${order.date}</div>
-        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${order.status}</span></div>
-        ${order.carrierTracking ? `<div><strong>${t('carrier_tracking_label')}:</strong> ${order.carrierTracking}</div>` : ''}
-        <div><strong>${t('products_label')}:</strong></div>
-        <ul style="margin:6px 18px;">${order.items.map(i=>`<li>${i.name} × ${i.qty}</li>`).join('')}</ul>
-        <div><strong>${t('total_label')}:</strong> $${order.total}</div>
-      </div>`).join('');
-  }
-  if(importMatches.length){
-    html += `<h3 style="margin:14px 0 10px;font-size:16px;">${t('import_orders_section')}</h3>`;
-    html += importMatches.reverse().map(([id,r]) => {
-      const items = r.items || [{name:r.name, qty:r.qty}];
-      const itemsList = items.map(it=>`<li>${it.name || t('unnamed')} × ${it.qty}</li>`).join('');
-      return `
-      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
-        <div><strong>${t('products_label')}:</strong></div>
-        <ul style="margin:6px 18px;">${itemsList}</ul>
-        <div><strong>${t('destination_label')}:</strong> ${r.destination||'-'}</div>
-        <div><strong>${t('date_label')}:</strong> ${r.date}</div>
-        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${r.status}</span></div>
-        ${r.quotedPrice ? `<div><strong>${t('quoted_price_label')}:</strong> $${r.quotedPrice}</div>` : ''}
-      </div>`;
-    }).join('');
-  }
-  if(factoryMatches.length){
-    html += `<h3 style="margin:14px 0 10px;font-size:16px;">${t('factory_visits_section')}</h3>`;
-    html += factoryMatches.reverse().map(([id,f]) => `
-      <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
-        <div><strong>${f.name}</strong> — ${f.specialty} — ${f.city}</div>
-        <div><strong>${t('date_label')}:</strong> ${f.date}</div>
-        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${f.status}</span></div>
-      </div>`).join('');
-  }
-  box.innerHTML = html;
-  box.classList.add('show');
-}
-
-async function showMyShipments(){
-  if(!currentUser || !currentCustomerData || !currentCustomerData.shippingMark){ showToast(t('please_login_first')); return; }
-  const overlay = document.getElementById('trackingAnim');
-  overlay.classList.add('show');
-  const marker = overlay.querySelector('.moving-marker');
-  marker.style.animation = 'none';
-  void marker.offsetWidth;
-  marker.style.animation = '';
-  await loadMyShipments();
-  setTimeout(()=>{
-    overlay.classList.remove('show');
-    renderShipmentsResult();
-  }, 2200);
-}
-
-function doLogout(){
-  auth.signOut();
-  showTab('home');
-  document.getElementById('userProfileBar').classList.remove('show');
-  showToast(t('logged_out_msg'));
-}
-
-// ====== CALCULATOR FUNCTIONS ======
-
 function calcCBM(){
   const L = parseFloat(document.getElementById('cbmL').value);
   const W = parseFloat(document.getElementById('cbmW').value);
@@ -2992,6 +2873,7 @@ function calcCBM(){
   const fill20 = ((total/28)*100).toFixed(1);
   const fill40 = ((total/58)*100).toFixed(1);
 
+  // أسعار داخلية غير معروضة للعميل — تُستخدم فقط لحساب تكلفة تقريبية
   const AED_TO_USD = 3.6725;
   const seaRatesUsdPerCbm = { SD:200, SS:550, UAE: 800/AED_TO_USD, KSA: 800/AED_TO_USD };
   let billedCbm = total;
@@ -3027,6 +2909,7 @@ function calcAirWeight(){
   chargeable = Math.ceil(chargeable);
   const basis = volumetric > actual ? t('volumetric_weight') : t('actual_weight');
 
+  // أسعار داخلية غير معروضة للعميل — تُستخدم فقط لحساب تكلفة تقريبية
   const minWeight = destCode === 'KSA' ? 60 : 1;
   const billedWeight = Math.max(chargeable, minWeight);
   const costLow = (billedWeight*30).toFixed(0);
@@ -3043,129 +2926,147 @@ function calcAirWeight(){
   box.classList.add('show');
 }
 
-function calcCurrency(){
-  const cny = parseFloat(document.getElementById('cnyAmount').value);
-  const box = document.getElementById('currencyResult');
-  if(!cny){ box.innerHTML = t('enter_valid_amount'); box.classList.add('show'); return; }
-  if(!currencyData.sdgRate){
-    box.innerHTML = t('rate_not_updated');
-    box.classList.add('show');
+function togglePasswordVisibility(inputId, btn){
+  const input = document.getElementById(inputId);
+  if(input.type === 'password'){
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
+function openAuthModal(){
+  document.getElementById('authOverlay').classList.add('show');
+}
+function closeAuthModal(){
+  document.getElementById('authOverlay').classList.remove('show');
+  document.getElementById('authError').classList.remove('show');
+}
+async function handleForgotPassword(){
+  const email = document.getElementById('authEmail').value.trim();
+  const errBox = document.getElementById('authError');
+  errBox.classList.remove('show');
+  if(!email){
+    errBox.textContent = 'يرجى إدخال بريدك الإلكتروني أولاً في الحقل أعلاه';
+    errBox.classList.add('show');
     return;
   }
-  const AED_PER_CNY = 1 / 1.50;
-  const USD_PER_CNY = 1 / 5.625;
-
-  const sdg = (cny * currencyData.sdgRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0});
-  const aed = (cny * AED_PER_CNY).toFixed(2);
-  const usd = (cny * USD_PER_CNY).toFixed(2);
-
-  box.innerHTML = `
-    <div class="big">¥${cny} ≈</div>
-    <div style="margin-top:6px;">$${usd} ${t('usd_currency')}</div>
-    <div>${aed} ${t('aed_currency')}</div>
-    <div>${sdg} ${t('sdg_currency')}</div>`;
-  box.classList.add('show');
-}
-
-async function saveSdgRate(){
-  const val = parseFloat(document.getElementById('sdgRateInput').value);
-  if(!val){ showToast('أدخل رقماً صحيحاً'); return; }
-  const data = { sdgRate: val, lastUpdated: new Date().toISOString() };
-  await db.collection('settings').doc('currency').set(data);
-  currencyData = data;
-  renderCurrencyMeta();
-  showToast('تم حفظ سعر الصرف');
-}
-
-function renderCurrencyMeta(){
-  const meta = document.getElementById('sdgRateMeta');
-  if(meta){
-    meta.textContent = currencyData.sdgRate
-      ? `آخر سعر محفوظ: ${currencyData.sdgRate} جنيه لكل يوان — آخر تحديث: ${new Date(currencyData.lastUpdated).toLocaleString('ar-EG')}`
-      : 'لم يُحفظ سعر بعد';
-  }
-  const publicMeta = document.getElementById('currencyMeta');
-  if(publicMeta){
-    publicMeta.textContent = currencyData.sdgRate
-      ? `آخر تحديث للسعر: ${new Date(currencyData.lastUpdated).toLocaleDateString('ar-EG')}`
-      : '';
-  }
-  const input = document.getElementById('sdgRateInput');
-  if(input && currencyData.sdgRate) input.value = currencyData.sdgRate;
-}
-
-// ====== FACTORY VISIT FUNCTIONS ======
-
-async function saveAgentCity(){
-  const val = document.getElementById('agentCityInput').value.trim();
-  if(!val){ showToast('أدخل اسم المدينة'); return; }
-  await db.collection('settings').doc('agentLocation').set({ currentCity: val });
-  agentLocationData = { currentCity: val };
-  updateFactoryCityLabel();
-  showToast('تم حفظ المدينة الحالية');
-}
-
-function updateFactoryCityLabel(){
-  const city = agentLocationData.currentCity ? `(${agentLocationData.currentCity})` : (currentLang==='ar' ? '(يُحدَّد لاحقاً)' : '(to be set)');
-  const p = document.getElementById('factoryTermsP');
-  if(!p) return;
-  if(currentLang === 'ar'){
-    p.innerHTML = `إذا كان المصنع داخل نفس المدينة التي يتواجد فيها المسؤول حالياً <strong id="factoryCurrentCityLabel">${city}</strong>، فتكلفة الزيارة <strong>15$</strong> تشمل: زيارة ميدانية، تفاوض مع المصنع، إتمام عملية الشراء، وفحص البضاعة والمصنع.<br><br>أما إذا كان المصنع في مدينة أخرى، فتكلفة التنقل والسفر تكون على العميل، وتُحدَّد بعد التنسيق المباشر.`;
-  } else {
-    p.innerHTML = `If the factory is in the same city the agent is currently based in <strong id="factoryCurrentCityLabel">${city}</strong>, the visit fee is <strong>$15</strong>, covering: an on-site visit, negotiation with the factory, completing the purchase, and inspecting the goods and factory.<br><br>If the factory is in a different city, travel costs are covered by the customer and will be arranged directly.`;
+  try{
+    await auth.sendPasswordResetEmail(email);
+    showToast(t('reset_link_sent'));
+  }catch(e){
+    const map = {
+      'auth/invalid-email': t('invalid_email_error'),
+      'auth/user-not-found': t('no_account_error')
+    };
+    errBox.textContent = map[e.code] || t('send_error_retry');
+    errBox.classList.add('show');
   }
 }
 
-function checkFactoryCity(){
-  const city = document.getElementById('factoryCity').value.trim().toLowerCase();
-  const note = document.getElementById('factoryCostNote');
-  if(!city || !agentLocationData.currentCity){ note.style.display='none'; return; }
-  const sameCity = city.includes(agentLocationData.currentCity.toLowerCase()) || agentLocationData.currentCity.toLowerCase().includes(city);
-  note.style.display = 'block';
-  note.textContent = sameCity
-    ? '✅ المصنع في نفس مدينة المسؤول — التكلفة المتوقعة: 15$ شاملة الزيارة والتفاوض والفحص'
-    : '⚠️ المصنع في مدينة مختلفة — تكلفة السفر ستكون على العميل، وسيتم التنسيق بعد إرسال الطلب';
+function switchAuthTab(mode){
+  authMode = mode;
+  document.getElementById('tabLogin').classList.toggle('active', mode==='login');
+  document.getElementById('tabRegister').classList.toggle('active', mode==='register');
+  document.getElementById('authTitle').textContent = translations[mode==='login' ? 'login_title' : 'register_title'][currentLang];
+  document.getElementById('authSubmitBtn').textContent = translations[mode==='login' ? 'login_btn2' : 'create_account_btn'][currentLang];
+  document.getElementById('authName').style.display = mode==='register' ? 'block' : 'none';
+  document.getElementById('authDestination').style.display = mode==='register' ? 'block' : 'none';
+  document.getElementById('customCodeHint').style.display = mode==='register' ? 'block' : 'none';
+  document.getElementById('termsAgreeWrap').style.display = mode==='register' ? 'flex' : 'none';
+  document.getElementById('forgotPasswordBtn').style.display = mode==='login' ? 'block' : 'none';
+  document.getElementById('authError').classList.remove('show');
 }
 
-async function submitFactoryVisit(){
-  if(!currentUser){ openAuthModal(); showToast(t('login_required_request')); return; }
-  const link = document.getElementById('factoryLink').value.trim();
-  const name = document.getElementById('factoryName').value.trim();
-  const specialty = document.getElementById('factorySpecialty').value.trim();
-  const contact = document.getElementById('factoryContact').value.trim();
-  const city = document.getElementById('factoryCity').value.trim();
-  const notes = document.getElementById('factoryNotes').value.trim();
-  if(!name || !specialty || !city){ showToast(t('fill_factory_required')); return; }
-
-  const sameCity = agentLocationData.currentCity && city.toLowerCase().includes(agentLocationData.currentCity.toLowerCase());
-  const costNote = sameCity ? '15$ (نفس مدينة المسؤول)' : 'تكلفة السفر على العميل (مدينة مختلفة)';
-  const mark = currentCustomerData?.shippingMark || '';
-
-  const reqData = {
-    link, name, specialty, contact, city, notes,
-    costNote,
-    customerEmail: currentUser.email,
-    shippingMark: mark,
-    status: 'قيد المراجعة',
-    date: new Date().toISOString().slice(0,10)
-  };
-  await db.collection('factoryVisitRequests').add(reqData);
-  notifyAdmin('طلب زيارة مصنع جديد', `مارك الشحن: ${mark}\nاسم المصنع: ${name}\nالمدينة: ${city}\nالتكلفة المتوقعة: ${costNote}`);
-
-  const msg = `مرحباً، أرغب في طلب زيارة مصنع.\nمارك الشحن الخاص بي: ${mark}\nاسم المصنع: ${name}\nالتخصص: ${specialty}\nالمدينة: ${city}\nرابط المصنع: ${link || '-'}\nتواصل المصنع: ${contact || '-'}\nملاحظات: ${notes || '-'}\nالتكلفة المتوقعة: ${costNote}`;
-  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-
-  document.getElementById('factoryLink').value = '';
-  document.getElementById('factoryName').value = '';
-  document.getElementById('factorySpecialty').value = '';
-  document.getElementById('factoryContact').value = '';
-  document.getElementById('factoryCity').value = '';
-  document.getElementById('factoryNotes').value = '';
-  document.getElementById('factoryCostNote').style.display = 'none';
-  showToast(t('visit_request_sent'));
+function openTermsInfo(){
+  document.getElementById('termsInfoOverlay').classList.add('show');
+}
+function closeTermsInfo(){
+  document.getElementById('termsInfoOverlay').classList.remove('show');
 }
 
-// ====== IMPORT ORDER FUNCTIONS ======
+function openCurrencyModal(){
+  document.getElementById('currencyModalOverlay').classList.add('show');
+}
+function closeCurrencyModal(){
+  document.getElementById('currencyModalOverlay').classList.remove('show');
+}
+async function submitAuth(){
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const name = document.getElementById('authName').value.trim();
+  const destCode = document.getElementById('authDestination').value;
+  const errBox = document.getElementById('authError');
+  errBox.classList.remove('show');
+  if(!email || !password){
+    errBox.textContent = t('enter_email_password');
+    errBox.classList.add('show');
+    return;
+  }
+  if(authMode === 'register' && !name){
+    errBox.textContent = t('enter_full_name');
+    errBox.classList.add('show');
+    return;
+  }
+
+  let cleanName = '';
+  if(authMode === 'register'){
+    cleanName = name.toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(!cleanName){
+      errBox.textContent = t('name_english_only');
+      errBox.classList.add('show');
+      return;
+    }
+  }
+
+  if(authMode === 'register' && !document.getElementById('authTermsCheck').checked){
+    errBox.textContent = t('must_agree_terms');
+    errBox.classList.add('show');
+    return;
+  }
+
+  try{
+    if(authMode === 'login'){
+      await auth.signInWithEmailAndPassword(email, password);
+    } else {
+      // ننشئ الحساب أولاً (مطلوب لقواعد الأمان اللي بتتطلب تسجيل دخول لفحص توفر المارك)
+      const userCred = await auth.createUserWithEmailAndPassword(email, password);
+
+      const shippingMark = await generateUniqueMark(cleanName, destCode, email);
+
+      await userCred.user.sendEmailVerification();
+      await db.collection('customers').doc(email).set({
+        email: email,
+        name: name,
+        destination: destName(destCode),
+        shippingMark: shippingMark,
+        emailVerified: false,
+        termsAccepted: true,
+        termsAcceptedDate: new Date().toISOString(),
+        joinDate: new Date().toISOString().slice(0,10)
+      });
+    }
+    playSailAnimation(() => {
+      closeAuthModal();
+      showToast(authMode==='login' ? t('logged_in') : t('account_created'));
+    });
+  }catch(e){
+    const map = {
+      'auth/email-already-in-use': t('email_in_use'),
+      'auth/invalid-email': t('invalid_email_error'),
+      'auth/weak-password': t('weak_password'),
+      'auth/user-not-found': t('no_account_error'),
+      'auth/wrong-password': t('wrong_password'),
+      'auth/invalid-credential': t('invalid_credential')
+    };
+    errBox.textContent = map[e.code] || t('generic_error');
+    errBox.classList.add('show');
+  }
+}
+
+let importRowCount = 0;
 
 function addImportRow(){
   importRowCount++;
@@ -3224,8 +3125,6 @@ async function submitImportRequest(){
   document.getElementById('importNotes').value = '';
   showToast(t('import_request_sent'));
 }
-
-// ====== COMMUNITY FUNCTIONS ======
 
 async function submitPost(){
   if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
@@ -3379,7 +3278,8 @@ async function deleteComment(postId, commentId){
   refreshCommentCount(postId);
 }
 
-// ====== RATINGS FUNCTIONS ======
+let selectedStars = 0;
+let allRatings = [];
 
 document.addEventListener('click', function(e){
   const star = e.target.closest('.star-pick');
@@ -3407,6 +3307,71 @@ async function submitRating(){
   showToast(t('rating_submitted'));
   loadRatings();
   loadActivityFeed();
+}
+
+async function loadActivityFeed(){
+  const wrap = document.getElementById('activityList');
+  if(!wrap) return;
+
+  const [postsSnap, qSnap, ratingsSnap] = await Promise.all([
+    db.collection('communityPosts').orderBy('createdAt','desc').limit(15).get(),
+    db.collection('questions').orderBy('createdAt','desc').limit(15).get(),
+    db.collection('ratings').orderBy('createdAt','desc').limit(15).get()
+  ]);
+
+  let items = [];
+  postsSnap.docs.forEach(d=>{
+    const p = d.data();
+    if(!p.createdAt) return;
+    items.push({ type:'post', name:p.authorName, text:p.text, ts:p.createdAt.toMillis(), isAdmin: p.authorEmail === ADMIN_EMAIL });
+  });
+  qSnap.docs.forEach(d=>{
+    const q = d.data();
+    if(!q.createdAt) return;
+    items.push({ type:'question', name:q.authorName || t('unnamed_customer'), text:q.question, ts:q.createdAt.toMillis() });
+  });
+  ratingsSnap.docs.forEach(d=>{
+    const r = d.data();
+    if(!r.createdAt) return;
+    items.push({ type:'rating', name:r.customerName, text:r.comment, rating:r.rating, ts:r.createdAt.toMillis() });
+  });
+
+  items.sort((a,b)=> b.ts - a.ts);
+  items = items.slice(0,25);
+
+  if(items.length===0){
+    wrap.innerHTML = `<div class="empty">${t('no_activity_yet')}</div>`;
+    return;
+  }
+
+  wrap.innerHTML = items.map(it=>{
+    const timeStr = new Date(it.ts).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US');
+    let icon, title, snippet, targetTab;
+    if(it.type === 'post'){
+      icon = '📝';
+      title = it.isAdmin ? `👑 ${t('admin_badge')} ${t('activity_posted')}` : `${it.name} ${t('activity_posted')}`;
+      snippet = it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text;
+      targetTab = 'community';
+    } else if(it.type === 'question'){
+      icon = '❓';
+      title = `${it.name} ${t('activity_asked')}`;
+      snippet = it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text;
+      targetTab = 'questions';
+    } else {
+      icon = '⭐';
+      title = `${it.name} ${t('activity_rated')} ${starsToText(it.rating)}`;
+      snippet = it.text ? (it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text) : '';
+      targetTab = 'ratings';
+    }
+    return `<div class="activity-item" onclick="showTab('${targetTab}')">
+      <div class="activity-icon">${icon}</div>
+      <div class="activity-body">
+        <div class="activity-title">${title}</div>
+        ${snippet ? `<div class="activity-snippet">${snippet}</div>` : ''}
+        <div class="activity-time">${timeStr}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 async function loadRatings(){
@@ -3462,7 +3427,57 @@ async function deleteRating(id){
   loadRatings();
 }
 
-// ====== QUESTIONS FUNCTIONS ======
+async function submitComplaint(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const type = document.getElementById('complaintType').value;
+  const text = document.getElementById('complaintText').value.trim();
+  if(!text){ showToast(t('write_complaint_first')); return; }
+  await db.collection('complaints').add({
+    type: type,
+    text: text,
+    customerEmail: currentUser.email,
+    shippingMark: (currentCustomerData && currentCustomerData.shippingMark) || '',
+    status: 'قيد المراجعة',
+    date: new Date().toISOString().slice(0,10)
+  });
+  notifyAdmin(type==='complaint' ? 'شكوى جديدة من عميل' : 'اقتراح جديد من عميل', `من: ${currentUser.email}\n${text}`);
+  document.getElementById('complaintText').value = '';
+  showToast(t('complaint_sent'));
+}
+
+function renderAdminComplaints(search){
+  const wrap = document.getElementById('adminComplaintsList');
+  if(!wrap) return;
+  const term = (search||'').trim().toLowerCase();
+  let ids = Object.keys(complaints);
+  if(term){
+    ids = ids.filter(id=>{
+      const c = complaints[id];
+      return (c.text||'').toLowerCase().includes(term) ||
+             (c.customerEmail||'').toLowerCase().includes(term) ||
+             (c.type||'').toLowerCase().includes(term);
+    });
+  }
+  if(ids.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا توجد شكاوى أو مقترحات بعد'}</div>`; return; }
+  wrap.innerHTML = ids.reverse().map(id=>{
+    const c = complaints[id];
+    return `<div class="admin-order-item">
+      <div style="margin-bottom:6px;"><strong>${c.type==='complaint'?'شكوى':'اقتراح'}</strong> · ${c.customerEmail} · ${c.date}</div>
+      <div style="margin-bottom:6px;color:#333;">${c.text}</div>
+      <select onchange="updateComplaintStatus('${id}', this.value)">
+        ${['قيد المراجعة','تم الرد','تم الحل','مغلقة'].map(s=>`<option value="${s}" ${c.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
+}
+
+async function updateComplaintStatus(id, status){
+  await db.collection('complaints').doc(id).update({status});
+  complaints[id].status = status;
+  const c = complaints[id];
+  notifyCustomer(c.customerEmail, 'تحديث بخصوص رسالتك', `النوع: ${c.type==='complaint'?'شكوى':'اقتراح'}\nالحالة الجديدة: ${status}`);
+  showToast('تم تحديث الحالة');
+}
 
 async function submitQuestion(){
   if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
@@ -3532,112 +3547,46 @@ async function answerQuestion(id){
   showToast('تم حفظ الرد بنجاح');
 }
 
-// ====== COMPLAINTS FUNCTIONS ======
-
-async function submitComplaint(){
-  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
-  const type = document.getElementById('complaintType').value;
-  const text = document.getElementById('complaintText').value.trim();
-  if(!text){ showToast(t('write_complaint_first')); return; }
-  await db.collection('complaints').add({
-    type: type,
-    text: text,
-    customerEmail: currentUser.email,
-    shippingMark: (currentCustomerData && currentCustomerData.shippingMark) || '',
-    status: 'قيد المراجعة',
-    date: new Date().toISOString().slice(0,10)
-  });
-  notifyAdmin(type==='complaint' ? 'شكوى جديدة من عميل' : 'اقتراح جديد من عميل', `من: ${currentUser.email}\n${text}`);
-  document.getElementById('complaintText').value = '';
-  showToast(t('complaint_sent'));
-}
-
-// ====== ACTIVITY FEED FUNCTIONS ======
-
-async function loadActivityFeed(){
-  const wrap = document.getElementById('activityList');
-  if(!wrap) return;
-
-  const [postsSnap, qSnap, ratingsSnap] = await Promise.all([
-    db.collection('communityPosts').orderBy('createdAt','desc').limit(15).get(),
-    db.collection('questions').orderBy('createdAt','desc').limit(15).get(),
-    db.collection('ratings').orderBy('createdAt','desc').limit(15).get()
-  ]);
-
-  let items = [];
-  postsSnap.docs.forEach(d=>{
-    const p = d.data();
-    if(!p.createdAt) return;
-    items.push({ type:'post', name:p.authorName, text:p.text, ts:p.createdAt.toMillis(), isAdmin: p.authorEmail === ADMIN_EMAIL });
-  });
-  qSnap.docs.forEach(d=>{
-    const q = d.data();
-    if(!q.createdAt) return;
-    items.push({ type:'question', name:q.authorName || t('unnamed_customer'), text:q.question, ts:q.createdAt.toMillis() });
-  });
-  ratingsSnap.docs.forEach(d=>{
-    const r = d.data();
-    if(!r.createdAt) return;
-    items.push({ type:'rating', name:r.customerName, text:r.comment, rating:r.rating, ts:r.createdAt.toMillis() });
-  });
-
-  items.sort((a,b)=> b.ts - a.ts);
-  items = items.slice(0,25);
-
-  if(items.length===0){
-    wrap.innerHTML = `<div class="empty">${t('no_activity_yet')}</div>`;
-    return;
+function showTab(tab){
+  document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+  const navBtn = document.querySelector(`nav.tabs button[data-tab="${tab}"]`);
+  if(navBtn) navBtn.classList.add('active');
+  const isAdmin = tab === 'admin';
+  document.getElementById('waFloat').style.display = isAdmin ? 'none' : 'flex';
+  document.getElementById('currencyFloat').style.display = isAdmin ? 'none' : 'flex';
+  if(firebase.analytics){
+    try{ firebase.analytics().logEvent('page_view', { page_title: tab }); }catch(e){}
   }
-
-  wrap.innerHTML = items.map(it=>{
-    const timeStr = new Date(it.ts).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US');
-    let icon, title, snippet, targetTab;
-    if(it.type === 'post'){
-      icon = '📝';
-      title = it.isAdmin ? `👑 ${t('admin_badge')} ${t('activity_posted')}` : `${it.name} ${t('activity_posted')}`;
-      snippet = it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text;
-      targetTab = 'community';
-    } else if(it.type === 'question'){
-      icon = '❓';
-      title = `${it.name} ${t('activity_asked')}`;
-      snippet = it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text;
-      targetTab = 'questions';
-    } else {
-      icon = '⭐';
-      title = `${it.name} ${t('activity_rated')} ${starsToText(it.rating)}`;
-      snippet = it.text ? (it.text.length > 80 ? it.text.slice(0,80) + '…' : it.text) : '';
-      targetTab = 'ratings';
-    }
-    return `<div class="activity-item" onclick="showTab('${targetTab}')">
-      <div class="activity-icon">${icon}</div>
-      <div class="activity-body">
-        <div class="activity-title">${title}</div>
-        ${snippet ? `<div class="activity-snippet">${snippet}</div>` : ''}
-        <div class="activity-time">${timeStr}</div>
-      </div>
-    </div>`;
-  }).join('');
 }
 
-// ====== INITIALIZATION ======
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
 
+function showCraneLoader(){
+  const el = document.getElementById('craneLoader');
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(()=> el.classList.remove('show'), 650);
+}
 document.addEventListener('click', function(e){
   if(e.target.closest('button, .add, .tiny-btn')){
     showCraneLoader();
   }
 });
 
-// تحميل البيانات
 loadData();
 loadCommunityFeed(false);
 loadRatings();
 loadActivityFeed();
 addImportRow();
-
-console.log('✅ AlHossain - تم تحميل الموقع بنجاح');
-console.log('📱 responsive mode - جاهز للجوال');
-console.log('👤 نظام الدخول/الخروج مع بروفايل');
-console.log('🔒 أزرار الحذف (X الأحمر) تم إخفاؤها');
+loadTabsSettings().then(applyTabsVisibility);
+renderFlashSalePage();
 </script>
 </body>
 </html>

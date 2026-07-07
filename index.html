@@ -1601,81 +1601,60 @@
   </section>
 
   <!-- ====== صفحة عن المؤسس - النسخة الجديدة ====== -->
-  <section id="about">
-    <div class="about-hero" id="aboutHero">
-      <!-- الصورة الخلفية -->
-      <div class="about-background" id="aboutBackground"></div>
-      
-      <!-- حاوية الزجاج -->
-      <div class="glass-container" id="glassContainer">
-        
-        <!-- ساعة iOS -->
-        <div class="ios-clock animate-in">
-          <span class="icon">🕐</span>
-          <span class="time" id="chinaClock">00:00:00</span>
-          <span class="label">توقيت الصين</span>
-        </div>
-        
-        <!-- صورة البروفايل -->
-        <div class="about-photo animate-in" id="aboutPhotoWrap">
-          <span id="aboutInitial">؟</span>
-        </div>
-        
-        <h2 class="animate-in" id="aboutName">اسم المؤسس</h2>
-        <div class="about-role animate-in" data-i18n="about_role">مؤسس AlHossain · وكيلك المعتمد في الصين</div>
-        
-        <!-- الإحصائيات -->
-        <div class="about-stats animate-in">
-          <div class="glass-card"><div class="num" id="aboutYears">-</div><div class="lbl" data-i18n="years_exp">سنوات الخبرة</div></div>
-          <div class="glass-card"><div class="num" id="statOrders2">0</div><div class="lbl" data-i18n="orders_done">طلب منفَّذ</div></div>
-          <div class="glass-card"><div class="num" id="customerCount2">0</div><div class="lbl" data-i18n="registered_customers">عميل مسجَّل</div></div>
-        </div>
-        
-        <!-- النبذة -->
-        <div class="about-bio animate-in" id="aboutBio">
-          لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.
-        </div>
-      </div>
-    </div>
+<!-- ====== صفحة عن المؤسس - النسخة الجديدة ====== -->
+<section id="about">
+  <div class="about-hero" id="aboutHero" style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0A1B2B;margin:0 -16px;overflow:hidden;padding:20px;">
     
-    <!-- زر العودة -->
-    <button class="back-btn" id="backBtn" onclick="collapseAbout()">
-      ✕ العودة
-    </button>
-  </section>
-
-  <section id="terms">
-    <h2 style="margin-bottom:16px;" data-i18n="terms_title">الشروط والأحكام</h2>
-    <div class="ask-box" style="text-align:right;">
-      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h1">1. طبيعة الخدمة والوساطة</h3>
-      <p style="margin-bottom:14px;" data-i18n="terms_p1">يعمل هذا الموقع بصفته <strong>وسيطاً فقط</strong> بين العميل من جهة، والمصنع أو المورد الصيني وشركة الشحن الناقلة من جهة أخرى. لا يُعد الموقع مصنّعاً للمنتجات ولا مالكاً لها، ولا شركة شحن، وإنما ينسّق ويسهّل عملية الشراء والشحن نيابة عن العميل مقابل أجر خدمة.</p>
-
-      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h2">2. حدود المسؤولية</h3>
-      <p style="margin-bottom:14px;" data-i18n="terms_p2">بصفته وسيطاً، <strong>يتحمّل الموقع المسؤولية فقط عن أي تقصير أو خطأ ناتج مباشرة عن فعله هو</strong> (كخطأ في نقل معلومات الطلب، أو إهمال واضح في المتابعة من جانبه). أما الأخطاء أو الأضرار الناتجة عن طرف ثالث — كعيب في تصنيع المنتج، تأخير أو تلف من شركة الشحن، أو تصرفات المورد الأصلي — فهي مسؤولية ذلك الطرف الثالث تحديداً، ولا يتحمّلها الموقع. يسعى الموقع، قدر الإمكان، لمساعدة العميل في متابعة أي مطالبة تجاه الطرف المسؤول الفعلي.</p>
-
-      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h3">3. الأسعار والدفع</h3>
-      <p style="margin-bottom:14px;" data-i18n="terms_p3">الأسعار المعروضة أو المقدَّرة عبر حاسبات الموقع تقريبية وقابلة للتغيير حسب سعر الصرف والسوق الفعلي وقت التنفيذ. يُعتمد السعر النهائي بعد التأكيد المباشر عبر واتساب أو لوحة الطلبات. تُحدَّد طريقة الدفع وشروطه (دفعة مقدَّمة، دفعة كاملة، أو غير ذلك) بالتراضي المتبادل بين الطرفين قبل بدء التنفيذ.</p>
-
-      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h4">4. مدة الشحن</h3>
-      <p style="margin-bottom:14px;" data-i18n="terms_p4">تختلف مدة الشحن حسب نوع الشحن (بحري أو جوي) والوجهة والظروف اللوجستية الخارجة عن إرادة الموقع (كالتخليص الجمركي وأحوال الموانئ وأداء شركة الشحن الناقلة). لا يتحمّل الموقع مسؤولية التأخير الناتج عن أسباب خارجة عن سيطرته المباشرة.</p>
-
-      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h5">5. الأضرار والفقدان أثناء الشحن</h3>
-      <p style="margin-bottom:14px;" data-i18n="terms_p5">يُبذل أقصى جهد ممكن لاختيار شركات شحن موثوقة ومتابعة الشحنة. في حال وجود تلف أو فقدان أثناء النقل، تكون المسؤولية على شركة الشحن الناقلة وفق سياستها الخاصة، ويقتصر دور الموقع على المساعدة في متابعة أي مطالبة تعويض لدى الجهة الناقلة.</p>
-
-      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h6">6. الإرجاع والاستبدال</h3>
-      <p style="margin-bottom:14px;" data-i18n="terms_p6">نظراً لطبيعة الشراء من مصادر خارجية (تاوباو، 1688، علي بابا)، فإن إمكانية الإرجاع أو الاستبدال تخضع لسياسة المورد الأصلي وحده، ويُبلَّغ العميل بذلك قبل تأكيد أي طلب استيراد.</p>
-
-      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h7">7. مسؤولية المارك (Shipping Mark)</h3>
-      <p style="margin-bottom:14px;" data-i18n="terms_p7">يتحمّل العميل مسؤولية استخدام مارك الشحن الخاص به بشكل صحيح عند الطلب من أي جهة، وعدم مشاركته مع أطراف أخرى لتفادي أي التباس في تحديد ملكية الشحنات.</p>
-
-      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h8">8. الموافقة على الشروط</h3>
-      <p style="margin-bottom:14px;" data-i18n="terms_p8">يُعد إنشاء حساب على هذا الموقع إقراراً من العميل بقراءته لهذه الشروط وموافقته الكاملة عليها.</p>
-
-      <h3 style="font-size:16px;margin-bottom:8px;" data-i18n="terms_h9">9. التعديلات</h3>
-      <p data-i18n="terms_p9">يحتفظ الموقع بحق تحديث هذه الشروط في أي وقت، وسيُعمل بأحدث نسخة منشورة على هذه الصفحة.</p>
+    <!-- خلفية الصورة -->
+    <div id="aboutBackground" style="position:absolute;top:0;left:0;right:0;bottom:0;background:url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=80') center/cover;filter:brightness(0.45) saturate(1.1);"></div>
+    
+    <!-- المحتوى الرئيسي -->
+    <div style="position:relative;z-index:2;width:100%;max-width:700px;padding:20px 20px 30px;text-align:center;">
+      
+      <!-- الساعة - أرقام فقط -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;">
+        <span id="chinaClock" style="font-family:'Aref Ruqaa',monospace;font-size:38px;font-weight:700;color:#ffffff;letter-spacing:3px;text-shadow:0 2px 12px rgba(0,0,0,0.4);">00:00:00</span>
+      </div>
+      
+      <!-- الاسم - كبير وواضح -->
+      <h2 id="aboutName" style="color:#ffffff;font-size:32px;font-weight:900;margin-bottom:4px;text-shadow:0 2px 16px rgba(0,0,0,0.5);letter-spacing:0.5px;">Amgad Abdallah Abdelhmed Hussein</h2>
+      
+      <!-- الدور -->
+      <div style="color:#D9A441;font-weight:700;font-size:15px;margin-bottom:24px;text-shadow:0 2px 8px rgba(0,0,0,0.3);">مؤسس AlHossain · وكيلك المعتمد في الصين</div>
+      
+      <!-- البطاقات الزجاجية - الإحصائيات -->
+      <div style="display:flex;gap:12px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;">
+        
+        <div style="background:rgba(255,255,255,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:14px 22px;text-align:center;min-width:80px;flex:1;max-width:140px;box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+          <div style="font-family:'Aref Ruqaa';font-size:28px;font-weight:700;color:#D9A441;text-shadow:0 2px 8px rgba(0,0,0,0.3);" id="aboutYears">5</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.85);font-weight:500;">سنوات الخبرة</div>
+        </div>
+        
+        <div style="background:rgba(255,255,255,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:14px 22px;text-align:center;min-width:80px;flex:1;max-width:140px;box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+          <div style="font-family:'Aref Ruqaa';font-size:28px;font-weight:700;color:#D9A441;text-shadow:0 2px 8px rgba(0,0,0,0.3);" id="statOrders2">0</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.85);font-weight:500;">طلب منفذ</div>
+        </div>
+        
+        <div style="background:rgba(255,255,255,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:14px 22px;text-align:center;min-width:80px;flex:1;max-width:140px;box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+          <div style="font-family:'Aref Ruqaa';font-size:28px;font-weight:700;color:#D9A441;text-shadow:0 2px 8px rgba(0,0,0,0.3);" id="customerCount2">0</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.85);font-weight:500;">عميل مسجل</div>
+        </div>
+        
+      </div>
+      
+      <!-- النبذة - بطاقة زجاجية -->
+      <div id="aboutBio" style="background:rgba(255,255,255,0.06);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 24px;font-size:14.5px;line-height:2;text-align:right;max-width:600px;margin:0 auto;color:rgba(255,255,255,0.92);text-shadow:0 1px 6px rgba(0,0,0,0.2);box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+        مهندس معماري بالتخصص، لكن منذ خمس سنوات اتجهت لعالم التجارة والتصدير. وأصبحت همزة وصل بين عملي في السودان وجنوب السودان والخليج. وبين المصانع والموردين في الصين. اشتغلت في مجالات متنوعة – من المنتجات المنزلية للإلكترونيات – وده بين عديد خبرة عملية حقيقية في كل تفاصيل الاستيراد: من التفاوض مع المصنع لحد ما توصل البضاعة لباب عملي. هدفي إنك تثق إنك بتتعامل مع حد يهم شغله ويكون معاك خطوة بخطوة لحد ما تستلم طلبك بالضبط زي ما تستحق.
+      </div>
+      
     </div>
-  </section>
-
+  </div>
+  
+  <!-- زر العودة -->
+  <button class="back-btn" id="backBtn" onclick="collapseAbout()" style="position:fixed;top:20px;left:20px;z-index:100;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:10px 18px;border-radius:12px;cursor:pointer;font-family:'Tajawal';font-size:14px;display:none;align-items:center;gap:8px;transition:all 0.3s ease;box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+    ✕ العودة
+  </button>
+</section>
   <section id="complaints">
     <h2 style="margin-bottom:6px;" data-i18n="complaints_title">شكاوى ومقترحات</h2>
     <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="complaints_desc">رسالتك هنا خاصة تمامًا ولا تظهر لأي شخص غيرنا. نقرأ كل رسالة ونهتم بمعالجتها.</p>

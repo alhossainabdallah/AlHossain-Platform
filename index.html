@@ -25,9 +25,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
   :root{
-    --ink:#14304A;
-    --ink-dark:#0A1B2B;
-    --gold:#E0A518;
+    --ink:#0F2438;
+    --ink-dark:#071522;
+    --gold:#E8A800;
     --gold-light:#F2C94C;
     --rust:#B4552D;
     --paper:#EDE6D8;
@@ -54,9 +54,9 @@
   }
   header.site{
     background:
-      radial-gradient(ellipse at 20% 30%, rgba(224,165,24,0.08), transparent 55%),
-      radial-gradient(ellipse at 80% 75%, rgba(180,85,45,0.12), transparent 55%),
-      linear-gradient(155deg, #0A1B2B 0%, #14304A 45%, #0F2438 100%);
+      radial-gradient(ellipse at 20% 30%, rgba(232,168,0,0.12), transparent 55%),
+      radial-gradient(ellipse at 80% 75%, rgba(180,85,45,0.16), transparent 55%),
+      linear-gradient(155deg, #14304A 0%, #1B3F63 45%, #10283F 100%);
     color:var(--paper);
     padding:22px 20px 26px;
     position:relative;
@@ -69,15 +69,15 @@
   .wave-svg-3{ animation:waveDrift3 28s ease-in-out infinite; }
   @keyframes waveDrift1{
     0%,100%{ transform:translateX(0) translateY(0); }
-    50%{ transform:translateX(3%) translateY(-4px); }
+    50%{ transform:translateX(6%) translateY(-8px); }
   }
   @keyframes waveDrift2{
     0%,100%{ transform:translateX(0) translateY(0); }
-    50%{ transform:translateX(-4%) translateY(5px); }
+    50%{ transform:translateX(-7%) translateY(9px); }
   }
   @keyframes waveDrift3{
     0%,100%{ transform:translateX(0) translateY(0); }
-    50%{ transform:translateX(2.5%) translateY(-3px); }
+    50%{ transform:translateX(5%) translateY(-6px); }
   }
   @media (prefers-reduced-motion: reduce){
     .wave-svg-1, .wave-svg-2, .wave-svg-3{ animation:none; }
@@ -88,47 +88,24 @@
   }
   header.site .top > div:first-child{ min-width:0; overflow:hidden; }
   header.site .brand{
-    font-size:26px;
+    font-family:'Aref Ruqaa', serif;
+    font-size:32px;
     color:var(--paper);
+    letter-spacing:1px;
+    text-shadow:0 2px 12px rgba(232,168,0,0.35);
   }
   #userGreeting{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  header.site .brand span{ color:var(--gold); }
-  nav.tabs{
-    display:flex; gap:6px; margin-top:18px;
-    overflow-x:auto; flex-wrap:nowrap; white-space:nowrap;
-    -webkit-overflow-scrolling:touch; scrollbar-width:none;
-    padding:12px 14px 16px;
-    position:relative; z-index:1;
-    margin:18px -14px 0;
-    width:calc(100% + 28px);
-  }
-  nav.tabs::-webkit-scrollbar{ display:none; }
-  nav.tabs button{
-    background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,0.18);
-    color:var(--paper);
-    padding:8px 16px;
-    border-radius:999px;
-    font-family:'Tajawal';
-    font-size:14px;
-    cursor:pointer;
-    transition: transform .35s cubic-bezier(.34,1.4,.64,1), background .3s ease, box-shadow .3s ease, border-color .3s ease;
-    flex-shrink:0;
-  }
-  nav.tabs button.active{
-    background:rgba(217,164,65,0.16);
-    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-    color:var(--gold);
-    border-color:rgba(217,164,65,0.65);
-    font-weight:700;
-    box-shadow:0 0 14px rgba(217,164,65,0.5), inset 0 0 10px rgba(217,164,65,0.15);
-    transform:scale(1.06) translateY(-2px);
+  header.site .brand span{
+    color:var(--gold-light);
+    background:linear-gradient(135deg, var(--gold-light), var(--gold));
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
   }
   .cart-btn{
     position:relative;
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.25);
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(14px) saturate(160%); -webkit-backdrop-filter:blur(14px) saturate(160%);
+    border:1px solid rgba(255,255,255,0.35);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 12px rgba(0,0,0,0.15);
     color:var(--paper);
     padding:7px 14px;
     border-radius:999px;
@@ -148,7 +125,7 @@
     border-radius:50%; width:20px; height:20px;
     font-size:11px; display:flex; align-items:center; justify-content:center;
   }
-  main{ max-width:900px; margin:0 auto; padding:24px 18px 80px; }
+  main{ max-width:900px; margin:0 auto; padding:24px 18px 100px; }
   section{ display:none; }
   section.active{ display:block; animation:fade .3s ease; }
   @keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
@@ -171,7 +148,7 @@
     font-size:32px; margin:14px 0 16px; color:var(--ink-dark); font-weight:900; line-height:1.35;
   }
   .hero p{ max-width:520px; margin:0 auto; color:#5a6668; font-size:15.5px; line-height:1.85; }
-  .hero-cta{ margin-top:26px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .hero-cta{ margin-top:28px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .btn{
     display:inline-block; padding:12px 22px; border-radius:10px;
     font-weight:700; text-decoration:none; cursor:pointer; border:none; font-family:'Tajawal'; font-size:15px;
@@ -181,23 +158,6 @@
   .btn-primary{ background:var(--ink); color:var(--paper); }
   .btn-gold{ background:linear-gradient(135deg, var(--gold-light), var(--gold)); color:var(--ink-dark); box-shadow:0 3px 10px rgba(224,165,24,0.35); }
   .btn-outline{ background:transparent; border:2px solid var(--ink); color:var(--ink); }
-
-  .strip{
-    display:flex; gap:14px; margin:40px 0 20px; overflow-x:auto; padding:6px 6px 10px;
-  }
-  .strip .card{
-    min-width:150px; flex:1; text-align:center; flex-shrink:0;
-    background:linear-gradient(160deg, var(--white) 0%, var(--paper-soft) 100%);
-    border:1px solid rgba(224,165,24,0.25); border-radius:16px; padding:20px 16px;
-    box-shadow:0 4px 16px rgba(20,48,74,0.06);
-    position:relative; overflow:hidden;
-  }
-  .strip .card::before{
-    content:''; position:absolute; top:0; right:0; left:0; height:3px;
-    background:linear-gradient(90deg, var(--gold), var(--rust));
-  }
-  .strip .card .num{ font-family:'Aref Ruqaa'; font-size:28px; color:var(--rust); }
-  .strip .card .lbl{ font-size:12.5px; color:#666; margin-top:5px; font-weight:700; }
 
   /* CATALOG */
   .catalog-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
@@ -473,21 +433,70 @@
     .dots-grid span{ animation:none; opacity:.8; }
   }
 
-  /* WHATSAPP FLOAT BUTTON */
-  #waFloat{
-    position:fixed; bottom:22px; right:22px; z-index:45;
-    width:58px; height:58px; border-radius:50%;
-    background:#25D366; display:flex; align-items:center; justify-content:center;
-    box-shadow:0 6px 16px rgba(0,0,0,.25); text-decoration:none;
-    animation:waPulse 2.4s ease-in-out infinite;
+  /* BOTTOM NAV */
+  .bottom-nav{
+    position:fixed; bottom:0; left:0; right:0; z-index:80;
+    display:flex; align-items:center; justify-content:space-around;
+    height:66px; padding-bottom:env(safe-area-inset-bottom);
+    background:rgba(7,17,28,0.92);
+    backdrop-filter:blur(30px) saturate(200%); -webkit-backdrop-filter:blur(30px) saturate(200%);
+    border-top:1px solid rgba(255,255,255,0.1);
+    box-shadow:0 -10px 40px rgba(0,0,0,0.5);
+    transition: backdrop-filter .35s ease;
   }
-  #waFloat svg{ width:30px; height:30px; }
-  #currencyFloat{
-    position:fixed; bottom:22px; left:22px; z-index:45;
-    width:52px; height:52px; border-radius:50%;
-    background:var(--gold); color:var(--ink-dark); border:none;
+  .bottom-nav.pressed{ backdrop-filter:blur(38px) saturate(200%); -webkit-backdrop-filter:blur(38px) saturate(200%); }
+  .bn-btn{
+    background:none; border:none; cursor:pointer; position:relative;
     display:flex; align-items:center; justify-content:center;
-    box-shadow:0 6px 16px rgba(0,0,0,.25); cursor:pointer; font-size:24px;
+    width:48px; height:48px;
+    color:rgba(237,230,216,0.45);
+    transition: transform .25s cubic-bezier(.34,1.5,.64,1), color .25s ease;
+  }
+  .bn-icon{ width:25px; height:25px; transition:filter .25s ease; }
+  .bn-btn.active{
+    color:var(--gold-light);
+    transform:translateY(-3px) scale(1.12);
+    filter:drop-shadow(0 0 6px rgba(242,201,76,0.65));
+  }
+  .bn-center .bn-icon{ width:28px; height:28px; }
+  .bn-dot{
+    position:absolute; top:6px; right:8px; width:8px; height:8px; border-radius:50%;
+    background:var(--gold-light); box-shadow:0 0 6px 1px rgba(242,201,76,0.8);
+  }
+
+  /* MORE MENU */
+  .more-menu-overlay{
+    position:fixed; inset:0; z-index:160;
+    background:rgba(7,21,34,0.6); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    display:none; align-items:flex-end; justify-content:center;
+  }
+  .more-menu-overlay.show{ display:flex; }
+  .more-menu-panel{
+    width:100%; max-width:520px;
+    background:rgba(15,36,56,0.88);
+    backdrop-filter:blur(26px) saturate(180%); -webkit-backdrop-filter:blur(26px) saturate(180%);
+    border:1px solid rgba(255,255,255,0.15); border-top:1px solid rgba(255,255,255,0.25);
+    border-radius:26px 26px 0 0;
+    padding:14px 18px 24px;
+    animation:moreMenuUp .32s cubic-bezier(.25,1,.4,1) forwards;
+    box-shadow:0 -10px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes moreMenuUp{ from{ transform:translateY(100%); } to{ transform:translateY(0); } }
+  .more-menu-handle{ width:40px; height:4px; border-radius:4px; background:rgba(255,255,255,0.3); margin:0 auto 18px; }
+  .more-menu-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+  .more-item{
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+    border-radius:16px; padding:16px 8px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    color:var(--paper); font-family:'Tajawal'; font-size:12px; font-weight:700;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .more-item span{ font-size:24px; }
+  .more-item:active{ transform:scale(0.94); background:rgba(232,168,0,0.18); }
+  .more-menu-close{
+    display:block; width:100%; margin-top:18px; padding:12px;
+    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+    border-radius:999px; color:var(--paper); font-family:'Tajawal'; font-weight:700; font-size:13.5px; cursor:pointer;
   }
 
   /* GROUP CHAT CTA (COMMUNITY PAGE) */
@@ -500,13 +509,16 @@
 
   /* GROUP CHAT FLOAT BUTTON */
   #groupChatFloat{
-    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) scale(0);
-    z-index:46; height:48px; padding:0 20px; border-radius:999px; border:1px solid rgba(255,255,255,0.4);
-    background:linear-gradient(90deg, #25D366, var(--gold));
-    backdrop-filter:blur(8px); color:#fff; font-size:22px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 6px 18px rgba(0,0,0,.3);
+    position:fixed; bottom:86px; left:50%; transform:translateX(-50%) scale(0);
+    z-index:46; height:46px; min-width:150px; padding:0 22px; border-radius:999px; border:1px solid rgba(255,255,255,0.35);
+    background:rgba(10,20,15,0.55);
+    backdrop-filter:blur(16px) saturate(160%); -webkit-backdrop-filter:blur(16px) saturate(160%);
+    color:#fff; font-size:14px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow:0 8px 24px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,0.15);
   }
+  #groupChatFloat::before{ content:'💬'; font-size:18px; }
+  #groupChatFloat::after{ content:'الدردشة الجماعية'; }
   #groupChatFloat.show{ animation:chatBtnBump .5s cubic-bezier(.34,1.6,.64,1) forwards; }
   @keyframes chatBtnBump{
     0%{ transform:translateX(-50%) scale(0); }
@@ -560,7 +572,9 @@
   /* AUTH */
   .auth-area{ display:flex; align-items:center; gap:8px; }
   .auth-btn{
-    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.25);
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(14px) saturate(160%); -webkit-backdrop-filter:blur(14px) saturate(160%);
+    border:1px solid rgba(255,255,255,0.35); box-shadow:inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 12px rgba(0,0,0,0.15);
     color:var(--paper); padding:7px 12px; border-radius:999px; font-family:'Tajawal';
     font-size:13px; cursor:pointer; flex-shrink:0; min-width:38px; text-align:center;
   }
@@ -817,30 +831,30 @@
 <header class="site">
   <div class="silk-waves">
     <svg viewBox="0 0 800 220" preserveAspectRatio="none" class="wave-svg wave-svg-1">
-      <path d="M-50 130 C 100 60, 250 190, 400 110 S 700 40, 850 120" fill="none" stroke="url(#waveGrad1)" stroke-width="3" opacity="0.55"/>
+      <path d="M-50 130 C 100 60, 250 190, 400 110 S 700 40, 850 120" fill="none" stroke="url(#waveGrad1)" stroke-width="3.5" opacity="0.8"/>
     </svg>
     <svg viewBox="0 0 800 220" preserveAspectRatio="none" class="wave-svg wave-svg-2">
-      <path d="M-50 90 C 120 160, 260 20, 420 100 S 680 180, 850 70" fill="none" stroke="url(#waveGrad2)" stroke-width="2" opacity="0.4"/>
+      <path d="M-50 90 C 120 160, 260 20, 420 100 S 680 180, 850 70" fill="none" stroke="url(#waveGrad2)" stroke-width="2.5" opacity="0.65"/>
     </svg>
     <svg viewBox="0 0 800 220" preserveAspectRatio="none" class="wave-svg wave-svg-3">
-      <path d="M-50 160 C 90 100, 300 200, 430 140 S 660 60, 850 150" fill="none" stroke="url(#waveGrad3)" stroke-width="4" opacity="0.35"/>
+      <path d="M-50 160 C 90 100, 300 200, 430 140 S 660 60, 850 150" fill="none" stroke="url(#waveGrad3)" stroke-width="4.5" opacity="0.55"/>
     </svg>
     <svg width="0" height="0">
       <defs>
         <linearGradient id="waveGrad1" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#E0A518" stop-opacity="0"/>
-          <stop offset="45%" stop-color="#F2C94C" stop-opacity="1"/>
-          <stop offset="100%" stop-color="#E0A518" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#E8A800" stop-opacity="0"/>
+          <stop offset="45%" stop-color="#FFD24C" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#E8A800" stop-opacity="0"/>
         </linearGradient>
         <linearGradient id="waveGrad2" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#B4552D" stop-opacity="0"/>
-          <stop offset="50%" stop-color="#E0A518" stop-opacity="0.9"/>
-          <stop offset="100%" stop-color="#B4552D" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#C4592E" stop-opacity="0"/>
+          <stop offset="50%" stop-color="#FFC429" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#C4592E" stop-opacity="0"/>
         </linearGradient>
         <linearGradient id="waveGrad3" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#F2C94C" stop-opacity="0"/>
-          <stop offset="50%" stop-color="#F2C94C" stop-opacity="0.8"/>
-          <stop offset="100%" stop-color="#F2C94C" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#FFD24C" stop-opacity="0"/>
+          <stop offset="50%" stop-color="#FFD24C" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#FFD24C" stop-opacity="0"/>
         </linearGradient>
       </defs>
     </svg>
@@ -857,20 +871,6 @@
       <button class="cart-btn" onclick="openCart()">🛒 <span id="cartLabel">السلة</span> <span class="cart-badge" id="cartBadge">0</span></button>
     </div>
   </div>
-  <nav class="tabs">
-    <button class="active" data-tab="home" data-i18n="nav_home" onclick="showTab('home')">الرئيسية</button>
-    <button data-tab="catalog" data-i18n="nav_catalog" onclick="showTab('catalog')">المنتجات</button>
-    <button data-tab="track" data-i18n="nav_track" onclick="showTab('track')">تتبع طلبي</button>
-    <button data-tab="glossary" data-i18n="nav_glossary" onclick="showTab('glossary')">دليل المصطلحات</button>
-    <button data-tab="questions" data-i18n="nav_questions" onclick="showTab('questions')">الأسئلة</button>
-    <button data-tab="importorder" data-i18n="nav_import" onclick="showTab('importorder')">اطلب من الصين</button>
-    <button data-tab="factoryvisit" data-i18n="nav_factory" onclick="showTab('factoryvisit')">زيارة مصنع</button>
-    <button data-tab="community" data-i18n="nav_community" onclick="showTab('community')">المجتمع</button>
-    <button data-tab="ratings" data-i18n="nav_ratings" onclick="showTab('ratings')">التقييمات</button>
-    <button data-tab="activityfeed" data-i18n="nav_activity" onclick="showTab('activityfeed')">🔔 الإشعارات</button>
-    <button data-tab="about" data-i18n="nav_about" onclick="showTab('about')">عن المؤسس</button>
-    <button data-tab="weeklyoffers" data-i18n="nav_offers" onclick="showTab('weeklyoffers')">🔥 العروض</button>
-  </nav>
 </header>
 <div class="pattern-divider"></div>
 
@@ -880,17 +880,12 @@
     <div class="hero">
       <div class="eyebrow" data-i18n="hero_eyebrow">وكيلك المعتمد في الصين · تجارة موثوقة</div>
       <h1 data-i18n="hero_title">كل احتياجاتك التجارية في مكان واحد</h1>
-      <p data-i18n="hero_desc">نستورد ونوفر لك أفضل المنتجات بأسعار تنافسية، مع متابعة مباشرة لطلبك من التأكيد حتى التسليم.</p>
+      <p data-i18n="hero_desc">أكثر من مجرد منصة تجارية — نحن نقطة التقاء لأشخاص من مختلف أنحاء العالم، يجمعهم هدف واحد: تبادل الخبرة والفرص والنفع المشترك. من قلب الصين، نفتح لك الباب لعالم من الفرص، ونمشي معك خطوة بخطوة من أول فكرة لحد ما توصلك شحنتك.</p>
       <div class="hero-cta">
         <button class="btn btn-gold" data-i18n="hero_browse" onclick="showTab('catalog')">تصفح المنتجات</button>
-        <button class="btn btn-outline" data-i18n="hero_track" onclick="showTab('track')">تتبع طلبي</button>
         <a class="btn btn-primary" data-i18n="hero_whatsapp" href="https://wa.link/noa4ss" target="_blank" rel="noopener">تواصل معنا على واتساب</a>
+        <button class="btn btn-outline" data-i18n="hero_track" onclick="showTab('track')">تتبع طلبي</button>
       </div>
-    </div>
-    <div class="strip">
-      <div class="card"><div class="num">24</div><div class="lbl" data-i18n="strip_response">ساعة للرد</div></div>
-      <div class="card"><div class="num">✓</div><div class="lbl" data-i18n="strip_followup">متابعة مستمرة</div></div>
-      <div class="card"><div class="num">🚢</div><div class="lbl" data-i18n="strip_shipping">شحن بحري وجوي</div></div>
     </div>
   </section>
 
@@ -1456,6 +1451,12 @@
         </div>
       </div>
       <div class="admin-section">
+        <h3>💰 أسعار حاسبة الشحن (نطاق سعري لكل دولة)</h3>
+        <p style="font-size:12.5px;color:#777;margin-bottom:12px;">هذه الأسعار هي أساس حساب التكلفة التقريبية اللي بتظهر للعميل في حاسبات "دليل المصطلحات".</p>
+        <div id="shippingRatesForm"></div>
+        <button class="btn btn-gold" style="margin-top:8px;" onclick="saveShippingRates()">💾 حفظ كل الأسعار</button>
+      </div>
+      <div class="admin-section">
         <h3>المنتجات الحالية</h3>
         <div id="adminProductList"></div>
       </div>
@@ -1513,6 +1514,44 @@
 
 <div class="toast" id="toast"></div>
 
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bn-btn active" data-tab="home" onclick="showTab('home')" aria-label="الرئيسية">
+    <svg class="bn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9a1 1 0 0 0 1 1H9.5a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-9"/></svg>
+  </button>
+  <button class="bn-btn" data-tab="activityfeed" onclick="showTab('activityfeed')" aria-label="الإشعارات">
+    <svg class="bn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <span class="bn-dot" id="bnNotifDot" style="display:none;"></span>
+  </button>
+  <button class="bn-btn bn-center" data-tab="catalog" onclick="showTab('catalog')" aria-label="المنتجات">
+    <svg class="bn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9z"/><path d="M9 13a3 3 0 0 0 6 0"/></svg>
+  </button>
+  <button class="bn-btn" data-tab="track" onclick="showTab('track')" aria-label="تتبع طلبي">
+    <svg class="bn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+  </button>
+  <button class="bn-btn" data-tab="more" onclick="openMoreMenu()" aria-label="المزيد">
+    <svg class="bn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+  </button>
+</nav>
+
+<div class="more-menu-overlay" id="moreMenuOverlay" onclick="if(event.target===this) closeMoreMenu()">
+  <div class="more-menu-panel">
+    <div class="more-menu-handle"></div>
+    <div class="more-menu-grid">
+      <button class="more-item" data-tab="glossary" onclick="showTab('glossary'); closeMoreMenu();"><span>📖</span>دليل المصطلحات</button>
+      <button class="more-item" data-tab="questions" onclick="showTab('questions'); closeMoreMenu();"><span>❓</span>الأسئلة</button>
+      <button class="more-item" data-tab="importorder" onclick="showTab('importorder'); closeMoreMenu();"><span>🇨🇳</span>اطلب من الصين</button>
+      <button class="more-item" data-tab="factoryvisit" onclick="showTab('factoryvisit'); closeMoreMenu();"><span>🏭</span>زيارة مصنع</button>
+      <button class="more-item" data-tab="community" onclick="showTab('community'); closeMoreMenu();"><span>👥</span>المجتمع</button>
+      <button class="more-item" data-tab="ratings" onclick="showTab('ratings'); closeMoreMenu();"><span>⭐</span>التقييمات</button>
+      <button class="more-item" data-tab="about" onclick="showTab('about'); closeMoreMenu();"><span>👑</span>عن المؤسس</button>
+      <button class="more-item" data-tab="weeklyoffers" onclick="showTab('weeklyoffers'); closeMoreMenu();"><span>🔥</span>العروض</button>
+      <button class="more-item" data-tab="profile" onclick="showTab('profile'); closeMoreMenu();"><span>🙋</span>حسابي</button>
+      <button class="more-item" onclick="openCurrencyModal(); closeMoreMenu();"><span>💱</span>محول العملة</button>
+    </div>
+    <button class="more-menu-close" onclick="closeMoreMenu()">✕ إغلاق</button>
+  </div>
+</div>
+
 <div id="craneLoader">
   <div class="dots-grid">
     <span></span><span></span><span></span>
@@ -1521,13 +1560,9 @@
   </div>
 </div>
 
-<a id="waFloat" href="https://wa.link/noa4ss" target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">
-  <svg viewBox="0 0 32 32" fill="white"><path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.386.696 4.607 1.898 6.48L4 29l7.72-1.867A11.94 11.94 0 0016 27c6.627 0 12-5.373 12-12S22.628 3 16.001 3zm0 21.75c-1.95 0-3.766-.57-5.29-1.55l-.38-.24-4.58 1.107 1.13-4.46-.25-.4A9.71 9.71 0 016.25 15c0-5.376 4.375-9.75 9.751-9.75S25.75 9.624 25.75 15 21.377 24.75 16.001 24.75zm5.34-7.30c-.29-.145-1.72-.85-1.99-.945-.267-.097-.462-.145-.656.145-.194.29-.75.945-.92 1.14-.17.194-.34.218-.63.073-.29-.146-1.224-.451-2.332-1.437-.862-.768-1.444-1.716-1.613-2.006-.169-.29-.018-.447.127-.592.13-.13.29-.34.435-.51.145-.17.194-.29.29-.484.097-.194.048-.363-.024-.508-.073-.145-.656-1.58-.899-2.165-.237-.568-.478-.49-.656-.5-.17-.008-.363-.01-.557-.01-.194 0-.508.073-.775.363-.267.29-1.017.994-1.017 2.423 0 1.43 1.041 2.812 1.187 3.006.145.194 2.05 3.13 4.966 4.39.694.3 1.235.478 1.657.612.696.221 1.33.19 1.83.115.558-.083 1.72-.703 1.963-1.383.242-.68.242-1.262.169-1.383-.072-.121-.266-.194-.556-.34z"/></svg>
-</a>
 
-<button id="currencyFloat" onclick="openCurrencyModal()" aria-label="محول العملة">💱</button>
 
-<button id="groupChatFloat" onclick="openGroupChat()" style="display:none;" aria-label="الدردشة الجماعية">💬</button>
+<button id="groupChatFloat" onclick="openGroupChat()" style="display:none;" aria-label="الدردشة الجماعية"></button>
 
 <div class="chat-activate-overlay" id="chatActivateOverlay">
   <div class="dots-grid dots-grid-big">
@@ -1725,6 +1760,7 @@ let products = [];
 let orders = {};
 let questions = {};
 let customers = [];
+let totalCustomersCount = 0;
 let importRequests = {};
 let factoryVisits = {};
 let myOrders = {};
@@ -1736,6 +1772,7 @@ let lastPostDoc = null;
 let likedPostIds = new Set();
 let aboutData = {};
 let currencyData = {};
+let shippingRatesData = {};
 let agentLocationData = {};
 let cart = {};
 let currentUser = null;
@@ -2037,7 +2074,7 @@ const translations = {
   unnamed_customer: {ar:'عميل', en:'Customer'},
 
   nav_activity: {ar:'الإشعارات', en:'Notifications'},
-  nav_offers: {ar:'🔥 العروض', en:'🔥 Offers'},
+  nav_offers: {ar:'العروض', en:'Offers'},
   china_time_label: {ar:'توقيت الصين الآن', en:'Current time in China'},
   phone_ph: {ar:'رقم الجوال', en:'Phone number'},
   enter_phone_number: {ar:'يرجى إدخال رقم الجوال', en:'Please enter your phone number'},
@@ -2147,6 +2184,9 @@ async function loadData(){
 
   const currencyDoc = await db.collection('settings').doc('currency').get();
   currencyData = currencyDoc.exists ? currencyDoc.data() : {};
+
+  const shippingRatesDoc = await db.collection('settings').doc('shippingRates').get();
+  shippingRatesData = shippingRatesDoc.exists ? shippingRatesDoc.data() : {};
 
   const locationDoc = await db.collection('settings').doc('agentLocation').get();
   agentLocationData = locationDoc.exists ? locationDoc.data() : {};
@@ -2383,7 +2423,7 @@ function renderAbout(){
   document.getElementById('aboutName').textContent = aboutData.name || 'اسم المؤسس';
   document.getElementById('aboutYears').textContent = aboutData.years ? aboutData.years : '-';
   document.getElementById('aboutBio').textContent = aboutData.bio || 'لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.';
-  document.getElementById('customerCount2').textContent = customers.length;
+  document.getElementById('customerCount2').textContent = totalCustomersCount;
   document.getElementById('statOrders2').textContent = Object.keys(orders).length;
 
   const hero = document.getElementById('aboutHero');
@@ -2409,6 +2449,16 @@ function renderAbout(){
     yearsInput.value = aboutData.years || '';
     bioInput.value = aboutData.bio || '';
   }
+}
+
+let totalCustomersUnsub = null;
+function loadTotalCustomersCount(){
+  if(totalCustomersUnsub) return; // المتابعة الحية شغالة بالفعل، مفيش داعي نكررها
+  totalCustomersUnsub = db.collection('settings').doc('counters').onSnapshot(doc => {
+    totalCustomersCount = doc.exists ? (doc.data().totalCustomers || 0) : 0;
+    const el = document.getElementById('customerCount2');
+    if(el) el.textContent = totalCustomersCount;
+  }, err => {});
 }
 
 let chinaClockInterval = null;
@@ -2526,6 +2576,51 @@ async function saveAgentCity(){
   agentLocationData = { currentCity: val };
   updateFactoryCityLabel();
   showToast('تم حفظ المدينة الحالية');
+}
+
+// ====== أسعار حاسبة الشحن (نطاق سعري لكل دولة) ======
+const shippingRateCountries = [
+  { code:'SD', label:'السودان', hasAir:false },
+  { code:'SS', label:'جنوب السودان', hasAir:false },
+  { code:'UAE', label:'الإمارات', hasAir:true },
+  { code:'KSA', label:'السعودية', hasAir:true }
+];
+
+function renderShippingRatesForm(){
+  const wrap = document.getElementById('shippingRatesForm');
+  if(!wrap) return;
+  wrap.innerHTML = shippingRateCountries.map(c => {
+    const r = shippingRatesData[c.code] || {};
+    return `<div style="border-bottom:1px solid var(--line);padding:10px 0;">
+      <div style="font-weight:700;margin-bottom:6px;">${c.label}</div>
+      <div class="admin-row">
+        <input type="number" id="rate_${c.code}_seaMin" placeholder="سعر CBM بحري - من ($)" value="${r.seaMin ?? ''}">
+        <input type="number" id="rate_${c.code}_seaMax" placeholder="سعر CBM بحري - إلى ($)" value="${r.seaMax ?? ''}">
+      </div>
+      ${c.hasAir ? `<div class="admin-row">
+        <input type="number" id="rate_${c.code}_airMin" placeholder="سعر الكيلو جوي - من ($)" value="${r.airMin ?? ''}">
+        <input type="number" id="rate_${c.code}_airMax" placeholder="سعر الكيلو جوي - إلى ($)" value="${r.airMax ?? ''}">
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function saveShippingRates(){
+  const data = {};
+  shippingRateCountries.forEach(c => {
+    const seaMin = parseFloat(document.getElementById(`rate_${c.code}_seaMin`).value);
+    const seaMax = parseFloat(document.getElementById(`rate_${c.code}_seaMax`).value);
+    data[c.code] = { seaMin: seaMin || 0, seaMax: seaMax || 0 };
+    if(c.hasAir){
+      const airMin = parseFloat(document.getElementById(`rate_${c.code}_airMin`).value);
+      const airMax = parseFloat(document.getElementById(`rate_${c.code}_airMax`).value);
+      data[c.code].airMin = airMin || 0;
+      data[c.code].airMax = airMax || 0;
+    }
+  });
+  await db.collection('settings').doc('shippingRates').set(data);
+  shippingRatesData = data;
+  showToast('تم حفظ أسعار الشحن بنجاح');
 }
 
 function updateFactoryCityLabel(){
@@ -3012,10 +3107,9 @@ async function showMyShipments(){
 
 // ====== نظام التحكم في التبويبات ======
 const defaultTabs = {
-  home:{label:'الرئيسية'}, catalog:{label:'المنتجات'}, track:{label:'تتبع طلبي'},
   glossary:{label:'دليل المصطلحات'}, questions:{label:'الأسئلة'}, importorder:{label:'اطلب من الصين'},
   factoryvisit:{label:'زيارة مصنع'}, community:{label:'المجتمع'}, ratings:{label:'التقييمات'},
-  activityfeed:{label:'الإشعارات'}, about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}
+  about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}
 };
 
 async function loadTabsSettings(){
@@ -3053,19 +3147,19 @@ async function saveTabsSettings(){
 }
 
 function applyTabsVisibility(tabs){
-  document.querySelectorAll('nav.tabs button[data-tab]').forEach(btn=>{
+  document.querySelectorAll('.more-item[data-tab]').forEach(btn=>{
     const key = btn.dataset.tab;
     const cfg = tabs[key];
     if(!cfg || cfg.status === 'active'){
       btn.style.display = '';
       btn.style.opacity = '1';
-      btn.onclick = () => showTab(key);
+      btn.style.pointerEvents = '';
     } else if(cfg.status === 'hidden'){
       btn.style.display = 'none';
     } else if(cfg.status === 'soon'){
       btn.style.display = '';
-      btn.style.opacity = '0.55';
-      btn.onclick = () => showToast('⏳ هذا القسم قيد التجهيز حالياً');
+      btn.style.opacity = '0.5';
+      btn.style.pointerEvents = 'none';
     }
   });
 }
@@ -3376,6 +3470,7 @@ function enterAdminPanel(){
   renderTabsControl();
   renderFlashSaleAdmin();
   renderFpManageSection();
+  renderShippingRatesForm();
   if(agentLocationData.currentCity){
     document.getElementById('agentCityInput').value = agentLocationData.currentCity;
   }
@@ -3690,12 +3785,13 @@ function calcCBM(){
   const fill20 = ((total/28)*100).toFixed(1);
   const fill40 = ((total/58)*100).toFixed(1);
 
-  // أسعار داخلية غير معروضة للعميل — تُستخدم فقط لحساب تكلفة تقريبية
-  const AED_TO_USD = 3.6725;
-  const seaRatesUsdPerCbm = { SD:200, SS:550, UAE: 800/AED_TO_USD, KSA: 800/AED_TO_USD };
+  // نطاق سعري لكل CBM قابل للتعديل من لوحة الإدارة، مع أرقام احتياطية افتراضية
+  const defaults = { SD:{seaMin:180,seaMax:220}, SS:{seaMin:500,seaMax:600}, UAE:{seaMin:190,seaMax:230}, KSA:{seaMin:190,seaMax:230} };
+  const rates = (shippingRatesData[destCode]) || defaults[destCode];
   let billedCbm = total;
   if((destCode === 'UAE' || destCode === 'KSA') && billedCbm < 1) billedCbm = 1;
-  const cost = (billedCbm * seaRatesUsdPerCbm[destCode]).toFixed(0);
+  const costLow = (billedCbm * rates.seaMin).toFixed(0);
+  const costHigh = (billedCbm * rates.seaMax).toFixed(0);
 
   box.innerHTML = `
     <div>${t('single_carton_volume')}: <strong>${perUnit.toFixed(4)} CBM</strong></div>
@@ -3704,7 +3800,7 @@ function calcCBM(){
       ${t('equivalent_to')} ${fill20}% ${t('of_20ft')}, ${t('or')} ${fill40}% ${t('of_40ft')}
     </div>
     <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:15px;">
-      <div>${t('approx_sea_cost_to')} ${destName(destCode)}: <strong>$${cost}</strong></div>
+      <div>${t('approx_sea_cost_to')} ${destName(destCode)}: <strong>$${costLow} – $${costHigh}</strong></div>
     </div>`;
   box.classList.add('show');
 }
@@ -3726,11 +3822,13 @@ function calcAirWeight(){
   chargeable = Math.ceil(chargeable);
   const basis = volumetric > actual ? t('volumetric_weight') : t('actual_weight');
 
-  // أسعار داخلية غير معروضة للعميل — تُستخدم فقط لحساب تكلفة تقريبية
+  // نطاق سعري لكل كيلو قابل للتعديل من لوحة الإدارة، مع أرقام احتياطية افتراضية
+  const defaults = { UAE:{airMin:30,airMax:35}, KSA:{airMin:30,airMax:35} };
+  const rates = (shippingRatesData[destCode] && shippingRatesData[destCode].airMin) ? shippingRatesData[destCode] : defaults[destCode];
   const minWeight = destCode === 'KSA' ? 60 : 1;
   const billedWeight = Math.max(chargeable, minWeight);
-  const costLow = (billedWeight*30).toFixed(0);
-  const costHigh = (billedWeight*35).toFixed(0);
+  const costLow = (billedWeight*rates.airMin).toFixed(0);
+  const costHigh = (billedWeight*rates.airMax).toFixed(0);
 
   box.innerHTML = `
     <div>${t('volumetric_weight')}: <strong>${volumetric.toFixed(2)} ${t('kg')}</strong></div>
@@ -3872,6 +3970,12 @@ async function submitAuth(){
         termsAccepted: true,
         termsAcceptedDate: new Date().toISOString(),
         joinDate: new Date().toISOString().slice(0,10)
+      });
+      const counterRef = db.collection('settings').doc('counters');
+      await db.runTransaction(async (t) => {
+        const doc = await t.get(counterRef);
+        const current = doc.exists ? (doc.data().totalCustomers || 0) : 0;
+        t.set(counterRef, { totalCustomers: current + 1 }, { merge: true });
       });
     }
     playSailAnimation(() => {
@@ -4184,6 +4288,9 @@ async function loadActivityFeed(){
   items.sort((a,b)=> b.ts - a.ts);
   items = items.slice(0,25);
 
+  window.latestActivityTs = items.length ? items[0].ts : 0;
+  updateNotifDot();
+
   if(items.length===0){
     wrap.innerHTML = `<div class="empty">${t('no_activity_yet')}</div>`;
     return;
@@ -4466,23 +4573,42 @@ async function answerQuestion(id){
 function showTab(tab){
   document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
   document.getElementById(tab).classList.add('active');
-  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
-  const navBtn = document.querySelector(`nav.tabs button[data-tab="${tab}"]`);
-  if(navBtn){
-    navBtn.classList.add('active');
-    navBtn.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  document.querySelectorAll('.bn-btn').forEach(b=>b.classList.remove('active'));
+  const bnBtn = document.querySelector(`.bn-btn[data-tab="${tab}"]`);
+  if(bnBtn) bnBtn.classList.add('active');
+  const navEl = document.getElementById('bottomNav');
+  if(navEl){
+    navEl.classList.add('pressed');
+    setTimeout(()=> navEl.classList.remove('pressed'), 350);
   }
   const isAdmin = tab === 'admin';
-  document.getElementById('waFloat').style.display = isAdmin ? 'none' : 'flex';
-  document.getElementById('currencyFloat').style.display = isAdmin ? 'none' : 'flex';
+  document.getElementById('bottomNav').style.display = isAdmin ? 'none' : 'flex';
   const chatFloat = document.getElementById('groupChatFloat');
   if(isAdmin){ chatFloat.style.display = 'none'; }
   else if(currentCustomerData && currentCustomerData.groupChatEnabled){ chatFloat.style.display = 'flex'; }
-  if(tab === 'about'){ startChinaClock(); } else { stopChinaClock(); }
+  if(tab === 'activityfeed'){
+    localStorage.setItem('lastSeenActivityTs', Date.now().toString());
+    updateNotifDot();
+  }
+  if(tab === 'about'){ startChinaClock(); loadTotalCustomersCount(); } else { stopChinaClock(); }
   if(tab === 'admin'){ renderAdminLockScreen(); }
   if(firebase.analytics){
     try{ firebase.analytics().logEvent('page_view', { page_title: tab }); }catch(e){}
   }
+}
+
+function openMoreMenu(){
+  document.getElementById('moreMenuOverlay').classList.add('show');
+}
+function closeMoreMenu(){
+  document.getElementById('moreMenuOverlay').classList.remove('show');
+}
+
+function updateNotifDot(){
+  const dot = document.getElementById('bnNotifDot');
+  if(!dot) return;
+  const lastSeen = parseInt(localStorage.getItem('lastSeenActivityTs') || '0');
+  dot.style.display = (window.latestActivityTs && window.latestActivityTs > lastSeen) ? 'block' : 'none';
 }
 
 function showToast(msg){
@@ -4512,6 +4638,7 @@ addImportRow();
 loadTabsSettings().then(applyTabsVisibility);
 renderFaqList();
 renderFlashSalePage();
+loadTotalCustomersCount();
 
 // مدخل سري للإدارة عبر رابط خاص، بدل رابط ظاهر في الفوتر
 if(window.location.hash === '#gate-14304a'){

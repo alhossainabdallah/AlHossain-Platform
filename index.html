@@ -2910,6 +2910,337 @@ console.log('✨ صفحة عن المؤسس - تأثير iOS الزجاجي');
 console.log('🕐 ساعة توقيت الصين');
 console.log('🔥 العروض النارية - جاهزة');
 console.log('📌 التحكم في التبويبات - جاهز');
+// ====== دوال المصادقة الكاملة ======
+
+async function generateUniqueMark(rawName, destCode, ownerEmail){
+  let base = (rawName || '').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(!base){
+    const seq = await getNextCustomerSeq();
+    base = `C${String(seq).padStart(3,'0')}`;
+  }
+  if(base.length > 15) base = base.slice(0,15);
+
+  let candidate = `AH-${base}-${destCode}`;
+  let attempt = 1;
+  while(true){
+    const markRef = db.collection('shippingMarks').doc(candidate);
+    const markDoc = await markRef.get();
+    if(!markDoc.exists){
+      await markRef.set({ email: ownerEmail });
+      return candidate;
+    }
+    attempt++;
+    candidate = `AH-${base}${attempt}-${destCode}`;
+  }
+}
+
+async function getNextOrderSeq(){
+  const counterRef = db.collection('settings').doc('counters');
+  return await db.runTransaction(async (t) => {
+    const doc = await t.get(counterRef);
+    const current = doc.exists ? (doc.data().orderSeq || 0) : 0;
+    const next = current + 1;
+    t.set(counterRef, { orderSeq: next }, { merge: true });
+    return next;
+  });
+}
+
+async function getNextCustomerSeq(){
+  const counterRef = db.collection('settings').doc('counters');
+  return await db.runTransaction(async (t) => {
+    const doc = await t.get(counterRef);
+    const current = doc.exists ? (doc.data().customerSeq || 0) : 0;
+    const next = current + 1;
+    t.set(counterRef, { customerSeq: next }, { merge: true });
+    return next;
+  });
+}
+
+async function ensureShippingMark(){
+  if(!currentUser) return;
+  if(currentCustomerData && currentCustomerData.shippingMark) return;
+
+  const destCode = currentCustomerData?.destination ? destCodeFromName(currentCustomerData.destination) : 'SD';
+  const nameBase = currentCustomerData?.name || currentUser.email.split('@')[0];
+  const mark = await generateUniqueMark(nameBase, destCode, currentUser.email);
+
+  const data = {
+    email: currentUser.email,
+    name: currentCustomerData?.name || nameBase,
+    destination: currentCustomerData?.destination || destName(destCode),
+    shippingMark: mark,
+    emailVerified: currentUser.emailVerified || false,
+    joinDate: currentCustomerData?.joinDate || new Date().toISOString().slice(0,10)
+  };
+  await db.collection('customers').doc(currentUser.email).set(data, {merge:true});
+  currentCustomerData = data;
+}
+
+async function submitAuth(){
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const name = document.getElementById('authName').value.trim();
+  const destCode = document.getElementById('authDestination').value;
+  const errBox = document.getElementById('authError');
+  errBox.classList.remove('show');
+  if(!email || !password){
+    errBox.textContent = t('enter_email_password');
+    errBox.classList.add('show');
+    return;
+  }
+  if(authMode === 'register' && !name){
+    errBox.textContent = t('enter_full_name');
+    errBox.classList.add('show');
+    return;
+  }
+
+  let cleanName = '';
+  if(authMode === 'register'){
+    cleanName = name.toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(!cleanName){
+      errBox.textContent = t('name_english_only');
+      errBox.classList.add('show');
+      return;
+    }
+  }
+
+  if(authMode === 'register' && !document.getElementById('authTermsCheck').checked){
+    errBox.textContent = t('must_agree_terms');
+    errBox.classList.add('show');
+    return;
+  }
+
+  try{
+    if(authMode === 'login'){
+      await auth.signInWithEmailAndPassword(email, password);
+    } else {
+      const userCred = await auth.createUserWithEmailAndPassword(email, password);
+      const shippingMark = await generateUniqueMark(cleanName, destCode, email);
+      await userCred.user.sendEmailVerification();
+      await db.collection('customers').doc(email).set({
+        email: email,
+        name: name,
+        destination: destName(destCode),
+        shippingMark: shippingMark,
+        emailVerified: false,
+        termsAccepted: true,
+        termsAcceptedDate: new Date().toISOString(),
+        joinDate: new Date().toISOString().slice(0,10)
+      });
+    }
+    playSailAnimation(() => {
+      closeAuthModal();
+      showToast(authMode==='login' ? t('logged_in') : t('account_created'));
+    });
+  }catch(e){
+    const map = {
+      'auth/email-already-in-use': t('email_in_use'),
+      'auth/invalid-email': t('invalid_email_error'),
+      'auth/weak-password': t('weak_password'),
+      'auth/user-not-found': t('no_account_error'),
+      'auth/wrong-password': t('wrong_password'),
+      'auth/invalid-credential': t('invalid_credential')
+    };
+    errBox.textContent = map[e.code] || t('generic_error');
+    errBox.classList.add('show');
+  }
+}
+
+async function handleForgotPassword(){
+  const email = document.getElementById('authEmail').value.trim();
+  const errBox = document.getElementById('authError');
+  errBox.classList.remove('show');
+  if(!email){
+    errBox.textContent = 'يرجى إدخال بريدك الإلكتروني أولاً في الحقل أعلاه';
+    errBox.classList.add('show');
+    return;
+  }
+  try{
+    await auth.sendPasswordResetEmail(email);
+    showToast(t('reset_link_sent'));
+  }catch(e){
+    const map = {
+      'auth/invalid-email': t('invalid_email_error'),
+      'auth/user-not-found': t('no_account_error')
+    };
+    errBox.textContent = map[e.code] || t('send_error_retry');
+    errBox.classList.add('show');
+  }
+}
+
+async function reauthCurrentUser(currentPassword){
+  const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, currentPassword);
+  await currentUser.reauthenticateWithCredential(credential);
+}
+
+async function changeMyEmail(){
+  const newEmail = document.getElementById('newEmailInput').value.trim();
+  const password = document.getElementById('emailCurrentPassword').value;
+  if(!newEmail || !password){ showToast(t('fill_all_fields')); return; }
+  try{
+    await reauthCurrentUser(password);
+    const oldEmail = currentUser.email;
+    await currentUser.updateEmail(newEmail);
+    await currentUser.sendEmailVerification();
+    const oldDoc = await db.collection('customers').doc(oldEmail).get();
+    const data = oldDoc.exists ? oldDoc.data() : {};
+    data.email = newEmail;
+    data.emailVerified = false;
+    await db.collection('customers').doc(newEmail).set(data);
+    await db.collection('customers').doc(oldEmail).delete();
+    const oldRating = await db.collection('ratings').doc(oldEmail).get();
+    if(oldRating.exists){
+      await db.collection('ratings').doc(newEmail).set(oldRating.data());
+      await db.collection('ratings').doc(oldEmail).delete();
+    }
+    currentCustomerData = data;
+    document.getElementById('newEmailInput').value = '';
+    document.getElementById('emailCurrentPassword').value = '';
+    renderProfile();
+    showToast(t('email_changed'));
+  }catch(e){
+    showToast(e.code === 'auth/wrong-password' ? t('wrong_password') : t('generic_error'));
+  }
+}
+
+async function changeMyPassword(){
+  const newPassword = document.getElementById('newPasswordInput').value;
+  const currentPassword = document.getElementById('passwordCurrentPassword').value;
+  if(!newPassword || !currentPassword){ showToast(t('fill_all_fields')); return; }
+  if(newPassword.length < 6){ showToast(t('weak_password')); return; }
+  try{
+    await reauthCurrentUser(currentPassword);
+    await currentUser.updatePassword(newPassword);
+    document.getElementById('newPasswordInput').value = '';
+    document.getElementById('passwordCurrentPassword').value = '';
+    showToast(t('password_changed'));
+  }catch(e){
+    showToast(e.code === 'auth/wrong-password' ? t('wrong_password') : t('generic_error'));
+  }
+}
+
+async function resendVerification(){
+  if(!currentUser){ return; }
+  try{
+    await currentUser.sendEmailVerification();
+    showToast(t('verify_link_resent'));
+  }catch(e){
+    showToast(t('send_error_retry'));
+  }
+}
+
+function playSailAnimation(callback){
+  const overlay = document.getElementById('sailOverlay');
+  overlay.classList.add('show');
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    if(callback) callback();
+  }, 2000);
+}
+
+// ====== مراقبة حالة المستخدم ======
+
+auth.onAuthStateChanged(async user => {
+  currentUser = user;
+  const btn = document.getElementById('authBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const profileBar = document.getElementById('userProfileBar');
+  const profileName = document.getElementById('userProfileName');
+  const avatar = document.getElementById('userAvatar');
+  
+  if(user){
+    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
+    btn.onclick = openAuthModal;
+    logoutBtn.style.display = 'inline-block';
+    logoutBtn.textContent = currentLang === 'ar' ? 'خروج' : 'Log out';
+    
+    profileBar.classList.add('show');
+    const displayName = currentCustomerData?.name || user.email.split('@')[0];
+    profileName.textContent = displayName;
+    avatar.textContent = displayName.charAt(0).toUpperCase();
+    
+    try{
+      const doc = await db.collection('customers').doc(user.email).get();
+      currentCustomerData = doc.exists ? doc.data() : null;
+      if(user.emailVerified && currentCustomerData && !currentCustomerData.emailVerified){
+        await db.collection('customers').doc(user.email).update({emailVerified: true});
+        currentCustomerData.emailVerified = true;
+      }
+      if(currentCustomerData?.name) {
+        profileName.textContent = currentCustomerData.name;
+        avatar.textContent = currentCustomerData.name.charAt(0).toUpperCase();
+      }
+    }catch(e){ currentCustomerData = null; }
+    
+    await ensureShippingMark();
+    renderMyShippingMark();
+    if(currentCustomerData && currentCustomerData.shippingMark){
+      await loadMyShipments();
+      renderShipmentsResult();
+    }
+    
+    // إذا كان المسؤول، عرض إعدادات الإدارة
+    if (user.email === ADMIN_EMAIL) {
+      setTimeout(async () => {
+        await renderTabsControl();
+        await renderFlashSaleAdmin();
+      }, 500);
+    }
+    
+  } else {
+    btn.textContent = currentLang === 'ar' ? 'دخول' : 'Log in';
+    btn.onclick = openAuthModal;
+    logoutBtn.style.display = 'none';
+    profileBar.classList.remove('show');
+    currentCustomerData = null;
+    myOrders = {}; myImportRequests = {}; myFactoryVisits = {};
+    renderMyShippingMark();
+  }
+});
+
+// ====== دوال العرض الأساسية المفقودة ======
+
+function renderProfile(){
+  if(!currentUser || !currentCustomerData) return;
+  document.getElementById('profileName').textContent = currentCustomerData.name || currentUser.email.split('@')[0];
+  document.getElementById('profileMark').textContent = currentCustomerData.shippingMark || '-';
+  document.getElementById('profileEmail').textContent = currentUser.email;
+  document.getElementById('profileDestination').textContent = currentCustomerData.destination || '-';
+  document.getElementById('profileVerified').textContent = currentUser.emailVerified ? '✅ ' + t('verified_yes') : '⏳ ' + t('verified_no');
+}
+
+function renderMyShippingMark(){
+  const loginPrompt = document.getElementById('trackLoginPrompt');
+  const wrap = document.getElementById('myMarkBox');
+  if(!wrap || !loginPrompt) return;
+  if(currentUser && currentCustomerData && currentCustomerData.shippingMark){
+    loginPrompt.style.display = 'none';
+    wrap.style.display = 'block';
+    document.getElementById('myMarkDisplay').textContent = currentCustomerData.shippingMark;
+    const notice = document.getElementById('verifyNotice');
+    notice.style.display = (currentUser && !currentUser.emailVerified) ? 'block' : 'none';
+  } else {
+    wrap.style.display = 'none';
+    loginPrompt.style.display = 'block';
+  }
+}
+
+function copyProfileMark(){
+  const mark = document.getElementById('profileMark').textContent;
+  if(!mark || mark === '-') return;
+  navigator.clipboard.writeText(mark).then(()=>{
+    showToast(t('mark_copied'));
+  }).catch(()=>{
+    showToast(t('copy_failed'));
+  });
+}
+
+function doLogout(){
+  auth.signOut();
+  showTab('home');
+  document.getElementById('userProfileBar').classList.remove('show');
+  showToast(t('logged_out_msg'));
+}
 </script>
 </body>
 </html>

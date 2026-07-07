@@ -156,31 +156,48 @@
   /* HOME */
   .hero{
     text-align:center;
-    padding:36px 10px 10px;
+    padding:44px 10px 10px;
   }
   .hero .eyebrow{
-    color:var(--rust); font-weight:700; letter-spacing:.5px; font-size:14px;
+    color:var(--rust); font-weight:700; letter-spacing:1.2px; font-size:13px;
+    text-transform:uppercase; display:inline-flex; align-items:center; gap:10px;
   }
-  .hero h1{ font-size:34px; margin:10px 0 14px; color:var(--ink-dark); }
-  .hero p{ max-width:520px; margin:0 auto; color:#3d4f4f; font-size:16px; }
-  .hero-cta{ margin-top:22px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .hero .eyebrow::before, .hero .eyebrow::after{
+    content:''; width:26px; height:1.5px;
+    background:linear-gradient(90deg, transparent, var(--gold));
+  }
+  .hero .eyebrow::after{ background:linear-gradient(90deg, var(--gold), transparent); }
+  .hero h1{
+    font-size:32px; margin:14px 0 16px; color:var(--ink-dark); font-weight:900; line-height:1.35;
+  }
+  .hero p{ max-width:520px; margin:0 auto; color:#5a6668; font-size:15.5px; line-height:1.85; }
+  .hero-cta{ margin-top:26px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .btn{
     display:inline-block; padding:12px 22px; border-radius:10px;
     font-weight:700; text-decoration:none; cursor:pointer; border:none; font-family:'Tajawal'; font-size:15px;
+    transition:transform .2s ease;
   }
+  .btn:active{ transform:scale(0.96); }
   .btn-primary{ background:var(--ink); color:var(--paper); }
   .btn-gold{ background:linear-gradient(135deg, var(--gold-light), var(--gold)); color:var(--ink-dark); box-shadow:0 3px 10px rgba(224,165,24,0.35); }
   .btn-outline{ background:transparent; border:2px solid var(--ink); color:var(--ink); }
 
   .strip{
-    display:flex; gap:14px; margin:34px 0; overflow-x:auto; padding-bottom:6px;
+    display:flex; gap:14px; margin:40px 0 20px; overflow-x:auto; padding:6px 6px 10px;
   }
   .strip .card{
-    min-width:150px; background:var(--white); border-radius:14px; padding:16px;
-    border:1px solid var(--line); text-align:center; flex-shrink:0;
+    min-width:150px; flex:1; text-align:center; flex-shrink:0;
+    background:linear-gradient(160deg, var(--white) 0%, var(--paper-soft) 100%);
+    border:1px solid rgba(224,165,24,0.25); border-radius:16px; padding:20px 16px;
+    box-shadow:0 4px 16px rgba(20,48,74,0.06);
+    position:relative; overflow:hidden;
   }
-  .strip .card .num{ font-family:'Aref Ruqaa'; font-size:26px; color:var(--rust); }
-  .strip .card .lbl{ font-size:13px; color:#555; margin-top:4px; }
+  .strip .card::before{
+    content:''; position:absolute; top:0; right:0; left:0; height:3px;
+    background:linear-gradient(90deg, var(--gold), var(--rust));
+  }
+  .strip .card .num{ font-family:'Aref Ruqaa'; font-size:28px; color:var(--rust); }
+  .strip .card .lbl{ font-size:12.5px; color:#666; margin-top:5px; font-weight:700; }
 
   /* CATALOG */
   .catalog-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
@@ -1325,11 +1342,23 @@
       <div class="admin-lock">
         <h3>دخول الإدارة</h3>
         <p style="font-size:13px;color:#666;">هذا القسم لصاحب المتجر فقط</p>
-        <input id="pinInput" type="password" placeholder="الرمز السري">
-        <button class="btn btn-primary" onclick="checkPin()" style="width:100%;">دخول</button>
+        <div id="fpEntryWrap" style="display:none;">
+          <button class="btn btn-gold" onclick="authenticateWithFingerprint()" style="width:100%;margin:14px 0 8px;font-size:16px;">🔒 الدخول بالبصمة</button>
+          <button class="link-btn" onclick="showPinFallback()">استخدام الرمز السري بدلاً من ذلك</button>
+        </div>
+        <div id="pinEntryWrap">
+          <input id="pinInput" type="password" placeholder="الرمز السري">
+          <button class="btn btn-primary" onclick="checkPin()" style="width:100%;">دخول</button>
+        </div>
       </div>
     </div>
     <div id="adminPanel" style="display:none;">
+      <div class="admin-section" id="fpManageSection">
+        <h3>🔒 دخول الإدارة بالبصمة</h3>
+        <p style="font-size:13px;color:#666;margin-bottom:10px;" id="fpStatusText"></p>
+        <button class="btn btn-gold" onclick="registerFingerprint()" id="fpRegisterBtn">تسجيل بصمة هذا الجهاز</button>
+        <button class="tiny-btn" onclick="removeFingerprint()" id="fpRemoveBtn" style="display:none;margin-right:8px;">إلغاء تسجيل البصمة</button>
+      </div>
       <div class="admin-section">
         <h3>إضافة منتج جديد</h3>
         <div class="admin-row">
@@ -1629,7 +1658,7 @@
   <video id="videoPlayer" controls></video>
 </div>
 
-<footer><span data-i18n="footer_text">AlHossain · للتواصل المباشر عبر واتساب</span> · <span class="footer-link" data-i18n="terms_title" onclick="showTab('terms')">الشروط والأحكام</span> · <span class="footer-link" data-i18n="complaints_title" onclick="showTab('complaints')">شكاوى ومقترحات</span> · <span onclick="showTab('admin')" style="cursor:pointer;opacity:0.5;font-size:13px;padding:10px;display:inline-block;">⚙️ إدارة</span></footer>
+<footer><span data-i18n="footer_text">AlHossain · للتواصل المباشر عبر واتساب</span> · <span class="footer-link" data-i18n="terms_title" onclick="showTab('terms')">الشروط والأحكام</span> · <span class="footer-link" data-i18n="complaints_title" onclick="showTab('complaints')">شكاوى ومقترحات</span></footer>
 
 <script>
 // ====== CONFIG — عدّل هذا القسم قبل النشر ======
@@ -3326,6 +3355,108 @@ async function closeOnboarding(){
   }
 }
 
+// ====== دخول الإدارة بالبصمة (WebAuthn) ======
+function renderAdminLockScreen(){
+  const fpRegistered = localStorage.getItem('adminFingerprintRegistered') === 'true';
+  const supported = !!window.PublicKeyCredential;
+  document.getElementById('fpEntryWrap').style.display = (fpRegistered && supported) ? 'block' : 'none';
+  document.getElementById('pinEntryWrap').style.display = (fpRegistered && supported) ? 'none' : 'block';
+}
+
+function showPinFallback(){
+  document.getElementById('fpEntryWrap').style.display = 'none';
+  document.getElementById('pinEntryWrap').style.display = 'block';
+}
+
+function enterAdminPanel(){
+  document.getElementById('adminLockWrap').style.display='none';
+  document.getElementById('adminPanel').style.display='block';
+  showToast('جاري تحميل بيانات الإدارة...');
+  loadAdminData();
+  renderTabsControl();
+  renderFlashSaleAdmin();
+  renderFpManageSection();
+  if(agentLocationData.currentCity){
+    document.getElementById('agentCityInput').value = agentLocationData.currentCity;
+  }
+}
+
+function renderFpManageSection(){
+  const registered = localStorage.getItem('adminFingerprintRegistered') === 'true';
+  const supported = !!window.PublicKeyCredential;
+  const statusText = document.getElementById('fpStatusText');
+  if(!supported){
+    statusText.textContent = 'جهازك أو متصفحك لا يدعم تسجيل الدخول بالبصمة، سيبقى الرمز السري متاحاً كطريقة دخول.';
+    document.getElementById('fpRegisterBtn').style.display = 'none';
+    return;
+  }
+  statusText.textContent = registered ? '✅ البصمة مسجّلة على هذا الجهاز، وهي الطريقة الافتراضية للدخول الآن.' : 'سجّل بصمتك على هذا الجهاز لتدخل الإدارة بلمسة واحدة بدل كتابة الرمز في كل مرة.';
+  document.getElementById('fpRegisterBtn').style.display = registered ? 'none' : 'inline-block';
+  document.getElementById('fpRemoveBtn').style.display = registered ? 'inline-block' : 'none';
+}
+
+async function registerFingerprint(){
+  if(!window.PublicKeyCredential){ showToast('جهازك لا يدعم البصمة'); return; }
+  try{
+    const challenge = new Uint8Array(32);
+    crypto.getRandomValues(challenge);
+    const cred = await navigator.credentials.create({
+      publicKey: {
+        challenge: challenge,
+        rp: { name: "AlHossain Admin" },
+        user: {
+          id: new TextEncoder().encode(ADMIN_EMAIL),
+          name: ADMIN_EMAIL,
+          displayName: "Admin"
+        },
+        pubKeyCredParams: [{alg:-7, type:"public-key"}, {alg:-257, type:"public-key"}],
+        authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
+        timeout: 60000
+      }
+    });
+    const credIdStr = btoa(String.fromCharCode(...new Uint8Array(cred.rawId)));
+    localStorage.setItem('adminFpCredId', credIdStr);
+    localStorage.setItem('adminFingerprintRegistered', 'true');
+    showToast('تم تسجيل البصمة بنجاح لهذا الجهاز');
+    renderFpManageSection();
+  }catch(e){
+    showToast('تعذّر تسجيل البصمة، تأكد إن جهازك فيه حساس بصمة مفعّل');
+  }
+}
+
+async function removeFingerprint(){
+  localStorage.removeItem('adminFpCredId');
+  localStorage.removeItem('adminFingerprintRegistered');
+  showToast('تم إلغاء تسجيل البصمة، الرمز السري هو الطريقة الافتراضية الآن');
+  renderFpManageSection();
+}
+
+async function authenticateWithFingerprint(){
+  const credIdStr = localStorage.getItem('adminFpCredId');
+  if(!credIdStr){ showPinFallback(); return; }
+  try{
+    const challenge = new Uint8Array(32);
+    crypto.getRandomValues(challenge);
+    const credId = Uint8Array.from(atob(credIdStr), c=>c.charCodeAt(0));
+    await navigator.credentials.get({
+      publicKey: {
+        challenge: challenge,
+        allowCredentials: [{ id: credId, type: 'public-key' }],
+        userVerification: "required",
+        timeout: 60000
+      }
+    });
+    if(!currentUser || currentUser.email !== ADMIN_EMAIL){
+      showToast('يجب تسجيل الدخول بحساب المسؤول أولاً');
+      openAuthModal();
+      return;
+    }
+    enterAdminPanel();
+  }catch(e){
+    showToast('فشلت المصادقة بالبصمة، جرّب تاني أو استخدم الرمز السري');
+  }
+}
+
 function checkPin(){
   const val = document.getElementById('pinInput').value;
   if(val !== ADMIN_PIN){
@@ -3337,15 +3468,7 @@ function checkPin(){
     openAuthModal();
     return;
   }
-  document.getElementById('adminLockWrap').style.display='none';
-  document.getElementById('adminPanel').style.display='block';
-  showToast('جاري تحميل بيانات الإدارة...');
-  loadAdminData();
-  renderTabsControl();
-  renderFlashSaleAdmin();
-  if(agentLocationData.currentCity){
-    document.getElementById('agentCityInput').value = agentLocationData.currentCity;
-  }
+  enterAdminPanel();
 }
 
 async function addProduct(){
@@ -4356,6 +4479,7 @@ function showTab(tab){
   if(isAdmin){ chatFloat.style.display = 'none'; }
   else if(currentCustomerData && currentCustomerData.groupChatEnabled){ chatFloat.style.display = 'flex'; }
   if(tab === 'about'){ startChinaClock(); } else { stopChinaClock(); }
+  if(tab === 'admin'){ renderAdminLockScreen(); }
   if(firebase.analytics){
     try{ firebase.analytics().logEvent('page_view', { page_title: tab }); }catch(e){}
   }
@@ -4388,6 +4512,11 @@ addImportRow();
 loadTabsSettings().then(applyTabsVisibility);
 renderFaqList();
 renderFlashSalePage();
+
+// مدخل سري للإدارة عبر رابط خاص، بدل رابط ظاهر في الفوتر
+if(window.location.hash === '#gate-14304a'){
+  showTab('admin');
+}
 </script>
 </body>
 </html>

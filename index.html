@@ -401,6 +401,69 @@
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 6px 16px rgba(0,0,0,.25); cursor:pointer; font-size:24px;
   }
+
+  /* GROUP CHAT CTA (COMMUNITY PAGE) */
+  .group-chat-cta{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:linear-gradient(90deg, rgba(37,211,102,0.12), rgba(224,165,24,0.14));
+    border:1px solid rgba(224,165,24,0.3); border-radius:14px; padding:14px 16px; margin-bottom:16px;
+  }
+  .group-chat-cta.activated .btn-gold{ display:none; }
+
+  /* GROUP CHAT FLOAT BUTTON */
+  #groupChatFloat{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) scale(0);
+    z-index:46; height:48px; padding:0 20px; border-radius:999px; border:1px solid rgba(255,255,255,0.4);
+    background:linear-gradient(90deg, #25D366, var(--gold));
+    backdrop-filter:blur(8px); color:#fff; font-size:22px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 18px rgba(0,0,0,.3);
+  }
+  #groupChatFloat.show{ animation:chatBtnBump .5s cubic-bezier(.34,1.6,.64,1) forwards; }
+  @keyframes chatBtnBump{
+    0%{ transform:translateX(-50%) scale(0); }
+    70%{ transform:translateX(-50%) scale(1.18); }
+    100%{ transform:translateX(-50%) scale(1); }
+  }
+
+  /* ACTIVATION ANIMATION OVERLAY */
+  .chat-activate-overlay{
+    position:fixed; inset:0; z-index:200;
+    background:rgba(10,27,43,0.25); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
+    display:none; align-items:flex-end; justify-content:center; padding-bottom:100px;
+  }
+  .chat-activate-overlay.show{ display:flex; }
+  .dots-grid-big{ grid-template-columns:repeat(3, 14px); gap:8px; }
+  .dots-grid-big span{ width:14px; height:14px; }
+
+  /* GROUP CHAT PANEL */
+  .group-chat-overlay{
+    position:fixed; inset:0; z-index:150; background:rgba(10,27,43,.55);
+    display:none; align-items:flex-end; justify-content:center;
+  }
+  .group-chat-overlay.show{ display:flex; }
+  .group-chat-panel{
+    background:var(--paper-soft); width:100%; max-width:480px; height:78vh;
+    border-radius:20px 20px 0 0; display:flex; flex-direction:column; overflow:hidden;
+    animation:chatPanelUp .3s ease forwards;
+  }
+  @keyframes chatPanelUp{ from{ transform:translateY(100%); } to{ transform:translateY(0); } }
+  .group-chat-header{
+    background:linear-gradient(90deg, #1b8a4a, var(--ink)); color:#fff; padding:14px 16px;
+    display:flex; justify-content:space-between; align-items:center; font-weight:700;
+  }
+  .group-chat-header .video-close{ background:rgba(255,255,255,.15); color:#fff; }
+  .group-chat-messages{ flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:10px; }
+  .chat-msg{ max-width:78%; padding:9px 13px; border-radius:14px; font-size:13.5px; line-height:1.6; }
+  .chat-msg.mine{ align-self:flex-start; background:var(--ink); color:var(--paper); border-bottom-left-radius:4px; }
+  .chat-msg.other{ align-self:flex-end; background:var(--white); border:1px solid var(--line); border-bottom-right-radius:4px; }
+  .chat-msg .chat-msg-author{ font-size:11px; font-weight:700; color:var(--gold); margin-bottom:3px; }
+  .chat-msg.other .chat-msg-author{ color:var(--rust); }
+  .chat-msg .chat-msg-time{ font-size:9.5px; opacity:.6; margin-top:3px; }
+  .chat-msg-delete{ background:none; border:none; color:var(--rust); font-size:11px; cursor:pointer; margin-top:3px; }
+  .group-chat-input-row{ display:flex; gap:8px; padding:10px 12px; background:var(--white); border-top:1px solid var(--line); }
+  .group-chat-input-row input{ flex:1; padding:10px; border-radius:999px; border:1px solid var(--line); font-family:'Tajawal'; }
+  .group-chat-input-row button{ background:var(--ink); color:var(--paper); border:none; border-radius:50%; width:40px; height:40px; cursor:pointer; font-size:16px; }
   @keyframes waPulse{
     0%,100%{ box-shadow:0 6px 16px rgba(37,211,102,.4); }
     50%{ box-shadow:0 6px 22px rgba(37,211,102,.75); }
@@ -642,6 +705,7 @@
   .comment-form{ display:flex; gap:8px; margin-top:8px; }
   .comment-form input{ flex:1; padding:8px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; font-size:13px; }
   .comment-form button{ background:var(--ink); color:var(--paper); border:none; border-radius:8px; padding:0 14px; cursor:pointer; font-size:13px; }
+  .private-comment-check{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:#777; margin-top:6px; cursor:pointer; }
   .qa-asker{ font-size:12.5px; color:var(--rust); font-weight:700; margin-bottom:6px; }
   .qa-q{ font-weight:700; margin-bottom:6px; }
   .qa-meta{ font-size:12px; color:#888; margin-bottom:8px; }
@@ -979,6 +1043,14 @@
     <h2 style="margin-bottom:6px;" data-i18n="community_title">مجتمع العملاء</h2>
     <p style="color:#5c6b6b; margin-bottom:18px;" data-i18n="community_desc">شارك تجربتك، اسأل، أو تفاعل مع باقي العملاء.</p>
 
+    <div class="group-chat-cta" id="groupChatCta">
+      <div>
+        <div style="font-weight:700;font-size:14.5px;" data-i18n="group_chat_cta_title">💬 الدردشة الجماعية المباشرة</div>
+        <div style="font-size:12.5px;color:#666;margin-top:2px;" data-i18n="group_chat_cta_desc">تحدث مع باقي العملاء مباشرة في غرفة واحدة</div>
+      </div>
+      <button class="btn btn-gold" id="groupChatActivateBtn" onclick="activateGroupChat()" data-i18n="group_chat_activate_btn">تفعيل</button>
+    </div>
+
     <div class="ask-box">
       <textarea id="postInput" placeholder="اكتب منشورك هنا..." data-i18n-ph="post_ph"></textarea>
       <button class="btn btn-primary" style="margin-top:8px;" data-i18n="publish_btn" onclick="submitPost()">نشر</button>
@@ -1291,6 +1363,31 @@
 </a>
 
 <button id="currencyFloat" onclick="openCurrencyModal()" aria-label="محول العملة">💱</button>
+
+<button id="groupChatFloat" onclick="openGroupChat()" style="display:none;" aria-label="الدردشة الجماعية">💬</button>
+
+<div class="chat-activate-overlay" id="chatActivateOverlay">
+  <div class="dots-grid dots-grid-big">
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<div class="group-chat-overlay" id="groupChatOverlay">
+  <div class="group-chat-panel">
+    <div class="group-chat-header">
+      <span data-i18n="group_chat_title">💬 الدردشة الجماعية</span>
+      <button class="video-close" onclick="closeGroupChat()">✕</button>
+    </div>
+    <div class="group-chat-messages" id="groupChatMessages"></div>
+    <div class="group-chat-input-row">
+      <input id="groupChatInput" placeholder="اكتب رسالتك..." data-i18n-ph="group_chat_input_ph" onkeydown="if(event.key==='Enter') sendGroupChatMessage();">
+      <button onclick="sendGroupChatMessage()">➤</button>
+    </div>
+  </div>
+</div>
+
 
 <div class="info-modal-overlay" id="currencyModalOverlay">
   <div class="info-modal">
@@ -1772,6 +1869,13 @@ const translations = {
   faq_prev: {ar:'السابق', en:'Previous'},
   faq_next: {ar:'التالي', en:'Next'},
   faq_close: {ar:'✕ إغلاق', en:'✕ Close'},
+  private_comment_label: {ar:'🔒 خاص للإدارة فقط (لن يظهر لباقي العملاء)', en:'🔒 Private to admin only (won\'t show to other customers)'},
+  group_chat_cta_title: {ar:'💬 الدردشة الجماعية المباشرة', en:'💬 Live Group Chat'},
+  group_chat_cta_desc: {ar:'تحدث مع باقي العملاء مباشرة في غرفة واحدة', en:'Chat directly with other customers in one room'},
+  group_chat_activate_btn: {ar:'تفعيل', en:'Activate'},
+  group_chat_activated_msg: {ar:'تم تفعيل الدردشة الجماعية! هتلاقي زرارها في أسفل الشاشة', en:'Group chat activated! You\'ll find its button at the bottom of the screen'},
+  group_chat_title: {ar:'💬 الدردشة الجماعية', en:'💬 Group Chat'},
+  group_chat_input_ph: {ar:'اكتب رسالتك...', en:'Type your message...'},
   activity_title: {ar:'آخر التحركات في الموقع', en:'Latest Site Activity'},
   activity_desc: {ar:'تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.', en:'Follow the latest posts, questions, and ratings from our real customers.'},
   no_activity_yet: {ar:'لا توجد تحركات بعد', en:'No activity yet'},
@@ -2003,6 +2107,7 @@ auth.onAuthStateChanged(async user => {
     }catch(e){ currentCustomerData = null; }
     await ensureShippingMark();
     renderMyShippingMark();
+    checkGroupChatActivation();
     if(currentCustomerData && currentCustomerData.shippingMark){
       await loadMyShipments();
       renderShipmentsResult();
@@ -2015,6 +2120,7 @@ auth.onAuthStateChanged(async user => {
     currentCustomerData = null;
     myOrders = {}; myImportRequests = {}; myFactoryVisits = {};
     renderMyShippingMark();
+    checkGroupChatActivation();
   }
 });
 
@@ -2840,6 +2946,92 @@ function quickOrderFlashSale(){
   window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
+// ====== الدردشة الجماعية المباشرة ======
+let groupChatUnsub = null;
+
+function checkGroupChatActivation(){
+  const cta = document.getElementById('groupChatCta');
+  const floatBtn = document.getElementById('groupChatFloat');
+  if(!cta || !floatBtn) return;
+  const enabled = currentCustomerData && currentCustomerData.groupChatEnabled;
+  if(enabled){
+    cta.classList.add('activated');
+    document.getElementById('groupChatActivateBtn').style.display = 'none';
+    floatBtn.style.display = 'flex';
+    floatBtn.classList.add('show');
+  } else {
+    cta.classList.remove('activated');
+    document.getElementById('groupChatActivateBtn').style.display = 'inline-block';
+    floatBtn.style.display = 'none';
+    floatBtn.classList.remove('show');
+  }
+}
+
+async function activateGroupChat(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const overlay = document.getElementById('chatActivateOverlay');
+  overlay.classList.add('show');
+  await db.collection('customers').doc(currentUser.email).update({ groupChatEnabled: true });
+  currentCustomerData.groupChatEnabled = true;
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    checkGroupChatActivation();
+    showToast(t('group_chat_activated_msg'));
+  }, 1100);
+}
+
+function openGroupChat(){
+  document.getElementById('groupChatOverlay').classList.add('show');
+  const msgsBox = document.getElementById('groupChatMessages');
+  msgsBox.innerHTML = `<div style="text-align:center;color:#999;font-size:12.5px;">${t('loading')}</div>`;
+  if(groupChatUnsub) groupChatUnsub();
+  groupChatUnsub = db.collection('groupChat').orderBy('createdAt','asc').limitToLast(100)
+    .onSnapshot(snap => {
+      const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
+      msgsBox.innerHTML = snap.docs.map(d => {
+        const m = d.data();
+        const mine = currentUser && m.authorEmail === currentUser.email;
+        const canDelete = isAdmin || mine;
+        const timeStr = m.createdAt && m.createdAt.toDate ? m.createdAt.toDate().toLocaleTimeString(currentLang==='ar'?'ar-EG':'en-US', {hour:'2-digit', minute:'2-digit'}) : '';
+        return `<div class="chat-msg ${mine ? 'mine' : 'other'}">
+          <div class="chat-msg-author">${m.authorName}</div>
+          <div>${m.text}</div>
+          <div class="chat-msg-time">${timeStr}</div>
+          ${canDelete ? `<button class="chat-msg-delete" onclick="deleteGroupChatMessage('${d.id}')">🗑️ ${currentLang==='ar'?'حذف':'Delete'}</button>` : ''}
+        </div>`;
+      }).join('') || `<div style="text-align:center;color:#999;font-size:12.5px;">${t('no_comments_yet')}</div>`;
+      msgsBox.scrollTop = msgsBox.scrollHeight;
+    }, err => {
+      msgsBox.innerHTML = `<div style="text-align:center;color:var(--rust);font-size:12.5px;">${t('generic_error')}</div>`;
+    });
+}
+
+function closeGroupChat(){
+  document.getElementById('groupChatOverlay').classList.remove('show');
+  if(groupChatUnsub){ groupChatUnsub(); groupChatUnsub = null; }
+}
+
+async function sendGroupChatMessage(){
+  if(!currentUser) return;
+  const input = document.getElementById('groupChatInput');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  const expireAt = new Date();
+  expireAt.setDate(expireAt.getDate() + 14);
+  await db.collection('groupChat').add({
+    authorEmail: currentUser.email,
+    authorName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    text: text,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    expireAt: expireAt
+  });
+}
+
+async function deleteGroupChatMessage(id){
+  await db.collection('groupChat').doc(id).delete();
+}
+
 function checkPin(){
   const val = document.getElementById('pinInput').value;
   if(val !== ADMIN_PIN){
@@ -3397,6 +3589,10 @@ async function loadCommunityFeed(loadMore){
           <input id="commentInput_${p.id}" placeholder="${t('comment_ph')}">
           <button onclick="submitComment('${p.id}')">${t('send_btn')}</button>
         </div>
+        <label class="private-comment-check">
+          <input type="checkbox" id="commentPrivate_${p.id}">
+          <span data-i18n="private_comment_label">🔒 خاص للإدارة فقط (لن يظهر لباقي العملاء)</span>
+        </label>
       </div>
     </div>`;
   }).join('');
@@ -3455,15 +3651,21 @@ async function loadComments(postId){
   const list = document.getElementById('commentsList_'+postId);
   list.innerHTML = `<div style="font-size:12px;color:#999;">${t('loading')}</div>`;
   const snap = await db.collection('communityPosts').doc(postId).collection('comments').orderBy('createdAt','asc').limit(50).get();
-  if(snap.empty){ list.innerHTML = `<div style="font-size:12.5px;color:#999;">${t('no_comments_yet')}</div>`; return; }
-  list.innerHTML = snap.docs.map(d => {
+  const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
+  const visibleDocs = snap.docs.filter(d => {
+    const c = d.data();
+    if(!c.isPrivate) return true;
+    return isAdmin || (currentUser && currentUser.email === c.authorEmail);
+  });
+  if(visibleDocs.length === 0){ list.innerHTML = `<div style="font-size:12.5px;color:#999;">${t('no_comments_yet')}</div>`; return; }
+  list.innerHTML = visibleDocs.map(d => {
     const c = d.data();
     const canDelete = currentUser && (currentUser.email === ADMIN_EMAIL || currentUser.email === c.authorEmail);
     const isAdminComment = c.authorEmail === ADMIN_EMAIL;
     const timeStr = c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(currentLang==='ar'?'ar-EG':'en-US', {hour:'2-digit', minute:'2-digit', day:'numeric', month:'short'}) : '';
-    return `<div class="comment-item" style="${isAdminComment ? 'background:var(--ink);color:var(--paper);' : ''}">
+    return `<div class="comment-item" style="${isAdminComment ? 'background:var(--ink);color:var(--paper);' : ''} ${c.isPrivate ? 'border:1px dashed var(--rust);' : ''}">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
-        <span class="comment-author" style="${isAdminComment ? 'color:var(--gold);' : ''}">${isAdminComment ? '👑 ' + t('admin_badge') : c.authorName}:</span>
+        <span class="comment-author" style="${isAdminComment ? 'color:var(--gold);' : ''}">${isAdminComment ? '👑 ' + t('admin_badge') : c.authorName}: ${c.isPrivate ? '🔒' : ''}</span>
         <span style="font-size:10.5px;opacity:.65;white-space:nowrap;">${timeStr}</span>
       </div>
       <div>${c.text}</div>
@@ -3475,15 +3677,18 @@ async function loadComments(postId){
 async function submitComment(postId){
   if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
   const input = document.getElementById('commentInput_'+postId);
+  const privateCheck = document.getElementById('commentPrivate_'+postId);
   const text = input.value.trim();
   if(!text) return;
   await db.collection('communityPosts').doc(postId).collection('comments').add({
     authorEmail: currentUser.email,
     authorName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
     text: text,
+    isPrivate: privateCheck ? privateCheck.checked : false,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   });
   input.value = '';
+  if(privateCheck) privateCheck.checked = false;
   loadComments(postId);
   refreshCommentCount(postId);
 }
@@ -3851,6 +4056,9 @@ function showTab(tab){
   const isAdmin = tab === 'admin';
   document.getElementById('waFloat').style.display = isAdmin ? 'none' : 'flex';
   document.getElementById('currencyFloat').style.display = isAdmin ? 'none' : 'flex';
+  const chatFloat = document.getElementById('groupChatFloat');
+  if(isAdmin){ chatFloat.style.display = 'none'; }
+  else if(currentCustomerData && currentCustomerData.groupChatEnabled){ chatFloat.style.display = 'flex'; }
   if(tab === 'about'){ startChinaClock(); } else { stopChinaClock(); }
   if(firebase.analytics){
     try{ firebase.analytics().logEvent('page_view', { page_title: tab }); }catch(e){}

@@ -481,25 +481,33 @@
   .faq-heading{ margin:32px 0 14px; padding-top:20px; border-top:2px dashed var(--line); }
   .faq-list{ display:flex; flex-direction:column; gap:10px; }
   .faq-envelope{
-    background:linear-gradient(135deg, rgba(217,164,64,0.14), rgba(217,164,64,0.06));
-    border:1px solid rgba(224,165,24,0.35); border-radius:12px;
+    background:rgba(255,255,255,0.35);
+    backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.5); border-radius:16px;
     padding:14px 16px; display:flex; align-items:center; gap:12px;
     cursor:pointer; transition:transform .2s ease, box-shadow .2s ease;
+    box-shadow:0 4px 16px rgba(20,48,74,0.08);
   }
   .faq-envelope:active{ transform:scale(0.98); }
-  .faq-envelope:hover{ box-shadow:0 4px 14px rgba(224,165,24,0.2); }
+  .faq-envelope:hover{ box-shadow:0 6px 20px rgba(224,165,24,0.25); border-color:rgba(224,165,24,0.5); }
   .faq-envelope-icon{ font-size:20px; flex-shrink:0; }
   .faq-envelope-q{ font-weight:700; font-size:14.5px; color:var(--ink-dark); flex:1; }
   .faq-envelope-arrow{ color:var(--gold); font-size:13px; }
 
   .faq-modal-overlay{
-    position:fixed; inset:0; background:rgba(10,27,43,.6); z-index:120;
+    position:fixed; inset:0; z-index:120;
+    background:linear-gradient(135deg, rgba(20,48,74,.75), rgba(180,85,45,.35), rgba(224,165,24,.35));
+    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
     display:none; align-items:center; justify-content:center; padding:20px;
   }
   .faq-modal-overlay.show{ display:flex; }
   .faq-modal{
-    background:var(--white); border-radius:18px; padding:30px 24px 22px;
+    background:rgba(255,255,255,0.14);
+    backdrop-filter:blur(22px) saturate(160%); -webkit-backdrop-filter:blur(22px) saturate(160%);
+    border:1px solid rgba(255,255,255,0.35);
+    border-radius:22px; padding:32px 24px 22px;
     max-width:440px; width:100%; position:relative; text-align:center;
+    box-shadow:0 10px 40px rgba(10,27,43,.35), inset 0 1px 0 rgba(255,255,255,.4);
     transform:scale(0.6) rotateX(-25deg); opacity:0; transform-origin:top center;
     animation:envelopeOpen .45s cubic-bezier(.34,1.4,.64,1) forwards;
   }
@@ -508,16 +516,20 @@
     60%{ transform:scale(1.02) rotateX(4deg); opacity:1; }
     100%{ transform:scale(1) rotateX(0deg); opacity:1; }
   }
-  .faq-modal-icon{ font-size:34px; margin-bottom:10px; }
-  .faq-modal-q{ font-size:17px; color:var(--ink-dark); margin-bottom:14px; line-height:1.6; }
-  .faq-modal-a{ font-size:14.5px; color:#444; line-height:1.9; text-align:right; background:var(--paper-soft); border-radius:12px; padding:16px; }
+  .faq-modal-icon{ font-size:34px; margin-bottom:10px; filter:drop-shadow(0 2px 6px rgba(0,0,0,.2)); }
+  .faq-modal-q{ font-size:17px; color:var(--ink-dark); margin-bottom:14px; line-height:1.6; font-weight:900; text-shadow:0 1px 2px rgba(255,255,255,.4); }
+  .faq-modal-a{
+    font-size:14.5px; color:var(--ink-dark); line-height:1.9; text-align:right;
+    background:rgba(255,255,255,0.35); backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,0.4); border-radius:14px; padding:16px;
+  }
   .faq-modal-nav{ display:flex; align-items:center; justify-content:space-between; margin-top:18px; }
   .faq-nav-btn{
-    background:var(--ink); color:var(--paper); border:none; border-radius:999px;
-    padding:8px 16px; font-family:'Tajawal'; font-size:13px; cursor:pointer;
+    background:rgba(20,48,74,0.75); backdrop-filter:blur(6px); color:var(--paper); border:1px solid rgba(255,255,255,.25);
+    border-radius:999px; padding:8px 16px; font-family:'Tajawal'; font-size:13px; cursor:pointer;
   }
   .faq-nav-btn:disabled{ opacity:0.35; cursor:not-allowed; }
-  .faq-modal-counter{ font-size:12.5px; color:#888; }
+  .faq-modal-counter{ font-size:12.5px; color:var(--ink-dark); font-weight:700; }
 
   /* PROFILE */
   .profile-card{ background:var(--ink); color:var(--paper); border-radius:16px; padding:22px; text-align:center; margin-bottom:20px; }

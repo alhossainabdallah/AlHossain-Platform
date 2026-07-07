@@ -75,21 +75,25 @@
   nav.tabs::-webkit-scrollbar{ display:none; }
   nav.tabs button{
     background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.2);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.18);
     color:var(--paper);
     padding:8px 16px;
     border-radius:999px;
     font-family:'Tajawal';
     font-size:14px;
     cursor:pointer;
-    transition:.2s;
+    transition: transform .35s cubic-bezier(.34,1.4,.64,1), background .3s ease, box-shadow .3s ease, border-color .3s ease;
     flex-shrink:0;
   }
   nav.tabs button.active{
-    background:var(--gold);
-    color:var(--ink-dark);
-    border-color:var(--gold);
+    background:rgba(217,164,65,0.16);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    color:var(--gold);
+    border-color:rgba(217,164,65,0.65);
     font-weight:700;
+    box-shadow:0 0 14px rgba(217,164,65,0.5), inset 0 0 10px rgba(217,164,65,0.15);
+    transform:scale(1.06) translateY(-2px);
   }
   .cart-btn{
     position:relative;
@@ -272,27 +276,51 @@
   .price-note{ font-size:12px; color:rgba(237,230,216,.7); margin-bottom:8px; }
 
   /* ABOUT */
-  .about-hero{ text-align:center; padding:20px 10px; }
+  .about-hero{
+    margin:0 -18px; padding:50px 20px; text-align:center;
+    background-size:cover; background-position:center; background-repeat:no-repeat;
+    background-color:var(--ink-dark);
+    position:relative;
+  }
+  .about-hero::before{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(10,27,43,.55), rgba(10,27,43,.85));
+  }
+  .about-glass-card{
+    position:relative; z-index:1; max-width:520px; margin:0 auto;
+    background:rgba(255,255,255,0.08); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.15); border-radius:22px; padding:28px 22px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.35);
+  }
+  .china-clock{
+    font-family:'Aref Ruqaa'; font-size:30px; color:var(--gold); letter-spacing:2px;
+    text-shadow:0 2px 10px rgba(0,0,0,.4);
+  }
+  .china-clock-label{ font-size:11.5px; color:rgba(237,230,216,.75); margin-bottom:16px; }
   .about-photo{
-    width:120px; height:120px; border-radius:50%; margin:0 auto 14px;
+    width:110px; height:110px; border-radius:50%; margin:0 auto 14px;
     background:linear-gradient(135deg, var(--ink) 0%, var(--rust) 100%);
     display:flex; align-items:center; justify-content:center; overflow:hidden;
-    font-family:'Aref Ruqaa'; font-size:42px; color:var(--paper);
+    font-family:'Aref Ruqaa'; font-size:38px; color:var(--paper);
     border:3px solid var(--gold);
   }
   .about-photo img{ width:100%; height:100%; object-fit:cover; }
-  .about-role{ color:var(--rust); font-weight:700; font-size:14px; margin-top:4px; }
-  .about-stats{ display:flex; gap:12px; justify-content:center; margin:24px 0; flex-wrap:wrap; }
-  .about-stat{
-    background:var(--white); border:1px solid var(--line); border-radius:14px;
-    padding:16px 22px; text-align:center; min-width:100px;
+  .about-big-name{
+    color:#fff; font-size:30px; font-weight:900; margin-top:4px;
+    text-shadow:0 2px 12px rgba(0,0,0,.5);
   }
-  .about-stat .num{ font-family:'Aref Ruqaa'; font-size:26px; color:var(--rust); }
-  .about-stat .lbl{ font-size:12px; color:#555; margin-top:4px; }
+  .about-role{ color:var(--gold); font-weight:700; font-size:14px; margin-top:4px; text-shadow:0 2px 8px rgba(0,0,0,.3); }
+  .about-stats{ display:flex; gap:10px; justify-content:center; margin:20px 0; flex-wrap:wrap; }
+  .about-stat{
+    background:rgba(255,255,255,0.1); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.15);
+    border-radius:14px; padding:14px 18px; text-align:center; min-width:90px;
+  }
+  .about-stat .num{ font-family:'Aref Ruqaa'; font-size:24px; color:var(--gold); }
+  .about-stat .lbl{ font-size:11.5px; color:rgba(237,230,216,.8); margin-top:4px; }
   .about-bio{
-    background:var(--white); border:1px solid var(--line); border-radius:16px;
-    padding:22px; font-size:15px; line-height:1.9; white-space:pre-line;
-    max-width:600px; margin:0 auto;
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:16px;
+    padding:20px; font-size:14.5px; line-height:1.9; white-space:pre-line; color:rgba(255,255,255,.92);
+    max-width:600px; margin:0 auto; text-shadow:0 1px 6px rgba(0,0,0,.2);
   }
 
   /* CRANE LOADER */
@@ -423,22 +451,22 @@
   }
   .sail-overlay.show{ display:flex; }
   .sail-track{
-    animation: sailMove 2s ease-in-out, sailBob 1.6s ease-in-out infinite;
+    animation: sailMove 4.5s ease-in-out, sailBob 3.2s ease-in-out infinite;
     transform-origin:center bottom;
   }
   .sail-waves-svg{ margin-top:-6px; }
-  .wave-path{ animation: waveShift 1.4s linear infinite; }
+  .wave-path{ animation: waveShift 3s linear infinite; }
   .wave-2{ animation-duration:1.9s; animation-direction:reverse; }
   .sail-text{
     color:var(--paper); font-size:14px; font-weight:700; margin-top:14px;
   }
   @keyframes sailMove{
-    0%{ transform:translateX(-60px); }
-    100%{ transform:translateX(60px); }
+    0%{ transform:translateX(-45px); }
+    100%{ transform:translateX(45px); }
   }
   @keyframes sailBob{
-    0%,100%{ transform:translateY(0) rotate(-2deg); }
-    50%{ transform:translateY(-6px) rotate(2deg); }
+    0%,100%{ transform:translateY(0) rotate(-1.2deg); }
+    50%{ transform:translateY(-4px) rotate(1.2deg); }
   }
   @keyframes waveShift{
     0%{ transform:translateX(0); }
@@ -538,7 +566,6 @@
     <div class="auth-area">
       <button class="auth-btn" onclick="toggleLanguage()" id="langBtn">EN</button>
       <button class="auth-btn" id="authBtn" onclick="openAuthModal()">👤</button>
-      <button class="auth-btn logout-btn" id="logoutBtn" onclick="doLogout()" style="display:none;">🚪</button>
       <button class="cart-btn" onclick="openCart()">🛒 <span id="cartLabel">السلة</span> <span class="cart-badge" id="cartBadge">0</span></button>
     </div>
   </div>
@@ -901,20 +928,24 @@
   </section>
 
   <section id="about">
-    <div class="about-hero">
-      <div class="about-photo" id="aboutPhotoWrap">
-        <span id="aboutInitial">؟</span>
+    <div class="about-hero" id="aboutHero">
+      <div class="about-glass-card">
+        <div class="china-clock" id="chinaClock">00:00:00</div>
+        <div class="china-clock-label" data-i18n="china_time_label">توقيت الصين الآن</div>
+        <div class="about-photo" id="aboutPhotoWrap">
+          <span id="aboutInitial">؟</span>
+        </div>
+        <h2 id="aboutName" class="about-big-name">اسم المؤسس</h2>
+        <div class="about-role" data-i18n="about_role">مؤسس AlHossain · وكيلك المعتمد في الصين</div>
+        <div class="about-stats">
+          <div class="about-stat"><div class="num" id="aboutYears">-</div><div class="lbl" data-i18n="years_exp">سنوات الخبرة</div></div>
+          <div class="about-stat"><div class="num" id="statOrders2">0</div><div class="lbl" data-i18n="orders_done">طلب منفَّذ</div></div>
+          <div class="about-stat"><div class="num" id="customerCount2">0</div><div class="lbl" data-i18n="registered_customers">عميل مسجَّل</div></div>
+        </div>
+        <div class="about-bio" id="aboutBio">
+          لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.
+        </div>
       </div>
-      <h2 id="aboutName">اسم المؤسس</h2>
-      <div class="about-role" data-i18n="about_role">مؤسس AlHossain · وكيلك المعتمد في الصين</div>
-    </div>
-    <div class="about-stats">
-      <div class="about-stat"><div class="num" id="aboutYears">-</div><div class="lbl" data-i18n="years_exp">سنوات الخبرة</div></div>
-      <div class="about-stat"><div class="num" id="statOrders2">0</div><div class="lbl" data-i18n="orders_done">طلب منفَّذ</div></div>
-      <div class="about-stat"><div class="num" id="customerCount2">0</div><div class="lbl" data-i18n="registered_customers">عميل مسجَّل</div></div>
-    </div>
-    <div class="about-bio" id="aboutBio">
-      لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.
     </div>
   </section>
 
@@ -1050,6 +1081,10 @@
         <div style="margin-bottom:8px;">
           <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">الصورة الشخصية</label>
           <input id="aboutPhotoInput" type="file" accept="image/*">
+        </div>
+        <div style="margin-bottom:8px;">
+          <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">🖼️ صورة خلفية الصفحة (اختياري)</label>
+          <input id="aboutBgPhotoInput" type="file" accept="image/*">
         </div>
         <textarea id="aboutBioInput" placeholder="اكتب نبذة عنك: قصتك، خبرتك، وطريقة عملك مع العملاء..." style="width:100%;min-height:100px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;"></textarea>
         <button class="btn btn-gold" onclick="saveAbout()" id="saveAboutBtn">حفظ صفحة المؤسس</button>
@@ -1612,6 +1647,7 @@ const translations = {
 
   nav_activity: {ar:'الإشعارات', en:'Notifications'},
   nav_offers: {ar:'🔥 العروض', en:'🔥 Offers'},
+  china_time_label: {ar:'توقيت الصين الآن', en:'Current time in China'},
   activity_title: {ar:'آخر التحركات في الموقع', en:'Latest Site Activity'},
   activity_desc: {ar:'تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.', en:'Follow the latest posts, questions, and ratings from our real customers.'},
   no_activity_yet: {ar:'لا توجد تحركات بعد', en:'No activity yet'},
@@ -1823,13 +1859,11 @@ function destCodeFromName(name){
 auth.onAuthStateChanged(async user => {
   currentUser = user;
   const btn = document.getElementById('authBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
   const greeting = document.getElementById('userGreeting');
   const tagline = document.getElementById('taglineText');
   if(user){
     btn.textContent = '👤';
     btn.onclick = () => { showTab('profile'); renderProfile(); };
-    logoutBtn.style.display = 'inline-block';
     greeting.style.display = 'block';
     greeting.textContent = '👋 ' + ((currentCustomerData && currentCustomerData.name) || user.email.split('@')[0]);
     tagline.style.display = 'none';
@@ -1851,7 +1885,6 @@ auth.onAuthStateChanged(async user => {
   } else {
     btn.textContent = '👤';
     btn.onclick = openAuthModal;
-    logoutBtn.style.display = 'none';
     greeting.style.display = 'none';
     tagline.style.display = 'block';
     currentCustomerData = null;
@@ -1866,7 +1899,7 @@ function playSailAnimation(callback){
   setTimeout(()=>{
     overlay.classList.remove('show');
     if(callback) callback();
-  }, 2000);
+  }, 4500);
 }
 
 function doLogout(){
@@ -1921,6 +1954,13 @@ function renderAbout(){
   document.getElementById('customerCount2').textContent = customers.length;
   document.getElementById('statOrders2').textContent = Object.keys(orders).length;
 
+  const hero = document.getElementById('aboutHero');
+  if(aboutData.backgroundPhoto){
+    hero.style.backgroundImage = `url("${aboutData.backgroundPhoto}")`;
+  } else {
+    hero.style.backgroundImage = 'none';
+  }
+
   const photoWrap = document.getElementById('aboutPhotoWrap');
   if(aboutData.photo){
     photoWrap.innerHTML = `<img src="${aboutData.photo}" alt="${aboutData.name||''}">`;
@@ -1939,11 +1979,31 @@ function renderAbout(){
   }
 }
 
+let chinaClockInterval = null;
+function startChinaClock(){
+  if(chinaClockInterval) return;
+  const update = () => {
+    const el = document.getElementById('chinaClock');
+    if(!el) return;
+    const nowChina = new Date(new Date().toLocaleString('en-US', {timeZone:'Asia/Shanghai'}));
+    const hh = String(nowChina.getHours()).padStart(2,'0');
+    const mm = String(nowChina.getMinutes()).padStart(2,'0');
+    const ss = String(nowChina.getSeconds()).padStart(2,'0');
+    el.textContent = `${hh}:${mm}:${ss}`;
+  };
+  update();
+  chinaClockInterval = setInterval(update, 1000);
+}
+function stopChinaClock(){
+  if(chinaClockInterval){ clearInterval(chinaClockInterval); chinaClockInterval = null; }
+}
+
 async function saveAbout(){
   const name = document.getElementById('aboutNameInput').value.trim();
   const years = document.getElementById('aboutYearsInput').value;
   const bio = document.getElementById('aboutBioInput').value.trim();
   const photoFile = document.getElementById('aboutPhotoInput').files[0];
+  const bgPhotoFile = document.getElementById('aboutBgPhotoInput').files[0];
   const btn = document.getElementById('saveAboutBtn');
   btn.disabled = true;
 
@@ -1956,6 +2016,13 @@ async function saveAbout(){
       data.photo = await photoRef.getDownloadURL();
     } else if(aboutData.photo){
       data.photo = aboutData.photo;
+    }
+    if(bgPhotoFile){
+      const bgRef = storage.ref('about/bg_' + Date.now() + '_' + bgPhotoFile.name);
+      await bgRef.put(bgPhotoFile);
+      data.backgroundPhoto = await bgRef.getDownloadURL();
+    } else if(aboutData.backgroundPhoto){
+      data.backgroundPhoto = aboutData.backgroundPhoto;
     }
     await db.collection('settings').doc('about').set(data);
     aboutData = data;
@@ -3552,10 +3619,14 @@ function showTab(tab){
   document.getElementById(tab).classList.add('active');
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
   const navBtn = document.querySelector(`nav.tabs button[data-tab="${tab}"]`);
-  if(navBtn) navBtn.classList.add('active');
+  if(navBtn){
+    navBtn.classList.add('active');
+    navBtn.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
   const isAdmin = tab === 'admin';
   document.getElementById('waFloat').style.display = isAdmin ? 'none' : 'flex';
   document.getElementById('currencyFloat').style.display = isAdmin ? 'none' : 'flex';
+  if(tab === 'about'){ startChinaClock(); } else { stopChinaClock(); }
   if(firebase.analytics){
     try{ firebase.analytics().logEvent('page_view', { page_title: tab }); }catch(e){}
   }

@@ -188,6 +188,51 @@
     margin-top:auto; background:var(--ink); color:var(--paper); border:none;
     padding:8px; border-radius:8px; font-family:'Tajawal'; font-weight:700; cursor:pointer; font-size:13px;
   }
+  .thumb-fav-btn{
+    position:absolute; bottom:6px; right:6px; z-index:2;
+    background:rgba(255,255,255,0.85); border:none; border-radius:50%;
+    width:30px; height:30px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,.2);
+  }
+  .moq-badge{ font-size:11px; color:var(--rust); font-weight:700; }
+  .wishlist-cta{
+    display:flex; align-items:center; gap:12px; margin-top:20px;
+    background:var(--paper-soft); border:1px dashed var(--line); border-radius:14px;
+    padding:14px 16px; cursor:pointer; font-size:22px;
+  }
+
+  /* ONBOARDING TOUR */
+  .onboarding-overlay{
+    position:fixed; inset:0; z-index:210; background:rgba(10,27,43,.7);
+    backdrop-filter:blur(3px); display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  .onboarding-overlay.show{ display:flex; }
+  .onboarding-card{
+    background:var(--white); border-radius:20px; padding:28px 24px; max-width:360px; width:100%; text-align:center;
+    animation:envelopeOpen .4s cubic-bezier(.34,1.4,.64,1) forwards;
+  }
+  .onboarding-icon{ font-size:46px; margin-bottom:12px; }
+  .onboarding-title{ font-size:18px; margin-bottom:8px; }
+  .onboarding-desc{ font-size:14px; color:#666; line-height:1.8; }
+  .onboarding-dots{ display:flex; gap:6px; justify-content:center; margin-top:16px; }
+  .onboarding-dots span{ width:7px; height:7px; border-radius:50%; background:var(--line); transition:.3s; }
+  .onboarding-dots span.active{ background:var(--gold); width:18px; border-radius:4px; }
+
+  .quick-view-overlay{
+    position:fixed; inset:0; z-index:130; background:rgba(10,27,43,.72);
+    display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  .quick-view-overlay.show{ display:flex; }
+  .quick-view-modal{
+    background:var(--white); border-radius:18px; padding:20px; max-width:400px; width:100%;
+    max-height:85vh; overflow-y:auto; position:relative;
+    animation:envelopeOpen .35s cubic-bezier(.34,1.4,.64,1) forwards;
+  }
+  .quick-view-thumb{
+    height:220px; border-radius:14px; overflow:hidden;
+    background:linear-gradient(135deg, var(--ink) 0%, var(--rust) 100%);
+  }
+  .quick-view-thumb img{ width:100%; height:100%; object-fit:cover; }
   .empty{
     text-align:center; padding:40px 20px; color:#666; background:var(--white);
     border-radius:14px; border:1px dashed var(--line);
@@ -781,7 +826,32 @@
       <h2 data-i18n="catalog_title">المنتجات</h2>
     </div>
     <div class="grid" id="productGrid"></div>
+    <div class="wishlist-cta" onclick="openWishlistModal()">
+      <span>😕</span>
+      <div>
+        <div style="font-weight:700;font-size:14px;" data-i18n="wishlist_cta_title">لم تجد ما يعجبك؟!</div>
+        <div style="font-size:12px;color:#666;" data-i18n="wishlist_cta_desc">اكتبه في قائمة الأمنيات وسنحاول توفيره لك</div>
+      </div>
+    </div>
   </section>
+
+  <div class="info-modal-overlay" id="wishlistModalOverlay">
+    <div class="info-modal" style="max-width:380px;text-align:center;">
+      <button class="auth-close" onclick="closeWishlistModal()" style="position:absolute;left:16px;top:14px;">✕</button>
+      <div style="font-size:34px;margin-bottom:8px;">📝</div>
+      <h3 style="margin-bottom:8px;" data-i18n="wishlist_modal_title">قائمة الأمنيات</h3>
+      <p style="font-size:13.5px;color:#666;margin-bottom:12px;" data-i18n="wishlist_modal_desc">اكتب اسم أو وصف المنتج اللي بتدور عليه ومقدروش لقيته، وهنحاول نوفره لك.</p>
+      <textarea id="wishlistInput" placeholder="مثال: سماعات بلوتوث رياضية مقاومة للماء..." style="width:100%;min-height:80px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;"></textarea>
+      <button class="btn btn-primary" style="width:100%;" onclick="submitWishlist()" data-i18n="wishlist_submit_btn">إرسال</button>
+    </div>
+  </div>
+
+  <div class="quick-view-overlay" id="quickViewOverlay">
+    <div class="quick-view-modal">
+      <button class="auth-close" onclick="closeQuickView()" style="position:absolute;left:14px;top:12px;z-index:2;">✕</button>
+      <div id="quickViewBody"></div>
+    </div>
+  </div>
 
   <section id="track">
     <h2 style="margin-bottom:14px;" data-i18n="track_title">تتبع شحناتي</h2>
@@ -1049,6 +1119,7 @@
         <div style="font-size:12.5px;color:#666;margin-top:2px;" data-i18n="group_chat_cta_desc">تحدث مع باقي العملاء مباشرة في غرفة واحدة</div>
       </div>
       <button class="btn btn-gold" id="groupChatActivateBtn" onclick="activateGroupChat()" data-i18n="group_chat_activate_btn">تفعيل</button>
+      <button class="btn btn-outline" id="groupChatDeactivateBtn" onclick="deactivateGroupChat()" style="display:none;" data-i18n="group_chat_deactivate_btn">توقيف</button>
     </div>
 
     <div class="ask-box">
@@ -1210,6 +1281,9 @@
           <input id="newProdPrice" placeholder="السعر ($)" type="number">
         </div>
         <div class="admin-row">
+          <input id="newProdMoq" placeholder="الحد الأدنى للطلب MOQ (اختياري، مثال: 50 قطعة)">
+        </div>
+        <div class="admin-row">
           <div style="flex:1;min-width:150px;">
             <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">صورة المنتج</label>
             <input id="newProdImage" type="file" accept="image/*">
@@ -1324,6 +1398,10 @@
         <h3>أسئلة العملاء</h3>
         <input class="admin-search" placeholder="بحث بنص السؤال أو الإيميل..." oninput="renderAdminQa(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
         <div id="adminQaList"></div>
+      </div>
+      <div class="admin-section">
+        <h3>📝 قائمة الأمنيات (منتجات مطلوبة)</h3>
+        <div id="adminWishlistList"></div>
       </div>
     </div>
   </section>
@@ -1445,6 +1523,19 @@
     <button class="btn btn-primary" style="width:100%;" id="authSubmitBtn" data-i18n="login_btn2" onclick="submitAuth()">دخول</button>
     <button class="link-btn" id="forgotPasswordBtn" data-i18n="forgot_password" onclick="handleForgotPassword()">نسيت كلمة المرور؟</button>
     <button class="auth-close" data-i18n="close_btn" onclick="closeAuthModal()">إغلاق</button>
+  </div>
+</div>
+
+<div class="onboarding-overlay" id="onboardingOverlay">
+  <div class="onboarding-card">
+    <div class="onboarding-icon" id="obIcon">🏠</div>
+    <h3 class="onboarding-title" id="obTitle"></h3>
+    <p class="onboarding-desc" id="obDesc"></p>
+    <div class="onboarding-dots" id="obDots"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn btn-outline" style="flex:1;" onclick="closeOnboarding()" data-i18n="onboarding_skip">تخطي</button>
+      <button class="btn btn-gold" style="flex:1;" id="obNextBtn" onclick="nextOnboardingStep()" data-i18n="onboarding_next">التالي</button>
+    </div>
   </div>
 </div>
 
@@ -1876,6 +1967,16 @@ const translations = {
   group_chat_activated_msg: {ar:'تم تفعيل الدردشة الجماعية! هتلاقي زرارها في أسفل الشاشة', en:'Group chat activated! You\'ll find its button at the bottom of the screen'},
   group_chat_title: {ar:'💬 الدردشة الجماعية', en:'💬 Group Chat'},
   group_chat_input_ph: {ar:'اكتب رسالتك...', en:'Type your message...'},
+  group_chat_deactivate_btn: {ar:'توقيف', en:'Stop'},
+  group_chat_deactivated_msg: {ar:'تم إيقاف الدردشة الجماعية', en:'Group chat deactivated'},
+  wishlist_cta_title: {ar:'لم تجد ما يعجبك؟!', en:'Didn\'t find what you like?!'},
+  wishlist_cta_desc: {ar:'اكتبه في قائمة الأمنيات وسنحاول توفيره لك', en:'Write it in the wishlist and we\'ll try to source it for you'},
+  wishlist_modal_title: {ar:'قائمة الأمنيات', en:'Wishlist'},
+  wishlist_modal_desc: {ar:'اكتب اسم أو وصف المنتج الذي تبحث عنه ولم تجده، وسنحاول توفيره لك.', en:'Write the name or description of the product you\'re looking for, and we\'ll try to source it.'},
+  wishlist_submit_btn: {ar:'إرسال', en:'Send'},
+  wishlist_sent_msg: {ar:'تم إرسال طلبك، شكراً لك!', en:'Your request has been sent, thank you!'},
+  onboarding_skip: {ar:'تخطي', en:'Skip'},
+  onboarding_next: {ar:'التالي', en:'Next'},
   activity_title: {ar:'آخر التحركات في الموقع', en:'Latest Site Activity'},
   activity_desc: {ar:'تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.', en:'Follow the latest posts, questions, and ratings from our real customers.'},
   no_activity_yet: {ar:'لا توجد تحركات بعد', en:'No activity yet'},
@@ -2034,6 +2135,20 @@ async function loadAdminData(){
     snap.docs.forEach(d => { orders[d.id] = d.data(); });
     renderAdminOrders();
   });
+
+  db.collection('wishlistRequests').orderBy('createdAt','desc').limit(50).onSnapshot(snap => {
+    const wrap = document.getElementById('adminWishlistList');
+    if(!wrap) return;
+    if(snap.empty){ wrap.innerHTML = `<div class="empty">لا توجد طلبات بعد</div>`; return; }
+    wrap.innerHTML = snap.docs.map(d => {
+      const w = d.data();
+      const timeStr = w.createdAt && w.createdAt.toDate ? w.createdAt.toDate().toLocaleDateString('ar-EG') : '';
+      return `<div class="admin-list-item">
+        <span><strong>${w.customerName}</strong> (${w.customerEmail}): ${w.text}</span>
+        <span style="color:#888;font-size:12px;">${timeStr}</span>
+      </div>`;
+    }).join('');
+  });
 }
 
 // تُستدعى فقط للعميل المسجل دخوله، وتجيب شحناته الخاصة به فقط عبر استعلام مقيّد بمارك الشحن
@@ -2108,6 +2223,7 @@ auth.onAuthStateChanged(async user => {
     await ensureShippingMark();
     renderMyShippingMark();
     checkGroupChatActivation();
+    renderCatalog();
     if(currentCustomerData && currentCustomerData.shippingMark){
       await loadMyShipments();
       renderShipmentsResult();
@@ -2393,19 +2509,68 @@ function renderCatalog(){
     grid.innerHTML = `<div class="empty">${t('no_products')}</div>`;
     return;
   }
+  const favs = (currentCustomerData && currentCustomerData.favorites) || [];
   grid.innerHTML = products.map(p => `
-    <div class="product">
+    <div class="product" data-pid="${p.id}"
+      ontouchstart="startLongPress('${p.id}')" ontouchend="cancelLongPress()" ontouchmove="cancelLongPress()"
+      onmousedown="startLongPress('${p.id}')" onmouseup="cancelLongPress()" onmouseleave="cancelLongPress()">
       <div class="thumb">
         ${p.image ? `<img src="${p.image}" alt="${p.name}">` : p.name.charAt(0)}
         ${p.video ? `<span class="thumb-video-badge" onclick="playVideo('${p.video}')">▶ ${t('video_label')}</span>` : ''}
         <button class="thumb-quick-btn" onclick="quickOrder('${p.id}')" title="${t('order_now_whatsapp')}">📩</button>
+        <button class="thumb-fav-btn ${favs.includes(p.id) ? 'active' : ''}" onclick="toggleFavorite('${p.id}')" id="favBtn_${p.id}">${favs.includes(p.id) ? '❤️' : '🤍'}</button>
       </div>
       <div class="body">
         <div class="name">${p.name}</div>
         <div class="price">$${p.price}</div>
+        ${p.moq ? `<div class="moq-badge">📦 MOQ: ${p.moq}</div>` : ''}
         <button class="add" onclick="addToCart('${p.id}')">${t('add_to_cart')}</button>
       </div>
     </div>`).join('');
+}
+
+let longPressTimer = null;
+function startLongPress(id){
+  longPressTimer = setTimeout(()=>{ openProductQuickView(id); longPressTimer = null; }, 480);
+}
+function cancelLongPress(){
+  if(longPressTimer){ clearTimeout(longPressTimer); longPressTimer = null; }
+}
+
+function openProductQuickView(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  const favs = (currentCustomerData && currentCustomerData.favorites) || [];
+  const isFav = favs.includes(id);
+  document.getElementById('quickViewBody').innerHTML = `
+    <div class="quick-view-thumb">
+      ${p.image ? `<img src="${p.image}" alt="${p.name}">` : `<div style="font-family:'Aref Ruqaa';font-size:48px;color:var(--paper);display:flex;align-items:center;justify-content:center;height:100%;">${p.name.charAt(0)}</div>`}
+    </div>
+    <h3 style="margin:14px 0 6px;">${p.name}</h3>
+    <div class="price" style="font-size:20px;">$${p.price}</div>
+    ${p.moq ? `<div class="moq-badge" style="margin:8px 0;">📦 MOQ: ${p.moq}</div>` : ''}
+    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+      <button class="btn btn-primary" style="flex:1;" onclick="addToCart('${p.id}');closeQuickView();">${t('add_to_cart')}</button>
+      <button class="btn btn-outline" onclick="toggleFavorite('${p.id}');openProductQuickView('${p.id}');">${isFav ? '❤️' : '🤍'}</button>
+      ${p.video ? `<button class="btn btn-outline" onclick="playVideo('${p.video}')">▶ ${t('video_label')}</button>` : ''}
+    </div>
+  `;
+  document.getElementById('quickViewOverlay').classList.add('show');
+}
+function closeQuickView(){
+  document.getElementById('quickViewOverlay').classList.remove('show');
+}
+
+async function toggleFavorite(id){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const favs = (currentCustomerData.favorites) || [];
+  const idx = favs.indexOf(id);
+  if(idx > -1){ favs.splice(idx,1); } else { favs.push(id); }
+  currentCustomerData.favorites = favs;
+  await db.collection('customers').doc(currentUser.email).update({ favorites: favs });
+  renderCatalog();
+  const btn = document.getElementById('favBtn_'+id);
+  if(btn){ btn.textContent = favs.includes(id) ? '❤️' : '🤍'; }
 }
 
 function quickOrder(id){
@@ -2957,14 +3122,24 @@ function checkGroupChatActivation(){
   if(enabled){
     cta.classList.add('activated');
     document.getElementById('groupChatActivateBtn').style.display = 'none';
+    document.getElementById('groupChatDeactivateBtn').style.display = 'inline-block';
     floatBtn.style.display = 'flex';
     floatBtn.classList.add('show');
   } else {
     cta.classList.remove('activated');
     document.getElementById('groupChatActivateBtn').style.display = 'inline-block';
+    document.getElementById('groupChatDeactivateBtn').style.display = 'none';
     floatBtn.style.display = 'none';
     floatBtn.classList.remove('show');
   }
+}
+
+async function deactivateGroupChat(){
+  if(!currentUser) return;
+  await db.collection('customers').doc(currentUser.email).update({ groupChatEnabled: false });
+  currentCustomerData.groupChatEnabled = false;
+  checkGroupChatActivation();
+  showToast(t('group_chat_deactivated_msg'));
 }
 
 async function activateGroupChat(){
@@ -3032,6 +3207,69 @@ async function deleteGroupChatMessage(id){
   await db.collection('groupChat').doc(id).delete();
 }
 
+function openWishlistModal(){
+  document.getElementById('wishlistModalOverlay').classList.add('show');
+}
+function closeWishlistModal(){
+  document.getElementById('wishlistModalOverlay').classList.remove('show');
+}
+async function submitWishlist(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const text = document.getElementById('wishlistInput').value.trim();
+  if(!text) return;
+  await db.collection('wishlistRequests').add({
+    customerEmail: currentUser.email,
+    customerName: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    text: text,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  document.getElementById('wishlistInput').value = '';
+  closeWishlistModal();
+  showToast(t('wishlist_sent_msg'));
+}
+
+// ====== الجولة التعريفية للعميل الجديد ======
+const onboardingSteps = [
+  { icon:'🏠', title:{ar:'أهلاً بيك في AlHossain!', en:'Welcome to AlHossain!'}, desc:{ar:'هنوريك بسرعة أهم أقسام الموقع عشان تستفيد بأقصى شكل.', en:'Let us quickly show you the main sections to get the most out of the site.'} },
+  { icon:'📦', title:{ar:'المنتجات', en:'Products'}, desc:{ar:'تصفح منتجاتنا الجاهزة، وضيفها للسلة، أو اطلبها مباشرة على واتساب.', en:'Browse our ready products, add them to your cart, or order directly via WhatsApp.'} },
+  { icon:'📍', title:{ar:'تتبع طلبي', en:'Track My Order'}, desc:{ar:'من هنا هتلاقي مارك الشحن الخاص بيك، وتقدر تتابع كل طلباتك وحالتها لحظة بلحظة.', en:'Here you\'ll find your Shipping Mark, and track all your orders and their status live.'} },
+  { icon:'🇨🇳', title:{ar:'اطلب من الصين', en:'Order from China'}, desc:{ar:'لقيت منتج في تاوباو أو 1688؟ ابعتلنا رابطه وهنجهزلك عرض سعر شامل الشحن.', en:'Found a product on Taobao or 1688? Send us the link and we\'ll prepare a full quote including shipping.'} },
+  { icon:'👥', title:{ar:'المجتمع والأسئلة', en:'Community & Questions'}, desc:{ar:'تفاعل مع باقي العملاء، اسأل أي سؤال، أو راجع الأسئلة الشائعة في أي وقت.', en:'Interact with other customers, ask any question, or check the FAQ anytime.'} }
+];
+let currentOnboardingStep = 0;
+
+function renderOnboardingStep(){
+  const step = onboardingSteps[currentOnboardingStep];
+  document.getElementById('obIcon').textContent = step.icon;
+  document.getElementById('obTitle').textContent = step.title[currentLang];
+  document.getElementById('obDesc').textContent = step.desc[currentLang];
+  document.getElementById('obDots').innerHTML = onboardingSteps.map((_,i)=>`<span class="${i===currentOnboardingStep?'active':''}"></span>`).join('');
+  document.getElementById('obNextBtn').textContent = currentOnboardingStep === onboardingSteps.length-1 ? (currentLang==='ar'?'ابدأ':'Start') : t('onboarding_next');
+}
+
+function startOnboarding(){
+  currentOnboardingStep = 0;
+  renderOnboardingStep();
+  document.getElementById('onboardingOverlay').classList.add('show');
+}
+
+function nextOnboardingStep(){
+  if(currentOnboardingStep < onboardingSteps.length - 1){
+    currentOnboardingStep++;
+    renderOnboardingStep();
+  } else {
+    closeOnboarding();
+  }
+}
+
+async function closeOnboarding(){
+  document.getElementById('onboardingOverlay').classList.remove('show');
+  if(currentUser){
+    try{ await db.collection('customers').doc(currentUser.email).update({ hasSeenOnboarding: true }); }catch(e){}
+    if(currentCustomerData) currentCustomerData.hasSeenOnboarding = true;
+  }
+}
+
 function checkPin(){
   const val = document.getElementById('pinInput').value;
   if(val !== ADMIN_PIN){
@@ -3057,6 +3295,7 @@ function checkPin(){
 async function addProduct(){
   const name = document.getElementById('newProdName').value.trim();
   const price = parseFloat(document.getElementById('newProdPrice').value);
+  const moq = document.getElementById('newProdMoq').value.trim();
   const imageFile = document.getElementById('newProdImage').files[0];
   const videoFile = document.getElementById('newProdVideo').files[0];
   if(!name || isNaN(price)){ showToast('يرجى إدخال اسم وسعر صحيحين'); return; }
@@ -3069,7 +3308,7 @@ async function addProduct(){
   const btn = document.getElementById('addProdBtn');
   btn.disabled = true;
 
-  const data = {name, price};
+  const data = {name, price, moq: moq || null};
 
   try{
     if(imageFile){
@@ -3459,6 +3698,7 @@ async function submitAuth(){
     playSailAnimation(() => {
       closeAuthModal();
       showToast(authMode==='login' ? t('logged_in') : t('account_created'));
+      if(authMode === 'register'){ setTimeout(startOnboarding, 400); }
     });
   }catch(e){
     const map = {

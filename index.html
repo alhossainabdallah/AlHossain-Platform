@@ -27,7 +27,8 @@
   :root{
     --ink:#14304A;
     --ink-dark:#0A1B2B;
-    --gold:#D9A441;
+    --gold:#E0A518;
+    --gold-light:#F2C94C;
     --rust:#B4552D;
     --paper:#EDE6D8;
     --paper-soft:#F5F1E8;
@@ -69,8 +70,11 @@
   header.site .brand span{ color:var(--gold); }
   nav.tabs{
     display:flex; gap:6px; margin-top:18px;
-    overflow-x:auto; flex-wrap:nowrap; white-space:nowrap;
-    -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px;
+    overflow-x:auto; overflow-y:visible; flex-wrap:nowrap; white-space:nowrap;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none;
+    padding:4px 14px 12px;
+    margin-left:-14px; margin-right:-14px;
+    width:calc(100% + 28px);
   }
   nav.tabs::-webkit-scrollbar{ display:none; }
   nav.tabs button{
@@ -139,7 +143,7 @@
     font-weight:700; text-decoration:none; cursor:pointer; border:none; font-family:'Tajawal'; font-size:15px;
   }
   .btn-primary{ background:var(--ink); color:var(--paper); }
-  .btn-gold{ background:var(--gold); color:var(--ink-dark); }
+  .btn-gold{ background:linear-gradient(135deg, var(--gold-light), var(--gold)); color:var(--ink-dark); box-shadow:0 3px 10px rgba(224,165,24,0.35); }
   .btn-outline{ background:transparent; border:2px solid var(--ink); color:var(--ink); }
 
   .strip{
@@ -451,11 +455,11 @@
   }
   .sail-overlay.show{ display:flex; }
   .sail-track{
-    animation: sailMove 4.5s ease-in-out, sailBob 3.2s ease-in-out infinite;
+    animation: sailMove 2.5s ease-in-out, sailBob 1.8s ease-in-out infinite;
     transform-origin:center bottom;
   }
   .sail-waves-svg{ margin-top:-6px; }
-  .wave-path{ animation: waveShift 3s linear infinite; }
+  .wave-path{ animation: waveShift 1.7s linear infinite; }
   .wave-2{ animation-duration:1.9s; animation-direction:reverse; }
   .sail-text{
     color:var(--paper); font-size:14px; font-weight:700; margin-top:14px;
@@ -1899,7 +1903,7 @@ function playSailAnimation(callback){
   setTimeout(()=>{
     overlay.classList.remove('show');
     if(callback) callback();
-  }, 4500);
+  }, 2500);
 }
 
 function doLogout(){

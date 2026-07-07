@@ -231,9 +231,33 @@
     width:100%; padding:12px; border-radius:10px; border:1px solid var(--line);
     font-family:'Tajawal'; font-size:15px; margin:14px 0; text-align:center;
   }
-  .order-result{ margin-top:18px; text-align:right; background:var(--paper-soft); border-radius:12px; padding:16px; display:none; }
+  .order-result{ margin-top:18px; text-align:right; background:var(--paper-soft); border-radius:12px; padding:16px; display:none; color:var(--ink-dark); }
   .order-result.show{ display:block; }
   .status-pill{ display:inline-block; padding:5px 14px; border-radius:999px; font-weight:700; font-size:13px; background:var(--gold); color:var(--ink-dark); }
+
+  /* STATUS STEPPER */
+  .status-stepper{ display:flex; align-items:flex-start; justify-content:space-between; margin:14px 0 18px; position:relative; }
+  .status-stepper::before{
+    content:''; position:absolute; top:14px; right:8%; left:8%; height:3px;
+    background:var(--line); z-index:0;
+  }
+  .status-stepper .step{ position:relative; z-index:1; flex:1; text-align:center; display:flex; flex-direction:column; align-items:center; }
+  .status-stepper .step-dot{
+    width:28px; height:28px; border-radius:50%; background:var(--white); border:3px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:13px; margin-bottom:6px;
+    transition:all .4s ease;
+  }
+  .status-stepper .step.done .step-dot{ background:var(--gold); border-color:var(--gold); color:var(--ink-dark); }
+  .status-stepper .step.current .step-dot{
+    background:var(--ink); border-color:var(--gold); color:var(--gold);
+    animation:stepPulse 1.4s ease-in-out infinite;
+  }
+  .status-stepper .step-label{ font-size:11px; color:#666; max-width:70px; }
+  .status-stepper .step.current .step-label{ color:var(--ink-dark); font-weight:700; }
+  @keyframes stepPulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(217,164,65,0.5); }
+    50%{ box-shadow:0 0 0 6px rgba(217,164,65,0); }
+  }
 
   /* ADMIN */
   .admin-lock{ background:var(--white); border:1px solid var(--line); border-radius:16px; padding:24px; text-align:center; max-width:320px; margin:0 auto; }
@@ -402,6 +426,12 @@
     background:var(--white); border-radius:16px; padding:28px; width:100%; max-width:400px;
   }
   .auth-modal h3{ text-align:center; margin-bottom:4px; }
+  .phone-wrap{ display:flex; gap:8px; margin-bottom:10px; }
+  .phone-wrap select{
+    padding:11px 6px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal';
+    background:var(--white); flex:0 0 100px; font-size:13px;
+  }
+  .phone-wrap input{ margin-bottom:0; flex:1; }
   .password-wrap{ position:relative; margin-bottom:10px; }
   .password-wrap input{ margin-bottom:0; padding-left:40px; }
   .toggle-pw-btn{
@@ -1208,6 +1238,16 @@
       <button id="tabRegister" data-i18n="register_tab" onclick="switchAuthTab('register')">حساب جديد</button>
     </div>
     <input id="authName" placeholder="اسمك بالإنجليزي (حروف وأرقام فقط)" data-i18n-ph="full_name_ph" style="display:none;">
+    <div class="phone-wrap" id="phoneWrap" style="display:none;">
+      <select id="authPhoneCode">
+        <option value="+249">🇸🇩 ‎+249</option>
+        <option value="+211">🇸🇸 ‎+211</option>
+        <option value="+20">🇪🇬 ‎+20</option>
+        <option value="+971">🇦🇪 ‎+971</option>
+        <option value="+966">🇸🇦 ‎+966</option>
+      </select>
+      <input id="authPhone" type="tel" placeholder="رقم الجوال" data-i18n-ph="phone_ph">
+    </div>
     <input id="authEmail" type="email" placeholder="البريد الإلكتروني" data-i18n-ph="email_ph">
     <div class="password-wrap">
       <input id="authPassword" type="password" placeholder="كلمة المرور (6 أحرف على الأقل)" data-i18n-ph="password_ph">
@@ -1646,6 +1686,8 @@ const translations = {
   nav_activity: {ar:'الإشعارات', en:'Notifications'},
   nav_offers: {ar:'🔥 العروض', en:'🔥 Offers'},
   china_time_label: {ar:'توقيت الصين الآن', en:'Current time in China'},
+  phone_ph: {ar:'رقم الجوال', en:'Phone number'},
+  enter_phone_number: {ar:'يرجى إدخال رقم الجوال', en:'Please enter your phone number'},
   activity_title: {ar:'آخر التحركات في الموقع', en:'Latest Site Activity'},
   activity_desc: {ar:'تابع أحدث المنشورات والأسئلة والتقييمات من عملائنا الحقيقيين.', en:'Follow the latest posts, questions, and ratings from our real customers.'},
   no_activity_yet: {ar:'لا توجد تحركات بعد', en:'No activity yet'},
@@ -1926,15 +1968,15 @@ function renderAdminCustomers(search){
   if(filtered.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا يوجد عملاء مسجلون بعد'}</div>`; return; }
   wrap.innerHTML = filtered.map(c=>`
     <div class="admin-list-item">
-      <span><strong>${c.shippingMark||'بدون مارك'}</strong> — ${c.name||''} — ${c.email} — ${c.destination||''} — ${c.emailVerified ? '✅ موثّق' : '⏳ غير موثّق'}</span>
+      <span><strong>${c.shippingMark||'بدون مارك'}</strong> — ${c.name||''} — ${c.email} — ${c.phone||'بدون رقم'} — ${c.destination||''} — ${c.emailVerified ? '✅ موثّق' : '⏳ غير موثّق'}</span>
       <span style="color:#888;font-size:12px;">${c.joinDate||''}</span>
     </div>`).join('');
 }
 
 function exportCustomers(){
   if(customers.length===0){ showToast('لا يوجد عملاء لتصديرهم بعد'); return; }
-  let csv = 'ShippingMark,Name,Email,Destination,EmailVerified,JoinDate\n';
-  customers.forEach(c=>{ csv += `${c.shippingMark||''},${c.name||''},${c.email},${c.destination||''},${c.emailVerified?'Yes':'No'},${c.joinDate||''}\n`; });
+  let csv = 'ShippingMark,Name,Email,Phone,Destination,EmailVerified,JoinDate\n';
+  customers.forEach(c=>{ csv += `${c.shippingMark||''},${c.name||''},${c.email},${c.phone||''},${c.destination||''},${c.emailVerified?'Yes':'No'},${c.joinDate||''}\n`; });
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -2341,6 +2383,20 @@ async function checkoutWhatsApp(){
   showToast(`تم إرسال طلبك، مارك الشحن: ${currentCustomerData.shippingMark}`);
 }
 
+function buildStatusStepper(currentStatus, stagesList){
+  const idx = stagesList.indexOf(currentStatus);
+  return `<div class="status-stepper">
+    ${stagesList.map((label,i)=>{
+      const cls = i < idx ? 'done' : (i === idx ? 'current' : '');
+      const icon = i < idx ? '✓' : (i+1);
+      return `<div class="step ${cls}">
+        <div class="step-dot">${icon}</div>
+        <div class="step-label">${label}</div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
 function renderShipmentsResult(){
   const box = document.getElementById('orderResult');
   const orderMatches = Object.entries(myOrders);
@@ -2354,12 +2410,13 @@ function renderShipmentsResult(){
   let html = '';
   if(orderMatches.length){
     html += `<h3 style="margin:10px 0;font-size:16px;">${t('orders_section')}</h3>`;
+    const orderStages = ['قيد المراجعة','تم التأكيد','قيد الشحن','تم التسليم'];
     html += orderMatches.reverse().map(([id,order]) => `
       <div style="border-bottom:1px solid var(--line); padding:12px 0; text-align:right;">
         <div><strong>${t('mark_label')}:</strong> ${order.shippingMark}</div>
         <div><strong>${t('destination_label')}:</strong> ${order.destination||'-'}</div>
         <div><strong>${t('date_label')}:</strong> ${order.date}</div>
-        <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${order.status}</span></div>
+        ${order.status === 'ملغي' ? `<div style="margin:10px 0;"><span class="status-pill" style="background:var(--rust);color:#fff;">${order.status}</span></div>` : buildStatusStepper(order.status, orderStages)}
         ${order.carrierTracking ? `<div><strong>${t('carrier_tracking_label')}:</strong> ${order.carrierTracking}</div>` : ''}
         <div><strong>${t('products_label')}:</strong></div>
         <ul style="margin:6px 18px;">${order.items.map(i=>`<li>${i.name} × ${i.qty}</li>`).join('')}</ul>
@@ -3038,6 +3095,7 @@ function switchAuthTab(mode){
   document.getElementById('authTitle').textContent = translations[mode==='login' ? 'login_title' : 'register_title'][currentLang];
   document.getElementById('authSubmitBtn').textContent = translations[mode==='login' ? 'login_btn2' : 'create_account_btn'][currentLang];
   document.getElementById('authName').style.display = mode==='register' ? 'block' : 'none';
+  document.getElementById('phoneWrap').style.display = mode==='register' ? 'flex' : 'none';
   document.getElementById('authDestination').style.display = mode==='register' ? 'block' : 'none';
   document.getElementById('customCodeHint').style.display = mode==='register' ? 'block' : 'none';
   document.getElementById('termsAgreeWrap').style.display = mode==='register' ? 'flex' : 'none';
@@ -3062,6 +3120,8 @@ async function submitAuth(){
   const email = document.getElementById('authEmail').value.trim();
   const password = document.getElementById('authPassword').value;
   const name = document.getElementById('authName').value.trim();
+  const phoneCode = document.getElementById('authPhoneCode').value;
+  const phoneNumber = document.getElementById('authPhone').value.trim().replace(/[^0-9]/g,'');
   const destCode = document.getElementById('authDestination').value;
   const errBox = document.getElementById('authError');
   errBox.classList.remove('show');
@@ -3072,6 +3132,11 @@ async function submitAuth(){
   }
   if(authMode === 'register' && !name){
     errBox.textContent = t('enter_full_name');
+    errBox.classList.add('show');
+    return;
+  }
+  if(authMode === 'register' && !phoneNumber){
+    errBox.textContent = t('enter_phone_number');
     errBox.classList.add('show');
     return;
   }
@@ -3105,6 +3170,7 @@ async function submitAuth(){
       await db.collection('customers').doc(email).set({
         email: email,
         name: name,
+        phone: phoneCode + phoneNumber,
         destination: destName(destCode),
         shippingMark: shippingMark,
         emailVerified: false,
@@ -3309,9 +3375,14 @@ async function loadComments(postId){
     const c = d.data();
     const canDelete = currentUser && (currentUser.email === ADMIN_EMAIL || currentUser.email === c.authorEmail);
     const isAdminComment = c.authorEmail === ADMIN_EMAIL;
+    const timeStr = c.createdAt && c.createdAt.toDate ? c.createdAt.toDate().toLocaleString(currentLang==='ar'?'ar-EG':'en-US', {hour:'2-digit', minute:'2-digit', day:'numeric', month:'short'}) : '';
     return `<div class="comment-item" style="${isAdminComment ? 'background:var(--ink);color:var(--paper);' : ''}">
-      <span class="comment-author" style="${isAdminComment ? 'color:var(--gold);' : ''}">${isAdminComment ? '👑 ' + t('admin_badge') : c.authorName}:</span> ${c.text}
-      ${canDelete ? `<button class="post-delete-btn" style="margin-right:6px;" onclick="deleteComment('${postId}','${d.id}')">🗑️</button>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
+        <span class="comment-author" style="${isAdminComment ? 'color:var(--gold);' : ''}">${isAdminComment ? '👑 ' + t('admin_badge') : c.authorName}:</span>
+        <span style="font-size:10.5px;opacity:.65;white-space:nowrap;">${timeStr}</span>
+      </div>
+      <div>${c.text}</div>
+      ${canDelete ? `<button class="post-delete-btn" style="margin-top:2px;" onclick="deleteComment('${postId}','${d.id}')">🗑️</button>` : ''}
     </div>`;
   }).join('');
 }

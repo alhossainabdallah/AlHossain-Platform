@@ -443,6 +443,17 @@
   }
 
   /* BOTTOM NAV */
+  #currencyFloatBtn{
+    position:fixed; z-index:81;
+    bottom:calc(66px + env(safe-area-inset-bottom) + 16px); left:16px;
+    width:50px; height:50px; border-radius:50%;
+    background:rgba(146,110,39,0.9);
+    backdrop-filter:blur(14px) saturate(160%); -webkit-backdrop-filter:blur(14px) saturate(160%);
+    border:1px solid rgba(255,255,255,0.35);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(0,0,0,.3); cursor:pointer; font-size:22px;
+  }
+
   .bottom-nav{
     position:fixed; bottom:0; left:0; right:0; z-index:80;
     display:flex; align-items:center; justify-content:space-around;
@@ -1310,6 +1321,12 @@
     </div>
   </section>
 
+  <section id="catalogs">
+    <h2 style="margin-bottom:6px;">📚 كتالوجات المنتجات</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;">تصفّح كتالوجات المصانع، واختر أكواد المنتجات اللي عجبتك، وابعتلنا الأكواد عشان نجهزلك عرض سعر.</p>
+    <div id="catalogsList"></div>
+  </section>
+
   <section id="weeklyoffers">
     <div id="flashSaleContainer"></div>
   </section>
@@ -1517,6 +1534,19 @@
         <h3>📝 قائمة الأمنيات (منتجات مطلوبة)</h3>
         <div id="adminWishlistList"></div>
       </div>
+      <div class="admin-section">
+        <h3>📚 إدارة كتالوجات المنتجات</h3>
+        <div class="admin-row">
+          <input id="newCatalogTitle" placeholder="اسم الكتالوج (مثال: كتالوج إلكترونيات صيف 2026)">
+        </div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">📎 ملفات الكتالوج (يمكن اختيار أكثر من ملف PDF دفعة واحدة تحت نفس الاسم)</label>
+          <input id="newCatalogFiles" type="file" accept="application/pdf" multiple>
+        </div>
+        <div id="catalogUploadProgress" style="font-size:13px;color:var(--rust);margin:6px 0;display:none;"></div>
+        <button class="btn btn-gold" onclick="addCatalog()" id="addCatalogBtn">رفع الكتالوج</button>
+        <div id="adminCatalogsList" style="margin-top:14px;"></div>
+      </div>
     </div>
   </section>
 
@@ -1550,6 +1580,8 @@
   </div>
 </div>
 
+<button id="currencyFloatBtn" onclick="openCurrencyModal()" aria-label="محول العملة">💱</button>
+
 <nav class="bottom-nav" id="bottomNav">
   <button class="bn-btn active" data-tab="home" onclick="showTab('home')" aria-label="الرئيسية">
     <svg class="bn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9a1 1 0 0 0 1 1H9.5a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-9"/></svg>
@@ -1581,8 +1613,8 @@
       <button class="more-item" data-tab="ratings" onclick="showTab('ratings'); closeMoreMenu();"><span>⭐</span>التقييمات</button>
       <button class="more-item" data-tab="about" onclick="showTab('about'); closeMoreMenu();"><span>👑</span>عن المؤسس</button>
       <button class="more-item" data-tab="weeklyoffers" onclick="showTab('weeklyoffers'); closeMoreMenu();"><span>🔥</span>العروض</button>
+      <button class="more-item" data-tab="catalogs" onclick="showTab('catalogs'); closeMoreMenu();"><span>📚</span>كتالوجات المنتجات</button>
       <button class="more-item" data-tab="profile" onclick="showTab('profile'); closeMoreMenu();"><span>🙋</span>حسابي</button>
-      <button class="more-item" onclick="openCurrencyModal(); closeMoreMenu();"><span>💱</span>محول العملة</button>
       <button class="more-item" id="fullscreenToggleBtn" onclick="toggleFullscreen(); closeMoreMenu();"><span id="fullscreenIcon">⛶</span><span id="fullscreenLabel">وضع ملء الشاشة</span></button>
     </div>
     <button class="more-menu-close" onclick="closeMoreMenu()">✕ إغلاق</button>
@@ -1627,15 +1659,39 @@
 <div class="info-modal-overlay" id="currencyModalOverlay" onclick="if(event.target===this) closeCurrencyModal()">
   <div class="info-modal">
     <button class="auth-close" onclick="closeCurrencyModal()" style="position:absolute;left:16px;top:14px;">✕</button>
-    <h3 style="margin-bottom:10px;" data-i18n="cur_title">محوّل العملات (يوان صيني)</h3>
-    <p data-i18n="cur_desc" style="font-size:13.5px;">أسعارنا مكتوبة باليوان الصيني. استخدم هذه الحاسبة لمعرفة ما يعادلها بالدولار، الدرهم، أو الجنيه السوداني.</p>
-    <div class="calc-box" style="margin-top:12px;">
+    <h3 style="margin-bottom:10px;" data-i18n="cur_title">أسعار العملات</h3>
+
+    <div id="usdRatesList" style="background:var(--paper-soft);border-radius:12px;padding:14px;margin-bottom:16px;">
+      <div style="text-align:center;color:#888;font-size:13px;" data-i18n="loading">جاري التحميل...</div>
+    </div>
+
+    <div class="calc-box">
+      <div class="calc-title" data-i18n="cur_calc_title">🧮 حاسبة تحويل بين العملات</div>
       <div class="calc-row">
-        <div><label data-i18n="cur_amount_label">المبلغ باليوان الصيني (¥)</label><input type="number" id="cnyAmount" placeholder="100"></div>
+        <div><label data-i18n="cur_amount_label">المبلغ</label><input type="number" id="curAmount" placeholder="100"></div>
+        <div>
+          <label data-i18n="cur_from_label">من عملة</label>
+          <select id="curFrom" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
+            <option value="USD">USD $</option>
+            <option value="CNY" selected>CNY ¥</option>
+            <option value="AED">AED د.إ</option>
+            <option value="SAR">SAR ر.س</option>
+            <option value="SDG">SDG ج.س</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:8px;">
+        <label data-i18n="cur_to_label">إلى عملة</label>
+        <select id="curTo" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
+          <option value="USD" selected>USD $</option>
+          <option value="CNY">CNY ¥</option>
+          <option value="AED">AED د.إ</option>
+          <option value="SAR">SAR ر.س</option>
+          <option value="SDG">SDG ج.س</option>
+        </select>
       </div>
       <button class="btn btn-primary" style="margin-top:10px;width:100%;" data-i18n="cur_btn" onclick="calcCurrency()">تحويل</button>
       <div class="calc-result" id="currencyResult"></div>
-      <div id="currencyMeta" style="margin-top:10px;font-size:12px;color:#777;"></div>
     </div>
     <p style="font-size:12px;color:#777;margin-top:10px;" data-i18n="cur_note">* هذا السعر تقريبي للاستئناس فقط، ويُعتمد السعر الفعلي وقت التنفيذ.</p>
   </div>
@@ -1859,9 +1915,11 @@ const translations = {
 
   glossary_desc: {ar:'مصطلحات ستواجهها كثيراً عند الشراء والشحن من الصين — فهمها جيداً يوفر الوقت والمال.', en:'Terms you will encounter often when buying and shipping from China — understanding them saves time and money.'},
 
-  cur_title: {ar:'محوّل العملة (دولار ↔ جنيه سوداني)', en:'Currency Converter (USD ↔ SDG)'},
-  cur_desc: {ar:'سعر صرف الجنيه السوداني يتغيّر بشكل شبه يومي، لذا لا يعتمد هذا المحوّل على مصدر آلي، بل على سعر يُحدَّث يدوياً من صاحب الموقع بحسب السوق الفعلي.', en:'The Sudanese Pound exchange rate changes almost daily, so this converter does not rely on an automated source, but on a rate updated manually by the site owner based on the actual market.'},
-  cur_amount_label: {ar:'المبلغ بالدولار ($)', en:'Amount in USD ($)'},
+  cur_title: {ar:'أسعار العملات', en:'Currency Rates'},
+  cur_amount_label: {ar:'المبلغ', en:'Amount'},
+  cur_from_label: {ar:'من عملة', en:'From currency'},
+  cur_to_label: {ar:'إلى عملة', en:'To currency'},
+  cur_calc_title: {ar:'🧮 حاسبة تحويل بين العملات', en:'🧮 Currency Conversion Calculator'},
   cur_btn: {ar:'تحويل', en:'Convert'},
   cur_note: {ar:'* هذا السعر تقريبي للاستئناس فقط، ويُعتمد السعر الفعلي وقت التنفيذ.', en:'* This rate is indicative only; the actual rate is confirmed at the time of the transaction.'},
 
@@ -2619,12 +2677,6 @@ function renderCurrencyMeta(){
       ? `آخر سعر محفوظ: ${currencyData.sdgRate} جنيه لكل يوان — آخر تحديث: ${new Date(currencyData.lastUpdated).toLocaleString('ar-EG')}`
       : 'لم يُحفظ سعر بعد';
   }
-  const publicMeta = document.getElementById('currencyMeta');
-  if(publicMeta){
-    publicMeta.textContent = currencyData.sdgRate
-      ? `آخر تحديث للسعر: ${new Date(currencyData.lastUpdated).toLocaleDateString('ar-EG')}`
-      : '';
-  }
   const input = document.getElementById('sdgRateInput');
   if(input && currencyData.sdgRate) input.value = currencyData.sdgRate;
 }
@@ -2653,36 +2705,60 @@ async function fetchLiveRates(){
   }
 }
 
+// نبني جدول أسعار موحّد: قيمة كل عملة مقابل دولار أمريكي واحد
+function getUnifiedRates(){
+  if(!liveRatesData) return null;
+  const rates = { USD: 1, CNY: liveRatesData.CNY, AED: liveRatesData.AED, SAR: liveRatesData.SAR };
+  // currencyData.sdgRate = كام جنيه سوداني لكل يوان واحد (مُدخل من الإدارة يدوياً)
+  if(currencyData.sdgRate){
+    rates.SDG = liveRatesData.CNY * currencyData.sdgRate;
+  }
+  return rates;
+}
+
+function renderUsdRatesList(){
+  const wrap = document.getElementById('usdRatesList');
+  if(!wrap) return;
+  const rates = getUnifiedRates();
+  if(!rates){
+    wrap.innerHTML = `<div style="text-align:center;color:#888;font-size:13px;">${currentLang==='ar' ? 'جارٍ تحميل الأسعار...' : 'Loading rates...'}</div>`;
+    return;
+  }
+  let html = `<div style="font-weight:700;margin-bottom:8px;text-align:center;">${currentLang==='ar' ? '1 دولار أمريكي =' : '1 US Dollar ='}</div>`;
+  html += `<div class="price-row"><span>CNY ¥</span><span>${rates.CNY.toFixed(2)}</span></div>`;
+  html += `<div class="price-row"><span>AED د.إ</span><span>${rates.AED.toFixed(2)}</span></div>`;
+  html += `<div class="price-row"><span>SAR ر.س</span><span>${rates.SAR.toFixed(2)}</span></div>`;
+  if(rates.SDG){
+    html += `<div class="price-row"><span>SDG ج.س</span><span>${rates.SDG.toLocaleString(currentLang==='ar'?'ar-EG':'en-US',{maximumFractionDigits:0})}</span></div>`;
+  } else {
+    html += `<div style="font-size:11.5px;color:#999;margin-top:8px;text-align:center;">${currentLang==='ar' ? '* لم يُحدَّث سعر الجنيه السوداني بعد من الإدارة' : '* SDG rate not set by admin yet'}</div>`;
+  }
+  wrap.innerHTML = html;
+}
+
 function calcCurrency(){
-  const cny = parseFloat(document.getElementById('cnyAmount').value);
+  const amount = parseFloat(document.getElementById('curAmount').value);
+  const fromCur = document.getElementById('curFrom').value;
+  const toCur = document.getElementById('curTo').value;
   const box = document.getElementById('currencyResult');
-  if(!cny){ box.innerHTML = t('enter_valid_amount'); box.classList.add('show'); return; }
-  if(!liveRatesData){
+  if(!amount){ box.innerHTML = t('enter_valid_amount'); box.classList.add('show'); return; }
+
+  const rates = getUnifiedRates();
+  if(!rates){
     box.innerHTML = currentLang==='ar' ? 'جارٍ تحميل أسعار الصرف، حاول بعد قليل' : 'Loading exchange rates, try again shortly';
     box.classList.add('show');
-    fetchLiveRates();
+    fetchLiveRates().then(renderUsdRatesList);
+    return;
+  }
+  if(!rates[fromCur] || !rates[toCur]){
+    box.innerHTML = currentLang==='ar' ? 'سعر هذه العملة غير متاح حالياً (يحتاج تحديث من الإدارة)' : 'This currency rate is not available yet (needs admin update)';
+    box.classList.add('show');
     return;
   }
 
-  const usd = cny / liveRatesData.CNY;
-  const aed = usd * liveRatesData.AED;
-  const sar = usd * liveRatesData.SAR;
-  const sdgLine = currencyData.sdgRate
-    ? `<div>${(cny * currencyData.sdgRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0})} ${t('sdg_currency')}</div>`
-    : '';
-
-  let html = `
-    <div class="big">¥${cny} ≈</div>
-    <div style="margin-top:6px;">$${usd.toFixed(2)} ${t('usd_currency')}</div>
-    <div>${aed.toFixed(2)} ${t('aed_currency')}</div>
-    <div>${sar.toFixed(2)} ${t('sar_currency')}</div>
-    ${sdgLine}`;
-
-  if(currencyData.egpRate){
-    const egp = (cny * currencyData.egpRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0});
-    html += `<div>${egp} ${t('egp_currency')}</div>`;
-  }
-  box.innerHTML = html;
+  const usdEquivalent = amount / rates[fromCur];
+  const result = usdEquivalent * rates[toCur];
+  box.innerHTML = `<div class="big">${amount} ${fromCur} ≈ ${result.toLocaleString(currentLang==='ar'?'ar-EG':'en-US',{maximumFractionDigits:2})} ${toCur}</div>`;
   box.classList.add('show');
 }
 
@@ -3234,7 +3310,7 @@ async function showMyShipments(){
 const defaultTabs = {
   glossary:{label:'دليل المصطلحات'}, questions:{label:'الأسئلة'}, importorder:{label:'اطلب من الصين'},
   factoryvisit:{label:'زيارة مصنع'}, community:{label:'المجتمع'}, ratings:{label:'التقييمات'},
-  about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}
+  about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}, catalogs:{label:'الكتالوجات'}
 };
 
 async function loadTabsSettings(){
@@ -3521,6 +3597,84 @@ function closeWishlistModal(){
   document.getElementById('wishlistModalOverlay').classList.remove('show');
   notifyModalClosed();
 }
+// ====== كتالوجات المنتجات (PDF) ======
+async function addCatalog(){
+  const title = document.getElementById('newCatalogTitle').value.trim();
+  const files = document.getElementById('newCatalogFiles').files;
+  if(!title){ showToast('يرجى كتابة اسم الكتالوج'); return; }
+  if(!files || files.length === 0){ showToast('يرجى اختيار ملف واحد على الأقل'); return; }
+
+  const progress = document.getElementById('catalogUploadProgress');
+  const btn = document.getElementById('addCatalogBtn');
+  btn.disabled = true;
+  progress.style.display = 'block';
+
+  try{
+    const uploadedFiles = [];
+    for(let i=0; i<files.length; i++){
+      const f = files[i];
+      progress.textContent = `جارٍ رفع الملف ${i+1} من ${files.length}...`;
+      const fileRef = storage.ref('catalogs/' + Date.now() + '_' + f.name);
+      await fileRef.put(f);
+      const url = await fileRef.getDownloadURL();
+      uploadedFiles.push({ name: f.name, url: url });
+    }
+    await db.collection('catalogs').add({
+      title: title,
+      files: uploadedFiles,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    document.getElementById('newCatalogTitle').value = '';
+    document.getElementById('newCatalogFiles').value = '';
+    showToast('تم رفع الكتالوج بنجاح');
+    loadCatalogsAdmin();
+    loadCatalogsPublic();
+  }catch(e){
+    showToast('حدث خطأ أثناء الرفع، يرجى التأكد من إعداد Firebase Storage');
+  }finally{
+    progress.style.display = 'none';
+    btn.disabled = false;
+  }
+}
+
+async function loadCatalogsPublic(){
+  const wrap = document.getElementById('catalogsList');
+  if(!wrap) return;
+  const snap = await db.collection('catalogs').orderBy('createdAt','desc').get();
+  if(snap.empty){ wrap.innerHTML = `<div class="empty">لا توجد كتالوجات متاحة حالياً</div>`; return; }
+  wrap.innerHTML = snap.docs.map(d => {
+    const c = d.data();
+    const filesHtml = (c.files||[]).map((f,i) =>
+      `<a class="btn btn-outline" style="display:block;margin-bottom:6px;" href="${f.url}" target="_blank" rel="noopener">📄 ${c.files.length > 1 ? 'الجزء ' + (i+1) + ' — ' : ''}${f.name}</a>`
+    ).join('');
+    return `<div class="term-card">
+      <h3 style="margin-bottom:10px;">${c.title}</h3>
+      ${filesHtml}
+    </div>`;
+  }).join('');
+}
+
+async function loadCatalogsAdmin(){
+  const wrap = document.getElementById('adminCatalogsList');
+  if(!wrap) return;
+  const snap = await db.collection('catalogs').orderBy('createdAt','desc').get();
+  if(snap.empty){ wrap.innerHTML = `<div class="empty">لا توجد كتالوجات مرفوعة بعد</div>`; return; }
+  wrap.innerHTML = snap.docs.map(d => {
+    const c = d.data();
+    return `<div class="admin-list-item">
+      <span><strong>${c.title}</strong> — ${(c.files||[]).length} ملف</span>
+      <button class="tiny-btn" onclick="deleteCatalog('${d.id}')">حذف</button>
+    </div>`;
+  }).join('');
+}
+
+async function deleteCatalog(id){
+  await db.collection('catalogs').doc(id).delete();
+  showToast('تم حذف الكتالوج');
+  loadCatalogsAdmin();
+  loadCatalogsPublic();
+}
+
 async function submitWishlist(){
   if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
   const text = document.getElementById('wishlistInput').value.trim();
@@ -3602,6 +3756,7 @@ function enterAdminPanel(){
   renderFlashSaleAdmin();
   renderFpManageSection();
   renderShippingRatesForm();
+  loadCatalogsAdmin();
   if(agentLocationData.currentCity){
     document.getElementById('agentCityInput').value = agentLocationData.currentCity;
   }
@@ -4100,6 +4255,10 @@ function closeTermsInfo(){
 function openCurrencyModal(){
   document.getElementById('currencyModalOverlay').classList.add('show');
   pushModalHistory();
+  renderUsdRatesList();
+  if(!liveRatesData){
+    fetchLiveRates().then(renderUsdRatesList);
+  }
 }
 function closeCurrencyModal(){
   document.getElementById('currencyModalOverlay').classList.remove('show');
@@ -4918,6 +5077,7 @@ function dismissInstallBanner(){
 }
 renderFaqList();
 renderFlashSalePage();
+loadCatalogsPublic();
 loadTotalCustomersCount();
 
 // مدخل سري للإدارة عبر رابط خاص، بدل رابط ظاهر في الفوتر

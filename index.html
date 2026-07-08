@@ -229,6 +229,33 @@
     width:15px; height:15px; border-radius:50%; background:var(--rust); color:#fff;
     font-size:10px; font-weight:900; cursor:pointer; vertical-align:middle;
   }
+
+  .gb-card{
+    background:var(--white); border:1px solid var(--line); border-radius:16px;
+    padding:18px; margin-bottom:16px; box-shadow:0 4px 14px rgba(20,48,74,0.06);
+  }
+  .gb-card-head{ display:flex; gap:12px; margin-bottom:12px; }
+  .gb-card-thumb{
+    width:64px; height:64px; border-radius:12px; flex-shrink:0; overflow:hidden;
+    background:linear-gradient(135deg, var(--ink) 0%, var(--rust) 100%);
+    display:flex; align-items:center; justify-content:center; color:var(--paper); font-family:'Aref Ruqaa'; font-size:26px;
+  }
+  .gb-card-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .gb-card-title{ font-weight:900; font-size:15.5px; margin-bottom:3px; }
+  .gb-card-price{ color:var(--rust); font-weight:700; font-size:14px; }
+  .gb-progress-track{
+    background:var(--paper-soft); border-radius:999px; height:16px; overflow:hidden; position:relative; margin:10px 0 6px;
+  }
+  .gb-progress-fill{
+    height:100%; border-radius:999px; background:linear-gradient(90deg, var(--gold-deco), var(--gold));
+    transition:width .5s ease; display:flex; align-items:center; justify-content:flex-end; padding-left:6px;
+  }
+  .gb-progress-label{ font-size:11.5px; color:#666; display:flex; justify-content:space-between; }
+  .gb-reached-badge{
+    background:#1b8a4a; color:#fff; text-align:center; padding:8px; border-radius:10px;
+    font-weight:700; font-size:13px; margin-top:10px;
+  }
+  .gb-my-qty{ font-size:12.5px; color:var(--rust); font-weight:700; margin-top:6px; }
   .wishlist-cta{
     display:flex; align-items:center; gap:12px; margin-top:20px;
     background:var(--paper-soft); border:1px dashed var(--line); border-radius:14px;
@@ -345,6 +372,7 @@
   .admin-section h3{ font-size:18px; margin-bottom:10px; }
   .admin-row{ display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
   .admin-row input, .admin-row select{ padding:8px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; flex:1; min-width:100px; }
+  input[type="file"]{ max-width:100%; }
   .admin-list-item{ display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:14px; gap:8px; flex-wrap:wrap; }
   .admin-order-item{ padding:12px 0; border-bottom:1px solid var(--line); font-size:13.5px; }
   .admin-order-item select{ width:100%; padding:7px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; }
@@ -1210,6 +1238,62 @@
       </div>
       <p style="font-size:12px;color:#777;margin-top:6px;" data-i18n="air_note">* الشحن الجوي متاح حالياً للإمارات والسعودية، وهو أسرع لكنه أعلى تكلفة من الشحن البحري، ويُستخدم غالباً للشحنات المستعجلة أو الخفيفة والصغيرة الحجم. هذه تكلفة تقريبية للاستئناس فقط.</p>
     </div>
+
+    <div class="term-card">
+      <div class="term-head">
+        <span class="term-badge">TA</span>
+        <h3 data-i18n="ta_title">ضمان التجارة (Trade Assurance)</h3>
+      </div>
+      <p data-i18n="ta_p1">خدمة مجانية من علي بابا بتحمي المشتري: لو المورد اتأخر في التسليم أو الجودة مطابقتش المتفق عليه، تقدر تسترد فلوسك. دايماً فضّل الموردين اللي عندهم العلامة دي.</p>
+    </div>
+
+    <div class="term-card">
+      <div class="term-head">
+        <span class="term-badge">✔️</span>
+        <h3 data-i18n="verified_title">مورد ذهبي / موثّق (Gold / Verified Supplier)</h3>
+      </div>
+      <p data-i18n="verified_p1">علامة بتدّيها علي بابا للموردين اللي أثبتوا هويتهم وسجلهم التجاري رسمياً، وبعضهم بيتفحص مصنعهم فعلياً بزيارة ميدانية من طرف علي بابا نفسه. مش ضمان جودة 100%، لكنها مؤشر ثقة أولي مهم.</p>
+    </div>
+
+    <div class="term-card">
+      <div class="term-head">
+        <span class="term-badge">RFQ</span>
+        <h3 data-i18n="rfq_title">طلب عرض سعر (Request for Quotation)</h3>
+      </div>
+      <p data-i18n="rfq_p1">بدل ما تدوّر على المنتج بنفسك، تكتب مواصفات اللي محتاجه (الكمية، المواصفات، السعر المتوقع)، وموردين كتير بيبعتولك عروض أسعار مختلفة تختار منها.</p>
+    </div>
+
+    <div class="term-card">
+      <div class="term-head">
+        <span class="term-badge">OEM</span>
+        <h3 data-i18n="oem_title">OEM / ODM — التصنيع بعلامتك الخاصة</h3>
+      </div>
+      <p data-i18n="oem_p1"><strong>OEM:</strong> المصنع يصنّع منتج جاهز التصميم لكن يحط عليه شعارك أو اسم علامتك التجارية.<br><strong>ODM:</strong> المصنع عنده تصميم جاهز من عنده، وانت بس تختار وتعدّل بسيط وتحطله شعارك. الاتنين مفيدين لو حابب تبني علامة تجارية خاصة بيك مستقبلاً.</p>
+    </div>
+
+    <div class="term-card">
+      <div class="term-head">
+        <span class="term-badge">شروط</span>
+        <h3 data-i18n="incoterms_title">FOB / CIF / EXW — شروط التسليم الدولية</h3>
+      </div>
+      <p data-i18n="incoterms_p1"><strong>EXW:</strong> تستلم البضاعة من باب المصنع نفسه، وانت المسؤول عن كل حاجة بعد كده (النقل، الشحن، التخليص).<br><strong>FOB:</strong> المصنع يوصّل البضاعة لميناء الشحن ويحمّلها على السفينة، وبعدها المسؤولية عليك.<br><strong>CIF:</strong> المصنع يتحمّل تكلفة الشحن والتأمين لحد ما توصل ميناء وجهتك.<br>نحن كوكيلك بنتعامل مع التفاصيل دي كلها نيابة عنك، فمش لازم تحفظها، بس مفيد تعرف تفرّق بينها لو شفتها في أي عرض سعر.</p>
+    </div>
+
+    <div class="term-card">
+      <div class="term-head">
+        <span class="term-badge">📦</span>
+        <h3 data-i18n="sample_title">طلب عينة (Sample Order)</h3>
+      </div>
+      <p data-i18n="sample_p1">طلب كمية صغيرة جداً (أحياناً قطعة واحدة) من المنتج قبل الالتزام بالكمية الكاملة، عشان تتأكد من الجودة بنفسك. غالباً بيكون سعرها أعلى نسبياً من سعر الجملة، لكنها استثمار ذكي قبل أي طلب كبير.</p>
+    </div>
+
+    <div class="term-card">
+      <div class="term-head">
+        <span class="term-badge">⏱️</span>
+        <h3 data-i18n="leadtime_title">مدة التصنيع (Lead Time)</h3>
+      </div>
+      <p data-i18n="leadtime_p1">الوقت اللي المصنع محتاجه عشان يصنّع طلبك من لحظة تأكيد الدفع، وده منفصل تماماً عن مدة الشحن نفسها. يعني لو Lead Time أسبوعين وشحن بحري شهر، المدة الكلية حوالي 6 أسابيع من التأكيد لحد الاستلام.</p>
+    </div>
   </section>
 
   <section id="questions">
@@ -1397,6 +1481,23 @@
     </div>
   </section>
 
+  <section id="groupbuys">
+    <h2 style="margin-bottom:6px;">🤝 الطلبات الجماعية</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;">بعض المنتجات عندها حد أدنى للكمية (MOQ) لا يقدر عميل واحد يوفّره لوحده. انضم مع عملاء آخرين لنفس المنتج، ولما نوصل للعدد المطلوب، نبدأ التنفيذ فوراً مع المصنع.</p>
+    <div id="groupBuysList"></div>
+  </section>
+
+  <div class="info-modal-overlay" id="groupBuyJoinOverlay" onclick="if(event.target===this) closeGroupBuyJoin()">
+    <div class="info-modal" style="max-width:380px;text-align:center;">
+      <button class="auth-close" onclick="closeGroupBuyJoin()" style="position:absolute;left:16px;top:14px;">✕</button>
+      <div style="font-size:34px;margin-bottom:8px;">🤝</div>
+      <h3 id="gbJoinTitle" style="margin-bottom:8px;"></h3>
+      <p style="font-size:13.5px;color:#666;margin-bottom:12px;">حدد الكمية اللي عايزها من المنتج ده، وهتتسجل ضمن التجميع.</p>
+      <input type="number" id="gbJoinQty" placeholder="الكمية المطلوبة" min="1" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;text-align:center;">
+      <button class="btn btn-gold" style="width:100%;" onclick="submitGroupBuyJoin()">انضمام للطلب</button>
+    </div>
+  </div>
+
   <section id="catalogs">
     <h2 style="margin-bottom:6px;">📚 كتالوجات المنتجات</h2>
     <p style="color:#5c6b6b; margin-bottom:18px;">تصفّح كتالوجات المصانع، واختر أكواد المنتجات اللي عجبتك، وابعتلنا الأكواد عشان نجهزلك عرض سعر.</p>
@@ -1483,25 +1584,28 @@
         <div class="admin-row">
           <input id="newProdMoq" placeholder="الحد الأدنى للطلب MOQ (اختياري، مثال: 50 قطعة)">
         </div>
-        <div class="admin-row">
-          <div style="flex:1;min-width:150px;">
+        <div class="admin-row" style="align-items:flex-start;">
+          <div style="flex:1 1 130px; min-width:0;">
             <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">صورة المنتج</label>
-            <input id="newProdImage" type="file" accept="image/*">
+            <input id="newProdImage" type="file" accept="image/*" style="width:100%;max-width:100%;">
           </div>
-          <div style="flex:1;min-width:150px;">
+          <div style="flex:1 1 130px; min-width:0;">
             <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">فيديو (اختياري)</label>
-            <input id="newProdVideo" type="file" accept="video/*">
+            <input id="newProdVideo" type="file" accept="video/*" style="width:100%;max-width:100%;">
           </div>
         </div>
         <div id="uploadProgress" style="font-size:13px;color:var(--rust);margin:6px 0;display:none;"></div>
         <button class="btn btn-gold" onclick="addProduct()" id="addProdBtn">إضافة المنتج</button>
       </div>
       <div class="admin-section">
-        <h3>عملاء مسجلين (<span id="customerCount">0</span>)</h3>
+        <h3 style="display:flex;justify-content:space-between;align-items:center;">
+          <span>عملاء مسجلين (<span id="customerCount">0</span>)</span>
+          <button class="tiny-btn" onclick="toggleCustomerListCollapse()" id="customerListToggleBtn">▶️ إظهار القائمة</button>
+        </h3>
         <button class="tiny-btn gold" onclick="syncCustomerCounter()" style="margin-bottom:10px;">🔄 مزامنة عداد صفحة المؤسس مع العدد الحقيقي</button>
         <button class="btn btn-primary" onclick="exportCustomers()" style="margin-bottom:12px;">تصدير الإيميلات CSV 📥</button>
-        <input class="admin-search" placeholder="بحث بالاسم أو الإيميل أو المارك..." oninput="renderAdminCustomers(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
-        <div id="adminCustomerList"></div>
+        <input class="admin-search" placeholder="بحث بالاسم أو الإيميل أو المارك..." oninput="document.getElementById('adminCustomerList').style.display='block'; document.getElementById('customerListToggleBtn').textContent='🔽 إخفاء القائمة'; renderAdminCustomers(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+        <div id="adminCustomerList" style="display:none;"></div>
       </div>
 
       <div class="admin-section">
@@ -1622,6 +1726,22 @@
         <button class="btn btn-gold" onclick="saveAnnouncement()">حفظ الإعلان</button>
       </div>
       <div class="admin-section">
+        <h3>🤝 إدارة الطلبات الجماعية (كسر الـMOQ)</h3>
+        <div class="admin-row">
+          <input id="newGbTitle" placeholder="اسم المنتج">
+          <input id="newGbPrice" type="number" placeholder="السعر التقريبي للقطعة ($)">
+        </div>
+        <div class="admin-row">
+          <input id="newGbTarget" type="number" placeholder="الحد الأدنى المطلوب (MOQ) — مثال: 500">
+        </div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">صورة المنتج (اختياري)</label>
+          <input id="newGbImage" type="file" accept="image/*">
+        </div>
+        <button class="btn btn-gold" onclick="addGroupBuy()" id="addGbBtn">إنشاء الحملة</button>
+        <div id="adminGroupBuysList" style="margin-top:14px;"></div>
+      </div>
+      <div class="admin-section">
         <h3>📚 إدارة كتالوجات المنتجات</h3>
         <div class="admin-row">
           <input id="newCatalogTitle" placeholder="اسم الكتالوج (مثال: كتالوج إلكترونيات صيف 2026)">
@@ -1701,6 +1821,7 @@
       <button class="more-item" data-tab="about" onclick="showTab('about'); closeMoreMenu();"><span>👑</span>عن المؤسس</button>
       <button class="more-item" data-tab="weeklyoffers" onclick="showTab('weeklyoffers'); closeMoreMenu();"><span>🔥</span>العروض</button>
       <button class="more-item" data-tab="catalogs" onclick="showTab('catalogs'); closeMoreMenu();"><span>📚</span>كتالوجات المنتجات</button>
+      <button class="more-item" data-tab="groupbuys" onclick="showTab('groupbuys'); closeMoreMenu();"><span>🤝</span>الطلبات الجماعية</button>
       <button class="more-item" data-tab="profile" onclick="showTab('profile'); closeMoreMenu();"><span>🙋</span>حسابي</button>
       <button class="more-item" id="fullscreenToggleBtn" onclick="toggleFullscreen(); closeMoreMenu();"><span id="fullscreenIcon">⛶</span><span id="fullscreenLabel">وضع ملء الشاشة</span></button>
     </div>
@@ -2051,6 +2172,20 @@ const translations = {
   air_calc_title: {ar:'🧮 احسب الوزن الحجمي والتكلفة التقريبية لشحنتك الجوية', en:'🧮 Calculate the volumetric weight and approximate cost of your air shipment'},
   actual_weight_label: {ar:'الوزن الفعلي (كجم)', en:'Actual Weight (kg)'},
   air_note: {ar:'* الشحن الجوي متاح حالياً للإمارات والسعودية، وهو أسرع لكنه أعلى تكلفة من الشحن البحري، ويُستخدم غالباً للشحنات المستعجلة أو الخفيفة والصغيرة الحجم. هذه تكلفة تقريبية للاستئناس فقط.', en:'* Air freight is currently available for the UAE and Saudi Arabia. It is faster but more expensive than sea freight, and is usually used for urgent or light, small shipments. This is an indicative cost only.'},
+  ta_title: {ar:'ضمان التجارة (Trade Assurance)', en:'Trade Assurance'},
+  ta_p1: {ar:'خدمة مجانية من علي بابا بتحمي المشتري: لو المورد اتأخر في التسليم أو الجودة مطابقتش المتفق عليه، تقدر تسترد فلوسك. دايماً فضّل الموردين اللي عندهم العلامة دي.', en:'A free Alibaba service that protects the buyer: if the supplier delays delivery or quality doesn\'t match what was agreed, you can get a refund. Always prefer suppliers with this badge.'},
+  verified_title: {ar:'مورد ذهبي / موثّق (Gold / Verified Supplier)', en:'Gold / Verified Supplier'},
+  verified_p1: {ar:'علامة بتدّيها علي بابا للموردين اللي أثبتوا هويتهم وسجلهم التجاري رسمياً، وبعضهم بيتفحص مصنعهم فعلياً بزيارة ميدانية من طرف علي بابا نفسه. مش ضمان جودة 100%، لكنها مؤشر ثقة أولي مهم.', en:'A badge Alibaba gives suppliers who have officially verified their identity and business registration, some even inspected on-site by Alibaba itself. Not a 100% quality guarantee, but an important initial trust signal.'},
+  rfq_title: {ar:'طلب عرض سعر (Request for Quotation)', en:'Request for Quotation (RFQ)'},
+  rfq_p1: {ar:'بدل ما تدوّر على المنتج بنفسك، تكتب مواصفات اللي محتاجه (الكمية، المواصفات، السعر المتوقع)، وموردين كتير بيبعتولك عروض أسعار مختلفة تختار منها.', en:'Instead of searching for the product yourself, you describe what you need (quantity, specs, expected price), and multiple suppliers send you competing quotes to choose from.'},
+  oem_title: {ar:'OEM / ODM — التصنيع بعلامتك الخاصة', en:'OEM / ODM — Private Label Manufacturing'},
+  oem_p1: {ar:'<strong>OEM:</strong> المصنع يصنّع منتج جاهز التصميم لكن يحط عليه شعارك أو اسم علامتك التجارية.<br><strong>ODM:</strong> المصنع عنده تصميم جاهز من عنده، وانت بس تختار وتعدّل بسيط وتحطله شعارك. الاتنين مفيدين لو حابب تبني علامة تجارية خاصة بيك مستقبلاً.', en:'<strong>OEM:</strong> The factory manufactures a ready-designed product but adds your logo/brand.<br><strong>ODM:</strong> The factory has its own ready design; you just pick, tweak slightly, and add your logo. Both are useful if you want to build your own brand later.'},
+  incoterms_title: {ar:'FOB / CIF / EXW — شروط التسليم الدولية', en:'FOB / CIF / EXW — International Delivery Terms'},
+  incoterms_p1: {ar:'<strong>EXW:</strong> تستلم البضاعة من باب المصنع نفسه، وانت المسؤول عن كل حاجة بعد كده (النقل، الشحن، التخليص).<br><strong>FOB:</strong> المصنع يوصّل البضاعة لميناء الشحن ويحمّلها على السفينة، وبعدها المسؤولية عليك.<br><strong>CIF:</strong> المصنع يتحمّل تكلفة الشحن والتأمين لحد ما توصل ميناء وجهتك.<br>نحن كوكيلك بنتعامل مع التفاصيل دي كلها نيابة عنك، فمش لازم تحفظها، بس مفيد تعرف تفرّق بينها لو شفتها في أي عرض سعر.', en:'<strong>EXW:</strong> You receive the goods at the factory door; you handle everything after that (transport, shipping, clearance).<br><strong>FOB:</strong> The factory delivers to the shipping port and loads it on the vessel; responsibility is yours after that.<br><strong>CIF:</strong> The factory covers shipping and insurance until it reaches your destination port.<br>As your agent, we handle these details on your behalf, so you don\'t need to memorize them — just useful to recognize if you see them in a quote.'},
+  sample_title: {ar:'طلب عينة (Sample Order)', en:'Sample Order'},
+  sample_p1: {ar:'طلب كمية صغيرة جداً (أحياناً قطعة واحدة) من المنتج قبل الالتزام بالكمية الكاملة، عشان تتأكد من الجودة بنفسك. غالباً بيكون سعرها أعلى نسبياً من سعر الجملة، لكنها استثمار ذكي قبل أي طلب كبير.', en:'Ordering a very small quantity (sometimes just one piece) before committing to the full order, so you can verify quality yourself. Usually priced higher than wholesale, but a smart investment before any large order.'},
+  leadtime_title: {ar:'مدة التصنيع (Lead Time)', en:'Lead Time'},
+  leadtime_p1: {ar:'الوقت اللي المصنع محتاجه عشان يصنّع طلبك من لحظة تأكيد الدفع، وده منفصل تماماً عن مدة الشحن نفسها. يعني لو Lead Time أسبوعين وشحن بحري شهر، المدة الكلية حوالي 6 أسابيع من التأكيد لحد الاستلام.', en:'The time the factory needs to manufacture your order from the moment payment is confirmed — completely separate from the shipping duration itself. So if lead time is 2 weeks and sea freight is a month, total time is about 6 weeks from confirmation to receipt.'},
 
   questions_desc: {ar:'هل لديك سؤال؟ اكتبه هنا وسنجيبك عليه، وسيظهر السؤال مع الإجابة هنا لبقية العملاء إن كان فيه فائدة للجميع.', en:'Have a question? Write it here and we\'ll answer it. Your question and answer will appear here for other customers if it\'s helpful to everyone.'},
   question_ph: {ar:'اكتب سؤالك هنا...', en:'Write your question here...'},
@@ -2615,6 +2750,14 @@ function renderAll(){
   renderAdminProducts();
   renderAdminOrders();
   renderAdminCustomers();
+}
+
+function toggleCustomerListCollapse(){
+  const wrap = document.getElementById('adminCustomerList');
+  const btn = document.getElementById('customerListToggleBtn');
+  const collapsed = wrap.style.display === 'none';
+  wrap.style.display = collapsed ? 'block' : 'none';
+  btn.textContent = collapsed ? '🔽 إخفاء القائمة' : '▶️ إظهار القائمة';
 }
 
 function renderAdminCustomers(search){
@@ -3429,7 +3572,7 @@ async function showMyShipments(){
 const defaultTabs = {
   glossary:{label:'دليل المصطلحات'}, questions:{label:'الأسئلة'}, importorder:{label:'اطلب من الصين'},
   factoryvisit:{label:'زيارة مصنع'}, community:{label:'المجتمع'}, ratings:{label:'التقييمات'},
-  about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}, catalogs:{label:'الكتالوجات'}
+  about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}, catalogs:{label:'الكتالوجات'}, groupbuys:{label:'الطلبات الجماعية'}
 };
 
 async function loadTabsSettings(){
@@ -3616,18 +3759,24 @@ let groupChatUnsub = null;
 function checkGroupChatActivation(){
   const cta = document.getElementById('groupChatCta');
   const floatBtn = document.getElementById('groupChatFloat');
-  if(!cta || !floatBtn) return;
+  if(!floatBtn) return;
   const enabled = currentCustomerData && currentCustomerData.groupChatEnabled;
-  if(enabled){
-    cta.classList.add('activated');
-    document.getElementById('groupChatActivateBtn').style.display = 'none';
-    document.getElementById('groupChatDeactivateBtn').style.display = 'inline-block';
+  const onAdminTab = document.getElementById('admin') && document.getElementById('admin').classList.contains('active');
+  if(cta){
+    if(enabled){
+      cta.classList.add('activated');
+      document.getElementById('groupChatActivateBtn').style.display = 'none';
+      document.getElementById('groupChatDeactivateBtn').style.display = 'inline-block';
+    } else {
+      cta.classList.remove('activated');
+      document.getElementById('groupChatActivateBtn').style.display = 'inline-block';
+      document.getElementById('groupChatDeactivateBtn').style.display = 'none';
+    }
+  }
+  if(enabled && !onAdminTab){
     floatBtn.style.display = 'flex';
     floatBtn.classList.add('show');
   } else {
-    cta.classList.remove('activated');
-    document.getElementById('groupChatActivateBtn').style.display = 'inline-block';
-    document.getElementById('groupChatDeactivateBtn').style.display = 'none';
     floatBtn.style.display = 'none';
     floatBtn.classList.remove('show');
   }
@@ -3716,6 +3865,153 @@ function closeWishlistModal(){
   document.getElementById('wishlistModalOverlay').classList.remove('show');
   notifyModalClosed();
 }
+// ====== الطلبات الجماعية (كسر الـMOQ) ======
+let currentGbJoinId = null;
+
+async function addGroupBuy(){
+  const title = document.getElementById('newGbTitle').value.trim();
+  const price = parseFloat(document.getElementById('newGbPrice').value);
+  const target = parseInt(document.getElementById('newGbTarget').value);
+  const imageFile = document.getElementById('newGbImage').files[0];
+  if(!title || !target){ showToast('يرجى إدخال اسم المنتج والحد الأدنى المطلوب على الأقل'); return; }
+
+  const btn = document.getElementById('addGbBtn');
+  btn.disabled = true;
+  try{
+    const data = { title, price: price || null, targetQty: target, currentQty: 0, status: 'open', createdAt: firebase.firestore.FieldValue.serverTimestamp() };
+    if(imageFile){
+      const imgRef = storage.ref('groupbuys/' + Date.now() + '_' + imageFile.name);
+      await imgRef.put(imageFile);
+      data.image = await imgRef.getDownloadURL();
+    }
+    await db.collection('groupBuys').add(data);
+    document.getElementById('newGbTitle').value = '';
+    document.getElementById('newGbPrice').value = '';
+    document.getElementById('newGbTarget').value = '';
+    document.getElementById('newGbImage').value = '';
+    showToast('تم إنشاء الحملة بنجاح');
+    loadGroupBuysAdmin();
+    loadGroupBuysPublic();
+  }catch(e){
+    showToast('حدث خطأ أثناء الإنشاء، يرجى التأكد من إعداد Firebase Storage');
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+async function loadGroupBuysPublic(){
+  const wrap = document.getElementById('groupBuysList');
+  if(!wrap) return;
+  const snap = await db.collection('groupBuys').orderBy('createdAt','desc').get();
+  if(snap.empty){ wrap.innerHTML = `<div class="empty">لا توجد حملات تجميع مفتوحة حالياً</div>`; return; }
+
+  let myParticipations = {};
+  if(currentUser){
+    const results = await Promise.all(snap.docs.map(d => db.collection('groupBuys').doc(d.id).collection('participants').doc(currentUser.email).get()));
+    snap.docs.forEach((d,i) => { if(results[i].exists) myParticipations[d.id] = results[i].data(); });
+  }
+
+  wrap.innerHTML = snap.docs.map(d => {
+    const g = d.data();
+    const pct = Math.min(100, Math.round((g.currentQty / g.targetQty) * 100));
+    const reached = g.currentQty >= g.targetQty;
+    const myQty = myParticipations[d.id] ? myParticipations[d.id].qty : null;
+    const safeTitle = g.title.replace(/'/g, "\\'");
+    return `<div class="gb-card">
+      <div class="gb-card-head">
+        <div class="gb-card-thumb">${g.image ? `<img src="${g.image}">` : g.title.charAt(0)}</div>
+        <div>
+          <div class="gb-card-title">${g.title}</div>
+          ${g.price ? `<div class="gb-card-price">≈ $${g.price} للقطعة</div>` : ''}
+        </div>
+      </div>
+      <div class="gb-progress-track"><div class="gb-progress-fill" style="width:${pct}%;"></div></div>
+      <div class="gb-progress-label"><span>${g.currentQty} من ${g.targetQty} قطعة</span><span>${pct}%</span></div>
+      ${myQty ? `<div class="gb-my-qty">✅ أنت مشارك بكمية: ${myQty}</div>` : ''}
+      ${reached
+        ? `<div class="gb-reached-badge">🎉 تم الوصول للحد الأدنى! جاري التنسيق مع المصنع</div>`
+        : `<button class="btn btn-gold" style="width:100%;margin-top:8px;" onclick="openGroupBuyJoin('${d.id}','${safeTitle}')">${myQty ? 'تعديل كميتي' : 'انضمام للطلب'}</button>`
+      }
+    </div>`;
+  }).join('');
+}
+
+function openGroupBuyJoin(id, title){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  currentGbJoinId = id;
+  document.getElementById('gbJoinTitle').textContent = title;
+  document.getElementById('gbJoinQty').value = '';
+  document.getElementById('groupBuyJoinOverlay').classList.add('show');
+  pushModalHistory();
+}
+function closeGroupBuyJoin(){
+  document.getElementById('groupBuyJoinOverlay').classList.remove('show');
+  notifyModalClosed();
+}
+
+async function submitGroupBuyJoin(){
+  const qty = parseInt(document.getElementById('gbJoinQty').value);
+  if(!qty || qty < 1){ showToast('يرجى إدخال كمية صحيحة'); return; }
+  if(!currentUser || !currentGbJoinId) return;
+
+  const gbRef = db.collection('groupBuys').doc(currentGbJoinId);
+  const participantRef = gbRef.collection('participants').doc(currentUser.email);
+
+  try{
+    const reachedTitle = await db.runTransaction(async (t) => {
+      const gbDoc = await t.get(gbRef);
+      const participantDoc = await t.get(participantRef);
+      if(!gbDoc.exists) throw new Error('الحملة غير موجودة');
+
+      const data = gbDoc.data();
+      const previousQty = participantDoc.exists ? participantDoc.data().qty : 0;
+      const newTotal = data.currentQty - previousQty + qty;
+
+      t.set(participantRef, {
+        qty: qty,
+        name: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+        email: currentUser.email,
+        shippingMark: (currentCustomerData && currentCustomerData.shippingMark) || '',
+        joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      const willReachNow = newTotal >= data.targetQty && data.status !== 'reached';
+      t.update(gbRef, { currentQty: newTotal, status: willReachNow ? 'reached' : data.status });
+      return willReachNow ? data.title : null;
+    });
+
+    closeGroupBuyJoin();
+    showToast('تم الانضمام للطلب الجماعي بنجاح');
+    if(reachedTitle){
+      notifyAdmin('🎉 وصلت حملة تجميع للحد الأدنى!', `المنتج: ${reachedTitle}\nوصلنا للعدد المطلوب، جاهزين للتنفيذ مع المصنع.`);
+    }
+    loadGroupBuysPublic();
+  }catch(e){
+    showToast('حدث خطأ أثناء الانضمام، حاول مرة أخرى');
+  }
+}
+
+async function loadGroupBuysAdmin(){
+  const wrap = document.getElementById('adminGroupBuysList');
+  if(!wrap) return;
+  const snap = await db.collection('groupBuys').orderBy('createdAt','desc').get();
+  if(snap.empty){ wrap.innerHTML = `<div class="empty">لا توجد حملات بعد</div>`; return; }
+  wrap.innerHTML = snap.docs.map(d => {
+    const g = d.data();
+    const pct = Math.min(100, Math.round((g.currentQty / g.targetQty) * 100));
+    return `<div class="admin-list-item">
+      <span><strong>${g.title}</strong> — ${g.currentQty}/${g.targetQty} (${pct}%) ${g.status==='reached' ? '🎉 وصلت' : ''}</span>
+      <button class="tiny-btn" onclick="deleteGroupBuy('${d.id}')">حذف</button>
+    </div>`;
+  }).join('');
+}
+
+async function deleteGroupBuy(id){
+  await db.collection('groupBuys').doc(id).delete();
+  showToast('تم حذف الحملة');
+  loadGroupBuysAdmin();
+  loadGroupBuysPublic();
+}
+
 // ====== كتالوجات المنتجات (PDF) ======
 async function addCatalog(){
   const title = document.getElementById('newCatalogTitle').value.trim();
@@ -3900,6 +4196,7 @@ function enterAdminPanel(){
   renderFpManageSection();
   renderShippingRatesForm();
   loadCatalogsAdmin();
+  loadGroupBuysAdmin();
   db.collection('settings').doc('announcement').get().then(doc=>{
     if(doc.exists){
       document.getElementById('announcementActive').value = doc.data().active ? 'active' : 'inactive';
@@ -3992,7 +4289,7 @@ let modalStackCount = 0;
 let closingViaPopstate = false;
 
 const trackedOverlayIds = [
-  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay','termHelpOverlay',
+  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay','termHelpOverlay','groupBuyJoinOverlay',
   'wishlistModalOverlay','quickViewOverlay','faqModalOverlay','groupChatOverlay',
   'moreMenuOverlay','overlay','videoModal','onboardingOverlay'
 ];
@@ -5096,9 +5393,7 @@ function showTab(tab){
   }
   const isAdmin = tab === 'admin';
   document.getElementById('bottomNav').style.display = isAdmin ? 'none' : 'flex';
-  const chatFloat = document.getElementById('groupChatFloat');
-  if(isAdmin){ chatFloat.style.display = 'none'; }
-  else if(currentCustomerData && currentCustomerData.groupChatEnabled){ chatFloat.style.display = 'flex'; }
+  checkGroupChatActivation();
   if(tab === 'activityfeed'){
     localStorage.setItem('lastSeenActivityTs', Date.now().toString());
     updateNotifDot();
@@ -5228,6 +5523,7 @@ function dismissInstallBanner(){
 renderFaqList();
 renderFlashSalePage();
 loadCatalogsPublic();
+loadGroupBuysPublic();
 loadAnnouncement();
 loadTotalCustomersCount();
 

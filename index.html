@@ -2657,11 +2657,6 @@ function calcCurrency(){
   const cny = parseFloat(document.getElementById('cnyAmount').value);
   const box = document.getElementById('currencyResult');
   if(!cny){ box.innerHTML = t('enter_valid_amount'); box.classList.add('show'); return; }
-  if(!currencyData.sdgRate){
-    box.innerHTML = t('rate_not_updated');
-    box.classList.add('show');
-    return;
-  }
   if(!liveRatesData){
     box.innerHTML = currentLang==='ar' ? 'جارٍ تحميل أسعار الصرف، حاول بعد قليل' : 'Loading exchange rates, try again shortly';
     box.classList.add('show');
@@ -2672,14 +2667,16 @@ function calcCurrency(){
   const usd = cny / liveRatesData.CNY;
   const aed = usd * liveRatesData.AED;
   const sar = usd * liveRatesData.SAR;
-  const sdg = (cny * currencyData.sdgRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0});
+  const sdgLine = currencyData.sdgRate
+    ? `<div>${(cny * currencyData.sdgRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0})} ${t('sdg_currency')}</div>`
+    : '';
 
   let html = `
     <div class="big">¥${cny} ≈</div>
     <div style="margin-top:6px;">$${usd.toFixed(2)} ${t('usd_currency')}</div>
     <div>${aed.toFixed(2)} ${t('aed_currency')}</div>
     <div>${sar.toFixed(2)} ${t('sar_currency')}</div>
-    <div>${sdg} ${t('sdg_currency')}</div>`;
+    ${sdgLine}`;
 
   if(currencyData.egpRate){
     const egp = (cny * currencyData.egpRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0});

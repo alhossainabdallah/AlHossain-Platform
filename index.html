@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AlHossain</title>
+<meta name="theme-color" content="#0F2648">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AlHossain">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%230F2648'/%3E%3Ctext x='96' y='128' font-size='110' font-family='Georgia,serif' font-weight='bold' fill='%23E8A800' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22AlHossain%22%2C%22short_name%22%3A%22AlHossain%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F5F1E8%22%2C%22theme_color%22%3A%22%230F2648%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2Bxmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2Bviewbox%253D%25270%2B0%2B192%2B192%2527%253E%253Crect%2Bwidth%253D%2527192%2527%2Bheight%253D%2527192%2527%2Brx%253D%252736%2527%2Bfill%253D%2527%25230F2648%2527%252F%253E%253Ctext%2Bx%253D%252796%2527%2By%253D%2527128%2527%2Bfont-size%253D%2527110%2527%2Bfont-family%253D%2527Georgia%252Cserif%2527%2Bfont-weight%253D%2527bold%2527%2Bfill%253D%2527%2523E8A800%2527%2Btext-anchor%253D%2527middle%2527%253EH%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 <meta name="description" content="AlHossain — وكيلك المعتمد في الصين. تسوّق، اشحن، وتابع طلباتك من الصين بسهولة عبر منصة واحدة.">
 <meta property="og:title" content="AlHossain — بوابتك الإلكترونية في الصين">
 <meta property="og:description" content="تسوّق من تاوباو و1688 وعلي بابا، واحسب تكلفة شحنتك، وتابع طلباتك أونلاين.">
@@ -440,10 +447,10 @@
     position:fixed; bottom:0; left:0; right:0; z-index:80;
     display:flex; align-items:center; justify-content:space-around;
     height:66px; padding-bottom:env(safe-area-inset-bottom);
-    background:rgba(7,17,28,0.92);
+    background:rgba(15,36,56,0.88);
     backdrop-filter:blur(30px) saturate(200%); -webkit-backdrop-filter:blur(30px) saturate(200%);
-    border-top:1px solid rgba(255,255,255,0.1);
-    box-shadow:0 -10px 40px rgba(0,0,0,0.5);
+    border-top:1px solid rgba(255,255,255,0.15);
+    box-shadow:0 -10px 40px rgba(0,0,0,0.4);
     transition: backdrop-filter .35s ease;
   }
   .bottom-nav.pressed{ backdrop-filter:blur(38px) saturate(200%); -webkit-backdrop-filter:blur(38px) saturate(200%); }
@@ -826,6 +833,23 @@
     font-size:14px; z-index:60; opacity:0; pointer-events:none; transition:.3s;
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
+
+  .install-banner{
+    position:fixed; top:0; left:0; right:0; z-index:190;
+    background:var(--ink); color:var(--paper);
+    padding:10px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+    font-size:12.5px; font-weight:700;
+    transform:translateY(-100%); transition:transform .35s cubic-bezier(.25,1,.4,1);
+    box-shadow:0 4px 16px rgba(0,0,0,.3);
+  }
+  .install-banner.show{ transform:translateY(0); }
+  .install-banner-btn{
+    background:var(--gold); color:var(--ink-dark); border:none; border-radius:999px;
+    padding:6px 14px; font-family:'Tajawal'; font-weight:700; font-size:12.5px; cursor:pointer;
+  }
+  .install-banner-close{
+    background:none; border:none; color:var(--paper); font-size:15px; cursor:pointer; opacity:.7;
+  }
 </style>
 </head>
 <body>
@@ -905,7 +929,7 @@
     </div>
   </section>
 
-  <div class="info-modal-overlay" id="wishlistModalOverlay">
+  <div class="info-modal-overlay" id="wishlistModalOverlay" onclick="if(event.target===this) closeWishlistModal()">
     <div class="info-modal" style="max-width:380px;text-align:center;">
       <button class="auth-close" onclick="closeWishlistModal()" style="position:absolute;left:16px;top:14px;">✕</button>
       <div style="font-size:34px;margin-bottom:8px;">📝</div>
@@ -916,7 +940,7 @@
     </div>
   </div>
 
-  <div class="quick-view-overlay" id="quickViewOverlay">
+  <div class="quick-view-overlay" id="quickViewOverlay" onclick="if(event.target===this) closeQuickView()">
     <div class="quick-view-modal">
       <button class="auth-close" onclick="closeQuickView()" style="position:absolute;left:14px;top:12px;z-index:2;">✕</button>
       <div id="quickViewBody"></div>
@@ -958,7 +982,7 @@
     </div>
   </section>
 
-  <div class="info-modal-overlay" id="markInfoOverlay">
+  <div class="info-modal-overlay" id="markInfoOverlay" onclick="if(event.target===this) closeMarkInfo()">
     <div class="info-modal">
       <button class="auth-close" onclick="closeMarkInfo()" style="position:absolute;left:16px;top:14px;">✕</button>
       <h3 style="margin-bottom:14px;" data-i18n="what_is_mark">ما هي الـ Shipping Mark؟</h3>
@@ -974,7 +998,7 @@
     </div>
   </div>
 
-  <div class="info-modal-overlay" id="termsInfoOverlay" style="z-index:110;">
+  <div class="info-modal-overlay" id="termsInfoOverlay" style="z-index:110;" onclick="if(event.target===this) closeTermsInfo()">
     <div class="info-modal">
       <button class="auth-close" onclick="closeTermsInfo()" style="position:absolute;left:16px;top:14px;">✕</button>
       <h3 style="margin-bottom:14px;">الشروط والأحكام</h3>
@@ -1114,7 +1138,7 @@
     <div id="faqList" class="faq-list"></div>
   </section>
 
-  <div class="faq-modal-overlay" id="faqModalOverlay">
+  <div class="faq-modal-overlay" id="faqModalOverlay" onclick="if(event.target===this) closeFaqModal()">
     <div class="faq-modal" id="faqModalCard">
       <div class="faq-modal-icon">✉️</div>
       <h3 class="faq-modal-q" id="faqModalQ"></h3>
@@ -1260,6 +1284,7 @@
       <button class="btn btn-primary" data-i18n="save_password_btn" onclick="changeMyPassword()">حفظ كلمة المرور الجديدة</button>
     </div>
 
+    <a class="btn btn-primary" style="width:100%;display:block;text-align:center;margin-bottom:12px;" href="https://wa.link/noa4ss" target="_blank" rel="noopener" data-i18n="contact_whatsapp_btn">💬 تواصل مع الإدارة عبر واتساب</a>
     <button class="btn btn-outline" style="width:100%;" data-i18n="logout_btn" onclick="auth.signOut(); showTab('home');">تسجيل الخروج</button>
   </section>
 
@@ -1380,6 +1405,7 @@
       </div>
       <div class="admin-section">
         <h3>عملاء مسجلين (<span id="customerCount">0</span>)</h3>
+        <button class="tiny-btn gold" onclick="syncCustomerCounter()" style="margin-bottom:10px;">🔄 مزامنة عداد صفحة المؤسس مع العدد الحقيقي</button>
         <button class="btn btn-primary" onclick="exportCustomers()" style="margin-bottom:12px;">تصدير الإيميلات CSV 📥</button>
         <input class="admin-search" placeholder="بحث بالاسم أو الإيميل أو المارك..." oninput="renderAdminCustomers(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
         <div id="adminCustomerList"></div>
@@ -1516,6 +1542,14 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="install-banner" id="installBanner">
+  <span id="installBannerText" data-i18n="install_banner_text">ثبّت AlHossain على شاشتك الرئيسية للوصول السريع</span>
+  <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+    <button class="install-banner-btn" id="installBannerBtn" onclick="triggerInstall()" data-i18n="install_banner_btn" style="display:none;">تثبيت</button>
+    <button class="install-banner-close" onclick="dismissInstallBanner()">✕</button>
+  </div>
+</div>
+
 <nav class="bottom-nav" id="bottomNav">
   <button class="bn-btn active" data-tab="home" onclick="showTab('home')" aria-label="الرئيسية">
     <svg class="bn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9a1 1 0 0 0 1 1H9.5a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-9"/></svg>
@@ -1549,6 +1583,7 @@
       <button class="more-item" data-tab="weeklyoffers" onclick="showTab('weeklyoffers'); closeMoreMenu();"><span>🔥</span>العروض</button>
       <button class="more-item" data-tab="profile" onclick="showTab('profile'); closeMoreMenu();"><span>🙋</span>حسابي</button>
       <button class="more-item" onclick="openCurrencyModal(); closeMoreMenu();"><span>💱</span>محول العملة</button>
+      <button class="more-item" id="fullscreenToggleBtn" onclick="toggleFullscreen(); closeMoreMenu();"><span id="fullscreenIcon">⛶</span><span id="fullscreenLabel">وضع ملء الشاشة</span></button>
     </div>
     <button class="more-menu-close" onclick="closeMoreMenu()">✕ إغلاق</button>
   </div>
@@ -1574,7 +1609,7 @@
   </div>
 </div>
 
-<div class="group-chat-overlay" id="groupChatOverlay">
+<div class="group-chat-overlay" id="groupChatOverlay" onclick="if(event.target===this) closeGroupChat()">
   <div class="group-chat-panel">
     <div class="group-chat-header">
       <span data-i18n="group_chat_title">💬 الدردشة الجماعية</span>
@@ -1589,7 +1624,7 @@
 </div>
 
 
-<div class="info-modal-overlay" id="currencyModalOverlay">
+<div class="info-modal-overlay" id="currencyModalOverlay" onclick="if(event.target===this) closeCurrencyModal()">
   <div class="info-modal">
     <button class="auth-close" onclick="closeCurrencyModal()" style="position:absolute;left:16px;top:14px;">✕</button>
     <h3 style="margin-bottom:10px;" data-i18n="cur_title">محوّل العملات (يوان صيني)</h3>
@@ -1606,7 +1641,7 @@
   </div>
 </div>
 
-<div class="auth-modal-overlay" id="authOverlay">
+<div class="auth-modal-overlay" id="authOverlay" onclick="if(event.target===this) closeAuthModal()">
   <div class="auth-modal">
     <h3 id="authTitle" data-i18n="login_title">تسجيل الدخول</h3>
     <p style="text-align:center;color:#777;font-size:13px;" data-i18n="auth_subtitle">سجّل بالبريد الإلكتروني لتتمكن من إتمام طلبك أو إرسال سؤال</p>
@@ -1630,6 +1665,21 @@
       <input id="authPassword" type="password" placeholder="كلمة المرور (6 أحرف على الأقل)" data-i18n-ph="password_ph">
       <button type="button" class="toggle-pw-btn" onclick="togglePasswordVisibility('authPassword', this)">👁</button>
     </div>
+    <select id="authResidence" style="width:100%;padding:11px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;display:none;">
+      <option value="" data-i18n="residence_placeholder">بلد الإقامة الحالي *</option>
+      <option value="مصر" data-i18n="res_eg">مصر</option>
+      <option value="السودان" data-i18n="res_sd">السودان</option>
+      <option value="قطر" data-i18n="res_qa">قطر</option>
+      <option value="الإمارات" data-i18n="res_ae">الإمارات</option>
+      <option value="عُمان" data-i18n="res_om">عُمان</option>
+      <option value="جنوب السودان" data-i18n="res_ss">جنوب السودان</option>
+      <option value="أوغندا" data-i18n="res_ug">أوغندا (كمبالا)</option>
+      <option value="إثيوبيا" data-i18n="res_et">إثيوبيا</option>
+      <option value="إريتريا" data-i18n="res_er">إريتريا</option>
+      <option value="السعودية" data-i18n="res_sa">السعودية</option>
+      <option value="الكويت" data-i18n="res_kw">الكويت</option>
+    </select>
+    <div style="font-size:11px;color:#888;margin:-6px 0 10px;display:none;" id="destinationSoonHint" data-i18n="destination_soon_hint">حالياً نشحن فعلياً إلى 4 وجهات فقط — باقي الوجهات قريباً بإذن الله 🚀</div>
     <select id="authDestination" style="width:100%;padding:11px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;display:none;">
       <option value="SD" data-i18n="opt_sd">السودان</option>
       <option value="SS" data-i18n="opt_ss">جنوب السودان</option>
@@ -1648,7 +1698,7 @@
   </div>
 </div>
 
-<div class="onboarding-overlay" id="onboardingOverlay">
+<div class="onboarding-overlay" id="onboardingOverlay" onclick="if(event.target===this) closeOnboarding()">
   <div class="onboarding-card">
     <div class="onboarding-icon" id="obIcon">🏠</div>
     <h3 class="onboarding-title" id="obTitle"></h3>
@@ -1690,7 +1740,7 @@
   <div class="sail-text" data-i18n="sail_text">جارٍ الإبحار نحو حسابك...</div>
 </div>
 
-<div class="video-modal-overlay" id="videoModal">
+<div class="video-modal-overlay" id="videoModal" onclick="if(event.target===this) closeVideo()">
   <button class="video-close" onclick="closeVideo()">✕</button>
   <video id="videoPlayer" controls></video>
 </div>
@@ -1992,6 +2042,8 @@ const translations = {
   sdg_currency: {ar:'جنيه سوداني', en:'SDG'},
   usd_currency: {ar:'دولار أمريكي', en:'USD'},
   aed_currency: {ar:'درهم إماراتي', en:'AED'},
+  sar_currency: {ar:'ريال سعودي', en:'SAR'},
+  egp_currency: {ar:'جنيه مصري', en:'EGP'},
 
   nav_community: {ar:'المجتمع', en:'Community'},
   community_title: {ar:'مجتمع العملاء', en:'Customer Community'},
@@ -2084,6 +2136,24 @@ const translations = {
   faq_prev: {ar:'السابق', en:'Previous'},
   faq_next: {ar:'التالي', en:'Next'},
   faq_close: {ar:'✕ إغلاق', en:'✕ Close'},
+  residence_placeholder: {ar:'بلد الإقامة الحالي *', en:'Current country of residence *'},
+  res_eg: {ar:'مصر', en:'Egypt'},
+  res_sd: {ar:'السودان', en:'Sudan'},
+  res_qa: {ar:'قطر', en:'Qatar'},
+  res_ae: {ar:'الإمارات', en:'UAE'},
+  res_om: {ar:'عُمان', en:'Oman'},
+  res_ss: {ar:'جنوب السودان', en:'South Sudan'},
+  res_ug: {ar:'أوغندا (كمبالا)', en:'Uganda (Kampala)'},
+  res_et: {ar:'إثيوبيا', en:'Ethiopia'},
+  res_er: {ar:'إريتريا', en:'Eritrea'},
+  res_sa: {ar:'السعودية', en:'Saudi Arabia'},
+  res_kw: {ar:'الكويت', en:'Kuwait'},
+  destination_soon_hint: {ar:'حالياً نشحن فعلياً إلى 4 وجهات فقط — باقي الوجهات قريباً بإذن الله 🚀', en:'We currently ship to 4 destinations only — more coming soon 🚀'},
+  select_residence_first: {ar:'يرجى اختيار بلد الإقامة', en:'Please select your country of residence'},
+  contact_whatsapp_btn: {ar:'💬 تواصل مع الإدارة عبر واتساب', en:'💬 Contact Admin via WhatsApp'},
+  install_banner_text: {ar:'ثبّت AlHossain على شاشتك الرئيسية للوصول السريع', en:'Install AlHossain on your home screen for quick access'},
+  install_banner_btn: {ar:'تثبيت', en:'Install'},
+  install_ios_text: {ar:'للتثبيت: اضغط على زر المشاركة 🔗 ثم "إضافة إلى الشاشة الرئيسية"', en:'To install: tap the Share button 🔗 then "Add to Home Screen"'},
   private_comment_label: {ar:'🔒 خاص للإدارة فقط (لن يظهر لباقي العملاء)', en:'🔒 Private to admin only (won\'t show to other customers)'},
   group_chat_cta_title: {ar:'💬 الدردشة الجماعية المباشرة', en:'💬 Live Group Chat'},
   group_chat_cta_desc: {ar:'تحدث مع باقي العملاء مباشرة في غرفة واحدة', en:'Chat directly with other customers in one room'},
@@ -2302,6 +2372,8 @@ async function ensureShippingMark(){
   if(!currentUser) return;
   if(currentCustomerData && currentCustomerData.shippingMark) return; // عنده مارك بالفعل، مفيش داعي
 
+  const isBrandNewCustomer = !currentCustomerData; // مفيش مستند خالص من قبل = عميل جديد فعلياً
+
   const destCode = currentCustomerData?.destination ? destCodeFromName(currentCustomerData.destination) : 'SD';
   const nameBase = currentCustomerData?.name || currentUser.email.split('@')[0];
   const mark = await generateUniqueMark(nameBase, destCode, currentUser.email);
@@ -2316,6 +2388,17 @@ async function ensureShippingMark(){
   };
   await db.collection('customers').doc(currentUser.email).set(data, {merge:true});
   currentCustomerData = data;
+
+  if(isBrandNewCustomer){
+    try{
+      const counterRef = db.collection('settings').doc('counters');
+      await db.runTransaction(async (t) => {
+        const doc = await t.get(counterRef);
+        const current = doc.exists ? (doc.data().totalCustomers || 0) : 0;
+        t.set(counterRef, { totalCustomers: current + 1 }, { merge: true });
+      });
+    }catch(e){}
+  }
 }
 
 function destCodeFromName(name){
@@ -2402,15 +2485,15 @@ function renderAdminCustomers(search){
   if(filtered.length===0){ wrap.innerHTML = `<div class="empty">${term ? 'لا توجد نتائج مطابقة' : 'لا يوجد عملاء مسجلون بعد'}</div>`; return; }
   wrap.innerHTML = filtered.map(c=>`
     <div class="admin-list-item">
-      <span><strong>${c.shippingMark||'بدون مارك'}</strong> — ${c.name||''} — ${c.email} — ${c.phone||'بدون رقم'} — ${c.destination||''} — ${c.emailVerified ? '✅ موثّق' : '⏳ غير موثّق'}</span>
+      <span><strong>${c.shippingMark||'بدون مارك'}</strong> — ${c.name||''} — ${c.email} — ${c.phone||'بدون رقم'} — 🏠 ${c.residenceCountry||'غير محدد'} — 📦 ${c.destination||''} — ${c.emailVerified ? '✅ موثّق' : '⏳ غير موثّق'}</span>
       <span style="color:#888;font-size:12px;">${c.joinDate||''}</span>
     </div>`).join('');
 }
 
 function exportCustomers(){
   if(customers.length===0){ showToast('لا يوجد عملاء لتصديرهم بعد'); return; }
-  let csv = 'ShippingMark,Name,Email,Phone,Destination,EmailVerified,JoinDate\n';
-  customers.forEach(c=>{ csv += `${c.shippingMark||''},${c.name||''},${c.email},${c.phone||''},${c.destination||''},${c.emailVerified?'Yes':'No'},${c.joinDate||''}\n`; });
+  let csv = 'ShippingMark,Name,Email,Phone,ResidenceCountry,Destination,EmailVerified,JoinDate\n';
+  customers.forEach(c=>{ csv += `${c.shippingMark||''},${c.name||''},${c.email},${c.phone||''},${c.residenceCountry||''},${c.destination||''},${c.emailVerified?'Yes':'No'},${c.joinDate||''}\n`; });
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -2546,6 +2629,30 @@ function renderCurrencyMeta(){
   if(input && currencyData.sdgRate) input.value = currencyData.sdgRate;
 }
 
+// ====== أسعار العملات الحية (دولار/يوان/درهم/ريال) من مصدر خارجي مجاني ======
+let liveRatesData = null;
+
+async function fetchLiveRates(){
+  const cached = localStorage.getItem('liveCurrencyRates');
+  if(cached){
+    try{
+      const parsed = JSON.parse(cached);
+      const ageHours = (Date.now() - parsed.ts) / (1000*60*60);
+      if(ageHours < 20){ liveRatesData = parsed.rates; return; }
+    }catch(e){}
+  }
+  try{
+    const res = await fetch('https://open.er-api.com/v6/latest/USD');
+    const json = await res.json();
+    if(json.result === 'success'){
+      liveRatesData = json.rates;
+      localStorage.setItem('liveCurrencyRates', JSON.stringify({rates: liveRatesData, ts: Date.now()}));
+    }
+  }catch(e){
+    if(!liveRatesData) liveRatesData = { CNY: 7.1, AED: 3.6725, SAR: 3.75 }; // احتياطي تقريبي لو تعذّر الاتصال
+  }
+}
+
 function calcCurrency(){
   const cny = parseFloat(document.getElementById('cnyAmount').value);
   const box = document.getElementById('currencyResult');
@@ -2555,19 +2662,30 @@ function calcCurrency(){
     box.classList.add('show');
     return;
   }
-  // أسعار العمل الداخلية (ثابتة، بناءً على أسعارك الخاصة اللي فيها هامش الربح)
-  const AED_PER_CNY = 1 / 1.50;   // الدرهم = 1.50 يوان
-  const USD_PER_CNY = 1 / 5.625;  // الدولار = 3.75 درهم = 5.625 يوان
+  if(!liveRatesData){
+    box.innerHTML = currentLang==='ar' ? 'جارٍ تحميل أسعار الصرف، حاول بعد قليل' : 'Loading exchange rates, try again shortly';
+    box.classList.add('show');
+    fetchLiveRates();
+    return;
+  }
 
+  const usd = cny / liveRatesData.CNY;
+  const aed = usd * liveRatesData.AED;
+  const sar = usd * liveRatesData.SAR;
   const sdg = (cny * currencyData.sdgRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0});
-  const aed = (cny * AED_PER_CNY).toFixed(2);
-  const usd = (cny * USD_PER_CNY).toFixed(2);
 
-  box.innerHTML = `
+  let html = `
     <div class="big">¥${cny} ≈</div>
-    <div style="margin-top:6px;">$${usd} ${t('usd_currency')}</div>
-    <div>${aed} ${t('aed_currency')}</div>
+    <div style="margin-top:6px;">$${usd.toFixed(2)} ${t('usd_currency')}</div>
+    <div>${aed.toFixed(2)} ${t('aed_currency')}</div>
+    <div>${sar.toFixed(2)} ${t('sar_currency')}</div>
     <div>${sdg} ${t('sdg_currency')}</div>`;
+
+  if(currencyData.egpRate){
+    const egp = (cny * currencyData.egpRate).toLocaleString(currentLang==='ar' ? 'ar-EG' : 'en-US', {maximumFractionDigits:0});
+    html += `<div>${egp} ${t('egp_currency')}</div>`;
+  }
+  box.innerHTML = html;
   box.classList.add('show');
 }
 
@@ -2738,9 +2856,11 @@ function openProductQuickView(id){
     </div>
   `;
   document.getElementById('quickViewOverlay').classList.add('show');
+  pushModalHistory();
 }
 function closeQuickView(){
   document.getElementById('quickViewOverlay').classList.remove('show');
+  notifyModalClosed();
 }
 
 async function toggleFavorite(id){
@@ -2766,19 +2886,23 @@ function playVideo(url){
   const modal = document.getElementById('videoModal');
   document.getElementById('videoPlayer').src = url;
   modal.classList.add('show');
+  pushModalHistory();
 }
 function closeVideo(){
   const modal = document.getElementById('videoModal');
   document.getElementById('videoPlayer').pause();
   document.getElementById('videoPlayer').src = '';
   modal.classList.remove('show');
+  notifyModalClosed();
 }
 
 function openMarkInfo(){
   document.getElementById('markInfoOverlay').classList.add('show');
+  pushModalHistory();
 }
 function closeMarkInfo(){
   document.getElementById('markInfoOverlay').classList.remove('show');
+  notifyModalClosed();
 }
 
 function addToCart(id){
@@ -2832,10 +2956,12 @@ function openCart(){
   renderCart();
   document.getElementById('drawer').classList.add('show');
   document.getElementById('overlay').classList.add('show');
+  pushModalHistory();
 }
 function closeCart(){
   document.getElementById('drawer').classList.remove('show');
   document.getElementById('overlay').classList.remove('show');
+  notifyModalClosed();
 }
 
 async function getNextOrderSeq(){
@@ -3338,6 +3464,7 @@ async function activateGroupChat(){
 
 function openGroupChat(){
   document.getElementById('groupChatOverlay').classList.add('show');
+  pushModalHistory();
   const msgsBox = document.getElementById('groupChatMessages');
   msgsBox.innerHTML = `<div style="text-align:center;color:#999;font-size:12.5px;">${t('loading')}</div>`;
   if(groupChatUnsub) groupChatUnsub();
@@ -3365,6 +3492,7 @@ function openGroupChat(){
 function closeGroupChat(){
   document.getElementById('groupChatOverlay').classList.remove('show');
   if(groupChatUnsub){ groupChatUnsub(); groupChatUnsub = null; }
+  notifyModalClosed();
 }
 
 async function sendGroupChatMessage(){
@@ -3390,9 +3518,11 @@ async function deleteGroupChatMessage(id){
 
 function openWishlistModal(){
   document.getElementById('wishlistModalOverlay').classList.add('show');
+  pushModalHistory();
 }
 function closeWishlistModal(){
   document.getElementById('wishlistModalOverlay').classList.remove('show');
+  notifyModalClosed();
 }
 async function submitWishlist(){
   if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
@@ -3432,6 +3562,7 @@ function startOnboarding(){
   currentOnboardingStep = 0;
   renderOnboardingStep();
   document.getElementById('onboardingOverlay').classList.add('show');
+  pushModalHistory();
 }
 
 function nextOnboardingStep(){
@@ -3445,6 +3576,7 @@ function nextOnboardingStep(){
 
 async function closeOnboarding(){
   document.getElementById('onboardingOverlay').classList.remove('show');
+  notifyModalClosed();
   if(currentUser){
     try{ await db.collection('customers').doc(currentUser.email).update({ hasSeenOnboarding: true }); }catch(e){}
     if(currentCustomerData) currentCustomerData.hasSeenOnboarding = true;
@@ -3551,6 +3683,63 @@ async function authenticateWithFingerprint(){
     enterAdminPanel();
   }catch(e){
     showToast('فشلت المصادقة بالبصمة، جرّب تاني أو استخدم الرمز السري');
+  }
+}
+
+// ====== نظام موحّد لربط زر الرجوع بإغلاق النوافذ المنبثقة بدل الخروج من الموقع ======
+let modalStackCount = 0;
+let closingViaPopstate = false;
+
+const trackedOverlayIds = [
+  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay',
+  'wishlistModalOverlay','quickViewOverlay','faqModalOverlay','groupChatOverlay',
+  'moreMenuOverlay','overlay','videoModal','onboardingOverlay'
+];
+
+function pushModalHistory(){
+  modalStackCount++;
+  history.pushState({modalDepth: modalStackCount}, '');
+}
+
+function notifyModalClosed(){
+  if(modalStackCount > 0 && !closingViaPopstate){
+    modalStackCount--;
+    history.back();
+  }
+}
+
+window.addEventListener('popstate', function(){
+  if(modalStackCount > 0){
+    closingViaPopstate = true;
+    modalStackCount--;
+    closeTopmostTrackedModal();
+    closingViaPopstate = false;
+  }
+});
+
+function closeTopmostTrackedModal(){
+  const map = {
+    authOverlay: closeAuthModal, markInfoOverlay: closeMarkInfo, termsInfoOverlay: closeTermsInfo,
+    currencyModalOverlay: closeCurrencyModal, wishlistModalOverlay: closeWishlistModal,
+    quickViewOverlay: closeQuickView, faqModalOverlay: closeFaqModal, groupChatOverlay: closeGroupChat,
+    moreMenuOverlay: closeMoreMenu, overlay: closeCart, videoModal: closeVideo, onboardingOverlay: closeOnboarding
+  };
+  for(const id of trackedOverlayIds){
+    const el = document.getElementById(id);
+    if(el && el.classList.contains('show')){
+      map[id]();
+      return;
+    }
+  }
+}
+
+async function syncCustomerCounter(){
+  try{
+    const realCount = customers.length; // العدد الحقيقي المحمّل بالفعل في لوحة الإدارة
+    await db.collection('settings').doc('counters').set({ totalCustomers: realCount }, { merge: true });
+    showToast(`تمت المزامنة! العدد الصحيح الآن: ${realCount}`);
+  }catch(e){
+    showToast('حدث خطأ أثناء المزامنة');
   }
 }
 
@@ -3856,10 +4045,12 @@ function togglePasswordVisibility(inputId, btn){
 
 function openAuthModal(){
   document.getElementById('authOverlay').classList.add('show');
+  pushModalHistory();
 }
 function closeAuthModal(){
   document.getElementById('authOverlay').classList.remove('show');
   document.getElementById('authError').classList.remove('show');
+  notifyModalClosed();
 }
 async function handleForgotPassword(){
   const email = document.getElementById('authEmail').value.trim();
@@ -3891,6 +4082,8 @@ function switchAuthTab(mode){
   document.getElementById('authSubmitBtn').textContent = translations[mode==='login' ? 'login_btn2' : 'create_account_btn'][currentLang];
   document.getElementById('authName').style.display = mode==='register' ? 'block' : 'none';
   document.getElementById('phoneWrap').style.display = mode==='register' ? 'flex' : 'none';
+  document.getElementById('authResidence').style.display = mode==='register' ? 'block' : 'none';
+  document.getElementById('destinationSoonHint').style.display = mode==='register' ? 'block' : 'none';
   document.getElementById('authDestination').style.display = mode==='register' ? 'block' : 'none';
   document.getElementById('customCodeHint').style.display = mode==='register' ? 'block' : 'none';
   document.getElementById('termsAgreeWrap').style.display = mode==='register' ? 'flex' : 'none';
@@ -3900,16 +4093,20 @@ function switchAuthTab(mode){
 
 function openTermsInfo(){
   document.getElementById('termsInfoOverlay').classList.add('show');
+  pushModalHistory();
 }
 function closeTermsInfo(){
   document.getElementById('termsInfoOverlay').classList.remove('show');
+  notifyModalClosed();
 }
 
 function openCurrencyModal(){
   document.getElementById('currencyModalOverlay').classList.add('show');
+  pushModalHistory();
 }
 function closeCurrencyModal(){
   document.getElementById('currencyModalOverlay').classList.remove('show');
+  notifyModalClosed();
 }
 async function submitAuth(){
   const email = document.getElementById('authEmail').value.trim();
@@ -3917,6 +4114,7 @@ async function submitAuth(){
   const name = document.getElementById('authName').value.trim();
   const phoneCode = document.getElementById('authPhoneCode').value;
   const phoneNumber = document.getElementById('authPhone').value.trim().replace(/[^0-9]/g,'');
+  const residenceCountry = document.getElementById('authResidence').value;
   const destCode = document.getElementById('authDestination').value;
   const errBox = document.getElementById('authError');
   errBox.classList.remove('show');
@@ -3932,6 +4130,11 @@ async function submitAuth(){
   }
   if(authMode === 'register' && !phoneNumber){
     errBox.textContent = t('enter_phone_number');
+    errBox.classList.add('show');
+    return;
+  }
+  if(authMode === 'register' && !residenceCountry){
+    errBox.textContent = t('select_residence_first');
     errBox.classList.add('show');
     return;
   }
@@ -3966,6 +4169,7 @@ async function submitAuth(){
         email: email,
         name: name,
         phone: phoneCode + phoneNumber,
+        residenceCountry: residenceCountry,
         destination: destName(destCode),
         shippingMark: shippingMark,
         emailVerified: false,
@@ -4497,6 +4701,7 @@ function openFaqModal(index){
   void card.offsetWidth;
   card.style.animation = '';
   overlay.classList.add('show');
+  pushModalHistory();
 }
 
 function renderFaqModalContent(){
@@ -4521,6 +4726,7 @@ function navigateFaq(delta){
 
 function closeFaqModal(){
   document.getElementById('faqModalOverlay').classList.remove('show');
+  notifyModalClosed();
 }
 
 function renderQaList(){
@@ -4601,10 +4807,37 @@ function showTab(tab){
 
 function openMoreMenu(){
   document.getElementById('moreMenuOverlay').classList.add('show');
+  pushModalHistory();
 }
 function closeMoreMenu(){
   document.getElementById('moreMenuOverlay').classList.remove('show');
+  notifyModalClosed();
 }
+
+async function toggleFullscreen(){
+  try{
+    if(!document.fullscreenElement){
+      await document.documentElement.requestFullscreen();
+    } else {
+      await document.exitFullscreen();
+    }
+  }catch(e){
+    showToast('تعذّر تفعيل وضع ملء الشاشة على هذا الجهاز');
+  }
+}
+
+document.addEventListener('fullscreenchange', () => {
+  const icon = document.getElementById('fullscreenIcon');
+  const label = document.getElementById('fullscreenLabel');
+  if(!icon) return;
+  if(document.fullscreenElement){
+    icon.textContent = '⛶';
+    label.textContent = 'الخروج من ملء الشاشة';
+  } else {
+    icon.textContent = '⛶';
+    label.textContent = 'وضع ملء الشاشة';
+  }
+});
 
 function updateNotifDot(){
   const dot = document.getElementById('bnNotifDot');
@@ -4638,6 +4871,54 @@ loadRatings();
 loadActivityFeed();
 addImportRow();
 loadTabsSettings().then(applyTabsVisibility);
+fetchLiveRates();
+
+// ====== اقتراح إضافة الموقع للشاشة الرئيسية (PWA) ======
+let deferredInstallPrompt = null;
+const INSTALL_DISMISS_KEY = 'installBannerDismissed';
+
+// تسجيل Service Worker بسيط (شرط أساسي لدعم متصفحات أندرويد لاقتراح التثبيت)
+if('serviceWorker' in navigator){
+  try{
+    const swCode = `self.addEventListener('fetch', e => {});`;
+    const swBlob = new Blob([swCode], {type:'application/javascript'});
+    const swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
+  }catch(e){}
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  if(localStorage.getItem(INSTALL_DISMISS_KEY) === 'true') return;
+  document.getElementById('installBannerBtn').style.display = 'inline-block';
+  setTimeout(()=> document.getElementById('installBanner').classList.add('show'), 2000);
+});
+
+function isIOS(){
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+function isStandalone(){
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+if(isIOS() && !isStandalone() && localStorage.getItem(INSTALL_DISMISS_KEY) !== 'true'){
+  document.getElementById('installBannerText').textContent = t('install_ios_text');
+  setTimeout(()=> document.getElementById('installBanner').classList.add('show'), 2000);
+}
+
+async function triggerInstall(){
+  if(!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  dismissInstallBanner();
+}
+
+function dismissInstallBanner(){
+  document.getElementById('installBanner').classList.remove('show');
+  localStorage.setItem(INSTALL_DISMISS_KEY, 'true');
+}
 renderFaqList();
 renderFlashSalePage();
 loadTotalCustomersCount();

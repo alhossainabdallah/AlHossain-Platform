@@ -158,6 +158,23 @@
   }
   .hero p{ max-width:520px; margin:0 auto; color:#5a6668; font-size:15.5px; line-height:1.85; }
   .hero-cta{ margin-top:28px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+
+  .how-it-works{ margin-top:50px; padding-top:30px; border-top:2px dashed var(--line); }
+  .hiw-steps{ display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; }
+  .hiw-step{
+    background:var(--white); border:1px solid var(--line); border-radius:16px;
+    padding:18px 12px; text-align:center; position:relative;
+    box-shadow:0 4px 14px rgba(20,48,74,0.06);
+  }
+  .hiw-num{
+    position:absolute; top:-10px; right:12px; width:26px; height:26px; border-radius:50%;
+    background:var(--gold); color:var(--ink-dark); font-weight:900; font-size:13px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Aref Ruqaa';
+  }
+  .hiw-icon{ font-size:28px; margin-bottom:8px; }
+  .hiw-title{ font-weight:900; font-size:14.5px; margin-bottom:4px; color:var(--ink-dark); }
+  .hiw-desc{ font-size:12px; color:#666; line-height:1.6; }
   .btn{
     display:inline-block; padding:12px 22px; border-radius:10px;
     font-weight:700; text-decoration:none; cursor:pointer; border:none; font-family:'Tajawal'; font-size:15px;
@@ -207,6 +224,11 @@
     cursor:pointer; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,.2);
   }
   .moq-badge{ font-size:11px; color:var(--rust); font-weight:700; }
+  .term-help-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:15px; height:15px; border-radius:50%; background:var(--rust); color:#fff;
+    font-size:10px; font-weight:900; cursor:pointer; vertical-align:middle;
+  }
   .wishlist-cta{
     display:flex; align-items:center; gap:12px; margin-top:20px;
     background:var(--paper-soft); border:1px dashed var(--line); border-radius:14px;
@@ -861,6 +883,17 @@
   .install-banner-close{
     background:none; border:none; color:var(--paper); font-size:15px; cursor:pointer; opacity:.7;
   }
+
+  .announcement-bar{
+    background:linear-gradient(90deg, var(--gold-deco), var(--rust));
+    color:#fff; padding:10px 16px; display:flex; align-items:center; justify-content:space-between;
+    gap:10px; font-size:13px; font-weight:700; text-align:center;
+  }
+  .announcement-bar span{ flex:1; }
+  .announcement-bar button{
+    background:rgba(255,255,255,0.2); border:none; color:#fff; border-radius:50%;
+    width:22px; height:22px; flex-shrink:0; cursor:pointer; font-size:12px;
+  }
 </style>
 </head>
 <body>
@@ -910,6 +943,10 @@
   </div>
 </header>
 <div class="pattern-divider"></div>
+<div class="announcement-bar" id="announcementBar" style="display:none;">
+  <span id="announcementText"></span>
+  <button onclick="dismissAnnouncement()">✕</button>
+</div>
 
 <main>
 
@@ -922,6 +959,36 @@
         <button class="btn btn-gold" data-i18n="hero_browse" onclick="showTab('catalog')">تصفح المنتجات</button>
         <a class="btn btn-primary" data-i18n="hero_whatsapp" href="https://wa.link/noa4ss" target="_blank" rel="noopener">تواصل معنا على واتساب</a>
         <button class="btn btn-outline" data-i18n="hero_track" onclick="showTab('track')">تتبع طلبي</button>
+      </div>
+    </div>
+
+    <div class="how-it-works">
+      <h2 style="text-align:center;margin-bottom:22px;font-size:20px;">✨ إزاي بنشتغل؟</h2>
+      <div class="hiw-steps">
+        <div class="hiw-step">
+          <div class="hiw-num">١</div>
+          <div class="hiw-icon">🔍</div>
+          <div class="hiw-title">تصفح</div>
+          <div class="hiw-desc">شوف منتجاتنا أو ابعتلنا رابط من تاوباو أو 1688</div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num">٢</div>
+          <div class="hiw-icon">📩</div>
+          <div class="hiw-title">اطلب</div>
+          <div class="hiw-desc">نجهزلك عرض سعر شامل الشراء والشحن</div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num">٣</div>
+          <div class="hiw-icon">🚢</div>
+          <div class="hiw-title">نشحن</div>
+          <div class="hiw-desc">نتابع طلبك من التأكيد لحد ما يوصل المستودع</div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num">٤</div>
+          <div class="hiw-icon">📦</div>
+          <div class="hiw-title">تستلم</div>
+          <div class="hiw-desc">تتابع شحنتك أول بأول لحد ما توصلك</div>
+        </div>
       </div>
     </div>
   </section>
@@ -992,6 +1059,15 @@
       <div class="tracking-anim-text" data-i18n="tracking_anim_text">جارٍ البحث عن شحناتك...</div>
     </div>
   </section>
+
+  <div class="info-modal-overlay" id="termHelpOverlay" onclick="if(event.target===this) closeTermHelp()">
+    <div class="info-modal" style="max-width:340px;text-align:center;">
+      <button class="auth-close" onclick="closeTermHelp()" style="position:absolute;left:16px;top:14px;">✕</button>
+      <h3 id="termHelpTitle" style="margin-bottom:10px;"></h3>
+      <p id="termHelpText" style="font-size:14px;"></p>
+      <button class="link-btn" onclick="closeTermHelp(); showTab('glossary');">اقرأ الشرح الكامل في دليل المصطلحات ←</button>
+    </div>
+  </div>
 
   <div class="info-modal-overlay" id="markInfoOverlay" onclick="if(event.target===this) closeMarkInfo()">
     <div class="info-modal">
@@ -1533,6 +1609,17 @@
       <div class="admin-section">
         <h3>📝 قائمة الأمنيات (منتجات مطلوبة)</h3>
         <div id="adminWishlistList"></div>
+      </div>
+      <div class="admin-section">
+        <h3>📣 شريط الإعلان العام</h3>
+        <div class="admin-row">
+          <select id="announcementActive" style="padding:8px 16px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
+            <option value="inactive">⏸ غير مفعّل</option>
+            <option value="active">▶ مفعّل</option>
+          </select>
+        </div>
+        <textarea id="announcementTextInput" placeholder="نص الإعلان (مثال: مغلقين بمناسبة العيد، هنرد عليكم بعد العيد إن شاء الله)" style="width:100%;min-height:60px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;"></textarea>
+        <button class="btn btn-gold" onclick="saveAnnouncement()">حفظ الإعلان</button>
       </div>
       <div class="admin-section">
         <h3>📚 إدارة كتالوجات المنتجات</h3>
@@ -2896,7 +2983,7 @@ function renderCatalog(){
       <div class="body">
         <div class="name">${p.name}</div>
         <div class="price">$${p.price}</div>
-        ${p.moq ? `<div class="moq-badge">📦 MOQ: ${p.moq}</div>` : ''}
+        ${p.moq ? `<div class="moq-badge">📦 MOQ: ${p.moq} <span class="term-help-btn" onclick="event.stopPropagation(); openTermHelp('MOQ')">؟</span></div>` : ''}
         <button class="add" onclick="addToCart('${p.id}')">${t('add_to_cart')}</button>
       </div>
     </div>`).join('');
@@ -2921,7 +3008,7 @@ function openProductQuickView(id){
     </div>
     <h3 style="margin:14px 0 6px;">${p.name}</h3>
     <div class="price" style="font-size:20px;">$${p.price}</div>
-    ${p.moq ? `<div class="moq-badge" style="margin:8px 0;">📦 MOQ: ${p.moq}</div>` : ''}
+    ${p.moq ? `<div class="moq-badge" style="margin:8px 0;">📦 MOQ: ${p.moq} <span class="term-help-btn" onclick="openTermHelp('MOQ')">؟</span></div>` : ''}
     <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
       <button class="btn btn-primary" style="flex:1;" onclick="addToCart('${p.id}');closeQuickView();">${t('add_to_cart')}</button>
       <button class="btn btn-outline" onclick="toggleFavorite('${p.id}');openProductQuickView('${p.id}');">${isFav ? '❤️' : '🤍'}</button>
@@ -2972,6 +3059,25 @@ function closeVideo(){
 function openMarkInfo(){
   document.getElementById('markInfoOverlay').classList.add('show');
   pushModalHistory();
+}
+
+const termHelpContent = {
+  MOQ: { ar:{title:'MOQ — الحد الأدنى للطلب', text:'أقل كمية يقبل المصنع بيعها في الطلب الواحد. لو محتاج كمية أقل، ممكن نتفاوض مع المصنع نيابة عنك.'},
+         en:{title:'MOQ — Minimum Order Quantity', text:'The smallest quantity the factory accepts per order. If you need less, we can negotiate with the factory on your behalf.'} },
+  CBM: { ar:{title:'CBM — المتر المكعب', text:'وحدة قياس حجم الشحنة، وهي الأساس اللي بيتحسب عليه سعر الشحن البحري. كل ما الحجم زاد، زادت التكلفة.'},
+         en:{title:'CBM — Cubic Meter', text:'The unit used to measure shipment volume, which is the basis for calculating sea freight cost. Larger volume means higher cost.'} }
+};
+function openTermHelp(term){
+  const c = termHelpContent[term];
+  if(!c) return;
+  document.getElementById('termHelpTitle').textContent = c[currentLang].title;
+  document.getElementById('termHelpText').textContent = c[currentLang].text;
+  document.getElementById('termHelpOverlay').classList.add('show');
+  pushModalHistory();
+}
+function closeTermHelp(){
+  document.getElementById('termHelpOverlay').classList.remove('show');
+  notifyModalClosed();
 }
 function closeMarkInfo(){
   document.getElementById('markInfoOverlay').classList.remove('show');
@@ -3025,8 +3131,21 @@ function changeQty(id, delta){
   renderCart();
 }
 
+const residenceToDestCode = {
+  'السودان':'SD', 'جنوب السودان':'SS', 'الإمارات':'UAE', 'السعودية':'KSA'
+};
+function suggestDestination(selectId){
+  const sel = document.getElementById(selectId);
+  if(!sel || !currentCustomerData || !currentCustomerData.residenceCountry) return;
+  const suggested = residenceToDestCode[currentCustomerData.residenceCountry];
+  if(suggested && [...sel.options].some(o=>o.value===suggested)){
+    sel.value = suggested;
+  }
+}
+
 function openCart(){
   renderCart();
+  suggestDestination('destinationSelect');
   document.getElementById('drawer').classList.add('show');
   document.getElementById('overlay').classList.add('show');
   pushModalHistory();
@@ -3637,6 +3756,30 @@ async function addCatalog(){
   }
 }
 
+// ====== شريط الإعلان العام ======
+async function loadAnnouncement(){
+  try{
+    const doc = await db.collection('settings').doc('announcement').get();
+    const bar = document.getElementById('announcementBar');
+    if(!doc.exists || !doc.data().active || !doc.data().text){ bar.style.display = 'none'; return; }
+    if(sessionStorage.getItem('announcementDismissed') === doc.data().text) return;
+    document.getElementById('announcementText').textContent = doc.data().text;
+    bar.style.display = 'flex';
+  }catch(e){}
+}
+function dismissAnnouncement(){
+  const text = document.getElementById('announcementText').textContent;
+  sessionStorage.setItem('announcementDismissed', text);
+  document.getElementById('announcementBar').style.display = 'none';
+}
+async function saveAnnouncement(){
+  const active = document.getElementById('announcementActive').value === 'active';
+  const text = document.getElementById('announcementTextInput').value.trim();
+  await db.collection('settings').doc('announcement').set({ active, text });
+  showToast('تم حفظ إعدادات الإعلان');
+  loadAnnouncement();
+}
+
 async function loadCatalogsPublic(){
   const wrap = document.getElementById('catalogsList');
   if(!wrap) return;
@@ -3757,6 +3900,12 @@ function enterAdminPanel(){
   renderFpManageSection();
   renderShippingRatesForm();
   loadCatalogsAdmin();
+  db.collection('settings').doc('announcement').get().then(doc=>{
+    if(doc.exists){
+      document.getElementById('announcementActive').value = doc.data().active ? 'active' : 'inactive';
+      document.getElementById('announcementTextInput').value = doc.data().text || '';
+    }
+  });
   if(agentLocationData.currentCity){
     document.getElementById('agentCityInput').value = agentLocationData.currentCity;
   }
@@ -3843,7 +3992,7 @@ let modalStackCount = 0;
 let closingViaPopstate = false;
 
 const trackedOverlayIds = [
-  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay',
+  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay','termHelpOverlay',
   'wishlistModalOverlay','quickViewOverlay','faqModalOverlay','groupChatOverlay',
   'moreMenuOverlay','overlay','videoModal','onboardingOverlay'
 ];
@@ -4956,6 +5105,7 @@ function showTab(tab){
   }
   if(tab === 'about'){ startChinaClock(); loadTotalCustomersCount(); } else { stopChinaClock(); }
   if(tab === 'admin'){ renderAdminLockScreen(); }
+  if(tab === 'importorder'){ suggestDestination('importDestination'); }
   if(firebase.analytics){
     try{ firebase.analytics().logEvent('page_view', { page_title: tab }); }catch(e){}
   }
@@ -5078,6 +5228,7 @@ function dismissInstallBanner(){
 renderFaqList();
 renderFlashSalePage();
 loadCatalogsPublic();
+loadAnnouncement();
 loadTotalCustomersCount();
 
 // مدخل سري للإدارة عبر رابط خاص، بدل رابط ظاهر في الفوتر

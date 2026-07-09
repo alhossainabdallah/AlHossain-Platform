@@ -282,20 +282,45 @@
   .onboarding-dots span.active{ background:var(--gold); width:18px; border-radius:4px; }
 
   .quick-view-overlay{
-    position:fixed; inset:0; z-index:130; background:rgba(10,27,43,.72);
+    position:fixed; inset:0; z-index:130;
+    background:linear-gradient(135deg, rgba(20,48,74,.75), rgba(180,85,45,.35), rgba(224,165,24,.35));
+    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
     display:none; align-items:center; justify-content:center; padding:20px;
   }
   .quick-view-overlay.show{ display:flex; }
   .quick-view-modal{
-    background:var(--white); border-radius:18px; padding:20px; max-width:400px; width:100%;
-    max-height:85vh; overflow-y:auto; position:relative;
-    animation:envelopeOpen .35s cubic-bezier(.34,1.4,.64,1) forwards;
+    background:var(--white);
+    border-radius:22px; padding:22px 20px 20px;
+    max-width:400px; width:100%; max-height:88vh; overflow-y:auto;
+    position:relative; text-align:center;
+    box-shadow:0 10px 40px rgba(10,27,43,.35);
+    transform:scale(0.6) rotateX(-25deg); opacity:0; transform-origin:top center;
+    animation:envelopeOpen .45s cubic-bezier(.34,1.4,.64,1) forwards;
   }
   .quick-view-thumb{
     height:220px; border-radius:14px; overflow:hidden;
     background:linear-gradient(135deg, var(--ink) 0%, var(--rust) 100%);
   }
+  .quick-view-thumb.gold-framed{
+    position:relative; border:4px solid transparent; padding:0;
+    background:
+      linear-gradient(var(--white), var(--white)) padding-box,
+      linear-gradient(120deg, var(--gold-deco) 20%, var(--gold-light) 45%, #fff8dc 50%, var(--gold-light) 55%, var(--gold-deco) 80%) border-box;
+    background-size: 100% 100%, 250% 100%;
+    animation: goldShimmer 2.5s linear infinite;
+    box-shadow:0 0 20px rgba(232,168,0,0.5);
+  }
+  @keyframes goldShimmer{
+    0%{ background-position: 0 0, 200% 0; }
+    100%{ background-position: 0 0, -50% 0; }
+  }
   .quick-view-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .quick-view-nav{ display:flex; align-items:center; justify-content:space-between; margin-top:16px; }
+  .quick-view-desc{
+    font-size:13.5px; color:var(--ink-dark); line-height:1.8; text-align:right;
+    background:var(--paper-soft);
+    border:1px solid var(--line); border-radius:12px; padding:12px; margin-top:10px;
+  }
   .empty{
     text-align:center; padding:40px 20px; color:#666; background:var(--white);
     border-radius:14px; border:1px dashed var(--line);
@@ -1054,7 +1079,7 @@
   </div>
 
   <div class="quick-view-overlay" id="quickViewOverlay" onclick="if(event.target===this) closeQuickView()">
-    <div class="quick-view-modal">
+    <div class="quick-view-modal" id="quickViewModal">
       <button class="auth-close" onclick="closeQuickView()" style="position:absolute;left:14px;top:12px;z-index:2;">✕</button>
       <div id="quickViewBody"></div>
     </div>
@@ -1591,6 +1616,9 @@
         <div class="admin-row">
           <input id="newProdMoq" placeholder="الحد الأدنى للطلب MOQ (اختياري، مثال: 50 قطعة)">
         </div>
+        <div class="admin-row">
+          <textarea id="newProdDesc" placeholder="وصف المنتج (اختياري) — تفاصيل، مواصفات، ملاحظات..." style="width:100%;min-height:70px;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';"></textarea>
+        </div>
         <div class="admin-row" style="align-items:flex-start;">
           <div style="flex:1 1 130px; min-width:0;">
             <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">صورة المنتج</label>
@@ -1740,6 +1768,12 @@
         </div>
         <div class="admin-row">
           <input id="newGbTarget" type="number" placeholder="الحد الأدنى المطلوب (MOQ) — مثال: 500">
+        </div>
+        <div class="admin-row">
+          <textarea id="newGbDesc" placeholder="وصف المنتج (اختياري) — تفاصيل، مواصفات..." style="width:100%;min-height:60px;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';"></textarea>
+        </div>
+        <div class="admin-row">
+          <input id="newGbWhatsappLink" placeholder="رابط جروب واتساب الحملة (اختياري) — يظهر بس للمشتركين">
         </div>
         <div style="margin-bottom:10px;">
           <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">صورة المنتج (اختياري)</label>
@@ -3171,20 +3205,18 @@ async function submitFactoryVisit(){
 function renderProductCard(p){
   const favs = (currentCustomerData && currentCustomerData.favorites) || [];
   return `
-    <div class="product" data-pid="${p.id}"
-      ontouchstart="startLongPress('${p.id}')" ontouchend="cancelLongPress()" ontouchmove="cancelLongPress()"
-      onmousedown="startLongPress('${p.id}')" onmouseup="cancelLongPress()" onmouseleave="cancelLongPress()">
+    <div class="product" data-pid="${p.id}" onclick="openProductQuickView('${p.id}')" style="cursor:pointer;">
       <div class="thumb">
         ${p.image ? `<img src="${p.image}" alt="${p.name}">` : p.name.charAt(0)}
-        ${p.video ? `<span class="thumb-video-badge" onclick="playVideo('${p.video}')">▶ ${t('video_label')}</span>` : ''}
-        <button class="thumb-quick-btn" onclick="quickOrder('${p.id}')" title="${t('order_now_whatsapp')}">📩</button>
-        <button class="thumb-fav-btn ${favs.includes(p.id) ? 'active' : ''}" onclick="toggleFavorite('${p.id}')" id="favBtn_${p.id}">${favs.includes(p.id) ? '❤️' : '🤍'}</button>
+        ${p.video ? `<span class="thumb-video-badge" onclick="event.stopPropagation(); playVideo('${p.video}')">▶ ${t('video_label')}</span>` : ''}
+        <button class="thumb-quick-btn" onclick="event.stopPropagation(); quickOrder('${p.id}')" title="${t('order_now_whatsapp')}">📩</button>
+        <button class="thumb-fav-btn ${favs.includes(p.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${p.id}')" id="favBtn_${p.id}">${favs.includes(p.id) ? '❤️' : '🤍'}</button>
       </div>
       <div class="body">
         <div class="name">${p.name}</div>
         <div class="price">$${p.price}</div>
         ${p.moq ? `<div class="moq-badge">📦 MOQ: ${p.moq} <span class="term-help-btn" onclick="event.stopPropagation(); openTermHelp('MOQ')">؟</span></div>` : ''}
-        <button class="add" onclick="addToCart('${p.id}')">${t('add_to_cart')}</button>
+        <button class="add" onclick="event.stopPropagation(); addToCart('${p.id}')">${t('add_to_cart')}</button>
       </div>
     </div>`;
 }
@@ -3205,14 +3237,6 @@ function renderCatalog(){
     grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
   }
   renderRecentlyViewed();
-}
-
-let longPressTimer = null;
-function startLongPress(id){
-  longPressTimer = setTimeout(()=>{ openProductQuickView(id); longPressTimer = null; }, 480);
-}
-function cancelLongPress(){
-  if(longPressTimer){ clearTimeout(longPressTimer); longPressTimer = null; }
 }
 
 const RECENTLY_VIEWED_KEY = 'recentlyViewedProducts';
@@ -3239,12 +3263,70 @@ function renderRecentlyViewed(){
   grid.innerHTML = viewedProducts.map(p => renderProductCard(p)).join('');
 }
 
+let currentQuickViewIndex = -1;
+function getQuickViewProductList(){
+  const searchInput = document.getElementById('productSearchInput');
+  const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
+  return term ? products.filter(p => p.name.toLowerCase().includes(term)) : products;
+}
+
+function openFlashSaleQuickView(){
+  if(!currentFlashSale) return;
+  const s = currentFlashSale;
+  document.getElementById('quickViewBody').innerHTML = `
+    <div class="quick-view-thumb gold-framed" id="qvMainThumb">
+      ${s.image ? `<img src="${s.image}" alt="${s.productName}">` : `<div style="font-family:'Aref Ruqaa';font-size:48px;color:var(--paper);display:flex;align-items:center;justify-content:center;height:100%;">${s.productName.charAt(0)}</div>`}
+    </div>
+    <h3 style="margin:14px 0 6px;">🔥 ${s.productName}</h3>
+    <div style="display:flex;gap:10px;justify-content:center;align-items:center;">
+      <span style="text-decoration:line-through;color:#999;">$${s.originalPrice}</span>
+      <span class="price" style="font-size:22px;">$${s.salePrice}</span>
+    </div>
+    ${s.description ? `<div class="quick-view-desc">${s.description}</div>` : ''}
+    <button class="btn btn-gold" style="width:100%;margin-top:14px;" onclick="closeQuickView(); quickOrderFlashSale();">اطلب الآن عبر واتساب 📩</button>
+  `;
+  const overlay = document.getElementById('quickViewOverlay');
+  const modal = document.getElementById('quickViewModal');
+  modal.style.animation = 'none';
+  void modal.offsetWidth;
+  modal.style.animation = '';
+  overlay.classList.add('show');
+  pushModalHistory();
+}
+
 function openProductQuickView(id){
-  const p = products.find(x=>x.id===id);
+  const list = getQuickViewProductList();
+  const idx = list.findIndex(x=>x.id===id);
+  if(idx === -1) return;
+  currentQuickViewIndex = idx;
+  renderQuickViewContent(list);
+  const overlay = document.getElementById('quickViewOverlay');
+  const modal = document.getElementById('quickViewModal');
+  modal.style.animation = 'none';
+  void modal.offsetWidth;
+  modal.style.animation = '';
+  overlay.classList.add('show');
+  pushModalHistory();
+}
+
+function navigateQuickView(delta){
+  const list = getQuickViewProductList();
+  const next = currentQuickViewIndex + delta;
+  if(next < 0 || next >= list.length) return;
+  currentQuickViewIndex = next;
+  renderQuickViewContent(list);
+  const modal = document.getElementById('quickViewModal');
+  modal.style.animation = 'none';
+  void modal.offsetWidth;
+  modal.style.animation = '';
+}
+
+function renderQuickViewContent(list){
+  const p = list[currentQuickViewIndex];
   if(!p) return;
-  trackRecentlyViewed(id);
+  trackRecentlyViewed(p.id);
   const favs = (currentCustomerData && currentCustomerData.favorites) || [];
-  const isFav = favs.includes(id);
+  const isFav = favs.includes(p.id);
   const gallery = (p.images && p.images.length > 0) ? p.images : (p.image ? [p.image] : []);
   document.getElementById('quickViewBody').innerHTML = `
     <div class="quick-view-thumb" id="qvMainThumb">
@@ -3256,14 +3338,18 @@ function openProductQuickView(id){
     <h3 style="margin:14px 0 6px;">${p.name}</h3>
     <div class="price" style="font-size:20px;">$${p.price}</div>
     ${p.moq ? `<div class="moq-badge" style="margin:8px 0;">📦 MOQ: ${p.moq} <span class="term-help-btn" onclick="openTermHelp('MOQ')">؟</span></div>` : ''}
+    ${p.description ? `<div class="quick-view-desc">${p.description}</div>` : ''}
     <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
       <button class="btn btn-primary" style="flex:1;" onclick="addToCart('${p.id}');closeQuickView();">${t('add_to_cart')}</button>
-      <button class="btn btn-outline" onclick="toggleFavorite('${p.id}');openProductQuickView('${p.id}');">${isFav ? '❤️' : '🤍'}</button>
+      <button class="btn btn-outline" onclick="toggleFavorite('${p.id}');renderQuickViewContent(getQuickViewProductList());">${isFav ? '❤️' : '🤍'}</button>
       ${p.video ? `<button class="btn btn-outline" onclick="playVideo('${p.video}')">▶ ${t('video_label')}</button>` : ''}
     </div>
+    <div class="quick-view-nav">
+      <button class="faq-nav-btn" onclick="navigateQuickView(-1)" ${currentQuickViewIndex===0?'disabled':''} style="color:var(--ink-dark);background:var(--paper-soft);border-color:var(--line);">◀ السابق</button>
+      <span class="faq-modal-counter">${currentQuickViewIndex+1} / ${list.length}</span>
+      <button class="faq-nav-btn" onclick="navigateQuickView(1)" ${currentQuickViewIndex===list.length-1?'disabled':''} style="color:var(--ink-dark);background:var(--paper-soft);border-color:var(--line);">التالي ▶</button>
+    </div>
   `;
-  document.getElementById('quickViewOverlay').classList.add('show');
-  pushModalHistory();
 }
 function closeQuickView(){
   document.getElementById('quickViewOverlay').classList.remove('show');
@@ -3833,6 +3919,7 @@ async function subscribeFlashSaleNotify(){
 }
 
 let flashTimerInterval = null;
+let currentFlashSale = null;
 
 async function renderFlashSalePage(){
   const container = document.getElementById('flashSaleContainer');
@@ -3855,11 +3942,12 @@ async function renderFlashSalePage(){
   }
   const timeLeft = getTimeRemaining(sale.endDate);
   const expired = !timeLeft;
+  currentFlashSale = sale;
   container.innerHTML = `
     <div style="background:linear-gradient(135deg, var(--ink), var(--rust)); border-radius:20px; padding:28px 20px; color:var(--paper); text-align:center;">
       <div style="font-size:13px;color:var(--gold);font-weight:700;">🔥 العرض الناري</div>
       <h2 style="color:var(--paper);font-size:24px;margin:8px 0;">${sale.productName}</h2>
-      ${sale.image ? `<img src="${sale.image}" style="max-width:180px;border-radius:12px;margin:10px auto;display:block;">` : ''}
+      ${sale.image ? `<img src="${sale.image}" onclick="openFlashSaleQuickView()" style="max-width:180px;border-radius:12px;margin:10px auto;display:block;cursor:pointer;border:2px solid rgba(232,168,0,0.5);">` : ''}
       <div style="display:flex;gap:10px;justify-content:center;align-items:center;margin:10px 0;">
         <span style="text-decoration:line-through;color:rgba(255,255,255,0.6);">$${sale.originalPrice}</span>
         <span style="font-size:26px;font-weight:900;color:var(--gold);">$${sale.salePrice}</span>
@@ -4011,13 +4099,15 @@ async function addGroupBuy(){
   const title = document.getElementById('newGbTitle').value.trim();
   const price = parseFloat(document.getElementById('newGbPrice').value);
   const target = parseInt(document.getElementById('newGbTarget').value);
+  const description = document.getElementById('newGbDesc').value.trim();
+  const whatsappLink = document.getElementById('newGbWhatsappLink').value.trim();
   const imageFiles = document.getElementById('newGbImage').files;
   if(!title || !target){ showToast('يرجى إدخال اسم المنتج والحد الأدنى المطلوب على الأقل'); return; }
 
   const btn = document.getElementById('addGbBtn');
   btn.disabled = true;
   try{
-    const data = { title, price: price || null, targetQty: target, currentQty: 0, status: 'open', createdAt: firebase.firestore.FieldValue.serverTimestamp() };
+    const data = { title, price: price || null, targetQty: target, currentQty: 0, description: description || null, whatsappLink: whatsappLink || null, status: 'open', createdAt: firebase.firestore.FieldValue.serverTimestamp() };
     if(imageFiles && imageFiles.length > 0){
       const urls = [];
       for(let i=0; i<imageFiles.length; i++){
@@ -4033,6 +4123,8 @@ async function addGroupBuy(){
     document.getElementById('newGbTitle').value = '';
     document.getElementById('newGbPrice').value = '';
     document.getElementById('newGbTarget').value = '';
+    document.getElementById('newGbDesc').value = '';
+    document.getElementById('newGbWhatsappLink').value = '';
     document.getElementById('newGbImage').value = '';
     showToast('تم إنشاء الحملة بنجاح');
     loadGroupBuysAdmin();
@@ -4043,6 +4135,9 @@ async function addGroupBuy(){
     btn.disabled = false;
   }
 }
+
+let currentGroupBuysList = [];
+let currentGbQuickViewIndex = -1;
 
 async function loadGroupBuysPublic(){
   const wrap = document.getElementById('groupBuysList');
@@ -4056,13 +4151,12 @@ async function loadGroupBuysPublic(){
     snap.docs.forEach((d,i) => { if(results[i].exists) myParticipations[d.id] = results[i].data(); });
   }
 
-  wrap.innerHTML = snap.docs.map(d => {
-    const g = d.data();
+  currentGroupBuysList = snap.docs.map(d => ({ id: d.id, myQty: myParticipations[d.id] ? myParticipations[d.id].qty : null, ...d.data() }));
+
+  wrap.innerHTML = currentGroupBuysList.map((g, idx) => {
     const pct = Math.min(100, Math.round((g.currentQty / g.targetQty) * 100));
     const reached = g.currentQty >= g.targetQty;
-    const myQty = myParticipations[d.id] ? myParticipations[d.id].qty : null;
-    const safeTitle = g.title.replace(/'/g, "\\'");
-    return `<div class="gb-card">
+    return `<div class="gb-card" onclick="openGroupBuyQuickView(${idx})" style="cursor:pointer;">
       <div class="gb-card-head">
         <div class="gb-card-thumb">${g.image ? `<img src="${g.image}">` : g.title.charAt(0)}</div>
         <div>
@@ -4070,16 +4164,71 @@ async function loadGroupBuysPublic(){
           ${g.price ? `<div class="gb-card-price">≈ $${g.price} للقطعة</div>` : ''}
         </div>
       </div>
-      ${(g.images && g.images.length > 1) ? `<div class="gb-extra-thumbs">${g.images.map(img => `<img src="${img}" onclick="window.open('${img}','_blank')">`).join('')}</div>` : ''}
       <div class="gb-progress-track"><div class="gb-progress-fill" style="width:${pct}%;"></div></div>
       <div class="gb-progress-label"><span>${g.currentQty} من ${g.targetQty} قطعة</span><span>${pct}%</span></div>
-      ${myQty ? `<div class="gb-my-qty">✅ أنت مشارك بكمية: ${myQty}</div>` : ''}
+      ${g.myQty ? `<div class="gb-my-qty">✅ أنت مشارك بكمية: ${g.myQty}</div>` : ''}
       ${reached
         ? `<div class="gb-reached-badge">🎉 تم الوصول للحد الأدنى! جاري التنسيق مع المصنع</div>`
-        : `<button class="btn btn-gold" style="width:100%;margin-top:8px;" onclick="openGroupBuyJoin('${d.id}','${safeTitle}')">${myQty ? 'تعديل كميتي' : 'انضمام للطلب'}</button>`
+        : `<button class="btn btn-gold" style="width:100%;margin-top:8px;" onclick="event.stopPropagation(); openGroupBuyJoin('${g.id}','${g.title.replace(/'/g, "\\'")}')">${g.myQty ? 'تعديل كميتي' : 'انضمام للطلب'}</button>`
       }
     </div>`;
   }).join('');
+}
+
+function openGroupBuyQuickView(idx){
+  currentGbQuickViewIndex = idx;
+  renderGbQuickViewContent();
+  const overlay = document.getElementById('quickViewOverlay');
+  const modal = document.getElementById('quickViewModal');
+  modal.style.animation = 'none';
+  void modal.offsetWidth;
+  modal.style.animation = '';
+  overlay.classList.add('show');
+  pushModalHistory();
+}
+
+function navigateGbQuickView(delta){
+  const next = currentGbQuickViewIndex + delta;
+  if(next < 0 || next >= currentGroupBuysList.length) return;
+  currentGbQuickViewIndex = next;
+  renderGbQuickViewContent();
+  const modal = document.getElementById('quickViewModal');
+  modal.style.animation = 'none';
+  void modal.offsetWidth;
+  modal.style.animation = '';
+}
+
+function renderGbQuickViewContent(){
+  const g = currentGroupBuysList[currentGbQuickViewIndex];
+  if(!g) return;
+  const gallery = (g.images && g.images.length > 0) ? g.images : (g.image ? [g.image] : []);
+  const pct = Math.min(100, Math.round((g.currentQty / g.targetQty) * 100));
+  const reached = g.currentQty >= g.targetQty;
+  const safeTitle = g.title.replace(/'/g, "\\'");
+  document.getElementById('quickViewBody').innerHTML = `
+    <div class="quick-view-thumb" id="qvMainThumb">
+      ${gallery.length > 0 ? `<img src="${gallery[0]}" alt="${g.title}">` : `<div style="font-family:'Aref Ruqaa';font-size:48px;color:var(--paper);display:flex;align-items:center;justify-content:center;height:100%;">${g.title.charAt(0)}</div>`}
+    </div>
+    ${gallery.length > 1 ? `<div style="display:flex;gap:6px;margin-top:8px;overflow-x:auto;padding-bottom:4px;">
+      ${gallery.map((img,i)=>`<img src="${img}" onclick="document.getElementById('qvMainThumb').innerHTML='<img src=\\\\'${img}\\\\'>'" style="width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid ${i===0?'var(--gold)':'transparent'};flex-shrink:0;">`).join('')}
+    </div>` : ''}
+    <h3 style="margin:14px 0 6px;">🤝 ${g.title}</h3>
+    ${g.price ? `<div class="price" style="font-size:18px;">≈ $${g.price} للقطعة</div>` : ''}
+    ${g.description ? `<div class="quick-view-desc">${g.description}</div>` : ''}
+    <div class="gb-progress-track" style="margin-top:12px;"><div class="gb-progress-fill" style="width:${pct}%;"></div></div>
+    <div class="gb-progress-label"><span>${g.currentQty} من ${g.targetQty} قطعة</span><span>${pct}%</span></div>
+    ${g.myQty ? `<div class="gb-my-qty">✅ أنت مشارك بكمية: ${g.myQty}</div>` : ''}
+    ${(g.myQty && g.whatsappLink) ? `<a class="btn btn-outline" style="width:100%;display:block;margin-top:8px;" href="${g.whatsappLink}" target="_blank" rel="noopener">💬 انضم لجروب واتساب المشاركين</a>` : ''}
+    ${reached
+      ? `<div class="gb-reached-badge">🎉 تم الوصول للحد الأدنى! جاري التنسيق مع المصنع</div>`
+      : `<button class="btn btn-gold" style="width:100%;margin-top:10px;" onclick="closeQuickView(); openGroupBuyJoin('${g.id}','${safeTitle}')">${g.myQty ? 'تعديل كميتي' : 'انضمام للطلب'}</button>`
+    }
+    <div class="quick-view-nav">
+      <button class="faq-nav-btn" onclick="navigateGbQuickView(-1)" ${currentGbQuickViewIndex===0?'disabled':''} style="color:var(--ink-dark);background:var(--paper-soft);border-color:var(--line);">◀ السابق</button>
+      <span class="faq-modal-counter">${currentGbQuickViewIndex+1} / ${currentGroupBuysList.length}</span>
+      <button class="faq-nav-btn" onclick="navigateGbQuickView(1)" ${currentGbQuickViewIndex===currentGroupBuysList.length-1?'disabled':''} style="color:var(--ink-dark);background:var(--paper-soft);border-color:var(--line);">التالي ▶</button>
+    </div>
+  `;
 }
 
 function openGroupBuyJoin(id, title){
@@ -4117,6 +4266,7 @@ async function submitGroupBuyJoin(){
         qty: qty,
         name: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
         email: currentUser.email,
+        phone: (currentCustomerData && currentCustomerData.phone) || '',
         shippingMark: (currentCustomerData && currentCustomerData.shippingMark) || '',
         joinedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
@@ -4155,6 +4305,8 @@ async function loadGroupBuysAdmin(){
   }).join('');
 }
 
+let currentGbParticipantsCache = {};
+
 async function toggleGbParticipants(id){
   const wrap = document.getElementById('gbParticipantsList_'+id);
   const btn = document.getElementById('gbParticipantsBtn_'+id);
@@ -4168,12 +4320,29 @@ async function toggleGbParticipants(id){
   const snap = await db.collection('groupBuys').doc(id).collection('participants').orderBy('joinedAt','asc').get();
   btn.textContent = '👥 إخفاء المشاركين';
   if(snap.empty){ wrap.innerHTML = `<div class="empty">لا يوجد مشاركين بعد</div>`; return; }
-  wrap.innerHTML = snap.docs.map(pd => {
-    const p = pd.data();
-    return `<div class="admin-list-item" style="font-size:13px;">
-      <span><strong>${p.name}</strong> — ${p.shippingMark || 'بدون مارك'} — ${p.email} — الكمية: <strong>${p.qty}</strong></span>
-    </div>`;
-  }).join('');
+  const rows = snap.docs.map(pd => pd.data());
+  currentGbParticipantsCache[id] = rows;
+  wrap.innerHTML = `
+    <button class="tiny-btn gold" style="margin-bottom:8px;" onclick="exportGbParticipants('${id}')">📥 تصدير أرقام المشاركين CSV</button>
+    ${rows.map(p => `<div class="admin-list-item" style="font-size:13px;">
+      <span><strong>${p.name}</strong> — ${p.shippingMark || 'بدون مارك'} — ${p.phone || 'بدون رقم'} — الكمية: <strong>${p.qty}</strong></span>
+    </div>`).join('')}
+  `;
+}
+
+function exportGbParticipants(id){
+  const rows = currentGbParticipantsCache[id];
+  if(!rows || rows.length === 0){ showToast('لا يوجد مشاركين لتصديرهم'); return; }
+  let csv = 'Name,Phone,ShippingMark,Email,Quantity\n';
+  rows.forEach(p=>{ csv += `${p.name||''},${p.phone||''},${p.shippingMark||''},${p.email||''},${p.qty||''}\n`; });
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'مشاركي_الحملة.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('تم تصدير الملف بنجاح');
 }
 
 async function deleteGroupBuy(id){
@@ -4542,7 +4711,8 @@ async function addProduct(){
   const btn = document.getElementById('addProdBtn');
   btn.disabled = true;
 
-  const data = {name, price, moq: moq || null};
+  const description = document.getElementById('newProdDesc').value.trim();
+  const data = {name, price, moq: moq || null, description: description || null};
 
   try{
     if(imageFiles && imageFiles.length > 0){
@@ -4569,6 +4739,8 @@ async function addProduct(){
     products.push({id: ref.id, ...data});
     document.getElementById('newProdName').value='';
     document.getElementById('newProdPrice').value='';
+    document.getElementById('newProdMoq').value='';
+    document.getElementById('newProdDesc').value='';
     document.getElementById('newProdImage').value='';
     document.getElementById('newProdVideo').value='';
     renderAll();

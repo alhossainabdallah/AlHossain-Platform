@@ -1027,6 +1027,11 @@
     <div class="catalog-head">
       <h2 data-i18n="catalog_title">المنتجات</h2>
     </div>
+    <input id="productSearchInput" class="admin-search" placeholder="ابحث عن منتج بالاسم..." oninput="renderCatalog()" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:14px;">
+    <div id="recentlyViewedWrap" style="display:none;margin-bottom:18px;">
+      <div style="font-weight:700;font-size:14px;margin-bottom:8px;">🕓 شفتها مؤخراً</div>
+      <div class="grid" id="recentlyViewedGrid"></div>
+    </div>
     <div class="grid" id="productGrid"></div>
     <div class="wishlist-cta" onclick="openWishlistModal()">
       <span>😕</span>
@@ -1908,9 +1913,20 @@
 </div>
 
 <div class="auth-modal-overlay" id="authOverlay" onclick="if(event.target===this) closeAuthModal()">
-  <div class="auth-modal">
+  <div class="auth-modal" id="authModalMain">
     <h3 id="authTitle" data-i18n="login_title">تسجيل الدخول</h3>
     <p style="text-align:center;color:#777;font-size:13px;" data-i18n="auth_subtitle">سجّل بالبريد الإلكتروني لتتمكن من إتمام طلبك أو إرسال سؤال</p>
+
+    <button type="button" onclick="signInWithGoogle()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:11px;border-radius:8px;border:1px solid var(--line);background:#fff;font-family:'Tajawal';font-weight:700;font-size:14px;cursor:pointer;margin-bottom:12px;">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.6 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.4 0 10.3-2.1 14-5.5l-6.5-5.4C29.4 34.9 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.6 39.6 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.3-4.1 5.7l6.5 5.4C40.9 36.5 44 30.9 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+      <span data-i18n="google_signin_btn">الدخول بحساب جوجل</span>
+    </button>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;color:#999;font-size:12px;">
+      <div style="flex:1;height:1px;background:var(--line);"></div>
+      <span data-i18n="or_divider">أو</span>
+      <div style="flex:1;height:1px;background:var(--line);"></div>
+    </div>
+
     <div class="auth-tabs">
       <button class="active" id="tabLogin" data-i18n="login_tab" onclick="switchAuthTab('login')">دخول</button>
       <button id="tabRegister" data-i18n="register_tab" onclick="switchAuthTab('register')">حساب جديد</button>
@@ -1961,6 +1977,48 @@
     <button class="btn btn-primary" style="width:100%;" id="authSubmitBtn" data-i18n="login_btn2" onclick="submitAuth()">دخول</button>
     <button class="link-btn" id="forgotPasswordBtn" data-i18n="forgot_password" onclick="handleForgotPassword()">نسيت كلمة المرور؟</button>
     <button class="auth-close" data-i18n="close_btn" onclick="closeAuthModal()">إغلاق</button>
+  </div>
+
+  <div class="auth-modal" id="googleCompleteProfileWrap" style="display:none;">
+    <h3 style="margin-bottom:4px;">🎉 خطوة أخيرة بسيطة</h3>
+    <p style="text-align:center;color:#777;font-size:13px;margin-bottom:14px;">محتاجين بس شوية بيانات إضافية عشان نجهزلك مارك الشحن الخاص بيك</p>
+    <div class="phone-wrap">
+      <select id="gcpPhoneCode">
+        <option value="+249">🇸🇩 ‎+249</option>
+        <option value="+211">🇸🇸 ‎+211</option>
+        <option value="+20">🇪🇬 ‎+20</option>
+        <option value="+971">🇦🇪 ‎+971</option>
+        <option value="+966">🇸🇦 ‎+966</option>
+      </select>
+      <input id="gcpPhone" type="tel" placeholder="رقم الجوال">
+    </div>
+    <select id="gcpResidence" style="width:100%;padding:11px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+      <option value="">بلد الإقامة الحالي *</option>
+      <option value="مصر">مصر</option>
+      <option value="السودان">السودان</option>
+      <option value="قطر">قطر</option>
+      <option value="الإمارات">الإمارات</option>
+      <option value="عُمان">عُمان</option>
+      <option value="جنوب السودان">جنوب السودان</option>
+      <option value="أوغندا">أوغندا (كمبالا)</option>
+      <option value="إثيوبيا">إثيوبيا</option>
+      <option value="إريتريا">إريتريا</option>
+      <option value="السعودية">السعودية</option>
+      <option value="الكويت">الكويت</option>
+    </select>
+    <div style="font-size:11px;color:#888;margin:-6px 0 10px;">حالياً نشحن فعلياً إلى 4 وجهات فقط — باقي الوجهات قريباً بإذن الله 🚀</div>
+    <select id="gcpDestination" style="width:100%;padding:11px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+      <option value="SD">السودان</option>
+      <option value="SS">جنوب السودان</option>
+      <option value="UAE">الإمارات العربية المتحدة</option>
+      <option value="KSA">المملكة العربية السعودية</option>
+    </select>
+    <label style="display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:#555;margin-bottom:10px;text-align:right;cursor:pointer;">
+      <input type="checkbox" id="gcpTermsCheck" style="margin-top:3px;">
+      <span>أوافق على <span class="link-btn" style="display:inline;margin:0;padding:0;" onclick="event.preventDefault(); openTermsInfo();">الشروط والأحكام</span></span>
+    </label>
+    <div class="err" id="gcpError"></div>
+    <button class="btn btn-primary" style="width:100%;" onclick="completeGoogleProfile()">إكمال التسجيل</button>
   </div>
 </div>
 
@@ -2433,6 +2491,8 @@ const translations = {
   destination_soon_hint: {ar:'حالياً نشحن فعلياً إلى 4 وجهات فقط — باقي الوجهات قريباً بإذن الله 🚀', en:'We currently ship to 4 destinations only — more coming soon 🚀'},
   select_residence_first: {ar:'يرجى اختيار بلد الإقامة', en:'Please select your country of residence'},
   contact_whatsapp_btn: {ar:'💬 تواصل مع الإدارة عبر واتساب', en:'💬 Contact Admin via WhatsApp'},
+  google_signin_btn: {ar:'الدخول بحساب جوجل', en:'Sign in with Google'},
+  or_divider: {ar:'أو', en:'or'},
   install_banner_text: {ar:'ثبّت AlHossain على شاشتك الرئيسية للوصول السريع', en:'Install AlHossain on your home screen for quick access'},
   install_banner_btn: {ar:'تثبيت', en:'Install'},
   install_ios_text: {ar:'للتثبيت: اضغط على زر المشاركة 🔗 ثم "إضافة إلى الشاشة الرئيسية"', en:'To install: tap the Share button 🔗 then "Add to Home Screen"'},
@@ -3108,14 +3168,9 @@ async function submitFactoryVisit(){
   showToast(t('visit_request_sent'));
 }
 
-function renderCatalog(){
-  const grid = document.getElementById('productGrid');
-  if(products.length===0){
-    grid.innerHTML = `<div class="empty">${t('no_products')}</div>`;
-    return;
-  }
+function renderProductCard(p){
   const favs = (currentCustomerData && currentCustomerData.favorites) || [];
-  grid.innerHTML = products.map(p => `
+  return `
     <div class="product" data-pid="${p.id}"
       ontouchstart="startLongPress('${p.id}')" ontouchend="cancelLongPress()" ontouchmove="cancelLongPress()"
       onmousedown="startLongPress('${p.id}')" onmouseup="cancelLongPress()" onmouseleave="cancelLongPress()">
@@ -3131,7 +3186,25 @@ function renderCatalog(){
         ${p.moq ? `<div class="moq-badge">📦 MOQ: ${p.moq} <span class="term-help-btn" onclick="event.stopPropagation(); openTermHelp('MOQ')">؟</span></div>` : ''}
         <button class="add" onclick="addToCart('${p.id}')">${t('add_to_cart')}</button>
       </div>
-    </div>`).join('');
+    </div>`;
+}
+
+function renderCatalog(){
+  const grid = document.getElementById('productGrid');
+  if(products.length===0){
+    grid.innerHTML = `<div class="empty">${t('no_products')}</div>`;
+    return;
+  }
+  const searchInput = document.getElementById('productSearchInput');
+  const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
+  const filtered = term ? products.filter(p => p.name.toLowerCase().includes(term)) : products;
+
+  if(filtered.length === 0){
+    grid.innerHTML = `<div class="empty">لا توجد منتجات مطابقة لبحثك</div>`;
+  } else {
+    grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
+  }
+  renderRecentlyViewed();
 }
 
 let longPressTimer = null;
@@ -3142,9 +3215,34 @@ function cancelLongPress(){
   if(longPressTimer){ clearTimeout(longPressTimer); longPressTimer = null; }
 }
 
+const RECENTLY_VIEWED_KEY = 'recentlyViewedProducts';
+function trackRecentlyViewed(id){
+  let list = JSON.parse(localStorage.getItem(RECENTLY_VIEWED_KEY) || '[]');
+  list = list.filter(x => x !== id);
+  list.unshift(id);
+  list = list.slice(0, 8);
+  localStorage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(list));
+}
+
+function renderRecentlyViewed(){
+  const wrap = document.getElementById('recentlyViewedWrap');
+  const grid = document.getElementById('recentlyViewedGrid');
+  if(!wrap || !grid) return;
+  const searchActive = document.getElementById('productSearchInput')?.value.trim();
+  const list = JSON.parse(localStorage.getItem(RECENTLY_VIEWED_KEY) || '[]');
+  const viewedProducts = list.map(id => products.find(p => p.id === id)).filter(Boolean);
+  if(searchActive || viewedProducts.length === 0){
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = 'block';
+  grid.innerHTML = viewedProducts.map(p => renderProductCard(p)).join('');
+}
+
 function openProductQuickView(id){
   const p = products.find(x=>x.id===id);
   if(!p) return;
+  trackRecentlyViewed(id);
   const favs = (currentCustomerData && currentCustomerData.favorites) || [];
   const isFav = favs.includes(id);
   const gallery = (p.images && p.images.length > 0) ? p.images : (p.image ? [p.image] : []);
@@ -3675,6 +3773,9 @@ async function saveFlashSale(){
   const data = { active, productName, originalPrice, salePrice, maxQuantity, startDate, endDate, description, sold:false, soldTo:null };
 
   try{
+    const previousSale = await loadFlashSale();
+    const wasInactiveBefore = !previousSale || !previousSale.active;
+
     const imageFile = document.getElementById('flashProductImage').files[0];
     if(imageFile){
       const imgRef = storage.ref('flashSales/' + Date.now() + '_' + imageFile.name);
@@ -3682,6 +3783,16 @@ async function saveFlashSale(){
       data.image = await imgRef.getDownloadURL();
     }
     await db.collection('settings').doc('flashSale').set(data, {merge:true});
+
+    if(active && wasInactiveBefore){
+      const subsSnap = await db.collection('flashSaleSubscribers').get();
+      subsSnap.docs.forEach(sd => {
+        notifyCustomer(sd.data().email, '🔥 عرض ناري جديد وصل!', `العرض اللي كنت مستني: ${productName}\nالسعر: $${salePrice}\nادخل الموقع بسرعة قبل ما ينفد!`);
+        sd.ref.delete();
+      });
+      if(!subsSnap.empty) showToast(`تم تنبيه ${subsSnap.size} عميل مشترك بالعرض الجديد`);
+    }
+
     showToast('تم حفظ العرض الناري بنجاح');
     renderFlashSalePage();
   }catch(e){
@@ -3710,6 +3821,17 @@ function formatTimeRemaining(r){
   return parts.join(' ');
 }
 
+async function subscribeFlashSaleNotify(){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  await db.collection('flashSaleSubscribers').doc(currentUser.email).set({
+    email: currentUser.email,
+    name: (currentCustomerData && currentCustomerData.name) || currentUser.email.split('@')[0],
+    subscribedAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  showToast('تمام! هنبعتلك رسالة أول ما نفعّل عرض جديد');
+  renderFlashSalePage();
+}
+
 let flashTimerInterval = null;
 
 async function renderFlashSalePage(){
@@ -3717,7 +3839,18 @@ async function renderFlashSalePage(){
   if(!container) return;
   const sale = await loadFlashSale();
   if(!sale || !sale.active){
-    container.innerHTML = `<div class="empty">لا توجد عروض نارية حالياً، ترقّبوا القادم!</div>`;
+    let alreadySubscribed = false;
+    if(currentUser){
+      const subDoc = await db.collection('flashSaleSubscribers').doc(currentUser.email).get();
+      alreadySubscribed = subDoc.exists;
+    }
+    container.innerHTML = `<div class="empty">
+      <div style="margin-bottom:14px;">لا توجد عروض نارية حالياً، ترقّبوا القادم!</div>
+      ${alreadySubscribed
+        ? `<div style="color:#1b8a4a;font-weight:700;">✅ هتوصلك رسالة أول ما نفعّل عرض جديد</div>`
+        : `<button class="btn btn-gold" onclick="subscribeFlashSaleNotify()">🔔 خبّرني لما يرجع العرض</button>`
+      }
+    </div>`;
     return;
   }
   const timeLeft = getTimeRemaining(sale.endDate);
@@ -4528,7 +4661,7 @@ function renderAdminImportRequests(search){
   wrap.innerHTML = ids.reverse().map(id=>{
     const r = importRequests[id];
     const items = r.items || [{link:r.link, name:r.name, qty:r.qty}];
-    const itemsHtml = items.map((it,i)=>`<div>${i+1}. <a href="${it.link}" target="_blank" rel="noopener">رابط المنتج</a> — الكمية: ${it.qty} ${it.name?('— '+it.name):''}</div>`).join('');
+    const itemsHtml = items.map((it,i)=>`<div style="margin-bottom:4px;">${i+1}. ${it.link ? `<a href="${it.link}" target="_blank" rel="noopener">رابط المنتج</a>` : (it.image ? `<a href="${it.image}" target="_blank" rel="noopener">📷 عرض الصورة المرفقة</a>` : 'بدون رابط أو صورة')} — الكمية: ${it.qty} ${it.name?('— '+it.name):''}</div>`).join('');
     return `<div class="admin-order-item">
       <div style="margin-bottom:6px;"><strong>${r.shippingMark||'-'}</strong> · ${r.customerEmail||''} · ${r.destination||''} · ${r.date}</div>
       <div style="margin-bottom:6px;">${itemsHtml}</div>
@@ -4686,12 +4819,95 @@ function togglePasswordVisibility(inputId, btn){
 }
 
 function openAuthModal(){
+  document.getElementById('authModalMain').style.display = 'block';
+  document.getElementById('googleCompleteProfileWrap').style.display = 'none';
   document.getElementById('authOverlay').classList.add('show');
   pushModalHistory();
+}
+
+let pendingGoogleUser = null;
+
+async function signInWithGoogle(){
+  try{
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const result = await auth.signInWithPopup(provider);
+    const email = result.user.email;
+    const custDoc = await db.collection('customers').doc(email).get();
+
+    if(custDoc.exists){
+      // عميل قديم — يدخل مباشرة، onAuthStateChanged هيكمّل الباقي
+      playSailAnimation(() => {
+        closeAuthModal();
+        showToast(t('logged_in'));
+      });
+    } else {
+      // أول مرة — محتاجين بيانات إضافية قبل ما نكمّل التسجيل
+      pendingGoogleUser = result.user;
+      document.getElementById('authModalMain').style.display = 'none';
+      document.getElementById('googleCompleteProfileWrap').style.display = 'block';
+    }
+  }catch(e){
+    if(e.code !== 'auth/popup-closed-by-user'){
+      showToast('تعذّر الدخول بجوجل، حاول مرة أخرى');
+    }
+  }
+}
+
+async function completeGoogleProfile(){
+  if(!pendingGoogleUser) return;
+  const phoneCode = document.getElementById('gcpPhoneCode').value;
+  const phoneNumber = document.getElementById('gcpPhone').value.trim().replace(/[^0-9]/g,'');
+  const residenceCountry = document.getElementById('gcpResidence').value;
+  const destCode = document.getElementById('gcpDestination').value;
+  const errBox = document.getElementById('gcpError');
+  errBox.classList.remove('show');
+
+  if(!phoneNumber){ errBox.textContent = t('enter_phone_number'); errBox.classList.add('show'); return; }
+  if(!residenceCountry){ errBox.textContent = t('select_residence_first'); errBox.classList.add('show'); return; }
+  if(!document.getElementById('gcpTermsCheck').checked){ errBox.textContent = t('must_agree_terms'); errBox.classList.add('show'); return; }
+
+  const email = pendingGoogleUser.email;
+  const rawName = pendingGoogleUser.displayName || email.split('@')[0];
+  let cleanName = rawName.toUpperCase().replace(/[^A-Z0-9]/g,'');
+
+  try{
+    const shippingMark = await generateUniqueMark(cleanName, destCode, email);
+    await db.collection('customers').doc(email).set({
+      email: email,
+      name: rawName,
+      phone: phoneCode + phoneNumber,
+      residenceCountry: residenceCountry,
+      destination: destName(destCode),
+      shippingMark: shippingMark,
+      emailVerified: pendingGoogleUser.emailVerified || false,
+      termsAccepted: true,
+      termsAcceptedDate: new Date().toISOString(),
+      joinDate: new Date().toISOString().slice(0,10)
+    });
+    const counterRef = db.collection('settings').doc('counters');
+    await db.runTransaction(async (t) => {
+      const doc = await t.get(counterRef);
+      const current = doc.exists ? (doc.data().totalCustomers || 0) : 0;
+      t.set(counterRef, { totalCustomers: current + 1 }, { merge: true });
+    });
+
+    pendingGoogleUser = null;
+    playSailAnimation(() => {
+      closeAuthModal();
+      showToast(t('account_created'));
+      setTimeout(startOnboarding, 400);
+    });
+  }catch(e){
+    errBox.textContent = t('generic_error');
+    errBox.classList.add('show');
+  }
 }
 function closeAuthModal(){
   document.getElementById('authOverlay').classList.remove('show');
   document.getElementById('authError').classList.remove('show');
+  document.getElementById('authModalMain').style.display = 'block';
+  document.getElementById('googleCompleteProfileWrap').style.display = 'none';
+  pendingGoogleUser = null;
   notifyModalClosed();
 }
 async function handleForgotPassword(){
@@ -4801,6 +5017,11 @@ async function submitAuth(){
     return;
   }
 
+  const submitBtn = document.getElementById('authSubmitBtn');
+  const originalBtnText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = currentLang === 'ar' ? 'جارٍ التحقق...' : 'Verifying...';
+
   try{
     if(authMode === 'login'){
       await auth.signInWithEmailAndPassword(email, password);
@@ -4846,6 +5067,9 @@ async function submitAuth(){
     };
     errBox.textContent = map[e.code] || t('generic_error');
     errBox.classList.add('show');
+  }finally{
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
   }
 }
 
@@ -4859,10 +5083,14 @@ function addImportRow(){
   row.className = 'import-row';
   row.id = 'importRow_' + id;
   row.innerHTML = `
-    <input placeholder="رابط المنتج" class="import-link">
+    <input placeholder="رابط المنتج (أو ارفع صورة بدلاً منه)" class="import-link" style="flex-basis:100%;">
     <input placeholder="اسم مختصر (اختياري)" class="import-name">
     <input type="number" placeholder="الكمية" class="import-qty qty-input">
     <button class="remove-row" onclick="removeImportRow(${id})" title="حذف">✕</button>
+    <div style="flex-basis:100%;">
+      <label style="font-size:11.5px;color:#777;display:block;margin-bottom:3px;">📷 أو ارفع صورة المنتج (لو معندكش رابط)</label>
+      <input type="file" accept="image/*" class="import-image" id="importImage_${id}">
+    </div>
   `;
   wrap.appendChild(row);
 }
@@ -4875,38 +5103,61 @@ function removeImportRow(id){
 async function submitImportRequest(){
   if(!currentUser){ openAuthModal(); showToast(t('login_required_request')); return; }
   const rows = document.querySelectorAll('#importItemsList .import-row');
-  const items = [];
+  const rowsData = [];
   rows.forEach(row=>{
     const link = row.querySelector('.import-link').value.trim();
     const name = row.querySelector('.import-name').value.trim();
     const qty = row.querySelector('.import-qty').value.trim();
-    if(link && qty) items.push({link, name, qty});
+    const imageInput = row.querySelector('.import-image');
+    const imageFile = imageInput && imageInput.files[0] ? imageInput.files[0] : null;
+    if((link || imageFile) && qty) rowsData.push({link, name, qty, imageFile});
   });
   const notes = document.getElementById('importNotes').value.trim();
   const destCode = document.getElementById('importDestination').value;
-  if(items.length===0){ showToast(t('add_one_item')); return; }
+  if(rowsData.length===0){ showToast(t('add_one_item')); return; }
 
-  const mark = currentCustomerData?.shippingMark || '';
-  const reqData = {
-    items, notes,
-    destination: destName(destCode),
-    customerEmail: currentUser.email,
-    shippingMark: mark,
-    status: 'قيد المراجعة',
-    quotedPrice: '',
-    date: new Date().toISOString().slice(0,10)
-  };
-  await db.collection('importRequests').add(reqData);
-  notifyAdmin('طلب شراء جديد من الصين', `مارك الشحن: ${mark}\nعدد المنتجات: ${items.length}\nالوجهة: ${reqData.destination}`);
+  const submitBtn = document.querySelector('button[onclick="submitImportRequest()"]');
+  if(submitBtn) submitBtn.disabled = true;
+  showToast('جارٍ إرسال طلبك...');
 
-  const itemsText = items.map((it,i)=>`${i+1}. ${it.name || 'بدون اسم'} — الكمية: ${it.qty}\nالرابط: ${it.link}`).join('\n');
-  const msg = `مرحباً، أرغب في طلب عرض سعر لشراء منتجات من الصين.\nمارك الشحن الخاص بي: ${mark}\n${itemsText}\nالوجهة: ${reqData.destination}\nملاحظات: ${notes || '-'}`;
-  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  try{
+    const items = [];
+    for(const row of rowsData){
+      const item = { link: row.link, name: row.name, qty: row.qty };
+      if(row.imageFile){
+        const imgRef = storage.ref('importRequests/' + Date.now() + '_' + row.imageFile.name);
+        await imgRef.put(row.imageFile);
+        item.image = await imgRef.getDownloadURL();
+      }
+      items.push(item);
+    }
+
+    const mark = currentCustomerData?.shippingMark || '';
+    const reqData = {
+      items, notes,
+      destination: destName(destCode),
+      customerEmail: currentUser.email,
+      shippingMark: mark,
+      status: 'قيد المراجعة',
+      quotedPrice: '',
+      date: new Date().toISOString().slice(0,10)
+    };
+    await db.collection('importRequests').add(reqData);
+    notifyAdmin('طلب شراء جديد من الصين', `مارك الشحن: ${mark}\nعدد المنتجات: ${items.length}\nالوجهة: ${reqData.destination}`);
+
+    const itemsText = items.map((it,i)=>`${i+1}. ${it.name || 'بدون اسم'} — الكمية: ${it.qty}\n${it.link ? 'الرابط: ' + it.link : (it.image ? 'صورة مرفقة: ' + it.image : '')}`).join('\n');
+    const msg = `مرحباً، أرغب في طلب عرض سعر لشراء منتجات من الصين.\nمارك الشحن الخاص بي: ${mark}\n${itemsText}\nالوجهة: ${reqData.destination}\nملاحظات: ${notes || '-'}`;
+    window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
 
   document.getElementById('importItemsList').innerHTML = '';
   addImportRow();
   document.getElementById('importNotes').value = '';
   showToast(t('import_request_sent'));
+  }catch(e){
+    showToast('حدث خطأ أثناء رفع الصورة أو إرسال الطلب، حاول مرة أخرى');
+  }finally{
+    if(submitBtn) submitBtn.disabled = false;
+  }
 }
 
 async function submitPost(){

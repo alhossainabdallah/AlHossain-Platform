@@ -560,6 +560,21 @@
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 6px 16px rgba(0,0,0,.3); cursor:pointer; font-size:22px;
   }
+  #aiSearchFloatBtn{
+    position:fixed; z-index:81;
+    bottom:calc(66px + env(safe-area-inset-bottom) + 16px); right:16px;
+    width:54px; height:54px; border-radius:50%;
+    background:var(--ink);
+    border:2px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 18px rgba(0,0,0,.35), 0 0 16px rgba(232,168,0,0.3);
+    cursor:pointer;
+    animation:aiBotFloat 2.6s ease-in-out infinite;
+  }
+  @keyframes aiBotFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-5px); }
+  }
 
   .bottom-nav{
     position:fixed; bottom:0; left:0; right:0; z-index:80;
@@ -1116,6 +1131,18 @@
       <p style="font-size:13.5px;color:#666;margin-bottom:12px;" data-i18n="wishlist_modal_desc">اكتب اسم أو وصف المنتج اللي بتدور عليه ومقدروش لقيته، وهنحاول نوفره لك.</p>
       <textarea id="wishlistInput" placeholder="مثال: سماعات بلوتوث رياضية مقاومة للماء..." style="width:100%;min-height:80px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;"></textarea>
       <button class="btn btn-primary" style="width:100%;" onclick="submitWishlist()" data-i18n="wishlist_submit_btn">إرسال</button>
+    </div>
+  </div>
+
+  <div class="quick-view-overlay" id="aiSearchOverlay" onclick="if(event.target===this) closeAiSearchModal()">
+    <div class="quick-view-modal" id="aiSearchModal" style="text-align:right;">
+      <button class="auth-close" onclick="closeAiSearchModal()" style="position:absolute;left:14px;top:12px;z-index:2;">✕</button>
+      <div style="text-align:center;font-size:34px;margin-bottom:6px;">🤖</div>
+      <h3 style="text-align:center;margin-bottom:6px;">مساعد البحث الذكي</h3>
+      <p style="font-size:12.5px;color:#666;text-align:center;margin-bottom:14px;">اكتب وصف اللي بتدوّر عليه بكلماتك العادية، وهنقترح لك أقرب منتجاتنا المتاحة</p>
+      <textarea id="aiSearchInput" placeholder="مثال: حاجة تسخن مياه بسرعة للشاي..." style="width:100%;min-height:70px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;"></textarea>
+      <button class="btn btn-gold" style="width:100%;" onclick="runAiSearch()">🔍 دوّرلي على منتج</button>
+      <div id="aiSearchResults" style="margin-top:16px;"></div>
     </div>
   </div>
 
@@ -1680,6 +1707,18 @@
         <button class="btn btn-gold" onclick="addProduct()" id="addProdBtn">إضافة المنتج</button>
       </div>
       <div class="admin-section">
+        <h3>📋 إضافة منتجات جماعية (دفعة واحدة)</h3>
+        <p style="font-size:12.5px;color:#777;margin-bottom:10px;">
+          اكتب كل منتج في سطر منفصل بالشكل: <strong>الاسم, السعر, الحد الأدنى (اختياري)</strong><br>
+          مثال:<br>
+          <code style="background:var(--paper-soft);padding:2px 6px;border-radius:4px;display:block;margin-top:4px;">كوب حراري ستانلس, 2.5, 100<br>سماعة بلوتوث رياضية, 8</code>
+        </p>
+        <textarea id="bulkProductsInput" placeholder="الصق هنا قائمة المنتجات، كل منتج في سطر..." style="width:100%;min-height:140px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;direction:ltr;text-align:right;"></textarea>
+        <div id="bulkAddProgress" style="font-size:13px;color:var(--rust);margin:6px 0;display:none;"></div>
+        <button class="btn btn-gold" onclick="bulkAddProducts()" id="bulkAddBtn">إضافة كل المنتجات دفعة واحدة</button>
+        <p style="font-size:11.5px;color:#999;margin-top:8px;">* الصور مش هتتضاف تلقائياً بالطريقة دي — بعد الإضافة، تقدر تدخل على كل منتج من قايمة "المنتجات الحالية" تحت وتضيفله صورة.</p>
+      </div>
+      <div class="admin-section">
         <h3 style="display:flex;justify-content:space-between;align-items:center;">
           <span>عملاء مسجلين (<span id="customerCount">0</span>)</span>
           <button class="tiny-btn" onclick="toggleCustomerListCollapse()" id="customerListToggleBtn">▶️ إظهار القائمة</button>
@@ -1797,6 +1836,17 @@
         <div id="adminWishlistList"></div>
       </div>
       <div class="admin-section">
+        <h3>🤖 مساعد البحث الذكي (زر عائم)</h3>
+        <p style="font-size:12.5px;color:#777;margin-bottom:10px;">يظهر للعميل كزر روبوت عائم، يدوّر تلقائياً في منتجاتك الحالية حسب وصف العميل — بدون أي اتصال خارجي، آمن بالكامل.</p>
+        <div class="admin-row">
+          <select id="aiSearchToggle" style="padding:8px 16px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
+            <option value="off">⏸ غير مفعّل</option>
+            <option value="on">▶ مفعّل</option>
+          </select>
+          <button class="tiny-btn gold" onclick="saveAiSearchToggle()">حفظ</button>
+        </div>
+      </div>
+      <div class="admin-section">
         <h3>📣 شريط الإعلان العام</h3>
         <div class="admin-row">
           <select id="announcementActive" style="padding:8px 16px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
@@ -1898,6 +1948,17 @@
 </div>
 
 <button id="currencyFloatBtn" onclick="openCurrencyModal()" aria-label="محول العملة">💱</button>
+
+<button id="aiSearchFloatBtn" onclick="openAiSearchModal()" aria-label="مساعد البحث الذكي" style="display:none;">
+  <svg viewBox="0 0 64 64" width="30" height="30">
+    <rect x="14" y="20" width="36" height="30" rx="14" fill="#E8A800"/>
+    <circle cx="25" cy="35" r="5" fill="#0F2648"/>
+    <circle cx="39" cy="35" r="5" fill="#0F2648"/>
+    <rect x="20" y="46" width="24" height="4" rx="2" fill="#0F2648" opacity="0.5"/>
+    <line x1="32" y1="20" x2="32" y2="10" stroke="#E8A800" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="32" cy="7" r="4" fill="#F2C94C"/>
+  </svg>
+</button>
 
 <nav class="bottom-nav" id="bottomNav">
   <button class="bn-btn active" data-tab="home" onclick="showTab('home')" aria-label="الرئيسية">
@@ -4619,6 +4680,76 @@ async function addCatalog(){
   }
 }
 
+// ====== مساعد البحث الذكي (بحث محلي آمن، بدون أي اتصال خارجي) ======
+let aiSearchEnabled = false;
+const arabicStopWords = ['عايز','عاوز','ترغب','حاجة','بتاعة','بتاع','من','في','على','او','أو','يا','ريت','ممكن','لو','اللي','دي','ده','عندك','عندكم','فيه','فى'];
+
+async function loadAiSearchSetting(){
+  try{
+    const doc = await db.collection('settings').doc('aiSearch').get();
+    aiSearchEnabled = doc.exists && doc.data().enabled === true;
+  }catch(e){ aiSearchEnabled = false; }
+  const btn = document.getElementById('aiSearchFloatBtn');
+  if(btn) btn.style.display = aiSearchEnabled ? 'flex' : 'none';
+}
+
+async function saveAiSearchToggle(){
+  const enabled = document.getElementById('aiSearchToggle').value === 'on';
+  await db.collection('settings').doc('aiSearch').set({ enabled });
+  aiSearchEnabled = enabled;
+  showToast('تم حفظ الإعداد');
+  loadAiSearchSetting();
+}
+
+function openAiSearchModal(){
+  document.getElementById('aiSearchResults').innerHTML = '';
+  document.getElementById('aiSearchInput').value = '';
+  const overlay = document.getElementById('aiSearchOverlay');
+  const modal = document.getElementById('aiSearchModal');
+  modal.style.animation = 'none';
+  void modal.offsetWidth;
+  modal.style.animation = '';
+  overlay.classList.add('show');
+  pushModalHistory();
+}
+function closeAiSearchModal(){
+  document.getElementById('aiSearchOverlay').classList.remove('show');
+  notifyModalClosed();
+}
+
+function runAiSearch(){
+  const query = document.getElementById('aiSearchInput').value.trim();
+  const resultsBox = document.getElementById('aiSearchResults');
+  if(!query){ resultsBox.innerHTML = `<div class="empty">اكتب وصف المنتج اللي بتدوّر عليه الأول</div>`; return; }
+
+  const keywords = query.toLowerCase().split(/\s+/).filter(w => w.length > 1 && !arabicStopWords.includes(w));
+  if(keywords.length === 0){ resultsBox.innerHTML = `<div class="empty">حاول تكتب كلمات أكتر تفصيلاً</div>`; return; }
+
+  const scored = products.map(p => {
+    const haystack = ((p.name||'') + ' ' + (p.description||'')).toLowerCase();
+    let score = 0;
+    keywords.forEach(k => { if(haystack.includes(k)) score++; });
+    return { p, score };
+  }).filter(x => x.score > 0).sort((a,b) => b.score - a.score).slice(0, 5);
+
+  if(scored.length === 0){
+    resultsBox.innerHTML = `<div class="empty">معنديش منتج مطابق حالياً — جرّب كلمات مختلفة، أو تواصل معنا مباشرة على واتساب وهنساعدك نلاقيه</div>`;
+    return;
+  }
+
+  resultsBox.innerHTML = `<div style="font-size:12.5px;color:#777;margin-bottom:8px;">أقرب ${scored.length} منتجات لطلبك:</div>` +
+    scored.map(({p}) => `
+      <div class="product" style="flex-direction:row;align-items:center;gap:10px;padding:8px;margin-bottom:8px;cursor:pointer;" onclick="closeAiSearchModal(); setTimeout(()=>openProductQuickView('${p.id}'), 350);">
+        <div class="thumb" style="width:56px;height:56px;flex-shrink:0;border-radius:10px;">
+          ${p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;">` : p.name.charAt(0)}
+        </div>
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:13.5px;">${p.name}</div>
+          <div style="color:var(--rust);font-weight:700;font-size:13px;">$${p.price}</div>
+        </div>
+      </div>`).join('');
+}
+
 // ====== شريط الإعلان العام ======
 async function loadAnnouncement(){
   try{
@@ -4765,6 +4896,7 @@ function enterAdminPanel(){
   loadCatalogsAdmin();
   loadGroupBuysAdmin();
   loadAdsAdmin();
+  document.getElementById('aiSearchToggle').value = aiSearchEnabled ? 'on' : 'off';
   db.collection('settings').doc('announcement').get().then(doc=>{
     if(doc.exists){
       document.getElementById('announcementActive').value = doc.data().active ? 'active' : 'inactive';
@@ -4857,7 +4989,7 @@ let modalStackCount = 0;
 let closingViaPopstate = false;
 
 const trackedOverlayIds = [
-  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay','termHelpOverlay','groupBuyJoinOverlay',
+  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay','termHelpOverlay','groupBuyJoinOverlay','aiSearchOverlay',
   'wishlistModalOverlay','quickViewOverlay','faqModalOverlay','groupChatOverlay',
   'moreMenuOverlay','overlay','videoModal','onboardingOverlay'
 ];
@@ -4888,7 +5020,8 @@ function closeTopmostTrackedModal(){
     authOverlay: closeAuthModal, markInfoOverlay: closeMarkInfo, termsInfoOverlay: closeTermsInfo,
     currencyModalOverlay: closeCurrencyModal, wishlistModalOverlay: closeWishlistModal,
     quickViewOverlay: closeQuickView, faqModalOverlay: closeFaqModal, groupChatOverlay: closeGroupChat,
-    moreMenuOverlay: closeMoreMenu, overlay: closeCart, videoModal: closeVideo, onboardingOverlay: closeOnboarding
+    moreMenuOverlay: closeMoreMenu, overlay: closeCart, videoModal: closeVideo, onboardingOverlay: closeOnboarding,
+    termHelpOverlay: closeTermHelp, groupBuyJoinOverlay: closeGroupBuyJoin, aiSearchOverlay: closeAiSearchModal
   };
   for(const id of trackedOverlayIds){
     const el = document.getElementById(id);
@@ -4991,10 +5124,83 @@ function renderAdminProducts(){
   const wrap = document.getElementById('adminProductList');
   if(products.length===0){ wrap.innerHTML='<div class="empty">لا توجد منتجات</div>'; return; }
   wrap.innerHTML = products.map(p=>`
-    <div class="admin-list-item">
-      <span>${p.name} — $${p.price}</span>
-      <button class="tiny-btn" onclick="removeProduct('${p.id}')">حذف</button>
+    <div class="admin-list-item" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span>${p.image ? '🖼️ ' : '⬜ '}${p.name} — $${p.price}</span>
+        <button class="tiny-btn" onclick="removeProduct('${p.id}')">حذف</button>
+      </div>
+      ${!p.image ? `<div style="display:flex;gap:6px;margin-top:6px;align-items:center;">
+        <input type="file" accept="image/*" id="quickImg_${p.id}" style="flex:1;font-size:11px;">
+        <button class="tiny-btn gold" onclick="addImageToProduct('${p.id}')">📎 إضافة صورة</button>
+      </div>` : ''}
     </div>`).join('');
+}
+
+async function addImageToProduct(id){
+  const input = document.getElementById('quickImg_'+id);
+  const file = input.files[0];
+  if(!file){ showToast('يرجى اختيار صورة أولاً'); return; }
+  try{
+    const imgRef = storage.ref('products/' + Date.now() + '_' + file.name);
+    await imgRef.put(file);
+    const url = await imgRef.getDownloadURL();
+    await db.collection('products').doc(id).update({ image: url });
+    const p = products.find(x=>x.id===id);
+    if(p) p.image = url;
+    showToast('تمت إضافة الصورة بنجاح');
+    renderAll();
+  }catch(e){
+    showToast('حدث خطأ أثناء رفع الصورة');
+  }
+}
+
+async function bulkAddProducts(){
+  const raw = document.getElementById('bulkProductsInput').value.trim();
+  if(!raw){ showToast('يرجى لصق قائمة المنتجات أولاً'); return; }
+
+  const lines = raw.split('\n').map(l=>l.trim()).filter(l=>l);
+  const parsed = [];
+  const errors = [];
+  lines.forEach((line, i) => {
+    const parts = line.split(',').map(p=>p.trim());
+    const name = parts[0];
+    const price = parseFloat(parts[1]);
+    const moq = parts[2] || null;
+    if(!name || isNaN(price)){
+      errors.push(`السطر ${i+1}: "${line}" — لازم اسم وسعر صحيح`);
+      return;
+    }
+    parsed.push({ name, price, moq });
+  });
+
+  if(errors.length){
+    showToast(`فيه ${errors.length} سطر فيه مشكلة، يرجى مراجعتهم: ` + errors[0], 6000);
+    return;
+  }
+  if(parsed.length === 0){ showToast('مفيش منتجات صحيحة للإضافة'); return; }
+
+  const btn = document.getElementById('bulkAddBtn');
+  const progress = document.getElementById('bulkAddProgress');
+  btn.disabled = true;
+  progress.style.display = 'block';
+
+  try{
+    let count = 0;
+    for(const item of parsed){
+      progress.textContent = `جارٍ إضافة ${count+1} من ${parsed.length}...`;
+      const ref = await db.collection('products').add(item);
+      products.push({ id: ref.id, ...item });
+      count++;
+    }
+    document.getElementById('bulkProductsInput').value = '';
+    showToast(`تمت إضافة ${count} منتج بنجاح`);
+    renderAll();
+  }catch(e){
+    showToast('حدث خطأ أثناء الإضافة الجماعية');
+  }finally{
+    progress.style.display = 'none';
+    btn.disabled = false;
+  }
 }
 
 function renderAdminOrders(search){
@@ -6217,6 +6423,7 @@ loadCatalogsPublic();
 loadGroupBuysPublic();
 loadAdsPublic();
 loadAnnouncement();
+loadAiSearchSetting();
 loadTotalCustomersCount();
 
 // مدخل سري للإدارة عبر رابط خاص، بدل رابط ظاهر في الفوتر

@@ -256,6 +256,23 @@
     font-weight:700; font-size:13px; margin-top:10px;
   }
   .gb-my-qty{ font-size:12.5px; color:var(--rust); font-weight:700; margin-top:6px; }
+
+  .ad-card{
+    background:var(--white); border:1px solid var(--line); border-radius:16px;
+    padding:16px; margin-bottom:14px; display:flex; gap:12px; align-items:center; cursor:pointer;
+    box-shadow:0 4px 14px rgba(20,48,74,0.06);
+  }
+  .ad-card-logo{
+    width:60px; height:60px; border-radius:12px; flex-shrink:0; overflow:hidden;
+    background:linear-gradient(135deg, var(--gold-deco) 0%, var(--rust) 100%);
+    display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Aref Ruqaa'; font-size:24px;
+  }
+  .ad-card-logo img{ width:100%; height:100%; object-fit:cover; }
+  .ad-card-name{ font-weight:900; font-size:15px; margin-bottom:3px; }
+  .ad-card-teaser{ font-size:12.5px; color:#777; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:220px; }
+  .ad-sponsored-badge{ font-size:10px; color:var(--gold-deco); font-weight:700; background:rgba(146,110,39,0.1); padding:2px 8px; border-radius:999px; display:inline-block; margin-bottom:4px; }
+  .ad-like-btn{ background:none; border:none; cursor:pointer; font-size:16px; display:flex; align-items:center; gap:5px; color:#555; }
+  .ad-like-btn.liked{ color:var(--rust); }
   .gb-extra-thumbs{ display:flex; gap:6px; overflow-x:auto; margin:8px 0; }
   .gb-extra-thumbs img{ width:52px; height:52px; border-radius:8px; object-fit:cover; flex-shrink:0; cursor:pointer; border:1px solid var(--line); }
   .wishlist-cta{
@@ -1513,6 +1530,12 @@
     </div>
   </section>
 
+  <section id="ads">
+    <h2 style="margin-bottom:6px;">📢 مساحة إعلانية</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;">تعرّف على شركائنا وشركات موثوقة تعمل معنا. اضغط على أي إعلان لعرض التفاصيل الكاملة والتواصل المباشر.</p>
+    <div id="adsList"></div>
+  </section>
+
   <section id="groupbuys">
     <h2 style="margin-bottom:6px;">🤝 الطلبات الجماعية</h2>
     <p style="color:#5c6b6b; margin-bottom:18px;">بعض المنتجات عندها حد أدنى للكمية (MOQ) لا يقدر عميل واحد يوفّره لوحده. انضم مع عملاء آخرين لنفس المنتج، ولما نوصل للعدد المطلوب، نبدأ التنفيذ فوراً مع المصنع.</p>
@@ -1761,6 +1784,28 @@
         <button class="btn btn-gold" onclick="saveAnnouncement()">حفظ الإعلان</button>
       </div>
       <div class="admin-section">
+        <h3>📢 إدارة المساحة الإعلانية</h3>
+        <div class="admin-row">
+          <input id="newAdCompany" placeholder="اسم الشركة المعلِنة *">
+        </div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:12px;color:#555;display:block;margin-bottom:4px;">شعار/صورة الشركة</label>
+          <input id="newAdLogo" type="file" accept="image/*">
+        </div>
+        <div class="admin-row">
+          <textarea id="newAdDesc" placeholder="وصف الشركة أو معلومات الإعلان *" style="width:100%;min-height:80px;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';"></textarea>
+        </div>
+        <div class="admin-row">
+          <input id="newAdWhatsapp" placeholder="رابط واتساب الشركة المباشر (مثال: https://wa.me/9665xxxxxxx)">
+        </div>
+        <div class="admin-row">
+          <input id="newAdStartDate" type="date" placeholder="تاريخ بدء الإعلان">
+          <input id="newAdEndDate" type="date" placeholder="تاريخ انتهاء الإعلان">
+        </div>
+        <button class="btn btn-gold" onclick="addAd()" id="addAdBtn">نشر الإعلان</button>
+        <div id="adminAdsList" style="margin-top:14px;"></div>
+      </div>
+      <div class="admin-section">
         <h3>🤝 إدارة الطلبات الجماعية (كسر الـMOQ)</h3>
         <div class="admin-row">
           <input id="newGbTitle" placeholder="اسم المنتج">
@@ -1863,6 +1908,7 @@
       <button class="more-item" data-tab="weeklyoffers" onclick="showTab('weeklyoffers'); closeMoreMenu();"><span>🔥</span>العروض</button>
       <button class="more-item" data-tab="catalogs" onclick="showTab('catalogs'); closeMoreMenu();"><span>📚</span>كتالوجات المنتجات</button>
       <button class="more-item" data-tab="groupbuys" onclick="showTab('groupbuys'); closeMoreMenu();"><span>🤝</span>الطلبات الجماعية</button>
+      <button class="more-item" data-tab="ads" onclick="showTab('ads'); closeMoreMenu();"><span>📢</span>مساحة إعلانية</button>
       <button class="more-item" data-tab="profile" onclick="showTab('profile'); closeMoreMenu();"><span>🙋</span>حسابي</button>
       <button class="more-item" id="fullscreenToggleBtn" onclick="toggleFullscreen(); closeMoreMenu();"><span id="fullscreenIcon">⛶</span><span id="fullscreenLabel">وضع ملء الشاشة</span></button>
     </div>
@@ -3768,7 +3814,7 @@ async function showMyShipments(){
 const defaultTabs = {
   glossary:{label:'دليل المصطلحات'}, questions:{label:'الأسئلة'}, importorder:{label:'اطلب من الصين'},
   factoryvisit:{label:'زيارة مصنع'}, community:{label:'المجتمع'}, ratings:{label:'التقييمات'},
-  about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}, catalogs:{label:'الكتالوجات'}, groupbuys:{label:'الطلبات الجماعية'}
+  about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}, catalogs:{label:'الكتالوجات'}, groupbuys:{label:'الطلبات الجماعية'}, ads:{label:'مساحة إعلانية'}
 };
 
 async function loadTabsSettings(){
@@ -4098,6 +4144,157 @@ function closeWishlistModal(){
   document.getElementById('wishlistModalOverlay').classList.remove('show');
   notifyModalClosed();
 }
+// ====== المساحة الإعلانية ======
+let currentAdsList = [];
+let currentAdQuickViewIndex = -1;
+
+async function addAd(){
+  const companyName = document.getElementById('newAdCompany').value.trim();
+  const description = document.getElementById('newAdDesc').value.trim();
+  const whatsappLink = document.getElementById('newAdWhatsapp').value.trim();
+  const startDate = document.getElementById('newAdStartDate').value;
+  const endDate = document.getElementById('newAdEndDate').value;
+  const logoFile = document.getElementById('newAdLogo').files[0];
+  if(!companyName || !description){ showToast('يرجى إدخال اسم الشركة والوصف على الأقل'); return; }
+
+  const btn = document.getElementById('addAdBtn');
+  btn.disabled = true;
+  try{
+    const data = { companyName, description, whatsappLink: whatsappLink || null, startDate: startDate || null, endDate: endDate || null, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
+    if(logoFile){
+      const logoRef = storage.ref('ads/' + Date.now() + '_' + logoFile.name);
+      await logoRef.put(logoFile);
+      data.logo = await logoRef.getDownloadURL();
+    }
+    await db.collection('advertisements').add(data);
+    document.getElementById('newAdCompany').value = '';
+    document.getElementById('newAdDesc').value = '';
+    document.getElementById('newAdWhatsapp').value = '';
+    document.getElementById('newAdStartDate').value = '';
+    document.getElementById('newAdEndDate').value = '';
+    document.getElementById('newAdLogo').value = '';
+    showToast('تم نشر الإعلان بنجاح');
+    loadAdsAdmin();
+    loadAdsPublic();
+  }catch(e){
+    showToast('خطأ: ' + (e.message || 'تعذّر النشر') + ' — تأكد من نشر قواعد Firestore', 8000);
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+async function loadAdsAdmin(){
+  const wrap = document.getElementById('adminAdsList');
+  if(!wrap) return;
+  const snap = await db.collection('advertisements').orderBy('createdAt','desc').get();
+  if(snap.empty){ wrap.innerHTML = `<div class="empty">لا توجد إعلانات بعد</div>`; return; }
+  wrap.innerHTML = snap.docs.map(d => {
+    const a = d.data();
+    return `<div class="admin-list-item">
+      <span><strong>${a.companyName}</strong> ${a.startDate ? `— من ${a.startDate}` : ''} ${a.endDate ? `إلى ${a.endDate}` : ''}</span>
+      <button class="tiny-btn" onclick="deleteAd('${d.id}')">حذف</button>
+    </div>`;
+  }).join('');
+}
+
+async function deleteAd(id){
+  await db.collection('advertisements').doc(id).delete();
+  showToast('تم حذف الإعلان');
+  loadAdsAdmin();
+  loadAdsPublic();
+}
+
+function isAdCurrentlyActive(a){
+  const today = new Date().toISOString().slice(0,10);
+  if(a.startDate && today < a.startDate) return false;
+  if(a.endDate && today > a.endDate) return false;
+  return true;
+}
+
+async function loadAdsPublic(){
+  const wrap = document.getElementById('adsList');
+  if(!wrap) return;
+  const snap = await db.collection('advertisements').orderBy('createdAt','desc').get();
+  const active = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(isAdCurrentlyActive);
+  currentAdsList = active;
+  if(active.length === 0){ wrap.innerHTML = `<div class="empty">لا توجد إعلانات متاحة حالياً</div>`; return; }
+
+  let likedIds = new Set();
+  if(currentUser){
+    const results = await Promise.all(active.map(a => db.collection('advertisements').doc(a.id).collection('likes').doc(currentUser.email).get()));
+    active.forEach((a,i) => { if(results[i].exists) likedIds.add(a.id); });
+  }
+
+  wrap.innerHTML = active.map((a, idx) => `
+    <div class="ad-card" onclick="openAdQuickView(${idx})">
+      <div class="ad-card-logo">${a.logo ? `<img src="${a.logo}">` : a.companyName.charAt(0)}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="ad-sponsored-badge">إعلان مموَّل</div>
+        <div class="ad-card-name">${a.companyName}</div>
+        <div class="ad-card-teaser">${a.description}</div>
+      </div>
+      <button class="ad-like-btn ${likedIds.has(a.id) ? 'liked' : ''}" onclick="event.stopPropagation(); toggleAdLike('${a.id}')">${likedIds.has(a.id) ? '❤️' : '🤍'}</button>
+    </div>`).join('');
+}
+
+async function toggleAdLike(adId){
+  if(!currentUser){ openAuthModal(); showToast(t('login_required_question')); return; }
+  const likeRef = db.collection('advertisements').doc(adId).collection('likes').doc(currentUser.email);
+  const doc = await likeRef.get();
+  if(doc.exists){ await likeRef.delete(); } else { await likeRef.set({ date: new Date().toISOString() }); }
+  loadAdsPublic();
+}
+
+function openAdQuickView(idx){
+  currentAdQuickViewIndex = idx;
+  renderAdQuickViewContent();
+  const overlay = document.getElementById('quickViewOverlay');
+  const modal = document.getElementById('quickViewModal');
+  modal.style.animation = 'none';
+  void modal.offsetWidth;
+  modal.style.animation = '';
+  overlay.classList.add('show');
+  pushModalHistory();
+}
+
+function navigateAdQuickView(delta){
+  const next = currentAdQuickViewIndex + delta;
+  if(next < 0 || next >= currentAdsList.length) return;
+  currentAdQuickViewIndex = next;
+  renderAdQuickViewContent();
+  const modal = document.getElementById('quickViewModal');
+  modal.style.animation = 'none';
+  void modal.offsetWidth;
+  modal.style.animation = '';
+}
+
+async function renderAdQuickViewContent(){
+  const a = currentAdsList[currentAdQuickViewIndex];
+  if(!a) return;
+  let liked = false;
+  if(currentUser){
+    const doc = await db.collection('advertisements').doc(a.id).collection('likes').doc(currentUser.email).get();
+    liked = doc.exists;
+  }
+  document.getElementById('quickViewBody').innerHTML = `
+    <div class="quick-view-thumb" id="qvMainThumb">
+      ${a.logo ? `<img src="${a.logo}" alt="${a.companyName}">` : `<div style="font-family:'Aref Ruqaa';font-size:48px;color:var(--paper);display:flex;align-items:center;justify-content:center;height:100%;">${a.companyName.charAt(0)}</div>`}
+    </div>
+    <div class="ad-sponsored-badge" style="margin-top:10px;">إعلان مموَّل</div>
+    <h3 style="margin:8px 0 6px;">${a.companyName}</h3>
+    <div class="quick-view-desc">${a.description}</div>
+    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+      ${a.whatsappLink ? `<a class="btn btn-primary" style="flex:1;" href="${a.whatsappLink}" target="_blank" rel="noopener">💬 تواصل عبر واتساب</a>` : ''}
+      <button class="btn btn-outline" onclick="toggleAdLike('${a.id}'); renderAdQuickViewContent();">${liked ? '❤️' : '🤍'}</button>
+    </div>
+    <div class="quick-view-nav">
+      <button class="faq-nav-btn" onclick="navigateAdQuickView(-1)" ${currentAdQuickViewIndex===0?'disabled':''} style="color:var(--ink-dark);background:var(--paper-soft);border-color:var(--line);">◀ السابق</button>
+      <span class="faq-modal-counter">${currentAdQuickViewIndex+1} / ${currentAdsList.length}</span>
+      <button class="faq-nav-btn" onclick="navigateAdQuickView(1)" ${currentAdQuickViewIndex===currentAdsList.length-1?'disabled':''} style="color:var(--ink-dark);background:var(--paper-soft);border-color:var(--line);">التالي ▶</button>
+    </div>
+  `;
+}
+
 // ====== الطلبات الجماعية (كسر الـMOQ) ======
 let currentGbJoinId = null;
 
@@ -4543,6 +4740,7 @@ function enterAdminPanel(){
   renderShippingRatesForm();
   loadCatalogsAdmin();
   loadGroupBuysAdmin();
+  loadAdsAdmin();
   db.collection('settings').doc('announcement').get().then(doc=>{
     if(doc.exists){
       document.getElementById('announcementActive').value = doc.data().active ? 'active' : 'inactive';
@@ -5998,6 +6196,7 @@ renderFaqList();
 renderFlashSalePage();
 loadCatalogsPublic();
 loadGroupBuysPublic();
+loadAdsPublic();
 loadAnnouncement();
 loadTotalCustomersCount();
 

@@ -1,0 +1,28 @@
+{
+  "id": "/AlHossain-Platform/",
+  "name": "AlHossain",
+  "short_name": "AlHossain",
+  "description": "AlHossain — وكيلك المعتمد في الصين. تسوّق، اشحن، وتابع طلباتك من الصين بسهولة عبر منصة واحدة.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F1E8",
+  "theme_color": "#0F2648",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

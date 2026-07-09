@@ -9,8 +9,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AlHossain">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%230F2648'/%3E%3Ctext x='96' y='128' font-size='110' font-family='Georgia,serif' font-weight='bold' fill='%23E8A800' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
-<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22AlHossain%22%2C%22short_name%22%3A%22AlHossain%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F5F1E8%22%2C%22theme_color%22%3A%22%230F2648%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2Bxmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2Bviewbox%253D%25270%2B0%2B192%2B192%2527%253E%253Crect%2Bwidth%253D%2527192%2527%2Bheight%253D%2527192%2527%2Brx%253D%252736%2527%2Bfill%253D%2527%25230F2648%2527%252F%253E%253Ctext%2Bx%253D%252796%2527%2By%253D%2527128%2527%2Bfont-size%253D%2527110%2527%2Bfont-family%253D%2527Georgia%252Cserif%2527%2Bfont-weight%253D%2527bold%2527%2Bfill%253D%2527%2523E8A800%2527%2Btext-anchor%253D%2527middle%2527%253EH%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
 <meta name="description" content="AlHossain — وكيلك المعتمد في الصين. تسوّق، اشحن، وتابع طلباتك من الصين بسهولة عبر منصة واحدة.">
 <meta property="og:title" content="AlHossain — بوابتك الإلكترونية في الصين">
 <meta property="og:description" content="تسوّق من تاوباو و1688 وعلي بابا، واحسب تكلفة شحنتك، وتابع طلباتك أونلاين.">
@@ -6174,14 +6174,9 @@ fetchLiveRates();
 let deferredInstallPrompt = null;
 const INSTALL_DISMISS_KEY = 'installBannerDismissed';
 
-// تسجيل Service Worker بسيط (شرط أساسي لدعم متصفحات أندرويد لاقتراح التثبيت)
+// تسجيل Service Worker حقيقي من ملف sw.js (مطلوب لتغليف الموقع كتطبيق حقيقي عبر PWABuilder)
 if('serviceWorker' in navigator){
-  try{
-    const swCode = `self.addEventListener('fetch', e => {});`;
-    const swBlob = new Blob([swCode], {type:'application/javascript'});
-    const swUrl = URL.createObjectURL(swBlob);
-    navigator.serviceWorker.register(swUrl).catch(()=>{});
-  }catch(e){}
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
 
 window.addEventListener('beforeinstallprompt', (e) => {

@@ -159,6 +159,19 @@
   .hero p{ max-width:520px; margin:0 auto; color:#5a6668; font-size:15.5px; line-height:1.85; }
   .hero-cta{ margin-top:28px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 
+  .app-download-card{
+    background:linear-gradient(160deg, var(--white) 0%, var(--paper-soft) 100%);
+    border:1px solid rgba(224,165,24,0.3); border-radius:18px; padding:24px 20px;
+    margin-top:30px; text-align:center;
+    box-shadow:0 6px 20px rgba(20,48,74,0.08);
+  }
+  .app-download-icon{ font-size:36px; margin-bottom:8px; }
+  .app-safety-note{
+    display:flex; align-items:flex-start; gap:8px; text-align:right;
+    background:rgba(27,138,74,0.08); border:1px solid rgba(27,138,74,0.25);
+    border-radius:10px; padding:10px 12px; margin-top:14px;
+    font-size:11.5px; color:#2d5940; line-height:1.7;
+  }
   .how-it-works{ margin-top:50px; padding-top:30px; border-top:2px dashed var(--line); }
   .hiw-steps{ display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; }
   .hiw-step{
@@ -1031,6 +1044,17 @@
         <button class="btn btn-gold" data-i18n="hero_browse" onclick="showTab('catalog')">تصفح المنتجات</button>
         <a class="btn btn-primary" data-i18n="hero_whatsapp" href="https://wa.link/noa4ss" target="_blank" rel="noopener">تواصل معنا على واتساب</a>
         <button class="btn btn-outline" data-i18n="hero_track" onclick="showTab('track')">تتبع طلبي</button>
+      </div>
+    </div>
+
+    <div class="app-download-card">
+      <div class="app-download-icon">📲</div>
+      <h3 style="margin-bottom:6px;">حمّل تطبيقنا الرسمي</h3>
+      <p style="font-size:13px;color:#666;margin-bottom:14px;">وصول أسرع، وتجربة أسهل من جوالك مباشرة.</p>
+      <a class="btn btn-gold" style="width:100%;display:block;text-align:center;" href="./AlHossain.apk" download>⬇️ تحميل التطبيق (APK)</a>
+      <div class="app-safety-note">
+        <span style="font-size:16px;">🛡️</span>
+        <span>التطبيق آمن 100% وهو نفس موقعنا الرسمي بالظبط. قد يظهر تحذير "مصدر غير معروف" من أندرويد لأننا لم ننشره على متجر Google Play بعد — هذا إجراء عام من أندرويد لأي تطبيق خارج المتجر، وليس علامة خطر. اضغط "تثبيت على أي حال" للمتابعة بثقة.</span>
       </div>
     </div>
 

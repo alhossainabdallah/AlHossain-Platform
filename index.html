@@ -237,6 +237,12 @@
     cursor:pointer; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,.2);
   }
   .moq-badge{ font-size:11px; color:var(--rust); font-weight:700; }
+  .category-chip{
+    flex-shrink:0; padding:7px 16px; border-radius:999px; border:1px solid var(--line);
+    background:var(--white); color:var(--ink-dark); font-family:'Tajawal'; font-size:13px; font-weight:700;
+    cursor:pointer; white-space:nowrap;
+  }
+  .category-chip.active{ background:var(--ink); color:var(--gold); border-color:var(--ink); }
   .term-help-btn{
     display:inline-flex; align-items:center; justify-content:center;
     width:15px; height:15px; border-radius:50%; background:var(--rust); color:#fff;
@@ -1109,7 +1115,8 @@
     <div class="catalog-head">
       <h2 data-i18n="catalog_title">المنتجات</h2>
     </div>
-    <input id="productSearchInput" class="admin-search" placeholder="ابحث عن منتج بالاسم..." oninput="renderCatalog()" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:14px;">
+    <input id="productSearchInput" class="admin-search" placeholder="ابحث عن منتج بالاسم..." oninput="renderCatalog()" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+    <div id="categoryFiltersWrap" style="display:none;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;"></div>
     <div id="recentlyViewedWrap" style="display:none;margin-bottom:18px;">
       <div style="font-weight:700;font-size:14px;margin-bottom:8px;">🕓 شفتها مؤخراً</div>
       <div class="grid" id="recentlyViewedGrid"></div>
@@ -1129,9 +1136,31 @@
       <button class="auth-close" onclick="closeWishlistModal()" style="position:absolute;left:16px;top:14px;">✕</button>
       <div style="font-size:34px;margin-bottom:8px;">📝</div>
       <h3 style="margin-bottom:8px;" data-i18n="wishlist_modal_title">قائمة الأمنيات</h3>
-      <p style="font-size:13.5px;color:#666;margin-bottom:12px;" data-i18n="wishlist_modal_desc">اكتب اسم أو وصف المنتج اللي بتدور عليه ومقدروش لقيته، وهنحاول نوفره لك.</p>
+      <p style="font-size:13.5px;color:#666;margin-bottom:12px;" data-i18n="wishlist_modal_desc">اكتب اسم أو وصف المنتج الذي تبحث عنه ولم تجده، وسنحاول توفيره لك.</p>
       <textarea id="wishlistInput" placeholder="مثال: سماعات بلوتوث رياضية مقاومة للماء..." style="width:100%;min-height:80px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;"></textarea>
       <button class="btn btn-primary" style="width:100%;" onclick="submitWishlist()" data-i18n="wishlist_submit_btn">إرسال</button>
+    </div>
+  </div>
+
+  <div class="quick-view-overlay" id="editProductOverlay" onclick="if(event.target===this) closeEditProductModal()">
+    <div class="quick-view-modal" style="text-align:right;">
+      <button class="auth-close" onclick="closeEditProductModal()" style="position:absolute;left:14px;top:12px;z-index:2;">✕</button>
+      <h3 style="text-align:center;margin-bottom:14px;">✏️ تعديل المنتج</h3>
+      <input type="hidden" id="editProdId">
+      <div class="admin-row">
+        <input id="editProdName" placeholder="اسم المنتج">
+        <input id="editProdPrice" placeholder="السعر (¥)" type="number">
+      </div>
+      <div class="admin-row">
+        <input id="editProdMoq" placeholder="الحد الأدنى للطلب MOQ (اختياري)">
+      </div>
+      <div class="admin-row">
+        <select id="editProdCategory" style="padding:8px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';flex:1;">
+          <option value="">بدون تصنيف</option>
+        </select>
+      </div>
+      <textarea id="editProdDesc" placeholder="وصف المنتج (اختياري)" style="width:100%;min-height:70px;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;"></textarea>
+      <button class="btn btn-gold" style="width:100%;" onclick="saveProductEdit()" id="saveEditProdBtn">💾 حفظ التعديلات</button>
     </div>
   </div>
 
@@ -1140,7 +1169,7 @@
       <button class="auth-close" onclick="closeAiSearchModal()" style="position:absolute;left:14px;top:12px;z-index:2;">✕</button>
       <div style="text-align:center;font-size:34px;margin-bottom:6px;">🤖</div>
       <h3 style="text-align:center;margin-bottom:6px;">مساعد البحث الذكي</h3>
-      <p style="font-size:12.5px;color:#666;text-align:center;margin-bottom:14px;">اكتب وصف اللي بتدوّر عليه بكلماتك العادية، وهنقترح لك أقرب منتجاتنا المتاحة</p>
+      <p style="font-size:12.5px;color:#666;text-align:center;margin-bottom:14px;">اكتب وصف ما تبحث عنه بكلماتك الخاصة، وسنقترح عليك أقرب منتجاتنا المتاحة</p>
       <textarea id="aiSearchInput" placeholder="مثال: حاجة تسخن مياه بسرعة للشاي..." style="width:100%;min-height:70px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;"></textarea>
       <button class="btn btn-gold" style="width:100%;" onclick="runAiSearch()">🔍 دوّرلي على منتج</button>
       <div id="aiSearchResults" style="margin-top:16px;"></div>
@@ -1345,7 +1374,7 @@
         <span class="term-badge">TA</span>
         <h3 data-i18n="ta_title">ضمان التجارة (Trade Assurance)</h3>
       </div>
-      <p data-i18n="ta_p1">خدمة مجانية من علي بابا بتحمي المشتري: لو المورد اتأخر في التسليم أو الجودة مطابقتش المتفق عليه، تقدر تسترد فلوسك. دايماً فضّل الموردين اللي عندهم العلامة دي.</p>
+      <p data-i18n="ta_p1">خدمة مجانية من علي بابا تحمي المشتري: إذا تأخر المورد في التسليم أو لم تطابق الجودة المتفق عليه، يمكنك استرداد أموالك. يُفضَّل دائماً اختيار الموردين الحاصلين على هذه العلامة.</p>
     </div>
 
     <div class="term-card">
@@ -1353,7 +1382,7 @@
         <span class="term-badge">✔️</span>
         <h3 data-i18n="verified_title">مورد ذهبي / موثّق (Gold / Verified Supplier)</h3>
       </div>
-      <p data-i18n="verified_p1">علامة بتدّيها علي بابا للموردين اللي أثبتوا هويتهم وسجلهم التجاري رسمياً، وبعضهم بيتفحص مصنعهم فعلياً بزيارة ميدانية من طرف علي بابا نفسه. مش ضمان جودة 100%، لكنها مؤشر ثقة أولي مهم.</p>
+      <p data-i18n="verified_p1">علامة تمنحها علي بابا للموردين الذين أثبتوا هويتهم وسجلهم التجاري رسمياً، وبعضهم يخضع لفحص فعلي لمصنعه بزيارة ميدانية من علي بابا نفسها. ليست ضماناً للجودة بنسبة 100%، لكنها مؤشر ثقة أولي مهم.</p>
     </div>
 
     <div class="term-card">
@@ -1361,7 +1390,7 @@
         <span class="term-badge">RFQ</span>
         <h3 data-i18n="rfq_title">طلب عرض سعر (Request for Quotation)</h3>
       </div>
-      <p data-i18n="rfq_p1">بدل ما تدوّر على المنتج بنفسك، تكتب مواصفات اللي محتاجه (الكمية، المواصفات، السعر المتوقع)، وموردين كتير بيبعتولك عروض أسعار مختلفة تختار منها.</p>
+      <p data-i18n="rfq_p1">بدلاً من البحث عن المنتج بنفسك، تكتب مواصفات ما تحتاجه (الكمية، المواصفات، السعر المتوقع)، ويرسل لك موردون عديدون عروض أسعار مختلفة تختار من بينها.</p>
     </div>
 
     <div class="term-card">
@@ -1369,7 +1398,7 @@
         <span class="term-badge">OEM</span>
         <h3 data-i18n="oem_title">OEM / ODM — التصنيع بعلامتك الخاصة</h3>
       </div>
-      <p data-i18n="oem_p1"><strong>OEM:</strong> المصنع يصنّع منتج جاهز التصميم لكن يحط عليه شعارك أو اسم علامتك التجارية.<br><strong>ODM:</strong> المصنع عنده تصميم جاهز من عنده، وانت بس تختار وتعدّل بسيط وتحطله شعارك. الاتنين مفيدين لو حابب تبني علامة تجارية خاصة بيك مستقبلاً.</p>
+      <p data-i18n="oem_p1"><strong>OEM:</strong> يصنّع المصنع منتجاً جاهز التصميم، ثم يضع عليه شعارك أو اسم علامتك التجارية.<br><strong>ODM:</strong> يمتلك المصنع تصميماً جاهزاً خاصاً به، وأنت فقط تختار وتعدّل يسيراً ثم تضيف شعارك. كلا الخيارين مفيد إذا كنت ترغب في بناء علامة تجارية خاصة بك مستقبلاً.</p>
     </div>
 
     <div class="term-card">
@@ -1377,7 +1406,7 @@
         <span class="term-badge">شروط</span>
         <h3 data-i18n="incoterms_title">FOB / CIF / EXW — شروط التسليم الدولية</h3>
       </div>
-      <p data-i18n="incoterms_p1"><strong>EXW:</strong> تستلم البضاعة من باب المصنع نفسه، وانت المسؤول عن كل حاجة بعد كده (النقل، الشحن، التخليص).<br><strong>FOB:</strong> المصنع يوصّل البضاعة لميناء الشحن ويحمّلها على السفينة، وبعدها المسؤولية عليك.<br><strong>CIF:</strong> المصنع يتحمّل تكلفة الشحن والتأمين لحد ما توصل ميناء وجهتك.<br>نحن كوكيلك بنتعامل مع التفاصيل دي كلها نيابة عنك، فمش لازم تحفظها، بس مفيد تعرف تفرّق بينها لو شفتها في أي عرض سعر.</p>
+      <p data-i18n="incoterms_p1"><strong>EXW:</strong> تستلم البضاعة من باب المصنع مباشرة، وأنت المسؤول عن كل ما بعد ذلك (النقل، الشحن، التخليص).<br><strong>FOB:</strong> يوصّل المصنع البضاعة إلى ميناء الشحن ويحمّلها على السفينة، وتقع المسؤولية عليك بعد ذلك.<br><strong>CIF:</strong> يتحمّل المصنع تكلفة الشحن والتأمين حتى وصول البضاعة إلى ميناء وجهتك.<br>نحن بصفتنا وكيلك نتولى هذه التفاصيل نيابة عنك، فلست بحاجة لحفظها، لكن من المفيد أن تميّز بينها إذا وردت في أي عرض سعر.</p>
     </div>
 
     <div class="term-card">
@@ -1393,7 +1422,7 @@
         <span class="term-badge">⏱️</span>
         <h3 data-i18n="leadtime_title">مدة التصنيع (Lead Time)</h3>
       </div>
-      <p data-i18n="leadtime_p1">الوقت اللي المصنع محتاجه عشان يصنّع طلبك من لحظة تأكيد الدفع، وده منفصل تماماً عن مدة الشحن نفسها. يعني لو Lead Time أسبوعين وشحن بحري شهر، المدة الكلية حوالي 6 أسابيع من التأكيد لحد الاستلام.</p>
+      <p data-i18n="leadtime_p1">الوقت الذي يحتاجه المصنع لتصنيع طلبك منذ لحظة تأكيد الدفع، وهو منفصل تماماً عن مدة الشحن نفسها. فإذا كانت مدة التصنيع أسبوعين والشحن البحري شهراً، تصبح المدة الكلية نحو 6 أسابيع من التأكيد وحتى الاستلام.</p>
     </div>
   </section>
 
@@ -1599,7 +1628,7 @@
       <button class="auth-close" onclick="closeGroupBuyJoin()" style="position:absolute;left:16px;top:14px;">✕</button>
       <div style="font-size:34px;margin-bottom:8px;">🤝</div>
       <h3 id="gbJoinTitle" style="margin-bottom:8px;"></h3>
-      <p style="font-size:13.5px;color:#666;margin-bottom:12px;">حدد الكمية اللي عايزها من المنتج ده، وهتتسجل ضمن التجميع.</p>
+      <p style="font-size:13.5px;color:#666;margin-bottom:12px;">حدد الكمية التي ترغب بها من هذا المنتج، وسيتم تسجيلها ضمن التجميع.</p>
       <input type="number" id="gbJoinQty" placeholder="الكمية المطلوبة" min="1" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;text-align:center;">
       <button class="btn btn-gold" style="width:100%;" onclick="submitGroupBuyJoin()">انضمام للطلب</button>
     </div>
@@ -1607,7 +1636,7 @@
 
   <section id="catalogs">
     <h2 style="margin-bottom:6px;">📚 كتالوجات المنتجات</h2>
-    <p style="color:#5c6b6b; margin-bottom:18px;">تصفّح كتالوجات المصانع، واختر أكواد المنتجات اللي عجبتك، وابعتلنا الأكواد عشان نجهزلك عرض سعر.</p>
+    <p style="color:#5c6b6b; margin-bottom:18px;">تصفّح كتالوجات المصانع، واختر أكواد المنتجات التي أعجبتك، وأرسل لنا الأكواد لنجهّز لك عرض سعر.</p>
     <div id="catalogsList"></div>
   </section>
 
@@ -1683,13 +1712,27 @@
         <button class="tiny-btn" onclick="removeFingerprint()" id="fpRemoveBtn" style="display:none;margin-right:8px;">إلغاء تسجيل البصمة</button>
       </div>
       <div class="admin-section">
+        <h3>🗂️ تصنيفات المنتجات</h3>
+        <p style="font-size:12.5px;color:#777;margin-bottom:10px;">أنشئ تصنيفات (مثال: إلكترونيات، أدوات منزلية، إكسسوارات)، واختر لكل منتج تصنيفه من نموذج الإضافة أو التعديل.</p>
+        <div class="admin-row">
+          <input id="newCategoryName" placeholder="اسم التصنيف الجديد">
+          <button class="tiny-btn gold" onclick="addCategory()">إضافة</button>
+        </div>
+        <div id="adminCategoriesList" style="margin-top:10px;"></div>
+      </div>
+      <div class="admin-section">
         <h3>إضافة منتج جديد</h3>
         <div class="admin-row">
           <input id="newProdName" placeholder="اسم المنتج">
-          <input id="newProdPrice" placeholder="السعر ($)" type="number">
+          <input id="newProdPrice" placeholder="السعر (¥)" type="number">
         </div>
         <div class="admin-row">
           <input id="newProdMoq" placeholder="الحد الأدنى للطلب MOQ (اختياري، مثال: 50 قطعة)">
+        </div>
+        <div class="admin-row">
+          <select id="newProdCategory" style="padding:8px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';flex:1;">
+            <option value="">بدون تصنيف</option>
+          </select>
         </div>
         <div class="admin-row">
           <textarea id="newProdDesc" placeholder="وصف المنتج (اختياري) — تفاصيل، مواصفات، ملاحظات..." style="width:100%;min-height:70px;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';"></textarea>
@@ -1717,7 +1760,7 @@
         <textarea id="bulkProductsInput" placeholder="الصق هنا قائمة المنتجات، كل منتج في سطر..." style="width:100%;min-height:140px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;direction:ltr;text-align:right;"></textarea>
         <div id="bulkAddProgress" style="font-size:13px;color:var(--rust);margin:6px 0;display:none;"></div>
         <button class="btn btn-gold" onclick="bulkAddProducts()" id="bulkAddBtn">إضافة كل المنتجات دفعة واحدة</button>
-        <p style="font-size:11.5px;color:#999;margin-top:8px;">* الصور مش هتتضاف تلقائياً بالطريقة دي — بعد الإضافة، تقدر تدخل على كل منتج من قايمة "المنتجات الحالية" تحت وتضيفله صورة.</p>
+        <p style="font-size:11.5px;color:#999;margin-top:8px;">* لن تُضاف الصور تلقائياً بهذه الطريقة — بعد الإضافة، يمكنك الدخول إلى كل منتج من قائمة "المنتجات الحالية" أدناه وإضافة صورة له.</p>
       </div>
       <div class="admin-section">
         <h3 style="display:flex;justify-content:space-between;align-items:center;">
@@ -1749,10 +1792,10 @@
           </div>
           <div class="admin-row">
             <input id="flashProductName" placeholder="اسم المنتج *">
-            <input id="flashSalePrice" type="number" placeholder="سعر العرض ($) *" step="0.01">
+            <input id="flashSalePrice" type="number" placeholder="سعر العرض (¥) *" step="0.01">
           </div>
           <div class="admin-row">
-            <input id="flashOriginalPrice" type="number" placeholder="السعر الأصلي ($)" step="0.01">
+            <input id="flashOriginalPrice" type="number" placeholder="السعر الأصلي (¥)" step="0.01">
             <input id="flashMaxQuantity" type="number" placeholder="العدد المتاح (1-10)" value="1" min="1" max="10">
           </div>
           <div class="admin-row">
@@ -1799,7 +1842,7 @@
       </div>
       <div class="admin-section">
         <h3>💰 أسعار حاسبة الشحن (نطاق سعري لكل دولة)</h3>
-        <p style="font-size:12.5px;color:#777;margin-bottom:12px;">هذه الأسعار هي أساس حساب التكلفة التقريبية اللي بتظهر للعميل في حاسبات "دليل المصطلحات".</p>
+        <p style="font-size:12.5px;color:#777;margin-bottom:12px;">هذه الأسعار هي أساس حساب التكلفة التقريبية التي تظهر للعميل في حاسبات "دليل المصطلحات".</p>
         <div id="shippingRatesForm"></div>
         <button class="btn btn-gold" style="margin-top:8px;" onclick="saveShippingRates()">💾 حفظ كل الأسعار</button>
       </div>
@@ -1892,7 +1935,7 @@
         <h3>🤝 إدارة الطلبات الجماعية (كسر الـMOQ)</h3>
         <div class="admin-row">
           <input id="newGbTitle" placeholder="اسم المنتج">
-          <input id="newGbPrice" type="number" placeholder="السعر التقريبي للقطعة ($)">
+          <input id="newGbPrice" type="number" placeholder="السعر التقريبي للقطعة (¥)">
         </div>
         <div class="admin-row">
           <input id="newGbTarget" type="number" placeholder="الحد الأدنى المطلوب (MOQ) — مثال: 500">
@@ -2155,7 +2198,7 @@
 
   <div class="auth-modal" id="googleCompleteProfileWrap" style="display:none;">
     <h3 style="margin-bottom:4px;">🎉 خطوة أخيرة بسيطة</h3>
-    <p style="text-align:center;color:#777;font-size:13px;margin-bottom:14px;">محتاجين بس شوية بيانات إضافية عشان نجهزلك مارك الشحن الخاص بيك</p>
+    <p style="text-align:center;color:#777;font-size:13px;margin-bottom:14px;">نحتاج فقط بعض البيانات الإضافية لنجهّز لك رمز الشحن الخاص بك</p>
     <div class="phone-wrap">
       <select id="gcpPhoneCode">
         <option value="+249">🇸🇩 ‎+249</option>
@@ -2203,7 +2246,7 @@
     <p class="onboarding-desc">انضم إلى قائمة الإشعارات الفورية عبر واتساب، وستصلك رسالة فور إضافة أي عرض أو منتج جديد على المنصة.</p>
     <div style="display:flex;gap:8px;margin-top:16px;">
       <button class="btn btn-outline" style="flex:1;" onclick="closeOffersJoinModal()">لا، شكراً</button>
-      <button class="btn btn-gold" style="flex:1;" onclick="joinOffersWhatsapp()">✅ انضم دلوقتي</button>
+      <button class="btn btn-gold" style="flex:1;" onclick="joinOffersWhatsapp()">✅ انضم الآن</button>
     </div>
   </div>
 </div>
@@ -3372,7 +3415,7 @@ function renderProductCard(p){
       </div>
       <div class="body">
         <div class="name">${p.name}</div>
-        <div class="price">$${p.price}</div>
+        <div class="price">¥${p.price}</div>
         ${p.moq ? `<div class="moq-badge">📦 MOQ: ${p.moq} <span class="term-help-btn" onclick="event.stopPropagation(); openTermHelp('MOQ')">؟</span></div>` : ''}
         <button class="add" onclick="event.stopPropagation(); addToCart('${p.id}')">${t('add_to_cart')}</button>
       </div>
@@ -3387,10 +3430,13 @@ function renderCatalog(){
   }
   const searchInput = document.getElementById('productSearchInput');
   const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
-  const filtered = term ? products.filter(p => p.name.toLowerCase().includes(term)) : products;
+  let filtered = term ? products.filter(p => p.name.toLowerCase().includes(term)) : products;
+  if(activeCategoryFilter){
+    filtered = filtered.filter(p => p.category === activeCategoryFilter);
+  }
 
   if(filtered.length === 0){
-    grid.innerHTML = `<div class="empty">لا توجد منتجات مطابقة لبحثك</div>`;
+    grid.innerHTML = `<div class="empty">لا توجد منتجات مطابقة</div>`;
   } else {
     grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
   }
@@ -3425,7 +3471,11 @@ let currentQuickViewIndex = -1;
 function getQuickViewProductList(){
   const searchInput = document.getElementById('productSearchInput');
   const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
-  return term ? products.filter(p => p.name.toLowerCase().includes(term)) : products;
+  let list = term ? products.filter(p => p.name.toLowerCase().includes(term)) : products;
+  if(activeCategoryFilter){
+    list = list.filter(p => p.category === activeCategoryFilter);
+  }
+  return list;
 }
 
 function openFlashSaleQuickView(){
@@ -3437,8 +3487,8 @@ function openFlashSaleQuickView(){
     </div>
     <h3 style="margin:14px 0 6px;">🔥 ${s.productName}</h3>
     <div style="display:flex;gap:10px;justify-content:center;align-items:center;">
-      <span style="text-decoration:line-through;color:#999;">$${s.originalPrice}</span>
-      <span class="price" style="font-size:22px;">$${s.salePrice}</span>
+      <span style="text-decoration:line-through;color:#999;">¥${s.originalPrice}</span>
+      <span class="price" style="font-size:22px;">¥${s.salePrice}</span>
     </div>
     ${s.description ? `<div class="quick-view-desc">${s.description}</div>` : ''}
     <button class="btn btn-gold" style="width:100%;margin-top:14px;" onclick="closeQuickView(); quickOrderFlashSale();">اطلب الآن عبر واتساب 📩</button>
@@ -3494,7 +3544,7 @@ function renderQuickViewContent(list){
       ${gallery.map((img,i)=>`<img src="${img}" onclick="document.getElementById('qvMainThumb').innerHTML='<img src=\\'${img}\\'>'" style="width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid ${i===0?'var(--gold)':'transparent'};flex-shrink:0;">`).join('')}
     </div>` : ''}
     <h3 style="margin:14px 0 6px;">${p.name}</h3>
-    <div class="price" style="font-size:20px;">$${p.price}</div>
+    <div class="price" style="font-size:20px;">¥${p.price}</div>
     ${p.moq ? `<div class="moq-badge" style="margin:8px 0;">📦 MOQ: ${p.moq} <span class="term-help-btn" onclick="openTermHelp('MOQ')">؟</span></div>` : ''}
     ${p.description ? `<div class="quick-view-desc">${p.description}</div>` : ''}
     <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
@@ -3529,7 +3579,7 @@ async function toggleFavorite(id){
 function quickOrder(id){
   const p = products.find(x=>x.id===id);
   if(!p) return;
-  const msg = `مرحباً، أريد الاستفسار عن طلب: ${p.name} (${p.price}$)`;
+  const msg = `مرحباً، أريد الاستفسار عن طلب: ${p.name} (${p.price}¥)`;
   window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
@@ -3555,7 +3605,7 @@ function openMarkInfo(){
 const termHelpContent = {
   MOQ: { ar:{title:'MOQ — الحد الأدنى للطلب', text:'أقل كمية يقبل المصنع بيعها في الطلب الواحد. لو محتاج كمية أقل، ممكن نتفاوض مع المصنع نيابة عنك.'},
          en:{title:'MOQ — Minimum Order Quantity', text:'The smallest quantity the factory accepts per order. If you need less, we can negotiate with the factory on your behalf.'} },
-  CBM: { ar:{title:'CBM — المتر المكعب', text:'وحدة قياس حجم الشحنة، وهي الأساس اللي بيتحسب عليه سعر الشحن البحري. كل ما الحجم زاد، زادت التكلفة.'},
+  CBM: { ar:{title:'CBM — المتر المكعب', text:'وحدة قياس حجم الشحنة، وهي الأساس الذي يُحسب عليه سعر الشحن البحري. كلما زاد الحجم، زادت التكلفة.'},
          en:{title:'CBM — Cubic Meter', text:'The unit used to measure shipment volume, which is the basis for calculating sea freight cost. Larger volume means higher cost.'} }
 };
 function openTermHelp(term){
@@ -3609,10 +3659,10 @@ function renderCart(){
           <button onclick="changeQty('${id}',1)">+</button>
         </div>
       </div>
-      <div>$${(p.price*qty).toFixed(2)}</div>
+      <div>¥${(p.price*qty).toFixed(2)}</div>
     </div>`;
   }).join('');
-  document.getElementById('cartTotal').textContent = `${t('total_label')}: $${total.toFixed(2)}`;
+  document.getElementById('cartTotal').textContent = `${t('total_label')}: ¥${total.toFixed(2)}`;
 }
 
 function changeQty(id, delta){
@@ -3707,7 +3757,7 @@ async function checkoutWhatsApp(){
     const p = products.find(x=>x.id===id);
     const qty = cart[id];
     total += p.price*qty;
-    return `- ${p.name} × ${qty} = $${(p.price*qty).toFixed(2)}`;
+    return `- ${p.name} × ${qty} = ¥${(p.price*qty).toFixed(2)}`;
   });
   const orderData = {
     items: ids.map(id=>({name:products.find(x=>x.id===id).name, qty:cart[id]})),
@@ -3721,8 +3771,8 @@ async function checkoutWhatsApp(){
   };
   const ref = await db.collection('orders').add(orderData);
   myOrders[ref.id] = orderData;
-  notifyAdmin('طلب جديد على الموقع', `مارك الشحن: ${currentCustomerData.shippingMark}\nالإجمالي: $${total.toFixed(2)}\nالوجهة: ${orderData.destination}`);
-  const msg = `مرحباً، أريد تأكيد طلب جديد.\nمارك الشحن الخاص بي (Shipping Mark): ${currentCustomerData.shippingMark}\n${lines.join('\n')}\nالإجمالي: $${total.toFixed(2)}\nالوجهة: ${orderData.destination}`;
+  notifyAdmin('طلب جديد على الموقع', `مارك الشحن: ${currentCustomerData.shippingMark}\nالإجمالي: ¥${total.toFixed(2)}\nالوجهة: ${orderData.destination}`);
+  const msg = `مرحباً، أريد تأكيد طلب جديد.\nمارك الشحن الخاص بي (Shipping Mark): ${currentCustomerData.shippingMark}\n${lines.join('\n')}\nالإجمالي: ¥${total.toFixed(2)}\nالوجهة: ${orderData.destination}`;
   window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
   cart = {};
   updateCartBadge();
@@ -3767,7 +3817,7 @@ function renderShipmentsResult(){
         ${order.carrierTracking ? `<div><strong>${t('carrier_tracking_label')}:</strong> ${order.carrierTracking}</div>` : ''}
         <div><strong>${t('products_label')}:</strong></div>
         <ul style="margin:6px 18px;">${order.items.map(i=>`<li>${i.name} × ${i.qty}</li>`).join('')}</ul>
-        <div><strong>${t('total_label')}:</strong> $${order.total}</div>
+        <div><strong>${t('total_label')}:</strong> ¥${order.total}</div>
       </div>`).join('');
   }
   if(importMatches.length){
@@ -3782,7 +3832,7 @@ function renderShipmentsResult(){
         <div><strong>${t('destination_label')}:</strong> ${r.destination||'-'}</div>
         <div><strong>${t('date_label')}:</strong> ${r.date}</div>
         <div style="margin:6px 0;"><strong>${t('status_label')}:</strong> <span class="status-pill">${r.status}</span></div>
-        ${r.quotedPrice ? `<div><strong>${t('quoted_price_label')}:</strong> $${r.quotedPrice}</div>` : ''}
+        ${r.quotedPrice ? `<div><strong>${t('quoted_price_label')}:</strong> ¥${r.quotedPrice}</div>` : ''}
       </div>`;
     }).join('');
   }
@@ -4031,7 +4081,7 @@ async function saveFlashSale(){
     if(active && wasInactiveBefore){
       const subsSnap = await db.collection('flashSaleSubscribers').get();
       subsSnap.docs.forEach(sd => {
-        notifyCustomer(sd.data().email, '🔥 عرض ناري جديد وصل!', `العرض اللي كنت مستني: ${productName}\nالسعر: $${salePrice}\nادخل الموقع بسرعة قبل ما ينفد!`);
+        notifyCustomer(sd.data().email, '🔥 عرض ناري جديد وصل!', `العرض الذي كنت تنتظره: ${productName}\nالسعر: ¥${salePrice}\nادخل الموقع بسرعة قبل نفاد الكمية!`);
         sd.ref.delete();
       });
       if(!subsSnap.empty) showToast(`تم تنبيه ${subsSnap.size} عميل مشترك بالعرض الجديد`);
@@ -4107,8 +4157,8 @@ async function renderFlashSalePage(){
       <h2 style="color:var(--paper);font-size:24px;margin:8px 0;">${sale.productName}</h2>
       ${sale.image ? `<img src="${sale.image}" onclick="openFlashSaleQuickView()" style="max-width:180px;border-radius:12px;margin:10px auto;display:block;cursor:pointer;border:2px solid rgba(232,168,0,0.5);">` : ''}
       <div style="display:flex;gap:10px;justify-content:center;align-items:center;margin:10px 0;">
-        <span style="text-decoration:line-through;color:rgba(255,255,255,0.6);">$${sale.originalPrice}</span>
-        <span style="font-size:26px;font-weight:900;color:var(--gold);">$${sale.salePrice}</span>
+        <span style="text-decoration:line-through;color:rgba(255,255,255,0.6);">¥${sale.originalPrice}</span>
+        <span style="font-size:26px;font-weight:900;color:var(--gold);">¥${sale.salePrice}</span>
       </div>
       ${sale.description ? `<p style="font-size:13.5px;color:rgba(255,255,255,0.85);margin-bottom:10px;">${sale.description}</p>` : ''}
       ${(!expired && !sale.sold) ? `
@@ -4470,7 +4520,7 @@ async function loadGroupBuysPublic(){
         <div class="gb-card-thumb">${g.image ? `<img src="${g.image}">` : g.title.charAt(0)}</div>
         <div>
           <div class="gb-card-title">${g.title}</div>
-          ${g.price ? `<div class="gb-card-price">≈ $${g.price} للقطعة</div>` : ''}
+          ${g.price ? `<div class="gb-card-price">≈ ¥${g.price} للقطعة</div>` : ''}
         </div>
       </div>
       <div class="gb-progress-track"><div class="gb-progress-fill" style="width:${pct}%;"></div></div>
@@ -4522,7 +4572,7 @@ function renderGbQuickViewContent(){
       ${gallery.map((img,i)=>`<img src="${img}" onclick="document.getElementById('qvMainThumb').innerHTML='<img src=\\\\'${img}\\\\'>'" style="width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid ${i===0?'var(--gold)':'transparent'};flex-shrink:0;">`).join('')}
     </div>` : ''}
     <h3 style="margin:14px 0 6px;">🤝 ${g.title}</h3>
-    ${g.price ? `<div class="price" style="font-size:18px;">≈ $${g.price} للقطعة</div>` : ''}
+    ${g.price ? `<div class="price" style="font-size:18px;">≈ ¥${g.price} للقطعة</div>` : ''}
     ${g.description ? `<div class="quick-view-desc">${g.description}</div>` : ''}
     <div class="gb-progress-track" style="margin-top:12px;"><div class="gb-progress-fill" style="width:${pct}%;"></div></div>
     <div class="gb-progress-label"><span>${g.currentQty} من ${g.targetQty} قطعة</span><span>${pct}%</span></div>
@@ -4763,7 +4813,7 @@ function closeAiSearchModal(){
 function runAiSearch(){
   const query = document.getElementById('aiSearchInput').value.trim();
   const resultsBox = document.getElementById('aiSearchResults');
-  if(!query){ resultsBox.innerHTML = `<div class="empty">اكتب وصف المنتج اللي بتدوّر عليه الأول</div>`; return; }
+  if(!query){ resultsBox.innerHTML = `<div class="empty">اكتب وصف المنتج الذي تبحث عنه أولاً</div>`; return; }
 
   const keywords = query.toLowerCase().split(/\s+/).filter(w => w.length > 1 && !arabicStopWords.includes(w));
   if(keywords.length === 0){ resultsBox.innerHTML = `<div class="empty">حاول تكتب كلمات أكتر تفصيلاً</div>`; return; }
@@ -4788,7 +4838,7 @@ function runAiSearch(){
         </div>
         <div style="flex:1;">
           <div style="font-weight:700;font-size:13.5px;">${p.name}</div>
-          <div style="color:var(--rust);font-weight:700;font-size:13px;">$${p.price}</div>
+          <div style="color:var(--rust);font-weight:700;font-size:13px;">¥${p.price}</div>
         </div>
       </div>`).join('');
 }
@@ -5052,7 +5102,7 @@ let modalStackCount = 0;
 let closingViaPopstate = false;
 
 const trackedOverlayIds = [
-  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay','termHelpOverlay','groupBuyJoinOverlay','aiSearchOverlay','offersJoinOverlay',
+  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay','termHelpOverlay','groupBuyJoinOverlay','aiSearchOverlay','offersJoinOverlay','editProductOverlay',
   'wishlistModalOverlay','quickViewOverlay','faqModalOverlay','groupChatOverlay',
   'moreMenuOverlay','overlay','videoModal','onboardingOverlay'
 ];
@@ -5085,7 +5135,7 @@ function closeTopmostTrackedModal(){
     quickViewOverlay: closeQuickView, faqModalOverlay: closeFaqModal, groupChatOverlay: closeGroupChat,
     moreMenuOverlay: closeMoreMenu, overlay: closeCart, videoModal: closeVideo, onboardingOverlay: closeOnboarding,
     termHelpOverlay: closeTermHelp, groupBuyJoinOverlay: closeGroupBuyJoin, aiSearchOverlay: closeAiSearchModal,
-    offersJoinOverlay: closeOffersJoinModal
+    offersJoinOverlay: closeOffersJoinModal, editProductOverlay: closeEditProductModal
   };
   for(const id of trackedOverlayIds){
     const el = document.getElementById(id);
@@ -5120,6 +5170,116 @@ function checkPin(){
   enterAdminPanel();
 }
 
+// ====== تصنيفات المنتجات ======
+let categories = [];
+
+async function loadCategories(){
+  const snap = await db.collection('categories').orderBy('name','asc').get();
+  categories = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderCategorySelects();
+  renderAdminCategories();
+  renderCategoryFilters();
+}
+
+function renderCategorySelects(){
+  const options = '<option value="">بدون تصنيف</option>' + categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  ['newProdCategory','editProdCategory'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el){ const current = el.value; el.innerHTML = options; el.value = current; }
+  });
+}
+
+async function addCategory(){
+  const name = document.getElementById('newCategoryName').value.trim();
+  if(!name){ showToast('يرجى كتابة اسم التصنيف'); return; }
+  await db.collection('categories').add({ name });
+  document.getElementById('newCategoryName').value = '';
+  showToast('تمت إضافة التصنيف بنجاح');
+  loadCategories();
+}
+
+function renderAdminCategories(){
+  const wrap = document.getElementById('adminCategoriesList');
+  if(!wrap) return;
+  if(categories.length === 0){ wrap.innerHTML = `<div class="empty">لا توجد تصنيفات بعد</div>`; return; }
+  wrap.innerHTML = categories.map(c => {
+    const count = products.filter(p => p.category === c.id).length;
+    return `<div class="admin-list-item">
+      <span>${c.name} <span style="color:#999;font-size:11px;">(${count} منتج)</span></span>
+      <button class="tiny-btn" onclick="deleteCategory('${c.id}')">حذف</button>
+    </div>`;
+  }).join('');
+}
+
+async function deleteCategory(id){
+  const count = products.filter(p => p.category === id).length;
+  if(count > 0 && !confirm(`هذا التصنيف مرتبط بـ ${count} منتج، سيصبحوا بدون تصنيف. هل تريد المتابعة؟`)) return;
+  await db.collection('categories').doc(id).delete();
+  showToast('تم حذف التصنيف');
+  loadCategories();
+}
+
+function renderCategoryFilters(){
+  const wrap = document.getElementById('categoryFiltersWrap');
+  if(!wrap) return;
+  if(categories.length === 0){ wrap.style.display = 'none'; return; }
+  wrap.style.display = 'flex';
+  wrap.innerHTML = `<button class="category-chip ${!activeCategoryFilter ? 'active' : ''}" onclick="setCategoryFilter('')">الكل</button>` +
+    categories.map(c => `<button class="category-chip ${activeCategoryFilter===c.id ? 'active' : ''}" onclick="setCategoryFilter('${c.id}')">${c.name}</button>`).join('');
+}
+
+let activeCategoryFilter = '';
+function setCategoryFilter(catId){
+  activeCategoryFilter = catId;
+  renderCategoryFilters();
+  renderCatalog();
+}
+
+// ====== تعديل منتج موجود ======
+function openEditProductModal(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('editProdId').value = id;
+  document.getElementById('editProdName').value = p.name || '';
+  document.getElementById('editProdPrice').value = p.price || '';
+  document.getElementById('editProdMoq').value = p.moq || '';
+  document.getElementById('editProdDesc').value = p.description || '';
+  renderCategorySelects();
+  document.getElementById('editProdCategory').value = p.category || '';
+  document.getElementById('editProductOverlay').classList.add('show');
+  pushModalHistory();
+}
+function closeEditProductModal(){
+  document.getElementById('editProductOverlay').classList.remove('show');
+  notifyModalClosed();
+}
+
+async function saveProductEdit(){
+  const id = document.getElementById('editProdId').value;
+  const name = document.getElementById('editProdName').value.trim();
+  const price = parseFloat(document.getElementById('editProdPrice').value);
+  const moq = document.getElementById('editProdMoq').value.trim();
+  const category = document.getElementById('editProdCategory').value;
+  const description = document.getElementById('editProdDesc').value.trim();
+  if(!name || isNaN(price)){ showToast('يرجى إدخال اسم وسعر صحيحين'); return; }
+
+  const btn = document.getElementById('saveEditProdBtn');
+  btn.disabled = true;
+  try{
+    const data = { name, price, moq: moq || null, category: category || null, description: description || null };
+    await db.collection('products').doc(id).update(data);
+    const p = products.find(x=>x.id===id);
+    if(p) Object.assign(p, data);
+    showToast('تم حفظ التعديلات بنجاح');
+    closeEditProductModal();
+    renderAll();
+  }catch(e){
+    showToast('حدث خطأ أثناء الحفظ');
+  }finally{
+    btn.disabled = false;
+  }
+}
+
 async function addProduct(){
   const name = document.getElementById('newProdName').value.trim();
   const price = parseFloat(document.getElementById('newProdPrice').value);
@@ -5137,7 +5297,8 @@ async function addProduct(){
   btn.disabled = true;
 
   const description = document.getElementById('newProdDesc').value.trim();
-  const data = {name, price, moq: moq || null, description: description || null};
+  const category = document.getElementById('newProdCategory').value;
+  const data = {name, price, moq: moq || null, description: description || null, category: category || null};
 
   try{
     if(imageFiles && imageFiles.length > 0){
@@ -5187,17 +5348,23 @@ async function removeProduct(id){
 function renderAdminProducts(){
   const wrap = document.getElementById('adminProductList');
   if(products.length===0){ wrap.innerHTML='<div class="empty">لا توجد منتجات</div>'; return; }
-  wrap.innerHTML = products.map(p=>`
+  wrap.innerHTML = products.map(p=>{
+    const catName = p.category ? (categories.find(c=>c.id===p.category)?.name || '') : '';
+    return `
     <div class="admin-list-item" style="flex-direction:column;align-items:stretch;">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-        <span>${p.image ? '🖼️ ' : '⬜ '}${p.name} — $${p.price}</span>
-        <button class="tiny-btn" onclick="removeProduct('${p.id}')">حذف</button>
+        <span>${p.image ? '🖼️ ' : '⬜ '}${p.name} — ¥${p.price} ${catName ? `<span style="font-size:11px;color:var(--gold-deco);">· ${catName}</span>` : ''}</span>
+        <div style="display:flex;gap:4px;flex-shrink:0;">
+          <button class="tiny-btn gold" onclick="openEditProductModal('${p.id}')">✏️ تعديل</button>
+          <button class="tiny-btn" onclick="removeProduct('${p.id}')">حذف</button>
+        </div>
       </div>
       ${!p.image ? `<div style="display:flex;gap:6px;margin-top:6px;align-items:center;">
         <input type="file" accept="image/*" id="quickImg_${p.id}" style="flex:1;font-size:11px;">
         <button class="tiny-btn gold" onclick="addImageToProduct('${p.id}')">📎 إضافة صورة</button>
       </div>` : ''}
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 async function addImageToProduct(id){
@@ -5283,7 +5450,7 @@ function renderAdminOrders(search){
   wrap.innerHTML = ids.reverse().map(id=>{
     const o = orders[id];
     return `<div class="admin-order-item">
-      <div style="margin-bottom:6px;"><strong>${o.shippingMark||'-'}</strong> · ${o.customerEmail||''} · ${o.destination||''} · $${o.total} · ${o.date}</div>
+      <div style="margin-bottom:6px;"><strong>${o.shippingMark||'-'}</strong> · ${o.customerEmail||''} · ${o.destination||''} · ¥${o.total} · ${o.date}</div>
       <select onchange="updateStatus('${id}', this.value)" style="margin-bottom:6px;">
         ${['قيد المراجعة','تم التأكيد','قيد الشحن','تم التسليم','ملغي'].map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
       </select>
@@ -5340,7 +5507,7 @@ function renderAdminImportRequests(search){
         ${['قيد المراجعة','تم عرض السعر','تم الشراء','وصل المستودع','تم الشحن','ملغي'].map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${s}</option>`).join('')}
       </select>
       <div class="admin-row" style="margin-top:4px;">
-        <input id="quote_${id}" placeholder="السعر المعروض ($)" value="${r.quotedPrice||''}">
+        <input id="quote_${id}" placeholder="السعر المعروض (¥)" value="${r.quotedPrice||''}">
         <button class="tiny-btn gold" onclick="saveQuotedPrice('${id}')">حفظ</button>
       </div>
     </div>`;
@@ -5361,7 +5528,7 @@ async function saveQuotedPrice(id){
   importRequests[id].quotedPrice = val;
   if(val){
     const r = importRequests[id];
-    notifyCustomer(r.customerEmail, 'تم تحديد سعر طلبك من الصين', `مارك الشحن: ${r.shippingMark}\nالسعر المعروض: $${val}\nيرجى مراجعة التفاصيل والتأكيد عبر واتساب.`);
+    notifyCustomer(r.customerEmail, 'تم تحديد سعر طلبك من الصين', `مارك الشحن: ${r.shippingMark}\nالسعر المعروض: ¥${val}\nيرجى مراجعة التفاصيل والتأكيد عبر واتساب.`);
   }
   showToast('تم حفظ السعر المعروض');
 }
@@ -6433,6 +6600,7 @@ document.addEventListener('click', function(e){
 });
 
 loadData();
+loadCategories();
 loadCommunityFeed(false);
 loadRatings();
 loadActivityFeed();

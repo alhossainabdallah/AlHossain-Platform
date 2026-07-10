@@ -1059,6 +1059,7 @@
         <button class="btn btn-gold" data-i18n="hero_browse" onclick="showTab('catalog')">تصفح المنتجات</button>
         <a class="btn btn-primary" data-i18n="hero_whatsapp" href="https://wa.link/noa4ss" target="_blank" rel="noopener">تواصل معنا على واتساب</a>
         <button class="btn btn-outline" data-i18n="hero_track" onclick="showTab('track')">تتبع طلبي</button>
+        <a class="btn btn-outline" id="whatsappChannelBtn" href="#" target="_blank" rel="noopener" style="display:none;">📢 قناتنا على واتساب</a>
       </div>
     </div>
 
@@ -1836,6 +1837,14 @@
         <div id="adminWishlistList"></div>
       </div>
       <div class="admin-section">
+        <h3>📢 رابط قناة واتساب</h3>
+        <p style="font-size:12.5px;color:#777;margin-bottom:10px;">الصق رابط قناتك على واتساب (يبدأ عادةً بـ https://whatsapp.com/channel/) ليظهر زر مباشر في الصفحة الرئيسية. اتركه فارغاً لإخفاء الزر.</p>
+        <div class="admin-row">
+          <input id="whatsappChannelLinkInput" placeholder="https://whatsapp.com/channel/...">
+          <button class="tiny-btn gold" onclick="saveWhatsappChannelLink()">حفظ</button>
+        </div>
+      </div>
+      <div class="admin-section">
         <h3>🤖 مساعد البحث الذكي (زر عائم)</h3>
         <p style="font-size:12.5px;color:#777;margin-bottom:10px;">يظهر للعميل كزر روبوت عائم، يدوّر تلقائياً في منتجاتك الحالية حسب وصف العميل — بدون أي اتصال خارجي، آمن بالكامل.</p>
         <div class="admin-row">
@@ -2184,6 +2193,18 @@
     </label>
     <div class="err" id="gcpError"></div>
     <button class="btn btn-primary" style="width:100%;" onclick="completeGoogleProfile()">إكمال التسجيل</button>
+  </div>
+</div>
+
+<div class="onboarding-overlay" id="offersJoinOverlay" onclick="if(event.target===this) closeOffersJoinModal()">
+  <div class="onboarding-card">
+    <div class="onboarding-icon">🔔</div>
+    <h3 class="onboarding-title">هل ترغب في معرفة كل عرض جديد فور نزوله؟</h3>
+    <p class="onboarding-desc">انضم إلى قائمة الإشعارات الفورية عبر واتساب، وستصلك رسالة فور إضافة أي عرض أو منتج جديد على المنصة.</p>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn btn-outline" style="flex:1;" onclick="closeOffersJoinModal()">لا، شكراً</button>
+      <button class="btn btn-gold" style="flex:1;" onclick="joinOffersWhatsapp()">✅ انضم دلوقتي</button>
+    </div>
   </div>
 </div>
 
@@ -4680,6 +4701,28 @@ async function addCatalog(){
   }
 }
 
+// ====== رابط قناة واتساب ======
+async function loadWhatsappChannelLink(){
+  try{
+    const doc = await db.collection('settings').doc('whatsappChannel').get();
+    const link = doc.exists ? doc.data().link : null;
+    const btn = document.getElementById('whatsappChannelBtn');
+    if(link){
+      btn.href = link;
+      btn.style.display = 'inline-block';
+    } else {
+      btn.style.display = 'none';
+    }
+  }catch(e){}
+}
+
+async function saveWhatsappChannelLink(){
+  const link = document.getElementById('whatsappChannelLinkInput').value.trim();
+  await db.collection('settings').doc('whatsappChannel').set({ link: link || null });
+  showToast('تم حفظ رابط القناة بنجاح');
+  loadWhatsappChannelLink();
+}
+
 // ====== مساعد البحث الذكي (بحث محلي آمن، بدون أي اتصال خارجي) ======
 let aiSearchEnabled = false;
 const arabicStopWords = ['عايز','عاوز','ترغب','حاجة','بتاعة','بتاع','من','في','على','او','أو','يا','ريت','ممكن','لو','اللي','دي','ده','عندك','عندكم','فيه','فى'];
@@ -4846,6 +4889,23 @@ function renderOnboardingStep(){
   document.getElementById('obNextBtn').textContent = currentOnboardingStep === onboardingSteps.length-1 ? (currentLang==='ar'?'ابدأ':'Start') : t('onboarding_next');
 }
 
+function openOffersJoinModal(){
+  document.getElementById('offersJoinOverlay').classList.add('show');
+  pushModalHistory();
+}
+function closeOffersJoinModal(){
+  document.getElementById('offersJoinOverlay').classList.remove('show');
+  notifyModalClosed();
+  setTimeout(startOnboarding, 300);
+}
+function joinOffersWhatsapp(){
+  const mark = (currentCustomerData && currentCustomerData.shippingMark) || '';
+  const name = (currentCustomerData && currentCustomerData.name) || '';
+  const msg = `مرحباً، أرغب في الانضمام لقائمة إشعارات العروض والمنتجات الجديدة فور نزولها.\nالاسم: ${name}\nمارك الشحن: ${mark}`;
+  window.open(`https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  closeOffersJoinModal();
+}
+
 function startOnboarding(){
   currentOnboardingStep = 0;
   renderOnboardingStep();
@@ -4896,6 +4956,9 @@ function enterAdminPanel(){
   loadCatalogsAdmin();
   loadGroupBuysAdmin();
   loadAdsAdmin();
+  db.collection('settings').doc('whatsappChannel').get().then(doc=>{
+    if(doc.exists && doc.data().link) document.getElementById('whatsappChannelLinkInput').value = doc.data().link;
+  });
   document.getElementById('aiSearchToggle').value = aiSearchEnabled ? 'on' : 'off';
   db.collection('settings').doc('announcement').get().then(doc=>{
     if(doc.exists){
@@ -4989,7 +5052,7 @@ let modalStackCount = 0;
 let closingViaPopstate = false;
 
 const trackedOverlayIds = [
-  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay','termHelpOverlay','groupBuyJoinOverlay','aiSearchOverlay',
+  'authOverlay','markInfoOverlay','termsInfoOverlay','currencyModalOverlay','termHelpOverlay','groupBuyJoinOverlay','aiSearchOverlay','offersJoinOverlay',
   'wishlistModalOverlay','quickViewOverlay','faqModalOverlay','groupChatOverlay',
   'moreMenuOverlay','overlay','videoModal','onboardingOverlay'
 ];
@@ -5021,7 +5084,8 @@ function closeTopmostTrackedModal(){
     currencyModalOverlay: closeCurrencyModal, wishlistModalOverlay: closeWishlistModal,
     quickViewOverlay: closeQuickView, faqModalOverlay: closeFaqModal, groupChatOverlay: closeGroupChat,
     moreMenuOverlay: closeMoreMenu, overlay: closeCart, videoModal: closeVideo, onboardingOverlay: closeOnboarding,
-    termHelpOverlay: closeTermHelp, groupBuyJoinOverlay: closeGroupBuyJoin, aiSearchOverlay: closeAiSearchModal
+    termHelpOverlay: closeTermHelp, groupBuyJoinOverlay: closeGroupBuyJoin, aiSearchOverlay: closeAiSearchModal,
+    offersJoinOverlay: closeOffersJoinModal
   };
   for(const id of trackedOverlayIds){
     const el = document.getElementById(id);
@@ -5501,7 +5565,7 @@ async function completeGoogleProfile(){
     playSailAnimation(() => {
       closeAuthModal();
       showToast(t('account_created'));
-      setTimeout(startOnboarding, 400);
+      setTimeout(openOffersJoinModal, 400);
     });
   }catch(e){
     errBox.textContent = t('generic_error');
@@ -5660,7 +5724,7 @@ async function submitAuth(){
     playSailAnimation(() => {
       closeAuthModal();
       showToast(authMode==='login' ? t('logged_in') : t('account_created'));
-      if(authMode === 'register'){ setTimeout(startOnboarding, 400); }
+      if(authMode === 'register'){ setTimeout(openOffersJoinModal, 400); }
     });
   }catch(e){
     const map = {
@@ -6424,6 +6488,7 @@ loadGroupBuysPublic();
 loadAdsPublic();
 loadAnnouncement();
 loadAiSearchSetting();
+loadWhatsappChannelLink();
 loadTotalCustomersCount();
 
 // مدخل سري للإدارة عبر رابط خاص، بدل رابط ظاهر في الفوتر

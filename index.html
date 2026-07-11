@@ -122,8 +122,14 @@
   #userGreeting{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   header.site .brand span{
     color:var(--gold-light);
-    background:linear-gradient(135deg, var(--gold-light), var(--gold));
+    background:linear-gradient(90deg, var(--gold-deco) 0%, var(--gold-light) 25%, #FFF8DC 50%, var(--gold-light) 75%, var(--gold-deco) 100%);
+    background-size:250% auto;
     -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    animation:brandShine 4s linear infinite;
+  }
+  @keyframes brandShine{
+    0%{ background-position:200% center; }
+    100%{ background-position:-50% center; }
   }
   .cart-btn{
     position:relative;
@@ -172,6 +178,12 @@
   .hero h1{
     font-size:32px; margin:14px 0 16px; color:var(--ink-dark); font-weight:900; line-height:1.35;
   }
+  .hero h1 .word-wrap{ display:inline-block; overflow:hidden; vertical-align:top; }
+  .hero h1 .word{
+    display:inline-block; opacity:0; transform:translateY(100%);
+    animation:wordRise .7s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes wordRise{ to{ opacity:1; transform:translateY(0); } }
   .hero p{ max-width:520px; margin:0 auto; color:#5a6668; font-size:15.5px; line-height:1.85; }
   .hero-cta{ margin-top:28px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 
@@ -341,13 +353,24 @@
   }
   .quick-view-overlay.show{ display:flex; }
   .quick-view-modal{
-    background:var(--white);
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%);
     border-radius:22px; padding:22px 20px 20px;
     max-width:400px; width:100%; max-height:88vh; overflow-y:auto;
     position:relative; text-align:center;
-    box-shadow:0 10px 40px rgba(10,27,43,.35);
+    box-shadow:0 10px 40px rgba(10,27,43,.35), inset 0 1px 0 rgba(255,255,255,.6);
     transform:scale(0.6) rotateX(-25deg); opacity:0; transform-origin:top center;
     animation:envelopeOpen .45s cubic-bezier(.34,1.4,.64,1) forwards;
+  }
+  .quick-view-modal::before{
+    content:''; position:absolute; inset:0; border-radius:inherit; padding:1.5px;
+    background:linear-gradient(180deg,
+      rgba(232,168,0,0.55) 0%, rgba(232,168,0,0.15) 20%,
+      rgba(232,168,0,0) 40%, rgba(232,168,0,0) 60%,
+      rgba(232,168,0,0.15) 80%, rgba(232,168,0,0.55) 100%);
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    pointer-events:none;
   }
   .quick-view-thumb{
     height:220px; border-radius:14px; overflow:hidden;
@@ -1098,7 +1121,7 @@
   <section id="home" class="active">
     <div class="hero">
       <div class="eyebrow" data-i18n="hero_eyebrow">وكيلك المعتمد في الصين · تجارة موثوقة</div>
-      <h1 data-i18n="hero_title">كل احتياجاتك التجارية في مكان واحد</h1>
+      <h1 data-i18n="hero_title" id="heroTitleWords">كل احتياجاتك التجارية في مكان واحد</h1>
       <p data-i18n="hero_desc">أكثر من مجرد منصة تجارية — نحن نقطة التقاء لأشخاص من مختلف أنحاء العالم، يجمعهم هدف واحد: تبادل الخبرة والفرص والنفع المشترك. من قلب الصين، نفتح لك الباب لعالم من الفرص، ونمشي معك خطوة بخطوة من أول فكرة لحد ما توصلك شحنتك.</p>
       <div class="hero-cta">
         <button class="btn btn-gold" data-i18n="hero_browse" onclick="showTab('catalog')">تصفح المنتجات</button>
@@ -3191,12 +3214,28 @@ function exportCustomers(){
   showToast('تم تصدير الملف بنجاح');
 }
 
+function animateCountUp(el, target, duration){
+  if(!el || el._countAnimated === target) return;
+  el._countAnimated = target;
+  const start = 0;
+  const startTime = performance.now();
+  function step(now){
+    const progress = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(start + (target - start) * eased);
+    el.textContent = current;
+    if(progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(step);
+}
+
 function renderAbout(){
   document.getElementById('aboutName').textContent = aboutData.name || 'اسم المؤسس';
   document.getElementById('aboutYears').textContent = aboutData.years ? aboutData.years : '-';
   document.getElementById('aboutBio').textContent = aboutData.bio || 'لم تُضَف نبذة بعد. يمكن لصاحب الموقع إضافتها من لوحة الإدارة.';
-  document.getElementById('customerCount2').textContent = totalCustomersCount;
-  document.getElementById('statOrders2').textContent = Object.keys(orders).length;
+  animateCountUp(document.getElementById('customerCount2'), totalCustomersCount, 1400);
+  animateCountUp(document.getElementById('statOrders2'), Object.keys(orders).length, 1400);
 
   const hero = document.getElementById('aboutHero');
   if(aboutData.backgroundPhoto){
@@ -3229,7 +3268,7 @@ function loadTotalCustomersCount(){
   totalCustomersUnsub = db.collection('settings').doc('counters').onSnapshot(doc => {
     totalCustomersCount = doc.exists ? (doc.data().totalCustomers || 0) : 0;
     const el = document.getElementById('customerCount2');
-    if(el) el.textContent = totalCustomersCount;
+    if(el) animateCountUp(el, totalCustomersCount, 1000);
   }, err => {});
 }
 
@@ -6957,6 +6996,17 @@ function updateDarkModeLabel(enabled){
   icon.textContent = enabled ? '☀️' : '🌙';
   label.textContent = enabled ? 'الوضع النهاري' : 'الوضع الليلي';
 }
+function animateHeroWords(){
+  const el = document.getElementById('heroTitleWords');
+  if(!el || el._wordsSplit) return;
+  el._wordsSplit = true;
+  const words = el.textContent.trim().split(/\s+/);
+  el.innerHTML = words.map((w,i) =>
+    `${i>0?'&nbsp;':''}<span class="word-wrap"><span class="word" style="animation-delay:${0.15 + i*0.08}s">${w}</span></span>`
+  ).join('');
+}
+animateHeroWords();
+
 applyDarkModePreference();
 
 async function toggleFullscreen(){

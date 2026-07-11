@@ -44,6 +44,22 @@
     --line: rgba(27,58,58,0.15);
     --white:#fff;
   }
+  body.dark-mode{
+    --ink-dark:#EDE6D8;
+    --paper:#1C2A3A;
+    --paper-soft:#0D1826;
+    --line: rgba(237,230,216,0.15);
+    --white:#16233A;
+  }
+  body.dark-mode .term-card, body.dark-mode .product, body.dark-mode .ad-card,
+  body.dark-mode .gb-card, body.dark-mode .qa-item, body.dark-mode .post-card,
+  body.dark-mode .review-item, body.dark-mode .admin-section, body.dark-mode .ask-box,
+  body.dark-mode .quick-view-modal, body.dark-mode .auth-modal, body.dark-mode .info-modal{
+    background:var(--white); color:var(--ink-dark);
+  }
+  body.dark-mode input, body.dark-mode select, body.dark-mode textarea{
+    background:var(--white); color:var(--ink-dark); border-color:var(--line);
+  }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
     font-family:'Tajawal', sans-serif;
@@ -442,6 +458,29 @@
   .admin-order-item input{ padding:7px; border-radius:8px; border:1px solid var(--line); font-family:'Tajawal'; flex:1; min-width:120px; }
   .tiny-btn{ background:var(--rust); color:#fff; border:none; padding:5px 10px; border-radius:6px; font-size:12px; cursor:pointer; }
   .tiny-btn.gold{ background:var(--gold); color:var(--ink-dark); }
+
+  .admin-tab-btn{
+    flex-shrink:0; padding:9px 16px; border-radius:10px; border:1px solid var(--line);
+    background:var(--white); color:var(--ink-dark); font-family:'Tajawal'; font-size:13.5px; font-weight:700;
+    cursor:pointer; white-space:nowrap; position:relative;
+  }
+  .admin-tab-btn.active{ background:var(--ink); color:var(--gold); border-color:var(--ink); }
+  .admin-tab-badge{
+    display:inline-block; min-width:16px; height:16px; padding:0 4px; border-radius:999px;
+    background:var(--rust); color:#fff; font-size:10px; font-weight:900; line-height:16px;
+    text-align:center; margin-right:4px; vertical-align:middle;
+  }
+  .admin-overview-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; }
+  .admin-overview-card{
+    background:var(--paper-soft); border:1px solid var(--line); border-radius:14px;
+    padding:16px; text-align:center; cursor:pointer; transition:transform .15s ease;
+  }
+  .admin-overview-card:active{ transform:scale(0.96); }
+  .admin-overview-num{ font-family:'Aref Ruqaa'; font-size:28px; color:var(--ink); }
+  .admin-overview-num.alert{ color:var(--rust); }
+  .admin-overview-label{ font-size:12px; color:#666; margin-top:2px; }
+  .admin-section[data-admin-tab]{ display:none; }
+  .admin-section[data-admin-tab].admin-tab-active{ display:block; }
 
   footer{ text-align:center; padding:24px; color:#5c6b6b; font-size:13px; }
   .footer-link{ cursor:pointer; text-decoration:underline; }
@@ -1117,10 +1156,6 @@
     </div>
     <input id="productSearchInput" class="admin-search" placeholder="ابحث عن منتج بالاسم..." oninput="renderCatalog()" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
     <div id="categoryFiltersWrap" style="display:none;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;"></div>
-    <div id="recentlyViewedWrap" style="display:none;margin-bottom:18px;">
-      <div style="font-weight:700;font-size:14px;margin-bottom:8px;">🕓 شفتها مؤخراً</div>
-      <div class="grid" id="recentlyViewedGrid"></div>
-    </div>
     <div class="grid" id="productGrid"></div>
     <div class="wishlist-cta" onclick="openWishlistModal()">
       <span>😕</span>
@@ -1611,6 +1646,17 @@
     </div>
   </section>
 
+  <section id="priceRef">
+    <h2 style="margin-bottom:6px;">🧮 مرجع الأسعار — قدّر تكلفة مشروعك</h2>
+    <p style="color:#5c6b6b; margin-bottom:18px;">اكتب أصناف مشروعك والكمية المطلوبة من كل صنف، وسنقدّر لك التكلفة التقريبية بناءً على قاعدة أسعارنا المرجعية. هذا تقدير أولي للاستئناس فقط، ويُعتمد السعر النهائي بعد التواصل المباشر.</p>
+    <div class="ask-box">
+      <div id="priceRefItemsList"></div>
+      <button class="btn btn-outline" style="width:100%;margin-bottom:12px;" onclick="addPriceRefRow()">+ إضافة صنف آخر</button>
+      <button class="btn btn-gold" style="width:100%;" onclick="calcPriceRefTotal()">🧮 احسب التكلفة التقريبية</button>
+      <div id="priceRefResults" style="margin-top:16px;"></div>
+    </div>
+  </section>
+
   <section id="ads">
     <h2 style="margin-bottom:6px;">📢 مساحة إعلانية</h2>
     <p style="color:#5c6b6b; margin-bottom:18px;">تعرّف على شركائنا وشركات موثوقة تعمل معنا. اضغط على أي إعلان لعرض التفاصيل الكاملة والتواصل المباشر.</p>
@@ -1705,13 +1751,60 @@
       </div>
     </div>
     <div id="adminPanel" style="display:none;">
-      <div class="admin-section" id="fpManageSection">
+      <input class="admin-search" id="adminGlobalSearch" placeholder="🔍 بحث سريع (اسم عميل، مارك شحن، اسم منتج...)" oninput="runAdminGlobalSearch(this.value)" style="width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
+      <div id="adminGlobalSearchResults" style="display:none;margin-bottom:14px;"></div>
+
+      <div id="adminTabsBar" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px;">
+        <button class="admin-tab-btn active" data-tab="overview" onclick="showAdminTab('overview')">📊 نظرة عامة</button>
+        <button class="admin-tab-btn" data-tab="orders" onclick="showAdminTab('orders')">🧾 الطلبات<span class="admin-tab-badge" id="badge_orders"></span></button>
+        <button class="admin-tab-btn" data-tab="products" onclick="showAdminTab('products')">📦 المنتجات</button>
+        <button class="admin-tab-btn" data-tab="customers" onclick="showAdminTab('customers')">👥 العملاء</button>
+        <button class="admin-tab-btn" data-tab="communication" onclick="showAdminTab('communication')">💬 التواصل<span class="admin-tab-badge" id="badge_communication"></span></button>
+        <button class="admin-tab-btn" data-tab="marketing" onclick="showAdminTab('marketing')">📢 المحتوى والتسويق</button>
+        <button class="admin-tab-btn" data-tab="settings" onclick="showAdminTab('settings')">⚙️ الإعدادات</button>
+      </div>
+
+      <div class="admin-section" data-admin-tab="overview">
+        <h3>📊 نظرة عامة سريعة</h3>
+        <div id="adminOverviewGrid" class="admin-overview-grid"></div>
+      </div>
+
+      <div class="admin-section" data-admin-tab="overview">
+        <h3>📈 تحليلات سريعة</h3>
+        <div style="margin-bottom:14px;">
+          <div style="font-weight:700;font-size:13.5px;margin-bottom:8px;">🔥 الأكثر مشاهدة</div>
+          <div id="topViewedProducts"></div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:13.5px;margin-bottom:8px;">🛒 الأكثر طلباً</div>
+          <div id="topOrderedProducts"></div>
+        </div>
+      </div>
+
+      <div class="admin-section" id="fpManageSection" data-admin-tab="settings">
         <h3>🔒 دخول الإدارة بالبصمة</h3>
         <p style="font-size:13px;color:#666;margin-bottom:10px;" id="fpStatusText"></p>
         <button class="btn btn-gold" onclick="registerFingerprint()" id="fpRegisterBtn">تسجيل بصمة هذا الجهاز</button>
         <button class="tiny-btn" onclick="removeFingerprint()" id="fpRemoveBtn" style="display:none;margin-right:8px;">إلغاء تسجيل البصمة</button>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="products">
+        <h3>🧮 مرجع الأسعار (لحاسبة تقدير التكلفة)</h3>
+        <p style="font-size:12.5px;color:#777;margin-bottom:10px;">
+          قاعدة بيانات أسعار مرجعية يستخدمها العميل لتقدير تكلفة مشروعه — منفصلة عن منتجاتك المعروضة للبيع مباشرة.<br>
+          اكتب كل صنف في سطر بالشكل: <strong>الاسم, السعر بالـ¥, المقاس/الوصف (اختياري)</strong><br>
+          مثال: <code style="background:var(--paper-soft);padding:2px 6px;border-radius:4px;">كوب حراري ستانلس 500مل, 18, 500 مل</code>
+        </p>
+        <textarea id="priceRefBulkInput" placeholder="الصق هنا قائمة الأصناف، كل صنف في سطر..." style="width:100%;min-height:120px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;direction:ltr;text-align:right;"></textarea>
+        <button class="btn btn-gold" onclick="bulkAddPriceRef()" id="bulkAddPriceRefBtn">إضافة كل الأصناف دفعة واحدة</button>
+        <div style="margin-top:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span style="font-size:13px;font-weight:700;">الأصناف الحالية (<span id="priceRefCount">0</span>)</span>
+            <button class="tiny-btn" onclick="clearAllPriceRef()">حذف الكل</button>
+          </div>
+          <div id="adminPriceRefList"></div>
+        </div>
+      </div>
+      <div class="admin-section" data-admin-tab="products">
         <h3>🗂️ تصنيفات المنتجات</h3>
         <p style="font-size:12.5px;color:#777;margin-bottom:10px;">أنشئ تصنيفات (مثال: إلكترونيات، أدوات منزلية، إكسسوارات)، واختر لكل منتج تصنيفه من نموذج الإضافة أو التعديل.</p>
         <div class="admin-row">
@@ -1720,7 +1813,7 @@
         </div>
         <div id="adminCategoriesList" style="margin-top:10px;"></div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="products">
         <h3>إضافة منتج جديد</h3>
         <div class="admin-row">
           <input id="newProdName" placeholder="اسم المنتج">
@@ -1750,7 +1843,7 @@
         <div id="uploadProgress" style="font-size:13px;color:var(--rust);margin:6px 0;display:none;"></div>
         <button class="btn btn-gold" onclick="addProduct()" id="addProdBtn">إضافة المنتج</button>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="products">
         <h3>📋 إضافة منتجات جماعية (دفعة واحدة)</h3>
         <p style="font-size:12.5px;color:#777;margin-bottom:10px;">
           اكتب كل منتج في سطر منفصل بالشكل: <strong>الاسم, السعر, الحد الأدنى (اختياري)</strong><br>
@@ -1762,7 +1855,7 @@
         <button class="btn btn-gold" onclick="bulkAddProducts()" id="bulkAddBtn">إضافة كل المنتجات دفعة واحدة</button>
         <p style="font-size:11.5px;color:#999;margin-top:8px;">* لن تُضاف الصور تلقائياً بهذه الطريقة — بعد الإضافة، يمكنك الدخول إلى كل منتج من قائمة "المنتجات الحالية" أدناه وإضافة صورة له.</p>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="customers">
         <h3 style="display:flex;justify-content:space-between;align-items:center;">
           <span>عملاء مسجلين (<span id="customerCount">0</span>)</span>
           <button class="tiny-btn" onclick="toggleCustomerListCollapse()" id="customerListToggleBtn">▶️ إظهار القائمة</button>
@@ -1773,14 +1866,14 @@
         <div id="adminCustomerList" style="display:none;"></div>
       </div>
 
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="settings">
         <h3>📌 التحكم في التبويبات</h3>
         <p style="font-size:13px;color:#666;margin-bottom:12px;">تحكم في ظهور وإخفاء التبويبات في الموقع</p>
         <div id="tabsControlList"></div>
         <button class="btn btn-gold" onclick="saveTabsSettings()" style="margin-top:12px;">💾 حفظ إعدادات التبويبات</button>
       </div>
 
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="marketing">
         <h3>🔥 إدارة العروض النارية</h3>
         <div style="background:var(--paper-soft);border-radius:12px;padding:16px;margin-bottom:16px;">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
@@ -1811,7 +1904,7 @@
         </div>
       </div>
 
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="marketing">
         <h3>صفحة عن المؤسس</h3>
         <div class="admin-row">
           <input id="aboutNameInput" placeholder="الاسم الكامل">
@@ -1828,7 +1921,7 @@
         <textarea id="aboutBioInput" placeholder="اكتب نبذة عنك: قصتك، خبرتك، وطريقة عملك مع العملاء..." style="width:100%;min-height:100px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;"></textarea>
         <button class="btn btn-gold" onclick="saveAbout()" id="saveAboutBtn">حفظ صفحة المؤسس</button>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="settings">
         <h3>سعر الصرف والموقع الحالي</h3>
         <div class="admin-row">
           <input id="sdgRateInput" type="number" placeholder="سعر اليوان الصيني بالجنيه السوداني (مثال: 850)">
@@ -1840,46 +1933,46 @@
           <button class="tiny-btn gold" onclick="saveAgentCity()">حفظ المدينة</button>
         </div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="settings">
         <h3>💰 أسعار حاسبة الشحن (نطاق سعري لكل دولة)</h3>
         <p style="font-size:12.5px;color:#777;margin-bottom:12px;">هذه الأسعار هي أساس حساب التكلفة التقريبية التي تظهر للعميل في حاسبات "دليل المصطلحات".</p>
         <div id="shippingRatesForm"></div>
         <button class="btn btn-gold" style="margin-top:8px;" onclick="saveShippingRates()">💾 حفظ كل الأسعار</button>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="products">
         <h3>المنتجات الحالية</h3>
         <div id="adminProductList"></div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="orders">
         <h3>الطلبات</h3>
         <input class="admin-search" placeholder="بحث بالمارك أو الإيميل أو الحالة..." oninput="renderAdminOrders(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
         <div id="adminOrderList"></div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="orders">
         <h3>طلبات الشراء من الصين</h3>
         <input class="admin-search" placeholder="بحث بالمارك أو الإيميل أو الحالة..." oninput="renderAdminImportRequests(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
         <div id="adminImportList"></div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="orders">
         <h3>طلبات زيارة المصانع</h3>
         <input class="admin-search" placeholder="بحث بالمارك أو اسم المصنع أو المدينة..." oninput="renderAdminFactoryVisits(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
         <div id="adminFactoryList"></div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="communication">
         <h3>الشكاوى والمقترحات</h3>
         <input class="admin-search" placeholder="بحث بالنص أو الإيميل أو النوع..." oninput="renderAdminComplaints(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
         <div id="adminComplaintsList"></div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="communication">
         <h3>أسئلة العملاء</h3>
         <input class="admin-search" placeholder="بحث بنص السؤال أو الإيميل..." oninput="renderAdminQa(this.value)" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:10px;">
         <div id="adminQaList"></div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="communication">
         <h3>📝 قائمة الأمنيات (منتجات مطلوبة)</h3>
         <div id="adminWishlistList"></div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="marketing">
         <h3>📢 رابط قناة واتساب</h3>
         <p style="font-size:12.5px;color:#777;margin-bottom:10px;">الصق رابط قناتك على واتساب (يبدأ عادةً بـ https://whatsapp.com/channel/) ليظهر زر مباشر في الصفحة الرئيسية. اتركه فارغاً لإخفاء الزر.</p>
         <div class="admin-row">
@@ -1887,7 +1980,7 @@
           <button class="tiny-btn gold" onclick="saveWhatsappChannelLink()">حفظ</button>
         </div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="marketing">
         <h3>🤖 مساعد البحث الذكي (زر عائم)</h3>
         <p style="font-size:12.5px;color:#777;margin-bottom:10px;">يظهر للعميل كزر روبوت عائم، يدوّر تلقائياً في منتجاتك الحالية حسب وصف العميل — بدون أي اتصال خارجي، آمن بالكامل.</p>
         <div class="admin-row">
@@ -1898,7 +1991,7 @@
           <button class="tiny-btn gold" onclick="saveAiSearchToggle()">حفظ</button>
         </div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="marketing">
         <h3>📣 شريط الإعلان العام</h3>
         <div class="admin-row">
           <select id="announcementActive" style="padding:8px 16px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';">
@@ -1909,7 +2002,7 @@
         <textarea id="announcementTextInput" placeholder="نص الإعلان (مثال: مغلقين بمناسبة العيد، هنرد عليكم بعد العيد إن شاء الله)" style="width:100%;min-height:60px;padding:10px;border-radius:8px;border:1px solid var(--line);font-family:'Tajawal';margin-bottom:8px;"></textarea>
         <button class="btn btn-gold" onclick="saveAnnouncement()">حفظ الإعلان</button>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="marketing">
         <h3>📢 إدارة المساحة الإعلانية</h3>
         <div class="admin-row">
           <input id="newAdCompany" placeholder="اسم الشركة المعلِنة *">
@@ -1931,7 +2024,7 @@
         <button class="btn btn-gold" onclick="addAd()" id="addAdBtn">نشر الإعلان</button>
         <div id="adminAdsList" style="margin-top:14px;"></div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="orders">
         <h3>🤝 إدارة الطلبات الجماعية (كسر الـMOQ)</h3>
         <div class="admin-row">
           <input id="newGbTitle" placeholder="اسم المنتج">
@@ -1953,7 +2046,7 @@
         <button class="btn btn-gold" onclick="addGroupBuy()" id="addGbBtn">إنشاء الحملة</button>
         <div id="adminGroupBuysList" style="margin-top:14px;"></div>
       </div>
-      <div class="admin-section">
+      <div class="admin-section" data-admin-tab="marketing">
         <h3>📚 إدارة كتالوجات المنتجات</h3>
         <div class="admin-row">
           <input id="newCatalogTitle" placeholder="اسم الكتالوج (مثال: كتالوج إلكترونيات صيف 2026)">
@@ -2046,8 +2139,10 @@
       <button class="more-item" data-tab="catalogs" onclick="showTab('catalogs'); closeMoreMenu();"><span>📚</span>كتالوجات المنتجات</button>
       <button class="more-item" data-tab="groupbuys" onclick="showTab('groupbuys'); closeMoreMenu();"><span>🤝</span>الطلبات الجماعية</button>
       <button class="more-item" data-tab="ads" onclick="showTab('ads'); closeMoreMenu();"><span>📢</span>مساحة إعلانية</button>
+      <button class="more-item" data-tab="priceRef" onclick="showTab('priceRef'); closeMoreMenu();"><span>🧮</span>مرجع الأسعار</button>
       <button class="more-item" data-tab="profile" onclick="showTab('profile'); closeMoreMenu();"><span>🙋</span>حسابي</button>
       <button class="more-item" id="fullscreenToggleBtn" onclick="toggleFullscreen(); closeMoreMenu();"><span id="fullscreenIcon">⛶</span><span id="fullscreenLabel">وضع ملء الشاشة</span></button>
+      <button class="more-item" onclick="toggleDarkMode(); closeMoreMenu();"><span id="darkModeIcon">🌙</span><span id="darkModeLabel">الوضع الليلي</span></button>
     </div>
     <button class="more-menu-close" onclick="closeMoreMenu()">✕ إغلاق</button>
   </div>
@@ -2844,6 +2939,7 @@ async function loadData(){
     snap.docs.forEach(d => { questions[d.id] = d.data(); });
     renderQaList();
     renderAdminQa();
+    updateAdminBadges();
   });
 }
 
@@ -2875,6 +2971,8 @@ async function loadAdminData(){
   renderAdminImportRequests();
   renderAdminFactoryVisits();
   renderAdminComplaints();
+  updateAdminBadges();
+  renderAdminOverview();
   }catch(e){
     showToast('⚠️ خطأ في تحميل بيانات الإدارة: ' + (e.message || e.code || 'غير معروف') + ' — تأكد من نشر قواعد Firestore', 8000);
   }
@@ -2883,18 +2981,21 @@ async function loadAdminData(){
     complaints = {};
     snap.docs.forEach(d => { complaints[d.id] = d.data(); });
     renderAdminComplaints();
+    updateAdminBadges();
   });
 
   db.collection('importRequests').onSnapshot(snap => {
     importRequests = {};
     snap.docs.forEach(d => { importRequests[d.id] = d.data(); });
     renderAdminImportRequests();
+    updateAdminBadges();
   });
 
   db.collection('factoryVisitRequests').onSnapshot(snap => {
     factoryVisits = {};
     snap.docs.forEach(d => { factoryVisits[d.id] = d.data(); });
     renderAdminFactoryVisits();
+    updateAdminBadges();
   });
 
   db.collection('customers').onSnapshot(snap => {
@@ -2908,6 +3009,7 @@ async function loadAdminData(){
     orders = {};
     snap.docs.forEach(d => { orders[d.id] = d.data(); });
     renderAdminOrders();
+    updateAdminBadges();
   });
 
   db.collection('wishlistRequests').orderBy('createdAt','desc').limit(50).onSnapshot(snap => {
@@ -3440,34 +3542,16 @@ function renderCatalog(){
   } else {
     grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
   }
-  renderRecentlyViewed();
-}
-
-const RECENTLY_VIEWED_KEY = 'recentlyViewedProducts';
-function trackRecentlyViewed(id){
-  let list = JSON.parse(localStorage.getItem(RECENTLY_VIEWED_KEY) || '[]');
-  list = list.filter(x => x !== id);
-  list.unshift(id);
-  list = list.slice(0, 8);
-  localStorage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(list));
-}
-
-function renderRecentlyViewed(){
-  const wrap = document.getElementById('recentlyViewedWrap');
-  const grid = document.getElementById('recentlyViewedGrid');
-  if(!wrap || !grid) return;
-  const searchActive = document.getElementById('productSearchInput')?.value.trim();
-  const list = JSON.parse(localStorage.getItem(RECENTLY_VIEWED_KEY) || '[]');
-  const viewedProducts = list.map(id => products.find(p => p.id === id)).filter(Boolean);
-  if(searchActive || viewedProducts.length === 0){
-    wrap.style.display = 'none';
-    return;
-  }
-  wrap.style.display = 'block';
-  grid.innerHTML = viewedProducts.map(p => renderProductCard(p)).join('');
 }
 
 let currentQuickViewIndex = -1;
+let viewTrackedThisSession = new Set();
+function trackProductView(id){
+  if(viewTrackedThisSession.has(id)) return; // مرة واحدة بس لكل منتج في نفس الجلسة
+  viewTrackedThisSession.add(id);
+  db.collection('products').doc(id).update({ views: firebase.firestore.FieldValue.increment(1) }).catch(()=>{});
+}
+
 function getQuickViewProductList(){
   const searchInput = document.getElementById('productSearchInput');
   const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
@@ -3532,7 +3616,7 @@ function navigateQuickView(delta){
 function renderQuickViewContent(list){
   const p = list[currentQuickViewIndex];
   if(!p) return;
-  trackRecentlyViewed(p.id);
+  trackProductView(p.id);
   const favs = (currentCustomerData && currentCustomerData.favorites) || [];
   const isFav = favs.includes(p.id);
   const gallery = (p.images && p.images.length > 0) ? p.images : (p.image ? [p.image] : []);
@@ -3970,7 +4054,7 @@ async function showMyShipments(){
 const defaultTabs = {
   glossary:{label:'دليل المصطلحات'}, questions:{label:'الأسئلة'}, importorder:{label:'اطلب من الصين'},
   factoryvisit:{label:'زيارة مصنع'}, community:{label:'المجتمع'}, ratings:{label:'التقييمات'},
-  about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}, catalogs:{label:'الكتالوجات'}, groupbuys:{label:'الطلبات الجماعية'}, ads:{label:'مساحة إعلانية'}
+  about:{label:'عن المؤسس'}, weeklyoffers:{label:'العروض'}, catalogs:{label:'الكتالوجات'}, groupbuys:{label:'الطلبات الجماعية'}, ads:{label:'مساحة إعلانية'}, priceRef:{label:'مرجع الأسعار'}
 };
 
 async function loadTabsSettings(){
@@ -4997,6 +5081,7 @@ function showPinFallback(){
 function enterAdminPanel(){
   document.getElementById('adminLockWrap').style.display='none';
   document.getElementById('adminPanel').style.display='block';
+  showAdminTab('overview');
   showToast('جاري تحميل بيانات الإدارة...');
   loadAdminData();
   renderTabsControl();
@@ -5156,6 +5241,99 @@ async function syncCustomerCounter(){
   }
 }
 
+// ====== نظام تبويبات لوحة الإدارة ======
+function showAdminTab(tab){
+  document.querySelectorAll('.admin-section[data-admin-tab]').forEach(el => {
+    el.classList.toggle('admin-tab-active', el.dataset.adminTab === tab);
+  });
+  document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+  if(tab === 'overview') renderAdminOverview();
+}
+
+function updateAdminBadges(){
+  const pendingOrders = Object.values(orders).filter(o => o.status === 'قيد المراجعة').length;
+  const pendingImports = Object.values(importRequests).filter(r => r.status === 'قيد المراجعة').length;
+  const pendingFactory = Object.values(factoryVisits).filter(f => f.status === 'قيد المراجعة').length;
+  const ordersCount = pendingOrders + pendingImports + pendingFactory;
+
+  const unansweredQuestions = Object.values(questions).filter(q => !q.answer).length;
+  const pendingComplaints = Object.values(complaints).filter(c => c.status === 'قيد المراجعة').length;
+  const commsCount = unansweredQuestions + pendingComplaints;
+
+  const ordersBadge = document.getElementById('badge_orders');
+  const commsBadge = document.getElementById('badge_communication');
+  if(ordersBadge) ordersBadge.textContent = ordersCount > 0 ? ordersCount : '';
+  if(commsBadge) commsBadge.textContent = commsCount > 0 ? commsCount : '';
+}
+
+function renderAdminOverview(){
+  const wrap = document.getElementById('adminOverviewGrid');
+  if(!wrap) return;
+  const pendingOrders = Object.values(orders).filter(o => o.status === 'قيد المراجعة').length;
+  const unansweredQuestions = Object.values(questions).filter(q => !q.answer).length;
+  const pendingComplaints = Object.values(complaints).filter(c => c.status === 'قيد المراجعة').length;
+  const cards = [
+    { num: pendingOrders, label: 'طلبات جديدة بانتظار المراجعة', tab: 'orders', alert: pendingOrders>0 },
+    { num: unansweredQuestions, label: 'أسئلة بانتظار الرد', tab: 'communication', alert: unansweredQuestions>0 },
+    { num: pendingComplaints, label: 'شكاوى ومقترحات جديدة', tab: 'communication', alert: pendingComplaints>0 },
+    { num: customers.length, label: 'إجمالي العملاء المسجلين', tab: 'customers', alert:false },
+    { num: products.length, label: 'إجمالي المنتجات', tab: 'products', alert:false },
+    { num: Object.keys(orders).length, label: 'إجمالي الطلبات', tab: 'orders', alert:false },
+  ];
+  wrap.innerHTML = cards.map(c => `
+    <div class="admin-overview-card" onclick="showAdminTab('${c.tab}')">
+      <div class="admin-overview-num ${c.alert ? 'alert' : ''}">${c.num}</div>
+      <div class="admin-overview-label">${c.label}</div>
+    </div>`).join('');
+  renderAdminAnalytics();
+}
+
+function renderAdminAnalytics(){
+  const viewedWrap = document.getElementById('topViewedProducts');
+  const orderedWrap = document.getElementById('topOrderedProducts');
+  if(!viewedWrap || !orderedWrap) return;
+
+  const topViewed = [...products].filter(p => p.views > 0).sort((a,b) => (b.views||0) - (a.views||0)).slice(0,5);
+  viewedWrap.innerHTML = topViewed.length === 0
+    ? `<div class="empty" style="padding:12px;">لا توجد بيانات مشاهدة بعد</div>`
+    : topViewed.map((p,i) => `<div class="admin-list-item" style="font-size:13px;"><span>${i+1}. ${p.name}</span><span style="color:var(--rust);font-weight:700;">👁️ ${p.views}</span></div>`).join('');
+
+  const orderCounts = {};
+  Object.values(orders).forEach(o => {
+    (o.items||[]).forEach(item => {
+      orderCounts[item.name] = (orderCounts[item.name]||0) + (parseInt(item.qty)||1);
+    });
+  });
+  const topOrdered = Object.entries(orderCounts).sort((a,b) => b[1]-a[1]).slice(0,5);
+  orderedWrap.innerHTML = topOrdered.length === 0
+    ? `<div class="empty" style="padding:12px;">لا توجد طلبات كافية بعد</div>`
+    : topOrdered.map(([name,qty],i) => `<div class="admin-list-item" style="font-size:13px;"><span>${i+1}. ${name}</span><span style="color:var(--rust);font-weight:700;">${qty} قطعة</span></div>`).join('');
+}
+
+// ====== بحث موحّد في لوحة الإدارة ======
+function runAdminGlobalSearch(term){
+  const resultsBox = document.getElementById('adminGlobalSearchResults');
+  term = term.trim().toLowerCase();
+  if(!term){ resultsBox.style.display = 'none'; resultsBox.innerHTML = ''; return; }
+
+  const results = [];
+  customers.filter(c => (c.name||'').toLowerCase().includes(term) || (c.email||'').toLowerCase().includes(term) || (c.shippingMark||'').toLowerCase().includes(term))
+    .slice(0,4).forEach(c => results.push({ label: `👤 ${c.name||''} — ${c.shippingMark||''}`, tab:'customers' }));
+  products.filter(p => p.name.toLowerCase().includes(term))
+    .slice(0,4).forEach(p => results.push({ label: `📦 ${p.name}`, tab:'products' }));
+  Object.values(orders).filter(o => (o.shippingMark||'').toLowerCase().includes(term))
+    .slice(0,4).forEach(o => results.push({ label: `🧾 طلب — ${o.shippingMark}`, tab:'orders' }));
+
+  if(results.length === 0){
+    resultsBox.innerHTML = `<div class="empty" style="padding:16px;">لا توجد نتائج مطابقة</div>`;
+  } else {
+    resultsBox.innerHTML = results.map(r => `<div class="admin-list-item" style="cursor:pointer;" onclick="showAdminTab('${r.tab}'); document.getElementById('adminGlobalSearchResults').style.display='none'; document.getElementById('adminGlobalSearch').value='';"><span>${r.label}</span></div>`).join('');
+  }
+  resultsBox.style.display = 'block';
+}
+
 function checkPin(){
   const val = document.getElementById('pinInput').value;
   if(val !== ADMIN_PIN){
@@ -5168,6 +5346,158 @@ function checkPin(){
     return;
   }
   enterAdminPanel();
+}
+
+// ====== مرجع الأسعار (حاسبة تقدير تكلفة المشروع) ======
+let priceRefItems = [];
+
+async function loadPriceRefItems(){
+  const snap = await db.collection('priceReference').orderBy('name','asc').get();
+  priceRefItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderAdminPriceRefList();
+}
+
+function renderAdminPriceRefList(){
+  const wrap = document.getElementById('adminPriceRefList');
+  const countEl = document.getElementById('priceRefCount');
+  if(countEl) countEl.textContent = priceRefItems.length;
+  if(!wrap) return;
+  if(priceRefItems.length === 0){ wrap.innerHTML = `<div class="empty">لا توجد أصناف بعد</div>`; return; }
+  wrap.innerHTML = priceRefItems.map(item => `
+    <div class="admin-list-item" style="font-size:13px;">
+      <span>${item.name} — ¥${item.price} ${item.size ? `<span style="color:#999;">(${item.size})</span>` : ''}</span>
+      <button class="tiny-btn" onclick="deletePriceRefItem('${item.id}')">حذف</button>
+    </div>`).join('');
+}
+
+async function bulkAddPriceRef(){
+  const raw = document.getElementById('priceRefBulkInput').value.trim();
+  if(!raw){ showToast('يرجى لصق قائمة الأصناف أولاً'); return; }
+
+  const lines = raw.split('\n').map(l=>l.trim()).filter(l=>l);
+  const parsed = [];
+  const errors = [];
+  lines.forEach((line,i) => {
+    const parts = line.split(',').map(p=>p.trim());
+    const name = parts[0];
+    const price = parseFloat(parts[1]);
+    const size = parts[2] || null;
+    if(!name || isNaN(price)){ errors.push(`السطر ${i+1}: "${line}"`); return; }
+    parsed.push({ name, price, size });
+  });
+
+  if(errors.length){
+    showToast(`فيه ${errors.length} سطر فيه مشكلة: ` + errors[0], 6000);
+    return;
+  }
+  if(parsed.length === 0){ showToast('مفيش أصناف صحيحة للإضافة'); return; }
+
+  const btn = document.getElementById('bulkAddPriceRefBtn');
+  btn.disabled = true;
+  try{
+    let count = 0;
+    for(const item of parsed){
+      await db.collection('priceReference').add(item);
+      count++;
+    }
+    document.getElementById('priceRefBulkInput').value = '';
+    showToast(`تمت إضافة ${count} صنف بنجاح`);
+    loadPriceRefItems();
+  }catch(e){
+    showToast('حدث خطأ أثناء الإضافة');
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+async function deletePriceRefItem(id){
+  await db.collection('priceReference').doc(id).delete();
+  showToast('تم الحذف');
+  loadPriceRefItems();
+}
+
+async function clearAllPriceRef(){
+  if(priceRefItems.length === 0) return;
+  if(!confirm(`سيتم حذف كل الأصناف (${priceRefItems.length}) نهائياً. هل تريد المتابعة؟`)) return;
+  for(const item of priceRefItems){
+    await db.collection('priceReference').doc(item.id).delete();
+  }
+  showToast('تم حذف كل الأصناف');
+  loadPriceRefItems();
+}
+
+// ===== واجهة العميل =====
+let priceRefRowCount = 0;
+function addPriceRefRow(){
+  priceRefRowCount++;
+  const id = priceRefRowCount;
+  const wrap = document.getElementById('priceRefItemsList');
+  const row = document.createElement('div');
+  row.className = 'import-row';
+  row.id = 'priceRefRow_' + id;
+  row.innerHTML = `
+    <input placeholder="اسم الصنف (مثال: كوب حراري)" class="pref-name">
+    <input type="number" placeholder="الكمية" class="pref-qty qty-input">
+    <button class="remove-row" onclick="removePriceRefRow(${id})" title="حذف">✕</button>
+  `;
+  wrap.appendChild(row);
+}
+function removePriceRefRow(id){
+  const row = document.getElementById('priceRefRow_' + id);
+  if(row) row.remove();
+}
+
+function findBestPriceRefMatch(query){
+  const keywords = query.toLowerCase().split(/\s+/).filter(w => w.length > 1);
+  if(keywords.length === 0) return null;
+  let best = null, bestScore = 0;
+  priceRefItems.forEach(item => {
+    const haystack = (item.name + ' ' + (item.size||'')).toLowerCase();
+    let score = 0;
+    keywords.forEach(k => { if(haystack.includes(k)) score++; });
+    if(score > bestScore){ bestScore = score; best = item; }
+  });
+  return best;
+}
+
+function calcPriceRefTotal(){
+  const rows = document.querySelectorAll('#priceRefItemsList .import-row');
+  const resultsBox = document.getElementById('priceRefResults');
+  if(rows.length === 0){ resultsBox.innerHTML = `<div class="empty">أضف صنفاً واحداً على الأقل أولاً</div>`; return; }
+  if(priceRefItems.length === 0){ resultsBox.innerHTML = `<div class="empty">قاعدة الأسعار غير مجهزة بعد، تواصل معنا مباشرة</div>`; return; }
+
+  let grandTotal = 0;
+  let html = '';
+  let matchedCount = 0;
+
+  rows.forEach(row => {
+    const name = row.querySelector('.pref-name').value.trim();
+    const qty = parseInt(row.querySelector('.pref-qty').value) || 0;
+    if(!name || qty <= 0) return;
+    const match = findBestPriceRefMatch(name);
+    if(match){
+      const subtotal = match.price * qty;
+      grandTotal += subtotal;
+      matchedCount++;
+      html += `<div class="admin-list-item" style="font-size:13px;"><span>${name} (${qty}× ¥${match.price})</span><span style="font-weight:700;color:var(--rust);">¥${subtotal.toFixed(2)}</span></div>`;
+    } else {
+      html += `<div class="admin-list-item" style="font-size:13px;color:#999;"><span>${name} — غير موجود في قاعدة الأسعار</span><span>—</span></div>`;
+    }
+  });
+
+  if(matchedCount === 0){
+    resultsBox.innerHTML = `<div class="empty">لم نجد أي تطابق لأصنافك — تواصل معنا مباشرة عبر واتساب للتسعير اليدوي</div>`;
+    return;
+  }
+
+  resultsBox.innerHTML = html + `
+    <div style="margin-top:12px;padding-top:12px;border-top:2px solid var(--line);display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-weight:900;font-size:16px;">الإجمالي التقريبي</span>
+      <span style="font-weight:900;font-size:18px;color:var(--rust);">¥${grandTotal.toFixed(2)}</span>
+    </div>
+    <p style="font-size:11.5px;color:#999;margin-top:8px;">* هذا تقدير أولي للاستئناس فقط بناءً على أسعارنا المرجعية، ولا يشمل تكلفة الشحن. يُعتمد السعر النهائي بعد التواصل المباشر.</p>
+    <a class="btn btn-gold" style="width:100%;display:block;text-align:center;margin-top:10px;" href="https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent('مرحباً، أرغب في تأكيد تسعير مشروعي التقريبي: ¥' + grandTotal.toFixed(2))}" target="_blank" rel="noopener">💬 تأكيد عبر واتساب</a>
+  `;
 }
 
 // ====== تصنيفات المنتجات ======
@@ -6547,6 +6877,26 @@ function closeMoreMenu(){
   notifyModalClosed();
 }
 
+function applyDarkModePreference(){
+  const enabled = localStorage.getItem('darkModeEnabled') === 'true';
+  document.body.classList.toggle('dark-mode', enabled);
+  updateDarkModeLabel(enabled);
+}
+function toggleDarkMode(){
+  const enabled = !document.body.classList.contains('dark-mode');
+  document.body.classList.toggle('dark-mode', enabled);
+  localStorage.setItem('darkModeEnabled', enabled ? 'true' : 'false');
+  updateDarkModeLabel(enabled);
+}
+function updateDarkModeLabel(enabled){
+  const icon = document.getElementById('darkModeIcon');
+  const label = document.getElementById('darkModeLabel');
+  if(!icon) return;
+  icon.textContent = enabled ? '☀️' : '🌙';
+  label.textContent = enabled ? 'الوضع النهاري' : 'الوضع الليلي';
+}
+applyDarkModePreference();
+
 async function toggleFullscreen(){
   try{
     if(!document.fullscreenElement){
@@ -6601,6 +6951,7 @@ document.addEventListener('click', function(e){
 
 loadData();
 loadCategories();
+loadPriceRefItems();
 loadCommunityFeed(false);
 loadRatings();
 loadActivityFeed();

@@ -5447,17 +5447,25 @@ function removePriceRefRow(id){
   if(row) row.remove();
 }
 
-function findBestPriceRefMatch(query){
+function findPriceRefMatches(query){
   const keywords = query.toLowerCase().split(/\s+/).filter(w => w.length > 1);
-  if(keywords.length === 0) return null;
-  let best = null, bestScore = 0;
-  priceRefItems.forEach(item => {
+  if(keywords.length === 0) return [];
+  const scored = priceRefItems.map(item => {
     const haystack = (item.name + ' ' + (item.size||'')).toLowerCase();
     let score = 0;
     keywords.forEach(k => { if(haystack.includes(k)) score++; });
-    if(score > bestScore){ bestScore = score; best = item; }
-  });
-  return best;
+    return { item, score };
+  }).filter(x => x.score > 0);
+  if(scored.length === 0) return [];
+  const topScore = Math.max(...scored.map(x => x.score));
+  return scored.filter(x => x.score === topScore).map(x => x.item);
+}
+
+let priceRefResolvedChoices = {};
+
+function resolvePriceRefChoice(rowId, itemId){
+  priceRefResolvedChoices[rowId] = itemId;
+  calcPriceRefTotal();
 }
 
 function calcPriceRefTotal(){
@@ -5467,36 +5475,90 @@ function calcPriceRefTotal(){
   if(priceRefItems.length === 0){ resultsBox.innerHTML = `<div class="empty">قاعدة الأسعار غير مجهزة بعد، تواصل معنا مباشرة</div>`; return; }
 
   let grandTotal = 0;
+  let grandTotalMin = 0;
+  let grandTotalMax = 0;
+  let hasRange = false;
   let html = '';
   let matchedCount = 0;
+  let unmatchedItems = [];
 
   rows.forEach(row => {
     const name = row.querySelector('.pref-name').value.trim();
     const qty = parseInt(row.querySelector('.pref-qty').value) || 0;
     if(!name || qty <= 0) return;
-    const match = findBestPriceRefMatch(name);
-    if(match){
-      const subtotal = match.price * qty;
-      grandTotal += subtotal;
-      matchedCount++;
-      html += `<div class="admin-list-item" style="font-size:13px;"><span>${name} (${qty}× ¥${match.price})</span><span style="font-weight:700;color:var(--rust);">¥${subtotal.toFixed(2)}</span></div>`;
-    } else {
+
+    const matches = findPriceRefMatches(name);
+    if(matches.length === 0){
+      unmatchedItems.push(`${name} (الكمية: ${qty})`);
       html += `<div class="admin-list-item" style="font-size:13px;color:#999;"><span>${name} — غير موجود في قاعدة الأسعار</span><span>—</span></div>`;
+      return;
+    }
+
+    let chosen = null;
+    if(matches.length === 1){
+      chosen = matches[0];
+    } else {
+      const savedChoiceId = priceRefResolvedChoices[row.id];
+      chosen = matches.find(m => m.id === savedChoiceId) || null;
+    }
+
+    if(chosen){
+      const subtotal = chosen.price * qty;
+      grandTotal += subtotal;
+      grandTotalMin += subtotal;
+      grandTotalMax += subtotal;
+      matchedCount++;
+      html += `<div class="admin-list-item" style="font-size:13px;"><span>${name} → ${chosen.name} (${qty}× ¥${chosen.price})</span><span style="font-weight:700;color:var(--rust);">¥${subtotal.toFixed(2)}</span></div>`;
+    } else {
+      // فيه أكتر من صنف محتمل — نعرض نطاق سعري فوري بدل ما نجبر رقم واحد غير دقيق
+      const prices = matches.map(m => m.price);
+      const rangeMin = Math.min(...prices) * qty;
+      const rangeMax = Math.max(...prices) * qty;
+      grandTotalMin += rangeMin;
+      grandTotalMax += rangeMax;
+      matchedCount++;
+      hasRange = true;
+      html += `<div class="admin-list-item" style="font-size:13px;flex-direction:column;align-items:stretch;">
+        <div style="display:flex;justify-content:space-between;">
+          <span>${name} (${qty}×)</span>
+          <span style="font-weight:700;color:var(--rust);">¥${rangeMin.toFixed(0)} – ¥${rangeMax.toFixed(0)}</span>
+        </div>
+        <span style="font-size:11.5px;color:#888;margin:6px 0 4px;">وجدنا ${matches.length} أصناف مشابهة — اختر الأدق لسعر مؤكد بدل النطاق:</span>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          ${matches.map(m => `<button class="tiny-btn gold" style="text-align:right;" onclick="resolvePriceRefChoice('${row.id}','${m.id}')">${m.name} ${m.size ? `(${m.size})` : ''} — ¥${m.price}</button>`).join('')}
+        </div>
+      </div>`;
     }
   });
 
-  if(matchedCount === 0){
-    resultsBox.innerHTML = `<div class="empty">لم نجد أي تطابق لأصنافك — تواصل معنا مباشرة عبر واتساب للتسعير اليدوي</div>`;
-    return;
-  }
+  const totalLine = matchedCount === 0 ? '' : (hasRange
+    ? `<span style="font-weight:900;font-size:18px;color:var(--rust);">¥${grandTotalMin.toFixed(0)} – ¥${grandTotalMax.toFixed(0)}</span>`
+    : `<span style="font-weight:900;font-size:18px;color:var(--rust);">¥${grandTotal.toFixed(2)}</span>`);
 
-  resultsBox.innerHTML = html + `
+  const rangeExplanation = hasRange ? `
+    <div style="background:var(--paper-soft);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:11.5px;color:#666;line-height:1.8;">
+      <strong>ليه السعر نطاق مش رقم واحد؟</strong> لأن وصفك يطابق أكثر من صنف عندنا بأسعار مختلفة. السعر الفعلي بيختلف حسب: نوع الصنف بالضبط، الكمية المطلوبة (طلبات أكبر غالباً سعر أقل للقطعة)، وطريقة التغليف (تصاميم عشوائية من المصنع أرخص من اختيار محدد). اختر الصنف الدقيق من الأزرار أعلاه للحصول على سعر مؤكد بدل النطاق.
+    </div>` : '';
+
+  const totalBlock = matchedCount === 0 ? `<div class="empty">لم نجد أي تطابق لأصنافك في قاعدة أسعارنا الحالية</div>` : `
     <div style="margin-top:12px;padding-top:12px;border-top:2px solid var(--line);display:flex;justify-content:space-between;align-items:center;">
       <span style="font-weight:900;font-size:16px;">الإجمالي التقريبي</span>
-      <span style="font-weight:900;font-size:18px;color:var(--rust);">¥${grandTotal.toFixed(2)}</span>
+      ${totalLine}
     </div>
-    <p style="font-size:11.5px;color:#999;margin-top:8px;">* هذا تقدير أولي للاستئناس فقط بناءً على أسعارنا المرجعية، ولا يشمل تكلفة الشحن. يُعتمد السعر النهائي بعد التواصل المباشر.</p>
-    <a class="btn btn-gold" style="width:100%;display:block;text-align:center;margin-top:10px;" href="https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent('مرحباً، أرغب في تأكيد تسعير مشروعي التقريبي: ¥' + grandTotal.toFixed(2))}" target="_blank" rel="noopener">💬 تأكيد عبر واتساب</a>
+    ${rangeExplanation}
+    <p style="font-size:11.5px;color:#999;margin-top:8px;">* هذا تقدير أولي للاستئناس فقط بناءً على أسعارنا المرجعية، ولا يشمل تكلفة الشحن.</p>`;
+
+  // نبني رسالة واتساب شاملة تضم المُسعّر والمفقود مع بعض، عشان نوفّر داتا حقيقية عن الطلب الفعلي
+  let waMsg = 'مرحباً، أرغب في تقدير تكلفة مشروعي:\n';
+  if(matchedCount > 0){
+    waMsg += `الإجمالي التقريبي للأصناف المتاحة: ${hasRange ? ('¥' + grandTotalMin.toFixed(0) + ' - ¥' + grandTotalMax.toFixed(0)) : ('¥' + grandTotal.toFixed(2))}\n`;
+  }
+  if(unmatchedItems.length > 0){
+    waMsg += `أصناف غير متوفرة في القائمة الحالية وأرغب بالاستفسار عنها:\n- ${unmatchedItems.join('\n- ')}`;
+  }
+
+  resultsBox.innerHTML = html + totalBlock + `
+    <a class="btn btn-gold" style="width:100%;display:block;text-align:center;margin-top:10px;" href="https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener">💬 إرسال التفاصيل عبر واتساب</a>
   `;
 }
 
